@@ -44,7 +44,6 @@ static char* rl_gets() {
 
 static int cmd_c(char *args) {
   cpu_exec(-1);
-  printf("c\n");
   return 0;
 }
 
@@ -102,7 +101,7 @@ void sdb_mainloop() {
     cmd_c(NULL);
     return;
   }
-
+  printf("0\n");
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
 
@@ -117,12 +116,12 @@ void sdb_mainloop() {
     if (args >= str_end) {
       args = NULL;
     }
-
+    printf("1\n");
 #ifdef CONFIG_DEVICE
     extern void sdl_clear_event_queue();
     sdl_clear_event_queue();
 #endif
-
+    printf("2\n");
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
@@ -130,8 +129,10 @@ void sdb_mainloop() {
         break;
       }
     }
+    printf("3\n");
 
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
+    printf("4\n");
   }
 }
 
