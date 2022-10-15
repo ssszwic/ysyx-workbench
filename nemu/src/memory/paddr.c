@@ -21,6 +21,8 @@
 #if   defined(CONFIG_PMEM_MALLOC)
 static uint8_t *pmem = NULL;
 #else // CONFIG_PMEM_GARRAY
+// PG_ALIGN: specify the alignment format 4096
+// all 128MB
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
@@ -49,6 +51,7 @@ void init_mem() {
 #ifdef CONFIG_MEM_RANDOM
   uint32_t *p = (uint32_t *)pmem;
   int i;
+  // randomize initial storage contents
   for (i = 0; i < (int) (CONFIG_MSIZE / sizeof(p[0])); i ++) {
     p[i] = rand();
   }

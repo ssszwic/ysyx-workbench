@@ -32,8 +32,8 @@ static void welcome() {
   Log("Build time: %s, %s", __TIME__, __DATE__);
   printf("Welcome to %s-NEMU!\n", ANSI_FMT(str(__GUEST_ISA__), ANSI_FG_YELLOW ANSI_BG_RED));
   printf("For help, type \"help\"\n");
-  Log("Exercise: Please remove me in the source code and compile NEMU again.");
-  assert(0);
+  // Log("Exercise: Please remove me in the source code and compile NEMU again.");
+  // assert(0);
 }
 
 #ifndef CONFIG_TARGET_AM
@@ -84,6 +84,7 @@ static int parse_args(int argc, char *argv[]) {
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
+      // all command-line options have been parsed, return -1
       case 1: img_file = optarg; return 0;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
@@ -117,9 +118,11 @@ void init_monitor(int argc, char *argv[]) {
   IFDEF(CONFIG_DEVICE, init_device());
 
   /* Perform ISA dependent initialization. */
+  // load initial img to RESET_VECTOR
   init_isa();
 
   /* Load the image to memory. This will overwrite the built-in image. */
+  // load img flie to RESET_VECTOR
   long img_size = load_img();
 
   /* Initialize differential testing. */

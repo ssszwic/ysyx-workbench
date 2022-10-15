@@ -76,6 +76,7 @@ static int cmd_help(char *args) {
 
   if (arg == NULL) {
     /* no argument given */
+    // print cmd_table (help information)
     for (i = 0; i < NR_CMD; i ++) {
       printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
     }
@@ -101,7 +102,6 @@ void sdb_mainloop() {
     cmd_c(NULL);
     return;
   }
-
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
 
@@ -116,12 +116,10 @@ void sdb_mainloop() {
     if (args >= str_end) {
       args = NULL;
     }
-
 #ifdef CONFIG_DEVICE
     extern void sdl_clear_event_queue();
     sdl_clear_event_queue();
 #endif
-
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
