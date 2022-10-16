@@ -112,12 +112,13 @@ static int cmd_si(char *args) {
       n = atoi(args);
     }
   }
-  printf("%d\n", n);
 
   if (n <= 0) {
     printf("Invalid input, N must be greater than 0\n");
     return 0;
   }
+
+  cpu_exec(n);
 
   return 0;
 }
