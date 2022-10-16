@@ -183,7 +183,7 @@ static int cmd_x(char *args) {
       second = strtok(tmp, " ");
     }
   }
-
+  printf("a");
   paddr_t addr;
   int *num = NULL;
   // only 1 argument
