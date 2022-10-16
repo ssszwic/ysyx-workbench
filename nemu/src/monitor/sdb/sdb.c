@@ -49,12 +49,13 @@ static int cmd_c(char *args) {
   return 0;
 }
 
-
 static int cmd_q(char *args) {
   return -1;
 }
 
 static int cmd_help(char *args);
+
+static int cmd_si(char *args);
 
 static struct {
   const char *name;
@@ -67,7 +68,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
-  { "si", "EXecute N instructions in a singel step, default 1"},
+  { "si", "EXecute N instructions in a singel step, default 1", cmd_si},
 
 };
 
@@ -94,6 +95,12 @@ static int cmd_help(char *args) {
     }
     printf("Unknown command '%s'\n", arg);
   }
+  return 0;
+}
+
+static int cmd_si(char *args) {
+  printf("%ld\n", strlen(args));
+  printf("%s\n", args);
   return 0;
 }
 
