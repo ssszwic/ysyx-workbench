@@ -26,7 +26,8 @@ const char *regs[] = {
 void isa_reg_display() {
   int i;
   for (i = 0; i < 32; i++) {
-    printf("%s\n", reg_name(i, 0));
+    printf("%-20s", reg_name(i, 0));
+
   }
 }
 
