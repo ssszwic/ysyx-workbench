@@ -104,15 +104,21 @@ static int cmd_si(char *args) {
     n = 1;
   }
   else {
+    char *first = strtok(args, " ");
+    if (first == NULL) {
+      printf("input space\n");
+    }
+    printf("%s", first);
     n = atoi(args);
   }
+  printf("%d", n);
 
-  if (n <= 0) {
-    printf("Invalid input, N must be greater than 0\n");
-    return 0;
-  }
+  // if (n <= 0) {
+  //   printf("Invalid input, N must be greater than 0\n");
+  //   return 0;
+  // }
 
-  printf("%d\n", n);
+  // printf("%d\n", n);
   return 0;
 }
 
