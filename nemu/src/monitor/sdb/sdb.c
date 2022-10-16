@@ -203,13 +203,15 @@ static int cmd_x(char *args) {
   // printf("%x\n", addr);
   char first[100];
   char second[100];
-  int argu_num = sscanf(args, "%s %s", first, second);
-  printf("%d\n", argu_num);
-  // if(argu == 0) {
-  //   printf("You must specify memory address\n");
-  //   return 0;
-  // }
-  // else
+  int args_num = sscanf(args, "%s %s", first, second);
+  printf("%ld\n", strlen(first));
+  printf("%ld\n", strlen(second));
+  if(args_num == 0) {
+    printf("You must specify memory address\n");
+    return 0;
+  }
+
+
 
   // printf("%s\n", strlen(first));
   // printf("%s\n", strlen(second));
