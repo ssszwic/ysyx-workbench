@@ -192,7 +192,11 @@ static int cmd_x(char *args) {
     sscanf(first, "%x", &addr);
   }
   else {
-    sscanf(first, "%d", &num);
+    num = atoi(first);
+    if (num <= 0) {
+    printf("Invalid input, N must be greater than 0\n");
+    return 0;
+    }
     sscanf(second, "%x", &addr);
   }
 
