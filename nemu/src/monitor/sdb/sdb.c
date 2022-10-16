@@ -192,8 +192,8 @@ static int cmd_x(char *args) {
     sscanf(first, "%x", &addr);
   }
   else {
-    printf("%d", sscanf(first, "%d", &num));
-    printf("%d", sscanf(second, "%x", &addr));
+    printf("%d\n", sscanf(first, "%d", &num));
+    printf("%d\n", sscanf(second, "%x", &addr));
   }
 
   // if (num != NULL) {
