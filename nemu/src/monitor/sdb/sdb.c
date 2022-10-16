@@ -162,7 +162,7 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_x(char *args) {
-  printf("%s", args);
+  printf("%s\n", args);
   char *first = NULL;
   char *second = NULL;
   // no extra argument
@@ -196,10 +196,10 @@ static int cmd_x(char *args) {
     sscanf(second, "%x", &addr);
   }
 
-  if (num != NULL) {
-    printf("%d\n", *num);
-  }
-  printf("%x\n", addr);
+  // if (num != NULL) {
+  //   printf("%d\n", *num);
+  // }
+  // printf("%x\n", addr);
   
 
 
