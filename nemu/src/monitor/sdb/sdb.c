@@ -102,6 +102,9 @@ static int cmd_si(char *args) {
   printf("%ld\n", strlen(args));
   printf("%s\n", args);
   int n = atoi(args);
+  if (n <= 0) {
+    
+  }
   printf("%d\n", n);
   return 0;
 }
