@@ -104,19 +104,23 @@ static int cmd_help(char *args) {
 // ssszw add funciton 2022.10.16
 static int cmd_si(char *args) {
   int n;
+  // N=1 when no extra argument
   if (args == NULL) {
     n = 1;
   }
   else {
+    // N=1 when argument is space('  ')
     char *first = strtok(args, " ");
     if (first == NULL) {
       n = 1;
     }
     else {
+      // string to int
       n = atoi(args);
     }
   }
 
+  // N > 0
   if (n <= 0) {
     printf("Invalid input, N must be greater than 0\n");
     return 0;
@@ -128,6 +132,29 @@ static int cmd_si(char *args) {
 }
 
 static int cmd_info(char *args) {
+  // no extra argument
+  if (args == NULL) {
+    printf("You must type info object, 'r': reg status; 'w': watch state");
+    // only 'r' and 'w' are acceptable");
+    return 0;
+  }
+  else {
+    // argument is space('  ')
+    char *first = strtok(args, " ");
+    if (first == NULL) {
+      printf("You must type info object, 'r': reg status; 'w': watch state");
+      return 0;
+    }
+    else if ((strcmp(first, "r") == 0) || (strcmp(first, "reg") == 0)) {
+      printf("reg\n");
+    }
+    else if ((strcmp(first, "w") == 0) || (strcmp(first, "watch") == 0)) {
+      printf("watch\n");
+    }
+    else {
+      printf("Invalid argument, only 'r' and 'w' are acceptable");
+    }
+  }
   return 0;
 }
 
