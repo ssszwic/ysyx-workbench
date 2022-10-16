@@ -109,7 +109,7 @@ static int cmd_si(char *args) {
       printf("input space\n");
     }
     printf("%s\n", first);
-    n = atoi(args);
+    // n = atoi(args);
   }
   printf("%d\n", n);
 
