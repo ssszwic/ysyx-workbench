@@ -198,7 +198,7 @@ static int cmd_x(char *args) {
 
   paddr_t addr;
   int num;
-  printf("%d\n", sscanf(args, "%d[^]%x", &num, &addr));
+  printf("%d\n", sscanf(args, "%d[^ ]%x", &num, &addr));
   printf("%d\n", num);
   printf("%x\n", addr);
 
