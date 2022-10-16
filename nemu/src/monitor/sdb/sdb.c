@@ -229,7 +229,7 @@ static int cmd_x(char *args) {
   }
   sscanf(num_str, "%d", &num);
 
-  sscanf(second, "%[x0-9]", addr_str);
+  sscanf(second, "%[0-9abcdefx]", addr_str);
   printf("%s\n", addr_str);
   if (strlen(addr_str) != strlen(second)) {
     printf("Addr must be hexadecimal integer\n");
