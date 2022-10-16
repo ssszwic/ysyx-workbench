@@ -208,9 +208,6 @@ static int cmd_x(char *args) {
   }
 
   // read nemu member
-  // uint8_t* host_addr = NULL;
-  // printf("addr: %ld\n", sizeof(guest_to_host(addr)));
-  // printf("unit8: %ld\n", sizeof(guest_to_host(host_addr)));
   uint8_t* host_addr = (uint8_t*) guest_to_host(addr);
   printf("%20x:", addr);
   int i;
