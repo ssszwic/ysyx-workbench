@@ -134,7 +134,7 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
   // no extra argument
   if (args == NULL) {
-    printf("You must type info object, 'r'('reg'): reg status; 'w'('watch'): watch state\n");
+    printf("You must type info object, reg (r): reg status; watch (w): watch state\n");
     // only 'r' and 'w' are acceptable");
     return 0;
   }
@@ -142,7 +142,7 @@ static int cmd_info(char *args) {
     // argument is space('  ')
     char *first = strtok(args, " ");
     if (first == NULL) {
-      printf("You must type info object, 'r': reg status; 'w': watch state\n");
+      printf("You must type info object, reg (r): reg status; watch (w): watch state\n");
       return 0;
     }
     else if ((strcmp(first, "r") == 0) || (strcmp(first, "reg") == 0)) {
@@ -152,7 +152,7 @@ static int cmd_info(char *args) {
       printf("watch\n");
     }
     else {
-      printf("Invalid argument, only 'r' and 'w' are acceptable\n");
+      printf("Invalid argument, only 'reg' and 'watch' are acceptable\n");
     }
   }
   return 0;
