@@ -208,11 +208,11 @@ static int cmd_x(char *args) {
   }
 
   // read nemu member
-  uint32_t* host_addr = (uint32_t*) guest_to_host(addr);
+  uint8_t* host_addr = guest_to_host(addr);
   printf("%20x:", addr);
   int i;
   for (i = 0; i < num; i++) {
-    printf("%12x", *host_addr);
+    printf("%4x", *host_addr);
     host_addr++;
   }
   printf("\n");
