@@ -33,6 +33,7 @@ static char* rl_gets() {
     line_read = NULL;
   }
 
+  // using prompt as a prompt
   line_read = readline("(nemu) ");
 
   if (line_read && *line_read) {
@@ -43,10 +44,10 @@ static char* rl_gets() {
 }
 
 static int cmd_c(char *args) {
+  // run client program is until the end of program
   cpu_exec(-1);
   return 0;
 }
-
 
 static int cmd_q(char *args) {
   return -1;
@@ -54,9 +55,18 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args);
+
+static int cmd_info(char *args);
+
+static int info_reg();
+
+static int info_watch();
+
 static struct {
   const char *name;
   const char *description;
+  // funciton
   int (*handler) (char *);
 } cmd_table [] = {
   { "help", "Display information about all supported commands", cmd_help },
@@ -64,6 +74,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
+  { "si", "Execute N instructions in a singel step, default 1", cmd_si},
+  { "info", "Print program state, reg (r): reg status; watch (w): watch state", cmd_info},
 
 };
 
@@ -93,6 +105,71 @@ static int cmd_help(char *args) {
   return 0;
 }
 
+// ssszw add funciton 2022.10.16
+static int cmd_si(char *args) {
+  int n;
+  // N=1 when no extra argument
+  if (args == NULL) {
+    n = 1;
+  }
+  else {
+    // N=1 when argument is space('  ')
+    char *first = strtok(args, " ");
+    if (first == NULL) {
+      n = 1;
+    }
+    else {
+      // string to int
+      n = atoi(args);
+    }
+  }
+  // N > 0
+  if (n <= 0) {
+    printf("Invalid input, N must be greater than 0\n");
+    return 0;
+  }
+  cpu_exec(n);
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  // no extra argument
+  if (args == NULL) {
+    printf("You must type info object, reg (r): reg status; watch (w): watch state\n");
+    // only 'r' and 'w' are acceptable");
+    return 0;
+  }
+  else {
+    // argument is space('  ')
+    char *first = strtok(args, " ");
+    if (first == NULL) {
+      printf("You must type info object, reg (r): reg status; watch (w): watch state\n");
+      return 0;
+    }
+    else if ((strcmp(first, "r") == 0) || (strcmp(first, "reg") == 0)) {
+      info_reg();
+    }
+    else if ((strcmp(first, "w") == 0) || (strcmp(first, "watch") == 0)) {
+      info_watch();
+    }
+    else {
+      printf("Invalid argument, only 'reg' and 'watch' are acceptable\n");
+    }
+  }
+  return 0;
+}
+
+static int info_reg() {
+  isa_reg_display();
+  return 0;
+}
+
+static int info_watch() {
+  printf("watch not done\n");
+  return 0;
+}
+// end
+
 void sdb_set_batch_mode() {
   is_batch_mode = true;
 }
@@ -106,13 +183,16 @@ void sdb_mainloop() {
     char *str_end = str + strlen(str);
 
     /* extract the first token as the command */
+    // get first string separated space
     char *cmd = strtok(str, " ");
     if (cmd == NULL) { continue; }
 
     /* treat the remaining string as the arguments,
      * which may need further parsing
      */
+    // args points to the remaining string separated of the input
     char *args = cmd + strlen(cmd) + 1;
+    // there is no 2nd string
     if (args >= str_end) {
       args = NULL;
     }
@@ -123,11 +203,13 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
+        // the remaining string is used as argument to the function
         if (cmd_table[i].handler(args) < 0) { return; }
         break;
       }
     }
 
+    // there is no matching com
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
   }
 }

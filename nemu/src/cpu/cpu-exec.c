@@ -94,8 +94,11 @@ void assert_fail_msg() {
 
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
+  // when n(is num) < MAX_INST_TO_PRINT, print is to the screen
   g_print_step = (n < MAX_INST_TO_PRINT);
+  // initial state is STOP
   switch (nemu_state.state) {
+    // if state is END or ABORT, return
     case NEMU_END: case NEMU_ABORT:
       printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
       return;
