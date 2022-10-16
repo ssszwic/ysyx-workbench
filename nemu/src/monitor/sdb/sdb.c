@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <memory/paddr.h>
 
 static int is_batch_mode = false;
 
@@ -184,7 +185,7 @@ static int cmd_x(char *args) {
     num = 1;
     sscanf(first, "%[0-9abcdefx]", addr_str);
     if (strlen(addr_str) != strlen(first)) {
-      printf("Addr must be hexadecimal integer\n");
+      printf("Address must be hexadecimal integer\n");
       return 0;
     }
     sscanf(addr_str, "%x", &addr);
@@ -206,10 +207,17 @@ static int cmd_x(char *args) {
     sscanf(addr_str, "%x", &addr);
   }
 
-
-  printf("%d\n", num);
-  printf("%x\n", addr);
-
+  // read nemu member
+  // uint8_t* host_addr = NULL;
+  // printf("addr: %ld\n", sizeof(guest_to_host(addr)));
+  // printf("unit8: %ld\n", sizeof(guest_to_host(host_addr)));
+  uint8_t* host_addr = (uint8_t*) guest_to_host(addr);
+  printf("%20x:", addr);
+  int i;
+  for (i = 0; i < num; i++) {
+    printf("%4x:", *host_addr);
+    host_addr++;
+  }
 
   return 0;
 }
