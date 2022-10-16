@@ -222,7 +222,7 @@ static int cmd_x(char *args) {
   paddr_t addr;
 
   sscanf(first, "%[0-9]", num_str);
-  printf("%s", num_str);
+  // printf("%s", num_str);
   if (strlen(num_str) != strlen(first)) {
     printf("Num must be integer greater than 0\n");
     return 0;
@@ -230,7 +230,7 @@ static int cmd_x(char *args) {
   sscanf(num_str, "%d", &num);
 
   sscanf(second, "%[0-9]", addr_str);
-  printf("%s", addr_str);
+  // printf("%s", addr_str);
   if (strlen(addr_str) < (strlen(second) - 1)) {
     printf("Addr must be hexadecimal integer\n");
     return 0;
@@ -241,8 +241,8 @@ static int cmd_x(char *args) {
 
 
 
-  printf("%d", num);
-  printf("%x", addr);
+  printf("%d\n", num);
+  printf("%x\n", addr);
 
 
   // printf("%s\n", strlen(first));
