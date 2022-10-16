@@ -162,39 +162,47 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_x(char *args) {
-  printf("%s\n", args);
-  char *first = NULL;
-  char *second = NULL;
-  // no extra argument
-  if (args == NULL) {
-    printf("You must specify memory address\n");
-    return 0;
-  }
-  else {
-    char *args_end = args + strlen(args);
-    first = strtok(args, " ");
-    if (first == NULL) {
-      // argument is space('  ')
-      printf("You must specify memory address\n");
-      return 0;
-    }
-    char *tmp = first + strlen(first) + 1;
-    if (tmp <= args_end) {
-      // there is no second argument
-      second = strtok(tmp, " ");
-    }
-  }
+  // printf("%s\n", args);
+  // char *first = NULL;
+  // char *second = NULL;
+  // // no extra argument
+  // if (args == NULL) {
+  //   printf("You must specify memory address\n");
+  //   return 0;
+  // }
+  // else {
+  //   char *args_end = args + strlen(args);
+  //   first = strtok(args, " ");
+  //   if (first == NULL) {
+  //     // argument is space('  ')
+  //     printf("You must specify memory address\n");
+  //     return 0;
+  //   }
+  //   char *tmp = first + strlen(first) + 1;
+  //   if (tmp <= args_end) {
+  //     // there is no second argument
+  //     second = strtok(tmp, " ");
+  //   }
+  // }
+
+  // paddr_t addr;
+  // int num;
+  // // only 1 argument
+  // if (second == NULL) {
+  //   sscanf(first, "%x", &addr);
+  // }
+  // else {
+  //   printf("%d\n", sscanf(first, "%d", &num));
+  //   printf("%d\n", sscanf(second, "%x", &addr));
+  // }
 
   paddr_t addr;
   int num;
-  // only 1 argument
-  if (second == NULL) {
-    sscanf(first, "%x", &addr);
-  }
-  else {
-    printf("%d\n", sscanf(first, "%d", &num));
-    printf("%d\n", sscanf(second, "%x", &addr));
-  }
+  sscanf(args, "%d %x", &num, &addr);
+  printf("%d", num);
+  printf("%x", addr);
+
+
 
   // if (num != NULL) {
   //   printf("%d\n", *num);
