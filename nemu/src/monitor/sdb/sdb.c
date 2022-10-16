@@ -162,100 +162,53 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_x(char *args) {
-  // printf("%s\n", args);
-  // char *first = NULL;
-  // char *second = NULL;
-  // // no extra argument
-  // if (args == NULL) {
-  //   printf("You must specify memory address\n");
-  //   return 0;
-  // }
-  // else {
-  //   char *args_end = args + strlen(args);
-  //   first = strtok(args, " ");
-  //   if (first == NULL) {
-  //     // argument is space('  ')
-  //     printf("You must specify memory address\n");
-  //     return 0;
-  //   }
-  //   char *tmp = first + strlen(first) + 1;
-  //   if (tmp <= args_end) {
-  //     // there is no second argument
-  //     second = strtok(tmp, " ");
-  //   }
-  // }
-
-  // paddr_t addr;
-  // int num;
-  // // only 1 argument
-  // if (second == NULL) {
-  //   sscanf(first, "%x", &addr);
-  // }
-  // else {
-  //   printf("%d\n", sscanf(first, "%d", &num));
-  //   printf("%d\n", sscanf(second, "%x", &addr));
-  // }
-
-  // paddr_t addr;
-  // int num;
-  // printf("%d\n", sscanf(args, "%d[^ ]%x", &num, &addr));
-  // printf("%d\n", num);
-  // printf("%x\n", addr);
-  // no extra argument
   if (args == NULL) {
     printf("You must specify memory address\n");
     return 0;
   }
   char first[100] = {};
   char second[100] = {};
-  int args_num = sscanf(args, "%s %s", first, second);
-  // argument is space('  ')
-  if(args_num == 0) {
-    printf("You must specify memory address\n");
-    return 0;
-  }
-
   char num_str[100] = {};
   char addr_str[100] = {};
-
   int num;
   paddr_t addr;
 
-  sscanf(first, "%[0-9]", num_str);
-  printf("%s\n", num_str);
-  if (strlen(num_str) != strlen(first)) {
-    printf("Num must be integer greater than 0\n");
+  int args_num = sscanf(args, "%s %s", first, second);
+  if (args_num == 0) {
+    // argument is space('  ')
+    printf("You must specify memory address\n");
     return 0;
   }
-  sscanf(num_str, "%d", &num);
-
-  sscanf(second, "%[0-9abcdefx]", addr_str);
-  printf("%s\n", addr_str);
-  if (strlen(addr_str) != strlen(second)) {
-    printf("Addr must be hexadecimal integer\n");
-    return 0;
+  else if (args_num == 1) {
+    // only one argument
+    num = 1;
+    sscanf(first, "%[0-9abcdefx]", addr_str);
+    if (strlen(addr_str) != strlen(first)) {
+      printf("Addr must be hexadecimal integer\n");
+      return 0;
+    }
+    sscanf(addr_str, "%x", &addr);
   }
-  sscanf(addr_str, "%x", &addr);
+  else {
+    // check wrong character
+    sscanf(first, "%[0-9]", num_str);
+    if (strlen(num_str) != strlen(first)) {
+      printf("Num must be integer greater than 0\n");
+      return 0;
+    }
+    sscanf(num_str, "%d", &num);
 
-
-
+    sscanf(second, "%[0-9abcdefx]", addr_str);
+    if (strlen(addr_str) != strlen(second)) {
+      printf("Address must be hexadecimal integer\n");
+      return 0;
+    }
+    sscanf(addr_str, "%x", &addr);
+  }
 
 
   printf("%d\n", num);
   printf("%x\n", addr);
-
-
-  // printf("%s\n", strlen(first));
-  // printf("%s\n", strlen(second));
-
-
-
-
-  // if (num != NULL) {
-  //   printf("%d\n", *num);
-  // }
-  // printf("%x\n", addr);
-  
 
 
   return 0;
