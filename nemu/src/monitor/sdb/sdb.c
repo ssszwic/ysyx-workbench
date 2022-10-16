@@ -185,22 +185,17 @@ static int cmd_x(char *args) {
   }
 
   paddr_t addr;
-  int num;
+  int *num = NULL;
   // only 1 argument
   if (second == NULL) {
-    num = 1;
     sscanf(first, "%x", &addr);
   }
   else {
-    num = atoi(first);
-    if (num <= 0) {
-    printf("Invalid input, N must be greater than 0\n");
-    return 0;
-    }
+    sscanf(first, "%d", num);
     sscanf(second, "%x", &addr);
   }
 
-  printf("%d\n", num);
+  printf("%d\n", *num);
   printf("%x\n", addr);
   
 
