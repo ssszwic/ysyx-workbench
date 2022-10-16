@@ -185,10 +185,10 @@ static int cmd_x(char *args) {
   }
 
   if (first != NULL) {
-    printf("%s\n", first);
+    printf("1: %s\n", first);
   }
   if (second != NULL) {
-    printf("%s\n", second);
+    printf("2: %s\n", second);
   }
 
 
