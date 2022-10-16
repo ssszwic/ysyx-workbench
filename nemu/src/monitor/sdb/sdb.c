@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include <memory/paddr.h>
 
 static int is_batch_mode = false;
 
@@ -59,6 +60,8 @@ static int cmd_si(char *args);
 
 static int cmd_info(char *args);
 
+static int cmd_x(char *args);
+
 static int info_reg();
 
 static int info_watch();
@@ -76,6 +79,7 @@ static struct {
   /* TODO: Add more commands */
   { "si", "Execute N instructions in a singel step, default 1", cmd_si},
   { "info", "Print program state, reg (r): reg status; watch (w): watch state", cmd_info},
+  { "x", "Print consecutive N data from the address, default 1 data", cmd_x},
 
 };
 
@@ -136,13 +140,12 @@ static int cmd_info(char *args) {
   // no extra argument
   if (args == NULL) {
     printf("You must type info object, reg (r): reg status; watch (w): watch state\n");
-    // only 'r' and 'w' are acceptable");
     return 0;
   }
   else {
-    // argument is space('  ')
     char *first = strtok(args, " ");
     if (first == NULL) {
+      // argument is space('  ')
       printf("You must type info object, reg (r): reg status; watch (w): watch state\n");
       return 0;
     }
@@ -156,6 +159,65 @@ static int cmd_info(char *args) {
       printf("Invalid argument, only 'reg' and 'watch' are acceptable\n");
     }
   }
+  return 0;
+}
+
+static int cmd_x(char *args) {
+  if (args == NULL) {
+    printf("You must specify memory address\n");
+    return 0;
+  }
+  char first[100] = {};
+  char second[100] = {};
+  char num_str[100] = {};
+  char addr_str[100] = {};
+  int num;
+  paddr_t addr;
+
+  int args_num = sscanf(args, "%s %s", first, second);
+  if (args_num == 0) {
+    // argument is space('  ')
+    printf("You must specify memory address\n");
+    return 0;
+  }
+  else if (args_num == 1) {
+    // only one argument
+    num = 1;
+    sscanf(first, "%[0-9abcdefx]", addr_str);
+    if (strlen(addr_str) != strlen(first)) {
+      printf("Address must be hexadecimal integer\n");
+      return 0;
+    }
+    sscanf(addr_str, "%x", &addr);
+  }
+  else {
+    // check wrong character
+    sscanf(first, "%[0-9]", num_str);
+    if (strlen(num_str) != strlen(first)) {
+      printf("Num must be integer greater than 0\n");
+      return 0;
+    }
+    sscanf(num_str, "%d", &num);
+
+    sscanf(second, "%[0-9abcdefx]", addr_str);
+    if (strlen(addr_str) != strlen(second)) {
+      printf("Address must be hexadecimal integer\n");
+      return 0;
+    }
+    sscanf(addr_str, "%x", &addr);
+  }
+
+  // read nemu member
+  uint8_t* host_addr = guest_to_host(addr);
+  printf("0x%08x:  ", addr);
+  int i;
+  for (i = 0; i < num; i++) {
+    // little endian for riscv64
+    printf("0x%02x ", *host_addr);
+    host_addr++;
+  }
+  printf("\n");
+
   return 0;
 }
 
