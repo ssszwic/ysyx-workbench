@@ -114,12 +114,11 @@ static int cmd_si(char *args) {
   }
   printf("%d\n", n);
 
-  // if (n <= 0) {
-  //   printf("Invalid input, N must be greater than 0\n");
-  //   return 0;
-  // }
+  if (n <= 0) {
+    printf("Invalid input, N must be greater than 0\n");
+    return 0;
+  }
 
-  // printf("%d\n", n);
   return 0;
 }
 
