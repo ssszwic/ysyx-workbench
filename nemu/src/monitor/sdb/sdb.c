@@ -209,11 +209,11 @@ static int cmd_x(char *args) {
 
   // read nemu member
   uint8_t* host_addr = guest_to_host(addr);
-  printf("%0#20x:", addr);
+  printf("%#20x:", addr);
   int i;
   for (i = 0; i < num; i++) {
     // little endian for riscv64
-    printf("%0#8x", *host_addr);
+    printf("%#2x", *host_addr);
     host_addr++;
   }
   printf("\n");
