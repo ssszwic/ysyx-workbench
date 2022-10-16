@@ -33,6 +33,7 @@ static char* rl_gets() {
     line_read = NULL;
   }
 
+  // using prompt as a prompt
   line_read = readline("(nemu) ");
 
   if (line_read && *line_read) {
@@ -43,6 +44,7 @@ static char* rl_gets() {
 }
 
 static int cmd_c(char *args) {
+  // run client program is until the end of program
   cpu_exec(-1);
   return 0;
 }
@@ -57,6 +59,7 @@ static int cmd_help(char *args);
 static struct {
   const char *name;
   const char *description;
+  // funciton
   int (*handler) (char *);
 } cmd_table [] = {
   { "help", "Display information about all supported commands", cmd_help },
@@ -106,13 +109,16 @@ void sdb_mainloop() {
     char *str_end = str + strlen(str);
 
     /* extract the first token as the command */
+    // get first string separated space
     char *cmd = strtok(str, " ");
     if (cmd == NULL) { continue; }
 
     /* treat the remaining string as the arguments,
      * which may need further parsing
      */
+    // args points to the remaining string separated of the input
     char *args = cmd + strlen(cmd) + 1;
+    // there is no 2nd string
     if (args >= str_end) {
       args = NULL;
     }
@@ -123,11 +129,13 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
+        // the remaining string is used as argument to the function
         if (cmd_table[i].handler(args) < 0) { return; }
         break;
       }
     }
 
+    // there is no matching com
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
   }
 }
