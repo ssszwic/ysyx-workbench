@@ -184,12 +184,16 @@ static int cmd_x(char *args) {
     }
   }
 
-  if (first != NULL) {
-    printf("1: %s\n", first);
+  paddr_t addr;
+  int num;
+  // only 1 argument
+  if (second == NULL) {
+    sscanf(first, "%x", &addr);
+    num = 1;
   }
-  if (second != NULL) {
-    printf("2: %s\n", second);
-  }
+
+  printf("%x\n", addr);
+  printf("%d\n", num);
 
 
   return 0;
