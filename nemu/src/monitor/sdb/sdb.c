@@ -108,10 +108,10 @@ static int cmd_si(char *args) {
     if (first == NULL) {
       printf("input space\n");
     }
-    printf("%s", first);
+    printf("%s\n", first);
     n = atoi(args);
   }
-  printf("%d", n);
+  printf("%d\n", n);
 
   // if (n <= 0) {
   //   printf("Invalid input, N must be greater than 0\n");
