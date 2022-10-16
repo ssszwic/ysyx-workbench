@@ -208,7 +208,7 @@ static int cmd_x(char *args) {
   }
 
   // read nemu member
-  uint8_t* host_addr = (uint8_t*) guest_to_host(addr);
+  uint8_t* host_addr = guest_to_host(addr);
   printf("%20x:", addr);
   int i;
   for (i = 0; i < num; i++) {
