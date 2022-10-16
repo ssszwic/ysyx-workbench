@@ -99,12 +99,19 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_si(char *args) {
-  printf("%ld\n", strlen(args));
-  printf("%s\n", args);
-  int n = atoi(args);
-  if (n <= 0) {
-    
+  int n;
+  if (args == NULL) {
+    n = 1;
   }
+  else {
+    n = atoi(args);
+  }
+
+  if (n <= 0) {
+    printf("Invalid input, N must be greater than 0\n");
+    return 0;
+  }
+
   printf("%d\n", n);
   return 0;
 }
