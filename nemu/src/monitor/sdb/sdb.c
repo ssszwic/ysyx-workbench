@@ -188,12 +188,17 @@ static int cmd_x(char *args) {
   int num;
   // only 1 argument
   if (second == NULL) {
-    sscanf(first, "%x", &addr);
     num = 1;
+    sscanf(first, "%x", &addr);
+  }
+  else {
+    sscanf(first, "%d", &num);
+    sscanf(first, "%x", &addr);
   }
 
-  printf("%x\n", addr);
   printf("%d\n", num);
+  printf("%x\n", addr);
+  
 
 
   return 0;
