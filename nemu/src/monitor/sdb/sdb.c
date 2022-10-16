@@ -59,6 +59,8 @@ static int cmd_si(char *args);
 
 static int cmd_info(char *args);
 
+static int cmd_x(char *args);
+
 static int info_reg();
 
 static int info_watch();
@@ -76,6 +78,7 @@ static struct {
   /* TODO: Add more commands */
   { "si", "Execute N instructions in a singel step, default 1", cmd_si},
   { "info", "Print program state, reg (r): reg status; watch (w): watch state", cmd_info},
+  { "x", "Print consecutive N data from the address, default 1 data", cmd_x},
 
 };
 
@@ -136,7 +139,6 @@ static int cmd_info(char *args) {
   // no extra argument
   if (args == NULL) {
     printf("You must type info object, reg (r): reg status; watch (w): watch state\n");
-    // only 'r' and 'w' are acceptable");
     return 0;
   }
   else {
@@ -154,6 +156,26 @@ static int cmd_info(char *args) {
     }
     else {
       printf("Invalid argument, only 'reg' and 'watch' are acceptable\n");
+    }
+  }
+  return 0;
+}
+
+static int cmd_x(char *args) {
+  // no extra argument
+  if (args == NULL) {
+    printf("You must specify memory address\n");
+    return 0;
+  }
+  else {
+    char *first = strtok(args, " ");
+    // argument is space('  ')
+    if (first == NULL) {
+      printf("You must specify memory address\n");
+      return 0;
+    }
+    else {
+      printf("x\n");
     }
   }
   return 0;
