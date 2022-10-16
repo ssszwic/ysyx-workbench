@@ -71,7 +71,7 @@ static struct {
 
   /* TODO: Add more commands */
   { "si", "Execute N instructions in a singel step, default 1", cmd_si},
-  { "info", "Print program state, 'r': reg status; 'w': watch state", cmd_info},
+  { "info", "Print program state, reg (r): reg status; watch (w): watch state", cmd_info},
 
 };
 
@@ -134,7 +134,7 @@ static int cmd_si(char *args) {
 static int cmd_info(char *args) {
   // no extra argument
   if (args == NULL) {
-    printf("You must type info object, 'r': reg status; 'w': watch state\n");
+    printf("You must type info object, 'r'('reg'): reg status; 'w'('watch'): watch state\n");
     // only 'r' and 'w' are acceptable");
     return 0;
   }
