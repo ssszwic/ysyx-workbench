@@ -213,7 +213,7 @@ static int cmd_x(char *args) {
   int i;
   for (i = 0; i < num; i++) {
     // little endian for riscv64
-    printf("%0#4x", *host_addr);
+    printf("%0#8x", *host_addr);
     host_addr++;
   }
   printf("\n");
