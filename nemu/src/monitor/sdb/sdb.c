@@ -162,16 +162,33 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_x(char *args) {
+  char *first = NULL;
+  char *second = NULL;
   // no extra argument
   if (args == NULL) {
     printf("You must specify memory address\n");
     return 0;
   }
   else {
-    printf("%s\n", args);
-    // char *first = strtok(args, " ");
-    // char *second;
-    
+    char *args_end = args + strlen(args);
+    first = strtok(args, " ");
+    if (first == NULL) {
+      // argument is space('  ')
+      printf("You must specify memory address\n");
+      return 0;
+    }
+    char *tmp = first + strlen(first) + 1;
+    if (tmp <= args_end) {
+      // there is no second argument
+      second = strtok(tmp, " ");
+    }
+  }
+
+  if (first != NULL) {
+    printf("%s\n", first);
+  }
+  if (second != NULL) {
+    printf("%s\n", second);
   }
 
 
