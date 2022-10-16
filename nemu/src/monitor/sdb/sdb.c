@@ -162,6 +162,7 @@ static int cmd_info(char *args) {
 }
 
 static int cmd_x(char *args) {
+  printf("%s", args);
   char *first = NULL;
   char *second = NULL;
   // no extra argument
