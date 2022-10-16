@@ -212,7 +212,7 @@ static int cmd_x(char *args) {
   printf("%20x:", addr);
   int i;
   for (i = 0; i < num; i++) {
-    printf("%4x:", *host_addr);
+    printf("%4x\n:", *host_addr);
     host_addr++;
   }
 
