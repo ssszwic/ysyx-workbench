@@ -67,6 +67,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
+  { "si", "EXecute N instructions in a singel step, default 1"},
 
 };
 
