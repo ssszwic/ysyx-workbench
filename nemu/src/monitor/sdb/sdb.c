@@ -59,6 +59,10 @@ static int cmd_si(char *args);
 
 static int cmd_info(char *args);
 
+static int info_reg();
+
+static int info_watch();
+
 static struct {
   const char *name;
   const char *description;
@@ -119,15 +123,12 @@ static int cmd_si(char *args) {
       n = atoi(args);
     }
   }
-
   // N > 0
   if (n <= 0) {
     printf("Invalid input, N must be greater than 0\n");
     return 0;
   }
-
   cpu_exec(n);
-
   return 0;
 }
 
@@ -146,10 +147,10 @@ static int cmd_info(char *args) {
       return 0;
     }
     else if ((strcmp(first, "r") == 0) || (strcmp(first, "reg") == 0)) {
-      printf("reg\n");
+      info_reg();
     }
     else if ((strcmp(first, "w") == 0) || (strcmp(first, "watch") == 0)) {
-      printf("watch\n");
+      info_watch();
     }
     else {
       printf("Invalid argument, only 'reg' and 'watch' are acceptable\n");
@@ -158,6 +159,15 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+static int info_reg() {
+  printf("reg\n");
+  return 0;
+}
+
+static int info_watch() {
+  printf("watch\n");
+  return 0;
+}
 // end
 
 void sdb_set_batch_mode() {
