@@ -203,7 +203,7 @@ static int cmd_x(char *args) {
   // printf("%x\n", addr);
   char first[100];
   char second[100];
-  printf("%d\n", sscanf(args, "%s[^ ]%s", first, second));
+  printf("%d\n", sscanf(args, "%s %s", first, second));
   printf("%s\n", first);
   printf("%s\n", second);
 
