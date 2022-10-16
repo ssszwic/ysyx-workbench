@@ -57,6 +57,8 @@ static int cmd_help(char *args);
 
 static int cmd_si(char *args);
 
+static int cmd_info(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -68,7 +70,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
 
   /* TODO: Add more commands */
-  { "si", "EXecute N instructions in a singel step, default 1", cmd_si},
+  { "si", "Execute N instructions in a singel step, default 1", cmd_si},
+  { "info", "Print program state, 'r': reg status; 'w': watch state", cmd_info},
 
 };
 
@@ -98,6 +101,7 @@ static int cmd_help(char *args) {
   return 0;
 }
 
+// ssszw add funciton 2022.10.16
 static int cmd_si(char *args) {
   int n;
   if (args == NULL) {
@@ -122,6 +126,12 @@ static int cmd_si(char *args) {
 
   return 0;
 }
+
+static int cmd_info(char *args) {
+  return 0;
+}
+
+// end
 
 void sdb_set_batch_mode() {
   is_batch_mode = true;
