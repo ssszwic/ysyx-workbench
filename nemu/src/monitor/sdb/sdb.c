@@ -142,9 +142,9 @@ static int cmd_info(char *args) {
     return 0;
   }
   else {
-    // argument is space('  ')
     char *first = strtok(args, " ");
     if (first == NULL) {
+      // argument is space('  ')
       printf("You must type info object, reg (r): reg status; watch (w): watch state\n");
       return 0;
     }
@@ -168,16 +168,13 @@ static int cmd_x(char *args) {
     return 0;
   }
   else {
-    char *first = strtok(args, " ");
-    // argument is space('  ')
-    if (first == NULL) {
-      printf("You must specify memory address\n");
-      return 0;
-    }
-    else {
-      printf("x\n");
-    }
+    printf("%s\n", args);
+    // char *first = strtok(args, " ");
+    // char *second;
+    
   }
+
+
   return 0;
 }
 
