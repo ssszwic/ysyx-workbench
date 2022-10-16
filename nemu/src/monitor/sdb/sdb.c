@@ -106,10 +106,11 @@ static int cmd_si(char *args) {
   else {
     char *first = strtok(args, " ");
     if (first == NULL) {
-      printf("input space\n");
+      n = 1;
     }
-    printf("%s\n", first);
-    // n = atoi(args);
+    else {
+      n = atoi(args);
+    }
   }
   printf("%d\n", n);
 
