@@ -186,14 +186,14 @@ static int cmd_x(char *args) {
   }
 
   paddr_t addr;
-  int *num = NULL;
+  int num;
   // only 1 argument
   if (second == NULL) {
     sscanf(first, "%x", &addr);
   }
   else {
-    sscanf(first, "%d", num);
-    sscanf(second, "%x", &addr);
+    printf("%d", sscanf(first, "%d", &num));
+    printf("%d", sscanf(second, "%x", &addr));
   }
 
   // if (num != NULL) {
