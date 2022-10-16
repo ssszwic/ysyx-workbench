@@ -160,12 +160,12 @@ static int cmd_info(char *args) {
 }
 
 static int info_reg() {
-  printf("reg\n");
+  isa_reg_display();
   return 0;
 }
 
 static int info_watch() {
-  printf("watch\n");
+  printf("watch not done\n");
   return 0;
 }
 // end
