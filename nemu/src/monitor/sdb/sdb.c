@@ -196,11 +196,17 @@ static int cmd_x(char *args) {
   //   printf("%d\n", sscanf(second, "%x", &addr));
   // }
 
-  paddr_t addr;
-  int num;
-  printf("%d\n", sscanf(args, "%d[^ ]%x", &num, &addr));
-  printf("%d\n", num);
-  printf("%x\n", addr);
+  // paddr_t addr;
+  // int num;
+  // printf("%d\n", sscanf(args, "%d[^ ]%x", &num, &addr));
+  // printf("%d\n", num);
+  // printf("%x\n", addr);
+  char first[100];
+  char second[100];
+  printf("%d\n", sscanf(args, "%s[^ ]%s", first, second));
+  printf("%s\n", first);
+  printf("%s\n", second);
+
 
 
 
