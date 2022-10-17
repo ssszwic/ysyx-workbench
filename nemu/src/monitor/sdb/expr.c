@@ -36,15 +36,15 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},      // spaces
-  {"\\+", '+'},           // plus
-  {"\\-", '-'},           // sub
-  {"\\*", '*'},           // mul
-  {"\\/", '/'},           // div
-  {"\\(", '('},           // left bracket
-  {"\\)", ')'},           // right bracket
+  {" +", TK_NOTYPE},            // spaces
+  {"\\+", '+'},                 // plus
+  {"\\-", '-'},                 // sub
+  {"\\*", '*'},                 // mul
+  {"\\/", '/'},                 // div
+  {"\\(", '('},                 // left bracket
+  {"\\)", ')'},                 // right bracket
   {"[0-9]+\\.[0-9]+", TK_NUM},  // num
-  {"==", TK_EQ},          // equal
+  {"==", TK_EQ},                // equal
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -94,16 +94,22 @@ static bool make_token(char *e) {
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
-        position += substr_len;
-
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
 
-        // switch (rules[i].token_type) {
-        //   default: TODO();
-        // }
+        if (rules[i].token_type != TK_NOTYPE) {
+          if (substr_len > 32) {
+            printf("string is too long, must less than 32 at position %d\n%s\n%*.s^\n", position, e, position, "");
+            return false;
+          }
+          tokens[nr_token].type = rules[i].token_type;
+          strncpy(tokens[nr_token].str, e + position, substr_len);
+          nr_token ++;
+        }
+
+        position += substr_len;
 
         break;
       }
