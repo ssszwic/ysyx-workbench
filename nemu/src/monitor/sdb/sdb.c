@@ -62,6 +62,8 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
+static int cmd_expr(char *args);
+
 static int info_reg();
 
 static int info_watch();
@@ -80,6 +82,7 @@ static struct {
   { "si", "Execute N instructions in a singel step, default 1", cmd_si},
   { "info", "Print program state, reg (r): reg status; watch (w): watch state", cmd_info},
   { "x", "Print consecutive N data from the address, default 1 data", cmd_x},
+  {"\"", "Expression evaluation", cmd_expr},
 
 };
 
@@ -221,6 +224,12 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_expr(char *args) {
+  printf("%s\n", args);
+
+  return 0;
+}
+
 static int info_reg() {
   isa_reg_display();
   return 0;
@@ -260,7 +269,7 @@ void sdb_mainloop() {
     }
 #ifdef CONFIG_DEVICE
     extern void sdl_clear_event_queue();
-    sdl_clear_event_queue();
+    sdl_clear_event_queue();  
 #endif
     int i;
     for (i = 0; i < NR_CMD; i ++) {
