@@ -285,9 +285,11 @@ void sdb_mainloop() {
       // if no matched cmd, consider it as expression
       bool *success = NULL;
       success = malloc(sizeof(bool));
-      expr(cmd, success);
-      free(success);
+      *success = true;
 
+      expr(cmd, success);
+
+      free(success);
       // printf("Unknown command '%s'\n", cmd); 
     }
   }
