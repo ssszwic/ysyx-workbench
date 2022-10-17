@@ -132,6 +132,8 @@ static bool make_token(char *e) {
 }
 
 static bool eliminate_parentheses(char *str_parent) {
+  printf("%ld", strlen(str_parent));
+
   int i = 0;
   for (i = 0; i < strlen(str_parent) - 1; i++) {
     if (str_parent[i] == '(' && str_parent[i+1] == ')') {
