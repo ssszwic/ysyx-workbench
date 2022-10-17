@@ -135,6 +135,7 @@ static int eliminate_parentheses(char *str_parent) {
   // if (str_parent[0] == '\0') {
   //   return 0;
   // }
+  printf("%s\n", str_parent);
   int i = 0;
   int len = strlen(str_parent);
   for (i = 0; i < len - 1; i++) {
@@ -164,7 +165,7 @@ static bool check_parentheses(int p, int q) {
     }
   }
   str_parent[index] = '\0';
-  
+
   eliminate_parentheses(str_parent);
   // unmatched parentheses in token
   if (strlen(str_parent) == 0) {
