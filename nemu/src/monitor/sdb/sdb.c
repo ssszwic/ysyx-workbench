@@ -251,7 +251,7 @@ void sdb_mainloop() {
     return;
   }
   for (char *str; (str = rl_gets()) != NULL; ) {
-    // copy str to expr_str for expr
+    // copy str to expr_str for expression
     char *expr_str = NULL;
     expr_str = malloc(strlen(str) * sizeof(char));
     strcpy(expr_str, str);
