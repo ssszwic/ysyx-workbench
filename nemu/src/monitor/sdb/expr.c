@@ -100,6 +100,10 @@ static bool make_token(char *e) {
          */
 
         if (rules[i].token_type != TK_NOTYPE) {
+          if (nr_token >= 32) {
+            printf("paramaters are too much, must less than 32 at position %d\n%s\n%*.s^\n", position, e, position, "");
+            return false;
+          }
           if (substr_len > 32) {
             printf("string is too long, must less than 32 at position %d\n%s\n%*.s^\n", position, e, position, "");
             return false;
@@ -108,6 +112,8 @@ static bool make_token(char *e) {
           strncpy(tokens[nr_token].str, e + position, substr_len);
           nr_token ++;
         }
+
+        
 
         position += substr_len;
 
