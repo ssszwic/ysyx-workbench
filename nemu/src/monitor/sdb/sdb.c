@@ -62,6 +62,8 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
+static int cmd_expr(char *args);
+
 static int info_reg();
 
 static int info_watch();
@@ -80,6 +82,7 @@ static struct {
   { "si", "Execute N instructions in a singel step, default 1", cmd_si},
   { "info", "Print program state, reg (r): reg status; watch (w): watch state", cmd_info},
   { "x", "Print consecutive N data from the address, default 1 data", cmd_x},
+  {"\"", "Expression evaluation", cmd_expr},
 
 };
 
@@ -221,6 +224,12 @@ static int cmd_x(char *args) {
   return 0;
 }
 
+static int cmd_expr(char *args) {
+  printf("%s\n", args);
+
+  return 0;
+}
+
 static int info_reg() {
   isa_reg_display();
   return 0;
@@ -242,8 +251,12 @@ void sdb_mainloop() {
     return;
   }
   for (char *str; (str = rl_gets()) != NULL; ) {
-    char *str_end = str + strlen(str);
+    // copy str to expr_str for expression
+    char *expr_str = NULL;
+    expr_str = malloc(strlen(str) * sizeof(char));
+    strcpy(expr_str, str);
 
+    char *str_end = str + strlen(str);
     /* extract the first token as the command */
     // get first string separated space
     char *cmd = strtok(str, " ");
@@ -260,7 +273,7 @@ void sdb_mainloop() {
     }
 #ifdef CONFIG_DEVICE
     extern void sdl_clear_event_queue();
-    sdl_clear_event_queue();
+    sdl_clear_event_queue();  
 #endif
     int i;
     for (i = 0; i < NR_CMD; i ++) {
@@ -272,7 +285,20 @@ void sdb_mainloop() {
     }
 
     // there is no matching com
-    if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
+    if (i == NR_CMD) { 
+      // if no matched cmd, consider it as expression
+      bool *success = NULL;
+      success = malloc(sizeof(bool));
+      *success = true;
+      expr(expr_str, success);
+
+      free(success);
+
+      if (! *success) {
+        printf("Unknown command '%s'\n", cmd); 
+      }
+    }
+    free(expr_str);
   }
 }
 
@@ -280,6 +306,6 @@ void init_sdb() {
   /* Compile the regular expressions. */
   init_regex();
 
-  /* Initialize the watchpoint pool. */
+  /* Initialize the watchpoinNULLt pool. */
   init_wp_pool();
 }
