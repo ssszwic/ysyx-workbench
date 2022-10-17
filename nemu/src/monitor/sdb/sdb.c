@@ -251,7 +251,11 @@ void sdb_mainloop() {
     return;
   }
   for (char *str; (str = rl_gets()) != NULL; ) {
-    char *str_expr = str;
+    // copy str to expr_str for expr
+    char *expr_str = NULL;
+    expr_str = malloc(strlen(str) * sizeof(char));
+    strcpy(expr_str, str);
+
     char *str_end = str + strlen(str);
     /* extract the first token as the command */
     // get first string separated space
@@ -286,7 +290,7 @@ void sdb_mainloop() {
       bool *success = NULL;
       success = malloc(sizeof(bool));
       *success = true;
-      expr(str_expr, success);
+      expr(expr_str, success);
 
       free(success);
 
@@ -294,6 +298,7 @@ void sdb_mainloop() {
         printf("Unknown command '%s'\n", cmd); 
       }
     }
+    free(expr_str);
   }
 }
 
