@@ -143,6 +143,7 @@ static int eliminate_parentheses(char *str_parent) {
       break;
     }
   }
+  printf("i: %d\n", i);
   // no eliminate parentheses
   if (i == strlen(str_parent)) {
     return 0;
