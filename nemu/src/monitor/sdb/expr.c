@@ -95,9 +95,9 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
-        switch (rules[i].token_type) {
-          default: TODO();
-        }
+        // switch (rules[i].token_type) {
+        //   default: TODO();
+        // }
 
         break;
       }
@@ -121,7 +121,7 @@ word_t expr(char *e, bool *success) {
   }
 
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  // TODO();
 
   return 0;
 }
