@@ -137,7 +137,7 @@ static bool eliminate_parentheses(char *str_parent) {
   // }
 
   int i = 0;
-  for (i = 0; i < strlen(str_parent) - 1; i++) {
+  for (i = 0; i < -1; i++) {
     printf("%d", i);
     if (str_parent[i] == '(' && str_parent[i+1] == ')') {
       break;
