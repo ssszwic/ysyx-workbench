@@ -40,8 +40,8 @@ static struct rule {
   {" -", TK_NOTYPE},    // spaces
   {" /", TK_NOTYPE},    // spaces
   {" \\*", TK_NOTYPE},    // spaces
-  {" (", '('},           // div
-  {" )", ')'},           // div
+  {" \\(", '('},           // div
+  {" \\)", ')'},           // div
   {"\\+", '+'},         // plus
   {"\\-", '-'},           // sub
   {"\\*", '*'},           // mul
