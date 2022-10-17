@@ -139,7 +139,7 @@ static bool eliminate_parentheses(char *str_parent) {
     }
   }
   int j = 0;
-  for (int j = i; j < strlen(str_parent) - 2; j++) {
+  for (j = i; j < strlen(str_parent) - 2; j++) {
     str_parent[j] = str_parent[j+2];
   }
   // no eliminate parentheses
@@ -147,7 +147,7 @@ static bool eliminate_parentheses(char *str_parent) {
     return 0;
   }
   else {
-    str_parent[j+1] = '\n';
+    str_parent[j+1] = '\0';
     return eliminate_parentheses(str_parent);
   }
 }
