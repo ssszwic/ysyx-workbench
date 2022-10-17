@@ -27,6 +27,8 @@ enum {
 
 };
 
+static bool eval_success;
+
 static struct rule {
   const char *regex;
   int token_type;
@@ -41,8 +43,8 @@ static struct rule {
   {"\\-", '-'},                 // sub
   {"\\*", '*'},                 // mul
   {"\\/", '/'},                 // div
-  {"\\(", '('},                 // left bracket
-  {"\\)", ')'},                 // right bracket
+  {"\\(", '('},                 // left Parentheses
+  {"\\)", ')'},                 // right Parentheses
   {"[0-9]+\\.?[0-9]+?", TK_NUM},  // num (consider '-' when eval)
   {"==", TK_EQ},                // equal
 };
@@ -129,12 +131,98 @@ static bool make_token(char *e) {
   return true;
 }
 
-static float eval(int p, int d) {
-  // print tokens
-  printf("tkoens:\n");
-  for (int i = 0; i <= d; i++) {
-    printf("%c: %s\n", tokens[i].type, tokens[i].str);
+static bool eliminate_parentheses(char *str_parent) {
+  int i = 0;
+  for (i = 0; i < strlen(str_parent) - 1; i++) {
+    if (str_parent[i] == '(' && str_parent[i+1] == ')') {
+      break;
+    }
   }
+  int j = 0;
+  for (int j = i; j < strlen(str_parent) - 2; j++) {
+    str_parent[j] = str_parent[j+2];
+  }
+  // no eliminate parentheses
+  if (j == (strlen(str_parent) - 1)) {
+    return 0;
+  }
+  else {
+    str_parent[j+1] = '\n';
+    return eliminate_parentheses(str_parent);
+  }
+}
+
+static bool check_parentheses(int p, int q) {
+  char str_parent[40];
+  int index = 0;
+  for (int i = p; i <= q; i++) {
+    if (tokens[q].type == '(' || tokens[q].type == ')') {
+      str_parent[index++] = tokens[q].type;
+    }
+  }
+  str_parent[index] = '\0';
+
+  eliminate_parentheses(str_parent);
+  // unmatched parentheses in token
+  if (strlen(str_parent) == 0) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+static float eval(int p, int q) {
+  // print tokens
+  // printf("tkoens:\n");
+  // for (int i = 0; i <= d; i++) {
+  //   printf("%c: %s\n", tokens[i].type, tokens[i].str);
+  // }
+
+  printf("%d\n", check_parentheses(p, q));
+
+  // if (p > q) {
+  //   /* Bad expression */
+  //   printf("p > q");
+  //   assert(0);
+  // }
+  // else if (p == q) {
+  //   /* Single token.
+  //    * For now this token should be a number.
+  //    * Return the value of the number.
+  //    */
+  //   // check paramater type, it must be num
+  //   if (tokens[q].type != TK_NUM) {
+  //     printf("error! single token must be num.");
+  //     eval_success = false;
+  //     return 0;
+  //   }
+  //   return strod(tokens[q].str, NULL);
+  // }
+  // else if (check_parentheses(p, q) == true) {
+  //   /* The expression is surrounded by a matched pair otokensf parentheses.
+  //    * If that is the case, just throw away the parentheses.
+  //    */
+  //   return eval(p + 1, q - 1);
+  // }
+  // else {
+  //   /* We should do more things here. */
+  //   switch(tokens[p].type) {
+  //     case '+': 
+  //       return eval(p + 1, q);
+  //     case '-': {
+  //       if (tokens[p+1].type == '(') {
+  //         return -eval(p + 1, q);
+  //       }
+  //       else if(tokens[p+1].type == TK_NUM) {
+  //         return ;
+  //       }
+  //     }
+
+  //   }
+
+  // }
+
   return 0;
 }
 
@@ -145,7 +233,7 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-
+  eval_success = true;
   eval(0, nr_token-1);
 
   /* TODO: Insert codes to evaluate the expression. */
