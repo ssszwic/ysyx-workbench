@@ -184,7 +184,7 @@ static float eval(int p, int q) {
   //   printf("%c: %s\n", tokens[i].type, tokens[i].str);
   // }
 
-  printf("%d\n", check_parentheses(p, q));
+  check_parentheses(p, q);
 
   // if (p > q) {
   //   /* Bad expression */
