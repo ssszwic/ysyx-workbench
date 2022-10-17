@@ -251,14 +251,13 @@ void sdb_mainloop() {
     return;
   }
   for (char *str; (str = rl_gets()) != NULL; ) {
-    printf("%s\n", str);
+    char *str_expr = str;
     char *str_end = str + strlen(str);
-    printf("%s\n", str);
+    printf("%s\n", str_expr);
     /* extract the first token as the command */
     // get first string separated space
     char *cmd = strtok(str, " ");
     if (cmd == NULL) { continue; }
-    printf("%s\n", str);
 
     /* treat the remaining string as the arguments,
      * which may need further parsing
