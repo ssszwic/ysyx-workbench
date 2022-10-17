@@ -156,8 +156,8 @@ static bool check_parentheses(int p, int q) {
   char str_parent[40];
   int index = 0;
   for (int i = p; i <= q; i++) {
-    if (tokens[q].type == '(' || tokens[q].type == ')') {
-      str_parent[index++] = tokens[q].type;
+    if (tokens[i].type == '(' || tokens[i].type == ')') {
+      str_parent[index++] = tokens[i].type;
     }
   }
   str_parent[index] = '\0';
