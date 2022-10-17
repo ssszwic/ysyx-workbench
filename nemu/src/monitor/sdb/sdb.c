@@ -253,7 +253,6 @@ void sdb_mainloop() {
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_expr = str;
     char *str_end = str + strlen(str);
-    printf("%s\n", str_expr);
     /* extract the first token as the command */
     // get first string separated space
     char *cmd = strtok(str, " ");
@@ -287,8 +286,7 @@ void sdb_mainloop() {
       bool *success = NULL;
       success = malloc(sizeof(bool));
       *success = true;
-      printf("%s\n", str);
-      expr(str, success);
+      expr(str_expr, success);
 
       free(success);
 
