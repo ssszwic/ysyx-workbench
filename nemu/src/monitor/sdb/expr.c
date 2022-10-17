@@ -21,7 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUM = 255,
+  TK_NOTYPE = 256, TK_EQ, TK_NUM = 102,
 
   /* TODO: Add more token types */
 
@@ -115,10 +115,7 @@ static bool make_token(char *e) {
           nr_token ++;
         }
 
-        
-
         position += substr_len;
-
         break;
       }
     }
@@ -132,6 +129,15 @@ static bool make_token(char *e) {
   return true;
 }
 
+static float eval(int p, int d) {
+  // print tokens
+  printf("tkoens:\n");
+  for (int i = 0; i <= d; i++) {
+    printf("%c: %s\n", tokens[i].type, tokens[i].str);
+  }
+  return 0;
+}
+
 
 word_t expr(char *e, bool *success) {
   printf("%s\n", e);
@@ -140,8 +146,10 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
 
+  eval(0, nr_token-1);
+
   /* TODO: Insert codes to evaluate the expression. */
-  // TODO();
+  
 
   return 0;
 }
