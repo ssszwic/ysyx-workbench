@@ -258,6 +258,7 @@ void sdb_mainloop() {
     // get first string separated space
     char *cmd = strtok(str, " ");
     if (cmd == NULL) { continue; }
+    printf("%s\n", str);
 
     /* treat the remaining string as the arguments,
      * which may need further parsing
@@ -287,7 +288,7 @@ void sdb_mainloop() {
       bool *success = NULL;
       success = malloc(sizeof(bool));
       *success = true;
-
+      printf("%s\n", str);
       expr(str, success);
 
       free(success);
