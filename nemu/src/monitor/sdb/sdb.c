@@ -290,7 +290,10 @@ void sdb_mainloop() {
       expr(cmd, success);
 
       free(success);
-      // printf("Unknown command '%s'\n", cmd); 
+
+      if (! *success) {
+        printf("Unknown command '%s'\n", cmd); 
+      }
     }
   }
 }
