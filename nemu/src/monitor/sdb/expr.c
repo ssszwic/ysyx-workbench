@@ -138,18 +138,18 @@ static bool eliminate_parentheses(char *str_parent) {
       break;
     }
   }
+  // no eliminate parentheses
+  if (i == strlen(str_parent)) {
+    return 0;
+  }
+
   int j = 0;
   for (j = i; j < strlen(str_parent) - 2; j++) {
     str_parent[j] = str_parent[j+2];
   }
-  // no eliminate parentheses
-  if (j == (strlen(str_parent) - 1)) {
-    return 0;
-  }
-  else {
-    str_parent[j+1] = '\0';
-    return eliminate_parentheses(str_parent);
-  }
+  
+  str_parent[j] = '\0';
+  return eliminate_parentheses(str_parent);
 }
 
 static bool check_parentheses(int p, int q) {
