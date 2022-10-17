@@ -132,12 +132,13 @@ static bool make_token(char *e) {
 }
 
 static bool eliminate_parentheses(char *str_parent) {
-  if (str_parent[0] == '\0') {
-    return 0;
-  }
+  // if (str_parent[0] == '\0') {
+  //   return 0;
+  // }
 
   int i = 0;
   for (i = 0; i < strlen(str_parent) - 1; i++) {
+    printf("%d", i);
     if (str_parent[i] == '(' && str_parent[i+1] == ')') {
       break;
     }
@@ -167,7 +168,6 @@ static bool check_parentheses(int p, int q) {
   str_parent[index] = '\0';
 
   eliminate_parentheses(str_parent);
-  printf("%ld\n", strlen(str_parent));
   // unmatched parentheses in token
   if (strlen(str_parent) == 0) {
     return true;
@@ -184,7 +184,7 @@ static float eval(int p, int q) {
   //   printf("%c: %s\n", tokens[i].type, tokens[i].str);
   // }
 
-  check_parentheses(p, q);
+  printf("%d\n", check_parentheses(p, q));
 
   // if (p > q) {
   //   /* Bad expression */
