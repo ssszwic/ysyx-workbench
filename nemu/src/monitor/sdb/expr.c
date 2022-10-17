@@ -43,7 +43,7 @@ static struct rule {
   {"\\/", '/'},                 // div
   {"\\(", '('},                 // left bracket
   {"\\)", ')'},                 // right bracket
-  {"^[-]?[0-9]+\\.?[0-9]+", TK_NUM},  // num
+  {"[0-9]+\\.?[0-9]+", TK_NUM},  // num (consider '-' when eval)
   {"==", TK_EQ},                // equal
 };
 
