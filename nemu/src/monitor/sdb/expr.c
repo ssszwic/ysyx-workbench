@@ -36,15 +36,15 @@ static struct rule {
    * Pay attention to the precedence level of different rules.
    */
 
-  {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
+  {" +", TK_NOTYPE},      // spaces
+  {"\\+", '+'},           // plus
   {"\\-", '-'},           // sub
   {"\\*", '*'},           // mul
   {"\\/", '/'},           // div
-  {"\\(", '('},           // div
-  {"\\)", ')'},           // div
-  {"[0-9\\.]+", TK_NUM},           // num
-  {"==", TK_EQ},        // equal
+  {"\\(", '('},           // left bracket
+  {"\\)", ')'},           // right bracket
+  {"[0-9]+\\.[0-9]+", TK_NUM},  // num
+  {"==", TK_EQ},          // equal
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -89,7 +89,9 @@ static bool make_token(char *e) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
         // first char match successful
         char *substr_start = e + position;
-        int substr_len = pmatch.rm_eo;
+        int substr_len = pmatch.rm_eo;        switch (rules[i].token_type) {
+          default: TODO();
+        }
 
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
@@ -101,9 +103,9 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
-        // switch (rules[i].token_type) {
-        //   default: TODO();
-        // }
+        switch (rules[i].token_type) {
+          default: TODO();
+        }
 
         break;
       }
