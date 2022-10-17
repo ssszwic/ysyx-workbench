@@ -132,7 +132,9 @@ static bool make_token(char *e) {
 }
 
 static bool eliminate_parentheses(char *str_parent) {
-  printf("%ld", strlen(str_parent));
+  if (str_parent == NULL) {
+    return 0;
+  }
 
   int i = 0;
   for (i = 0; i < strlen(str_parent) - 1; i++) {
