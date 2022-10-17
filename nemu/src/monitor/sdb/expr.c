@@ -167,7 +167,7 @@ static bool check_parentheses(int p, int q) {
   str_parent[index] = '\0';
 
   eliminate_parentheses(str_parent);
-  printf("%ld", strlen(str_parent));
+  printf("%ld\n", strlen(str_parent));
   // unmatched parentheses in token
   if (strlen(str_parent) == 0) {
     return true;
