@@ -284,8 +284,9 @@ void sdb_mainloop() {
     if (i == NR_CMD) { 
       // if no matched cmd, consider it as expression
       bool *success = NULL;
-      printf("%s\n", cmd);
+      success = malloc(sizeof(bool));
       expr(cmd, success);
+      free(success);
 
       // printf("Unknown command '%s'\n", cmd); 
     }
