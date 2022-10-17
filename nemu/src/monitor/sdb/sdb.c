@@ -281,7 +281,12 @@ void sdb_mainloop() {
     }
 
     // there is no matching com
-    if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
+    if (i == NR_CMD) { 
+      // if no matched cmd, consider it as expression
+      bool *success = NULL;
+      expr(cmd, success);
+      // printf("Unknown command '%s'\n", cmd); 
+    }
   }
 }
 
@@ -289,6 +294,6 @@ void init_sdb() {
   /* Compile the regular expressions. */
   init_regex();
 
-  /* Initialize the watchpoint pool. */
+  /* Initialize the watchpoinNULLt pool. */
   init_wp_pool();
 }
