@@ -287,7 +287,7 @@ void sdb_mainloop() {
       success = malloc(sizeof(bool));
       *success = true;
 
-      expr(cmd, success);
+      expr(str, success);
 
       free(success);
 
