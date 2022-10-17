@@ -135,15 +135,16 @@ static int eliminate_parentheses(char *str_parent) {
   // if (str_parent[0] == '\0') {
   //   return 0;
   // }
-  printf("%s\n", str_parent);
   int i = 0;
   int len = strlen(str_parent);
+  if (len < 2) {
+    return 0;
+  }
   for (i = 0; i < len - 1; i++) {
     if (str_parent[i] == '(' && str_parent[i+1] == ')') {
       break;
     }
   }
-  printf("i: %d\n", i);
   // no eliminate parentheses
   if (i == strlen(str_parent)) {
     return 0;
