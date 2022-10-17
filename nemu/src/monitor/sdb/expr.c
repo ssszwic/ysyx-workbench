@@ -135,7 +135,7 @@ static bool eliminate_parentheses(char *str_parent) {
   // if (str_parent[0] == '\0') {
   //   return 0;
   // }
-
+  printf("%ld", strlen(str_parent) - 1);
   int i = 0;
   int len = strlen(str_parent);
   for (i = 0; i < len - 1; i++) {
