@@ -131,11 +131,10 @@ static bool make_token(char *e) {
   return true;
 }
 
-static bool eliminate_parentheses(char *str_parent) {
+static int eliminate_parentheses(char *str_parent) {
   // if (str_parent[0] == '\0') {
   //   return 0;
   // }
-  printf("%lu\n", strlen(str_parent) - 1);
   int i = 0;
   int len = strlen(str_parent);
   for (i = 0; i < len - 1; i++) {
@@ -147,12 +146,11 @@ static bool eliminate_parentheses(char *str_parent) {
   if (i == strlen(str_parent)) {
     return 0;
   }
-
+  // delate first '()'
   int j = 0;
   for (j = i; j < strlen(str_parent) - 2; j++) {
     str_parent[j] = str_parent[j+2];
   }
-  
   str_parent[j] = '\0';
   return eliminate_parentheses(str_parent);
 }
@@ -166,7 +164,7 @@ static bool check_parentheses(int p, int q) {
     }
   }
   str_parent[index] = '\0';
-
+  
   eliminate_parentheses(str_parent);
   // unmatched parentheses in token
   if (strlen(str_parent) == 0) {
