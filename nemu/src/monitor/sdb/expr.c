@@ -365,6 +365,7 @@ word_t expr(char *e, bool *success) {
       printf("expression: %s\n", buf);
       printf("cal result: %u\n", test_result);
       printf("real result: %lu\n", strtoul(test_str, NULL, 10));
+      printf("\n");
     }
     i++;
   }
