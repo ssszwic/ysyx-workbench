@@ -310,11 +310,11 @@ static uint32_t eval(int p, int q) {
       uint32_t tmp = eval(op + 1, q) == 0;
       if (tmp == 0) {
         if (!eval_success) {
-          return eval(p, op - 1) / tmp;
+          return 0;
         }
         printf("error! the divisor cannot be 0.\n");
         eval_success = false;
-        return eval(p, op - 1) / tmp;
+        return 0;
       }
       else {
         return eval(p, op - 1) / tmp;
@@ -339,7 +339,7 @@ word_t expr(char *e, bool *success) {
   }
 
   // test for expression
-  // type any valid expression to start test
+  // type any valid expression to starttest
   FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
   uint32_t test_result = 0;
   char test_str[40] = {};
