@@ -337,22 +337,32 @@ word_t expr(char *e, bool *success) {
     printf("%u\n", result);
   }
 
+  // test
   FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
-  char result_test[40] = {};
+  uint32_t test_result = 0;
+  char test_str[40] = {};
   char buf[1000] = {};
+  int i = 0;
   while (1) {
-    if (fgets(result_test, sizeof(result_test), fp) == NULL) {
+    if (fgets(test_str, sizeof(test_str), fp) == NULL) {
       break;
     }
     if (fgets(buf, sizeof(buf), fp) == NULL) {
       break;
     }
-    printf("%s", result_test);
-    printf("%s", buf);
-    printf("\n");
+    if (!make_token(e)) {
+      printf("matched failed! at %d\n", i);
+      break;
+    }
+    eval_success = true;
+    test_result = eval(0, nr_token-1);
+    if(!eval_success || (test_result != strtoul(test_str, NULL, 10))) {
+      printf("cal error at %d\n", i);
+      break;
+    }
+    i++;
   }
   fclose(fp);
-  
 
 
   
