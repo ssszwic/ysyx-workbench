@@ -237,7 +237,7 @@ static float eval(int p, int q) {
   while (i <= q) {
     switch(tokens[i].type) {
       case '(': {
-        j = p + 1;
+        j = i + 1;
         while (!check_parentheses(p, j)) j++;
         i = j + 1;
         break;
