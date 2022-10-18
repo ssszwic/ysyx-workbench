@@ -181,11 +181,11 @@ static bool check_parentheses(int p, int q) {
 
 static uint32_t eval(int p, int q) {
   // print tokens
-  // printf("tkoens:\n");
-  // for (int i = p; i <= q; i++) {
-  //   printf("%s", tokens[i].str);
-  // }
-  // printf("\ntkoens end\n");
+  printf("tkoens: ");
+  for (int i = p; i <= q; i++) {
+    printf("%s", tokens[i].str);
+  }
+  printf("\n");
 
 
   if (p > q) {
