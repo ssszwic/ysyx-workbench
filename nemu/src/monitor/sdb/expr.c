@@ -182,7 +182,7 @@ static bool check_parentheses(int p, int q) {
 static float eval(int p, int q) {
   // print tokens
   printf("tkoens:\n");
-  for (int i = 0; i <= q; i++) {
+  for (int i = p; i <= q; i++) {
     printf("%s", tokens[i].str);
   }
   printf("\ntkoens end\n");
