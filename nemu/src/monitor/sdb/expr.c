@@ -347,11 +347,12 @@ word_t expr(char *e, bool *success) {
     if (fgets(test_str, sizeof(test_str), fp) == NULL) {
       break;
     }
-    // delate \n
-    test_str[strlen(test_str) - 1] = '\0';
+    
     if (fgets(buf, sizeof(buf), fp) == NULL) {
       break;
     }
+    // delate \n
+    buf[strlen(buf) - 1] = '\0';
     if (!make_token(buf)) {
       printf("matched failed! at %d\n", i);
       break;
