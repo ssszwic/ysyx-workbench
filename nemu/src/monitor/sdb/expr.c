@@ -289,7 +289,7 @@ static float eval(int p, int q) {
 
   // if op on the edge, only '-' on left is allowed
   if ((op == p) || (op == q)) {
-    if ((op == p) && (tokens[q].type == '-')) {
+    if ((op == p) && (tokens[op].type == '-')) {
       return -eval(p + 1, q);
     }
     printf("error! the op isn't matched.\n");
