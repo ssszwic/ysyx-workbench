@@ -350,7 +350,7 @@ word_t expr(char *e, bool *success) {
     if (fgets(buf, sizeof(buf), fp) == NULL) {
       break;
     }
-    if (!make_token(e)) {
+    if (!make_token(buf)) {
       printf("matched failed! at %d\n", i);
       break;
     }
