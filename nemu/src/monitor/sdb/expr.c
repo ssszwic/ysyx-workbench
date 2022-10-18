@@ -288,7 +288,7 @@ static float eval(int p, int q) {
   }
 
   // if op on the edge, only '-' on left is allowed
-  if ((op == q) || (op == q)) {
+  if ((op == p) || (op == q)) {
     if ((op == p) && (tokens[q].type == '-')) {
       return -eval(p + 1, q);
     }
