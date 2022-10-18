@@ -310,11 +310,11 @@ static uint32_t eval(int p, int q) {
       uint32_t tmp = eval(op + 1, q) == 0;
       if (tmp == 0) {
         if (!eval_success) {
-          return 0;
+          return eval(p, op - 1) / tmp;
         }
         printf("error! the divisor cannot be 0.\n");
         eval_success = false;
-        return 0;
+        return eval(p, op - 1) / tmp;
       }
       else {
         return eval(p, op - 1) / tmp;
