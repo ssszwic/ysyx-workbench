@@ -357,7 +357,7 @@ word_t expr(char *e, bool *success) {
     eval_success = true;
     test_result = eval(0, nr_token-1);
     if(!eval_success || (test_result != strtoul(test_str, NULL, 10))) {
-      printf("cal error at %d\n", i);
+      printf("cal error at %d\n", nr_token);
       printf("expression: %s\n", buf);
       break;
     }
