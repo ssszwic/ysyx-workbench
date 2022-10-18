@@ -181,12 +181,12 @@ static bool check_parentheses(int p, int q) {
 
 static float eval(int p, int q) {
   // print tokens
-  // printf("tkoens:\n");
-  // for (int i = 0; i <= d; i++) {
-  //   printf("%c: %s\n", tokens[i].type, tokens[i].str);
-  // }
+  printf("tkoens:\n");
+  for (int i = 0; i <= q; i++) {
+    printf("%c: %s\n", tokens[i].type, tokens[i].str);
+  }
+  printf("tkoens end\n");
 
-  printf("%d\n", check_parentheses(p, q));
 
   if (p > q) {
     /* Bad expression */
