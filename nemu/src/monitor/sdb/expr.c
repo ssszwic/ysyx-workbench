@@ -20,6 +20,9 @@
  */
 #include <regex.h>
 
+#include "stdlib.h"
+#include "stdio.h"
+
 enum {
   TK_NOTYPE = 256, TK_EQ = 200, TK_NUM = 102,
 
@@ -324,7 +327,6 @@ static uint32_t eval(int p, int q) {
 
 
 word_t expr(char *e, bool *success) {
-  printf("%s\n", e);
   if (!make_token(e)) {
     *success = false;
     return 0;
@@ -334,6 +336,16 @@ word_t expr(char *e, bool *success) {
   if (eval_success) {
     printf("%u\n", result);
   }
+
+  FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
+  char buf[65536] = {};
+  while (fgets(buf, sizeof(buf), fp) != NULL) {
+        printf("%s\n", buf);
+  }
+  fclose(fp);
+  
+
+
   
 
   /* TODO: Insert codes to evaluate the expression. */
