@@ -45,7 +45,7 @@ static struct rule {
   {"\\/", '/'},                 // div
   {"\\(", '('},                 // left Parentheses
   {"\\)", ')'},                 // right Parentheses
-  {"[0-9]+\\.?[0-9]+?", TK_NUM},  // num (consider '-' when eval)
+  {"[0-9]", TK_NUM},  // num (consider '-' when eval)
   {"==", TK_EQ},                // equal
 };
 
@@ -179,13 +179,13 @@ static bool check_parentheses(int p, int q) {
   }
 }
 
-static float eval(int p, int q) {
+static uint32_t eval(int p, int q) {
   // print tokens
-  printf("tkoens:\n");
-  for (int i = p; i <= q; i++) {
-    printf("%s", tokens[i].str);
-  }
-  printf("\ntkoens end\n");
+  // printf("tkoens:\n");
+  // for (int i = p; i <= q; i++) {
+  //   printf("%s", tokens[i].str);
+  // }
+  // printf("\ntkoens end\n");
 
 
   if (p > q) {
@@ -206,7 +206,7 @@ static float eval(int p, int q) {
       eval_success = false;
       return 0;
     }
-    return strtod(tokens[q].str, NULL);
+    return strtoul(tokens[q].str, NULL, 10);
   }
 
   // check parentheses
@@ -329,9 +329,9 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   eval_success = true;
-  float result = eval(0, nr_token-1);
+  uint32_t result = eval(0, nr_token-1);
   if (eval_success) {
-    printf("%f\n", result);
+    printf("%u\n", result);
   }
   
 
