@@ -183,9 +183,9 @@ static float eval(int p, int q) {
   // print tokens
   printf("tkoens:\n");
   for (int i = 0; i <= q; i++) {
-    printf("%c: %s\n", tokens[i].type, tokens[i].str);
+    printf("%s", tokens[i].str);
   }
-  printf("tkoens end\n");
+  printf("\ntkoens end\n");
 
 
   if (p > q) {
