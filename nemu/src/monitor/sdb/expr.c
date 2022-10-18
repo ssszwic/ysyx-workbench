@@ -21,7 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUM = 102,
+  TK_NOTYPE = 256, TK_EQ = 200, TK_NUM = 102,
 
   /* TODO: Add more token types */
 
@@ -161,6 +161,7 @@ static int eliminate_parentheses(char *str_parent) {
 static bool check_parentheses(int p, int q) {
   char str_parent[40];
   int index = 0;
+
   for (int i = p; i <= q; i++) {
     if (tokens[i].type == '(' || tokens[i].type == ')') {
       str_parent[index++] = tokens[i].type;
@@ -187,47 +188,135 @@ static float eval(int p, int q) {
 
   printf("%d\n", check_parentheses(p, q));
 
-  // if (p > q) {
-  //   /* Bad expression */
-  //   printf("p > q");
-  //   assert(0);
-  // }
-  // else if (p == q) {
-  //   /* Single token.
-  //    * For now this token should be a number.
-  //    * Return the value of the number.
-  //    */
-  //   // check paramater type, it must be num
-  //   if (tokens[q].type != TK_NUM) {
-  //     printf("error! single token must be num.");
-  //     eval_success = false;
-  //     return 0;
-  //   }
-  //   return strod(tokens[q].str, NULL);
-  // }
-  // else if (check_parentheses(p, q) == true) {
-  //   /* The expression is surrounded by a matched pair otokensf parentheses.
-  //    * If that is the case, just throw away the parentheses.
-  //    */
-  //   return eval(p + 1, q - 1);
-  // }
-  // else {
-  //   /* We should do more things here. */
-  //   switch(tokens[p].type) {
-  //     case '+': 
-  //       return eval(p + 1, q);
-  //     case '-': {
-  //       if (tokens[p+1].type == '(') {
-  //         return -eval(p + 1, q);
-  //       }
-  //       else if(tokens[p+1].type == TK_NUM) {
-  //         return ;
-  //       }
-  //     }
+  if (p > q) {
+    /* Bad expression */
+    printf("p > q");
+    assert(0);
+  }
 
-  //   }
+  // only one tokens
+  if (p == q) {
+    /* Single token.
+     * For now this token should be a number.
+     * Return the value of the number.
+     */
+    // check paramater type, it must be num
+    if (tokens[q].type != TK_NUM) {
+      printf("error! single token must be num.\n");
+      eval_success = false;
+      return 0;
+    }
+    return strtod(tokens[q].str, NULL);
+  }
 
-  // }
+  // check parentheses
+  if (!check_parentheses(p, q)) {
+    printf("error! parentheses token must be matched.\n");
+    eval_success = false;
+    return 0;
+  }
+
+  // The expression is surrounded by a matched pair of parentheses
+  if ( tokens[p].type == '(' ) {
+    // expression is ()
+    if ((p + 1) == q) {
+      printf("error! there must be an expression in the parentheses.\n");
+      eval_success = false;
+      return 0;
+    }
+    // The expression is surrounded by a matched pair of parentheses
+    if (check_parentheses(p + 1, q - 1)) {
+      return eval(p + 1, q - 1);
+    }
+  }
+
+  // op = the position of 主运算符 in the token expression
+  int op = -1; // -1 means no operator
+  int i = p;
+  int j = 0;
+  while (i <= q) {
+    switch(tokens[i].type) {
+      case '(': {
+        j = p + 1;
+        while (check_parentheses(p, j)) j++;
+        i = j + 1;
+        break;
+      }
+      case '+': {
+        op = i;
+        i ++;
+        break;
+      }
+      case '-': {
+        op = i;
+        i ++;
+        break;
+      }
+      case '*': {
+        if(op == -1) {
+          op = i;
+        }
+        else if (tokens[op].type == '*' || tokens[op].type == '/') {
+          op = i;
+        }
+        i ++;
+        break;
+      }
+      case '/': {
+        if(op == -1) {
+          op = i;
+        }
+        else if (tokens[op].type == '*' || tokens[op].type == '/') {
+          op = i;
+        }
+        i ++;
+        break;
+      }
+      case TK_NUM: {
+        i ++;
+        break;
+      }
+      default: assert(0);
+    }
+  }
+
+  // no op in expression
+  if (op == -1) {
+    printf("error! there must be an op between expression.\n");
+    eval_success = false;
+    return 0;
+  }
+
+  // if op on the edge, only '-' on left is allowed
+  if ((op == q) || (op == q)) {
+    if ((op == p) && (tokens[q].type == '-')) {
+      return -eval(p + 1, q);
+    }
+    printf("error! there op isn't matched.\n");
+    eval_success = false;
+    return 0;
+  }
+
+  // cal
+  switch (tokens[op].type) {
+    case '+': return eval(p, op - 1) + eval(op + 1, q);
+    case '-': return eval(p, op - 1) - eval(op + 1, q);
+    case '*': return eval(p, op - 1) * eval(op + 1, q);
+    case '/': {
+      if (eval(op + 1, q) == 0) {
+        if (!eval_success) {
+          return 0;
+        }
+        printf("error! the divisor cannot be 0.\n");
+        eval_success = false;
+        return 0;
+      }
+      else {
+        return eval(p, op - 1) / eval(op + 1, q);
+      }
+    }
+    default: assert(0);
+  }
 
   return 0;
 }
@@ -240,7 +329,8 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   eval_success = true;
-  eval(0, nr_token-1);
+  float result = eval(0, nr_token-1);
+  printf("%f\n", result);
 
   /* TODO: Insert codes to evaluate the expression. */
   
