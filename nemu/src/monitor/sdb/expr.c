@@ -93,11 +93,11 @@ static bool make_token(char *e) {
     for (i = 0; i < NR_REGEX; i ++) {
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
         // first char match successful
-        char *substr_start = e + position;
+        // char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;        
 
-        Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
-            i, rules[i].regex, position, substr_len, substr_len, substr_start);
+        // Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
+        //     i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
@@ -185,11 +185,11 @@ static bool check_parentheses(int p, int q) {
 
 static uint32_t eval(int p, int q) {
   // print tokens
-  printf("tkoens: ");
-  for (int i = p; i <= q; i++) {
-    printf("%s", tokens[i].str);
-  }
-  printf("\n");
+  // printf("tkoens: ");
+  // for (int i = p; i <= q; i++) {
+  //   printf("%s", tokens[i].str);
+  // }
+  // printf("\n");
 
 
   if (p > q) {
