@@ -45,7 +45,7 @@ static struct rule {
   {"\\/", '/'},                 // div
   {"\\(", '('},                 // left Parentheses
   {"\\)", ')'},                 // right Parentheses
-  {"[0-9]+", TK_NUM},  // num (consider '-' when eval)
+  {"[0-9]+", TK_NUM},           // num (consider '-' when eval)
   {"==", TK_EQ},                // equal
 };
 
