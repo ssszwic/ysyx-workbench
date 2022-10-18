@@ -347,6 +347,8 @@ word_t expr(char *e, bool *success) {
     if (fgets(test_str, sizeof(test_str), fp) == NULL) {
       break;
     }
+    // delate \n
+    test_str[strlen(test_str) - 1] = '\0';
     if (fgets(buf, sizeof(buf), fp) == NULL) {
       break;
     }
@@ -354,6 +356,8 @@ word_t expr(char *e, bool *success) {
       printf("matched failed! at %d\n", i);
       break;
     }
+    
+
     printf("token: %d\n", nr_token);
     eval_success = true;
     test_result = eval(0, nr_token-1);
