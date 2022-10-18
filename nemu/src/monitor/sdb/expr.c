@@ -330,7 +330,10 @@ word_t expr(char *e, bool *success) {
   }
   eval_success = true;
   float result = eval(0, nr_token-1);
-  printf("%f\n", result);
+  if (eval_success) {
+    printf("%f\n", result);
+  }
+  
 
   /* TODO: Insert codes to evaluate the expression. */
   
