@@ -292,7 +292,7 @@ static float eval(int p, int q) {
     if ((op == p) && (tokens[q].type == '-')) {
       return -eval(p + 1, q);
     }
-    printf("error! there op isn't matched.\n");
+    printf("error! the op isn't matched.\n");
     eval_success = false;
     return 0;
   }
