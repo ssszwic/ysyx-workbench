@@ -113,6 +113,7 @@ static bool make_token(char *e) {
             return false;
           }
           tokens[nr_token].type = rules[i].token_type;
+          tokens[nr_token].str[0] = '\0'; // clear old string
           strncpy(tokens[nr_token].str, e + position, substr_len);
           nr_token ++;
         }
