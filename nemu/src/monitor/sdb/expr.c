@@ -371,11 +371,5 @@ word_t expr(char *e, bool *success) {
   // }
   // fclose(fp);
 
-
-  
-
-  /* TODO: Insert codes to evaluate the expression. */
-  
-
   return 0;
 }
