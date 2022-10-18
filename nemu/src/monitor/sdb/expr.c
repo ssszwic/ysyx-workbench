@@ -338,9 +338,18 @@ word_t expr(char *e, bool *success) {
   }
 
   FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
-  char buf[65536] = {};
-  while (fgets(buf, sizeof(buf), fp) != NULL) {
-        printf("%s\n", buf);
+  char result_test[40] = {};
+  char buf[1000] = {};
+  while (1) {
+    if (fgets(result_test, sizeof(result_test), fp) == NULL) {
+      break;
+    }
+    if (fgets(buf, sizeof(buf), fp) == NULL) {
+      break;
+    }
+    printf("%s\n", result_test);
+    printf("%s\n", buf);
+    printf("\n");
   }
   fclose(fp);
   
