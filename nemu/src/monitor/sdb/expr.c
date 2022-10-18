@@ -347,8 +347,8 @@ word_t expr(char *e, bool *success) {
     if (fgets(buf, sizeof(buf), fp) == NULL) {
       break;
     }
-    printf("%s\n", result_test);
-    printf("%s\n", buf);
+    printf("%s", result_test);
+    printf("%s", buf);
     printf("\n");
   }
   fclose(fp);
