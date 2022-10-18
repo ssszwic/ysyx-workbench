@@ -119,7 +119,7 @@ int main(int argc, char *argv[]) {
       assert(0);
     }
 
-    printf("%d\n%s\n", result, buf);
+    printf("%u\n%s\n", result, buf);
   }
   return 0;
 }
