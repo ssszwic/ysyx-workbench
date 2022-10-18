@@ -354,11 +354,13 @@ word_t expr(char *e, bool *success) {
       printf("matched failed! at %d\n", i);
       break;
     }
+    printf("token: %d\n", nr_token);
     eval_success = true;
     test_result = eval(0, nr_token-1);
     if(!eval_success || (test_result != strtoul(test_str, NULL, 10))) {
-      printf("cal error at %d\n", nr_token);
+      printf("cal error at %d\n", i);
       printf("expression: %s\n", buf);
+
       break;
     }
     i++;
