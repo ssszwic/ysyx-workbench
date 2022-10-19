@@ -43,10 +43,19 @@ static void gen_num() {
   num = rand();
   char num_str[32] = {};
   char num_str_unsign[32] = {};
-  sprintf(num_str_unsign, "(unsigned)%d", num);
-  sprintf(num_str, "%d", num);
-  strcat(buf_unsign, num_str_unsign);
-  strcat(buf, num_str);
+  if (choose(2)) {
+    sprintf(num_str_unsign, "(unsigned)%d", num);
+    sprintf(num_str, "%d", num);
+    strcat(buf_unsign, num_str_unsign);
+    strcat(buf, num_str);
+  }
+  else {
+    sprintf(num_str_unsign, "(unsigned)0x%x", num);
+    sprintf(num_str, "0x%x", num);
+    strcat(buf_unsign, num_str_unsign);
+    strcat(buf, num_str);
+  }
+  
 }
 
 static void gen_rand_op() {
@@ -106,8 +115,8 @@ int main(int argc, char *argv[]) {
 
     // buf[0] = '\0';
     // buf_unsign[0] = '\0';
-    // strcat(buf, "849234842 /         (    (1625765807  !=   1758825329  == 618825356) )");
-    // strcat(buf_unsign, "849234842 /         (    (1625765807  !=   1758825329  == 618825356) )");
+    // strcat(buf, "0x16");
+    // strcat(buf_unsign, "0x16");
     
     sprintf(code_buf, code_format, buf_unsign);
 
