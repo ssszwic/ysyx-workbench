@@ -191,7 +191,7 @@ static bool check_parentheses(int p, int q) {
   }
 }
 
-static uint32_t eval(int p, int q) {
+static word_t eval(int p, int q) {
   // print tokens
   // printf("tkoens: ");
   // for (int i = p; i <= q; i++) {
@@ -223,7 +223,7 @@ static uint32_t eval(int p, int q) {
       bool success;
       tmp = isa_reg_str2val(tokens[q].str + 1, &success);
       if (success) {
-        return (uint32_t) tmp;
+        return tmp;
       }
       else {
         printf("error! can't find reg %s.\n", tokens[q].str + 1);
@@ -363,7 +363,7 @@ static uint32_t eval(int p, int q) {
     case '-': return eval(p, op - 1) - eval(op + 1, q);
     case '*': return eval(p, op - 1) * eval(op + 1, q);
     case '/': {
-      uint32_t tmp = eval(op + 1, q);
+      word_t tmp = eval(op + 1, q);
       if (tmp == 0) {
         if (!eval_success) {
           return 0;
@@ -392,44 +392,44 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   eval_success = true;
-  uint32_t result = eval(0, nr_token-1);
+  word_t result = eval(0, nr_token-1);
   if (eval_success) {
-    printf("%u\n", result);
+    printf("%lu\n", result);
   }
 
   // test for expression
   // type any valid expression to starttest
-  // FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
-  // uint32_t test_result = 0;
-  // char test_str[40] = {};
-  // char buf[1000] = {};
-  // int i = 0;
-  // while (1) {
-  //   if (fgets(test_str, sizeof(test_str), fp) == NULL) {
-  //     break;
-  //   }
+  FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
+  word_t test_result = 0;
+  char test_str[40] = {};
+  char buf[1000] = {};
+  int i = 0;
+  while (1) {
+    if (fgets(test_str, sizeof(test_str), fp) == NULL) {
+      break;
+    }
     
-  //   if (fgets(buf, sizeof(buf), fp) == NULL) {
-  //     break;
-  //   }
-  //   // delate \n
-  //   buf[strlen(buf) - 1] = '\0';
-  //   if (!make_token(buf)) {
-  //     printf("matched failed! at %d\n", i);
-  //     break;
-  //   }
-  //   eval_success = true;
-  //   test_result = eval(0, nr_token-1);
-  //   if(!eval_success || (test_result != strtoul(test_str, NULL, 10))) {
-  //     printf("cal error at %d\n", i);
-  //     printf("expression: %s\n", buf);
-  //     printf("cal result: %u\n", test_result);
-  //     printf("real result: %lu\n", strtoul(test_str, NULL, 10));
-  //     printf("\n");
-  //   }
-  //   i++;
-  // }
-  // fclose(fp);
+    if (fgets(buf, sizeof(buf), fp) == NULL) {
+      break;
+    }
+    // delate \n
+    buf[strlen(buf) - 1] = '\0';
+    if (!make_token(buf)) {
+      printf("matched failed! at %d\n", i);
+      break;
+    }
+    eval_success = true;
+    test_result = eval(0, nr_token-1);
+    if(!eval_success || (test_result != strtoul(test_str, NULL, 10))) {
+      printf("cal error at %d\n", i);
+      printf("expression: %s\n", buf);
+      printf("cal result: %lu\n", test_result);
+      printf("real result: %lu\n", strtoul(test_str, NULL, 10));
+      printf("\n");
+    }
+    i++;
+  }
+  fclose(fp);
 
   return 0;
 }
