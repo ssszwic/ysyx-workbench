@@ -176,6 +176,7 @@ static int cmd_x(char *args) {
   char addr_str[100] = {};
   int num;
   paddr_t addr;
+  printf("%s\n", args);
 
   int args_num = sscanf(args, "%s %s", first, second);
   if (args_num == 0) {
