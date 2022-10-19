@@ -178,7 +178,7 @@ static int cmd_x(char *args) {
   paddr_t addr;
   printf("%s\n", args);
 
-  int args_num = sscanf(args, "%*[\"]%[^\"]%s", first, second);
+  int args_num = sscanf(args, "%*[\"]%[^\"]%*[\"]%s", first, second);
   printf("%s\n", first);
   printf("%s\n", second);
   if (args_num == 0) {
