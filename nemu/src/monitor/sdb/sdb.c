@@ -199,7 +199,7 @@ static int cmd_x(char *args) {
   word_t* host_addr = (word_t*) guest_to_host(addr);
   printf("You must specify memory1\n");
 
-  printf("0x%*x:  ", 16, addr);
+  printf("0x%x:  ", addr);
   int i;
   for (i = 0; i < len; i++) {
     // little endian for riscv64
