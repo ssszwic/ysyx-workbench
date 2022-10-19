@@ -52,8 +52,9 @@ static struct rule {
   {"&&", TK_AND},               // AND
   {"!=", TK_NOEQ},              // un equal
   {"==", TK_EQ},                // equal
-  {"[0-9]+", TK_DEC},           // dec num (consider '-' when eval)
   {"0[xX][0-9]+", TK_HEX},     // hex num (consider '-' when eval)
+  {"[0-9]+", TK_DEC},           // dec num (consider '-' when eval)
+  
 
 };
 
