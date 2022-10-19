@@ -28,9 +28,10 @@ static char buf_unsign[65536] = {}; // buf_unsign is expression with '(unsigned)
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
+"#include <stdint.h>\n"
 "int main() { "
-"  unsigned result = %s; "
-"  printf(\"%%u\", result); "
+"  uint64_t result = %s; "
+"  printf(\"%%lu\", result); "
 "  return 0; "
 "}";
 
@@ -44,13 +45,13 @@ static void gen_num() {
   char num_str[32] = {};
   char num_str_unsign[32] = {};
   if (choose(2)) {
-    sprintf(num_str_unsign, "(unsigned)%d", num);
+    sprintf(num_str_unsign, " (uint64_t) %d", num);
     sprintf(num_str, "%d", num);
     strcat(buf_unsign, num_str_unsign);
     strcat(buf, num_str);
   }
   else {
-    sprintf(num_str_unsign, " (unsigned)0x%x ", num);
+    sprintf(num_str_unsign, " (uint64_t) 0x%x ", num);
     sprintf(num_str, " 0x%x ", num);
     strcat(buf_unsign, num_str_unsign);
     strcat(buf, num_str);
@@ -131,13 +132,13 @@ int main(int argc, char *argv[]) {
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
 
-    uint32_t result;
-    if (fscanf(fp, "%u", &result) == 0) {
+    uint64_t result;
+    if (fscanf(fp, "%lu", &result) == 0) {
       assert(0);
     }
     pclose(fp);
 
-    printf("%u\n%s\n", result, buf);
+    printf("%lu\n%s\n", result, buf);
   }
   return 0;
 }
