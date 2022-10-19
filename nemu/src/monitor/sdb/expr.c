@@ -334,7 +334,7 @@ static uint32_t eval(int p, int q) {
     case '-': return eval(p, op - 1) - eval(op + 1, q);
     case '*': return eval(p, op - 1) * eval(op + 1, q);
     case '/': {
-      uint32_t tmp = eval(op + 1, q) == 0;
+      uint32_t tmp = eval(op + 1, q);
       printf("div result: %u", tmp);
       if (tmp == 0) {
         if (!eval_success) {
