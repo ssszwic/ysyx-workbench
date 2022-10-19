@@ -174,7 +174,6 @@ static int cmd_x(char *args) {
   char expr_str[100] = {};
   // word_t num default: 1
   int len = 1;
-  printf("%s\n", args);
 
   int args_num = sscanf(args, "%*[\"]%[^\"]%*[\"]%d", expr_str, &len);
   
@@ -187,7 +186,7 @@ static int cmd_x(char *args) {
     // only one argument
     len = 1;
   }
-
+  printf("error! expression invalid.\n");
   bool success;
   paddr_t addr = expr(expr_str, &success);
   if (!success) {
