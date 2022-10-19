@@ -50,11 +50,14 @@ static void gen_num() {
 }
 
 static void gen_rand_op() {
-  switch(choose(4)) {
+  switch(choose(7)) {
     case 0: strcat(buf, "+"); strcat(buf_unsign, "+");break;
     case 1: strcat(buf, "-"); strcat(buf_unsign, "-");break;
     case 2: strcat(buf, "*"); strcat(buf_unsign, "*");break;
     case 3: strcat(buf, "/"); strcat(buf_unsign, "/");break;
+    case 4: strcat(buf, "&&"); strcat(buf_unsign, "/");break;
+    case 5: strcat(buf, "=="); strcat(buf_unsign, "/");break;
+    case 6: strcat(buf, "!="); strcat(buf_unsign, "/");break;
     default: assert(0);
   }
 }
@@ -101,10 +104,10 @@ int main(int argc, char *argv[]) {
     len = 1;
     gen_rand_expr();
 
-    buf[0] = '\0';
-    buf_unsign[0] = '\0';
-    strcat(buf, "3&&2");
-    strcat(buf_unsign, "3&&2");
+    // buf[0] = '\0';
+    // buf_unsign[0] = '\0';
+    // strcat(buf, "3&&2");
+    // strcat(buf_unsign, "3&&2");
     
     sprintf(code_buf, code_format, buf_unsign);
 
