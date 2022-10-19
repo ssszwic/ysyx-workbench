@@ -407,7 +407,7 @@ static word_t eval(int p, int q) {
     case TK_AND: return eval(p, op - 1) && eval(op + 1, q);
     case TK_EQ: return eval(p, op - 1) == eval(op + 1, q);
     case TK_NOEQ: return eval(p, op - 1) != eval(op + 1, q);
-    case TK_POINT: word_t *tmp = (word_t *) guest_to_host(eval(op+1, q)); return *tmp;
+    case TK_POINT: word_t *tmp = (word_t *) guest_to_host(eval(op + 1, q)); return *tmp;
     default: assert(0);
   }
 
@@ -427,37 +427,37 @@ word_t expr(char *e, bool *success) {
 
   // test for expression
   // type any valid expression to starttest
-  FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
-  word_t test_result = 0;
-  char test_str[40] = {};
-  char buf[1000] = {};
-  int i = 0;
-  while (1) {
-    if (fgets(test_str, sizeof(test_str), fp) == NULL) {
-      break;
-    }
+  // FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
+  // word_t test_result = 0;
+  // char test_str[40] = {};
+  // char buf[1000] = {};
+  // int i = 0;
+  // while (1) {
+  //   if (fgets(test_str, sizeof(test_str), fp) == NULL) {
+  //     break;
+  //   }
     
-    if (fgets(buf, sizeof(buf), fp) == NULL) {
-      break;
-    }
-    // delate \n
-    buf[strlen(buf) - 1] = '\0';
-    if (!make_token(buf)) {
-      printf("matched failed! at %d\n", i);
-      break;
-    }
-    eval_success = true;
-    test_result = eval(0, nr_token-1);
-    if(!eval_success || (test_result != strtoul(test_str, NULL, 10))) {
-      printf("cal error at %d\n", i);
-      printf("expression: %s\n", buf);
-      printf("cal result: %lu\n", test_result);
-      printf("real result: %lu\n", strtoul(test_str, NULL, 10));
-      printf("\n");
-    }
-    i++;
-  }
-  fclose(fp);
+  //   if (fgets(buf, sizeof(buf), fp) == NULL) {
+  //     break;
+  //   }
+  //   // delate \n
+  //   buf[strlen(buf) - 1] = '\0';
+  //   if (!make_token(buf)) {
+  //     printf("matched failed! at %d\n", i);
+  //     break;
+  //   }
+  //   eval_success = true;
+  //   test_result = eval(0, nr_token-1);
+  //   if(!eval_success || (test_result != strtoul(test_str, NULL, 10))) {
+  //     printf("cal error at %d\n", i);
+  //     printf("expression: %s\n", buf);
+  //     printf("cal result: %lu\n", test_result);
+  //     printf("real result: %lu\n", strtoul(test_str, NULL, 10));
+  //     printf("\n");
+  //   }
+  //   i++;
+  // }
+  // fclose(fp);
 
   return 0;
 }
