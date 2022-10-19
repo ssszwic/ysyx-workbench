@@ -437,10 +437,7 @@ word_t expr(char *e, bool *success) {
   char test_str[40] = {};
   char buf[1000] = {};
   int i = 0;
-  printf("666\n");
   while (1) {
-    printf("i: %d", i);
-    printf("666\n");
     if (fgets(test_str, sizeof(test_str), fp) == NULL) {
       break;
     }
