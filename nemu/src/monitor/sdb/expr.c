@@ -24,7 +24,7 @@
 #include "stdio.h"
 
 enum {
-  TK_NOTYPE = 256, TK_EQ = 200, TK_NOEQ = 201, TK_NUM = 202, TK_AND = 203,
+  TK_NOTYPE = 256, TK_EQ = 200, TK_NOEQ = 201, TK_DEC = 202, TK_AND = 203,
 
   /* TODO: Add more token types */
 
@@ -51,7 +51,7 @@ static struct rule {
   {"&&", TK_AND},                 // right Parentheses
   {"!=", TK_NOEQ},                 // right Parentheses
   {"==", TK_EQ},                 // right Parentheses
-  {"[0-9]+", TK_NUM},           // num (consider '-' when eval)
+  {"[0-9]+", TK_DEC},           // num (consider '-' when eval)
 
 };
 
@@ -206,7 +206,7 @@ static uint32_t eval(int p, int q) {
      * Return the value of the number.
      */
     // check paramater type, it must be num
-    if (tokens[q].type != TK_NUM) {
+    if (tokens[q].type != TK_DEC) {
       printf("error! single token must be num.\n");
       eval_success = false;
       return 0;
@@ -300,7 +300,7 @@ static uint32_t eval(int p, int q) {
         i ++;
         break;
       }
-      case TK_NUM: {
+      case TK_DEC: {
         i ++;
         break;
       }
