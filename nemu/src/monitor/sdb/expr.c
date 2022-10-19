@@ -419,15 +419,20 @@ static word_t eval(int p, int q) {
 }
 
 word_t expr(char *e, bool *success) {
+  *success = true;
+
   if (!make_token(e)) {
     *success = false;
     return 0;
   }
+
   eval_success = true;
   word_t result = eval(0, nr_token-1);
-  if (eval_success) {
-    printf("%lu\n", result);
+  if (!eval_success) {
+    *success = false;
+    return 0;
   }
+  printf("%lu\n", result);
 
   // test for expression
   // type any valid expression to starttest
