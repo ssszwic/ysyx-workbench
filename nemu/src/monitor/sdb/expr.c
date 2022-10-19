@@ -344,6 +344,9 @@ static uint32_t eval(int p, int q) {
         return eval(p, op - 1) / tmp;
       }
     }
+    case TK_AND: return eval(p, op - 1) && eval(op + 1, q);
+    case TK_EQ: return eval(p, op - 1) == eval(op + 1, q);
+    case TK_NOEQ: return eval(p, op - 1) != eval(op + 1, q);
     default: assert(0);
   }
 
