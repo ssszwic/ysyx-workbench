@@ -220,6 +220,7 @@ static uint32_t eval(int p, int q) {
     else if (tokens[q].type == TK_REG) {
       word_t tmp;
       bool *success = NULL;
+      *success = true;
       tmp = isa_reg_str2val(tokens[q].str + 1, success);
       if (*success) {
         return (uint32_t) tmp;
