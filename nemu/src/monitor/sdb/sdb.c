@@ -170,14 +170,12 @@ static int cmd_x(char *args) {
     printf("You must specify memory address\n");
     return 0;
   }
-  char first[100] = {};
-  char second[100] = {};
-  char num_str[100] = {};
-  char addr_str[100] = {};
-  int num;
-  paddr_t addr;
 
-  int args_num = sscanf(args, "%s %s", first, second);
+  char expr_str[100] = {};
+  // word_t num default: 1
+  int len = 1;
+
+  int args_num = sscanf(args, "%*[\"]%[^\"]%*[\"]%d", expr_str, &len);
   if (args_num == 0) {
     // argument is space('  ')
     printf("You must specify memory address\n");
@@ -185,38 +183,23 @@ static int cmd_x(char *args) {
   }
   else if (args_num == 1) {
     // only one argument
-    num = 1;
-    sscanf(first, "%[0-9abcdefx]", addr_str);
-    if (strlen(addr_str) != strlen(first)) {
-      printf("Address must be hexadecimal integer\n");
-      return 0;
-    }
-    sscanf(addr_str, "%x", &addr);
+    len = 1;
   }
-  else {
-    // check wrong character
-    sscanf(first, "%[0-9]", num_str);
-    if (strlen(num_str) != strlen(first)) {
-      printf("Num must be integer greater than 0\n");
-      return 0;
-    }
-    sscanf(num_str, "%d", &num);
-
-    sscanf(second, "%[0-9abcdefx]", addr_str);
-    if (strlen(addr_str) != strlen(second)) {
-      printf("Address must be hexadecimal integer\n");
-      return 0;
-    }
-    sscanf(addr_str, "%x", &addr);
+  
+  bool success;
+  uint64_t addr = expr(expr_str, &success);
+  if (!success) {
+    printf("error! expression invalid.\n");
+    return 0;
   }
-
   // read nemu member
-  uint8_t* host_addr = guest_to_host(addr);
-  printf("0x%08x:  ", addr);
+  word_t* host_addr = (word_t*) guest_to_host(addr);
+
+  printf("0x%016lx: ", addr);
   int i;
-  for (i = 0; i < num; i++) {
+  for (i = 0; i < len; i++) {
     // little endian for riscv64
-    printf("0x%02x ", *host_addr);
+    printf("0x%016lx ", *host_addr);
     host_addr++;
   }
   printf("\n");
