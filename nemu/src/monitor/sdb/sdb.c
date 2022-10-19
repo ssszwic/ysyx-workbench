@@ -262,11 +262,15 @@ void sdb_mainloop() {
     if (i == NR_CMD) { 
       // if no matched cmd, consider it as expression
       bool success = true;
-      expr(expr_str, &success);
+      word_t expr_result = expr(expr_str, &success);
 
       if (! success) {
         printf("Unknown command '%s'\n", cmd); 
       }
+      else {
+        printf("%lu\n", expr_result);
+      }
+      
     }
     free(expr_str);
   }
