@@ -19,12 +19,16 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <memory/paddr.h>
 
 #include "stdlib.h"
 #include "stdio.h"
 
+
 enum {
-  TK_NOTYPE = 256, TK_EQ = 200, TK_NUM = 102,
+  // value must be greater than 127, because ascii num <= 127
+  TK_NOTYPE = 256, TK_EQ = 200, TK_NOEQ = 201, TK_DEC = 202, 
+  TK_HEX = 203, TK_AND = 204, TK_REG = 205, TK_POINT = 206
 
   /* TODO: Add more token types */
 
@@ -42,14 +46,22 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},            // spaces
-  {"\\+", '+'},                 // plus
-  {"\\-", '-'},                 // sub
-  {"\\*", '*'},                 // mul
-  {"\\/", '/'},                 // div
-  {"\\(", '('},                 // left Parentheses
-  {"\\)", ')'},                 // right Parentheses
-  {"[0-9]+", TK_NUM},           // num (consider '-' when eval)
+  // opcode
+  {"\\+", '+'},                 // plus 75
+  {"\\-", '-'},                 // sub  77
+  {"\\*", '*'},                 // mul  74
+  {"\\/", '/'},                 // div  79
+  {"&&", TK_AND},               // AND
+  {"!=", TK_NOEQ},              // un equal
   {"==", TK_EQ},                // equal
+  // expression
+  {"\\(", '('},                 // left Parentheses  72
+  {"\\)", ')'},                 // right Parentheses  73
+  // TK_HEX must be in front of TK_DEC
+  {"0[xX][0-9a-fA-F]+", TK_HEX},     // hex num (consider '-' when eval)
+  {"[0-9]+", TK_DEC},           // dec num (consider '-' when eval)
+  {"\\$[0-9a-zA-Z\\$]+", TK_REG},     // hex num (consider '-' when eval)
+
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -125,13 +137,24 @@ static bool make_token(char *e) {
         break;
       }
     }
-
     if (i == NR_REGEX) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
   }
-
+  // picking out pointers from '*'
+  for (int i = 0; i < nr_token; i++) {
+     if (tokens[i].type == '*') {
+      if (i == 0) {
+        tokens[i].type = TK_POINT;
+      }
+      else if(tokens[i-1].type == '+' || tokens[i-1].type == '+' || tokens[i-1].type == '*' ||
+              tokens[i-1].type == '/' || tokens[i-1].type == TK_EQ || tokens[i-1].type == TK_NOEQ ||
+              tokens[i-1].type == TK_AND) {
+        tokens[i].type = TK_POINT;
+      }
+     }
+  }
   return true;
 }
 
@@ -183,14 +206,13 @@ static bool check_parentheses(int p, int q) {
   }
 }
 
-static uint32_t eval(int p, int q) {
+static word_t eval(int p, int q) {
   // print tokens
   // printf("tkoens: ");
   // for (int i = p; i <= q; i++) {
   //   printf("%s", tokens[i].str);
   // }
   // printf("\n");
-
 
   if (p > q) {
     /* Bad expression */
@@ -205,12 +227,30 @@ static uint32_t eval(int p, int q) {
      * Return the value of the number.
      */
     // check paramater type, it must be num
-    if (tokens[q].type != TK_NUM) {
+    if (tokens[q].type == TK_DEC) {
+      return strtoul(tokens[q].str, NULL, 10);
+    }
+    else if (tokens[q].type == TK_HEX) {
+      return strtoul(tokens[q].str, NULL, 16);
+    }
+    else if (tokens[q].type == TK_REG) {
+      word_t tmp;
+      bool success;
+      tmp = isa_reg_str2val(tokens[q].str + 1, &success);
+      if (success) {
+        return tmp;
+      }
+      else {
+        printf("error! can't find reg %s.\n", tokens[q].str + 1);
+        eval_success = false;
+        return 0;
+      }
+    }
+    else {
       printf("error! single token must be num.\n");
       eval_success = false;
       return 0;
     }
-    return strtoul(tokens[q].str, NULL, 10);
   }
 
   // check parentheses
@@ -246,37 +286,78 @@ static uint32_t eval(int p, int q) {
         i = j + 1;
         break;
       }
-      case '+': {
+      case TK_AND: {
         op = i;
+        i ++;
+        break;
+      }
+      case TK_EQ: {
+        if (op == -1 || (op != -1 && tokens[op].type != TK_AND)) {
+          op = i;
+        }
+        i ++;
+        break;
+      }
+      case TK_NOEQ: {
+        if (op == -1 || (op != -1 && tokens[op].type != TK_AND)) {
+          op = i;
+        }
+        i ++;
+        break;
+      }
+      case '+': {
+        if (op == -1 || (op != -1 && tokens[op].type != TK_AND && 
+            tokens[op].type != TK_EQ && tokens[op].type != TK_NOEQ)) {
+          op = i;
+        }
         i ++;
         break;
       }
       case '-': {
-        op = i;
+        if (op == -1 || (op != -1 && tokens[op].type != TK_AND && 
+            tokens[op].type != TK_EQ && tokens[op].type != TK_NOEQ)) {
+          op = i;
+        }
         i ++;
         break;
       }
       case '*': {
-        if(op == -1) {
-          op = i;
-        }
-        else if (tokens[op].type == '*' || tokens[op].type == '/') {
+        if (op == -1 || 
+            (op != -1 && tokens[op].type != TK_AND && tokens[op].type != TK_EQ && 
+            tokens[op].type != TK_NOEQ && tokens[op].type != '+' && tokens[op].type != '-')) {
           op = i;
         }
         i ++;
         break;
       }
       case '/': {
-        if(op == -1) {
-          op = i;
-        }
-        else if (tokens[op].type == '*' || tokens[op].type == '/') {
+        if (op == -1 || 
+            (op != -1 && tokens[op].type != TK_AND && tokens[op].type != TK_EQ && 
+            tokens[op].type != TK_NOEQ && tokens[op].type != '+' && tokens[op].type != '-')) {
           op = i;
         }
         i ++;
         break;
       }
-      case TK_NUM: {
+      case TK_POINT: {
+        if (op == -1 || 
+            (op != -1 && tokens[op].type != TK_AND && tokens[op].type != TK_EQ && 
+            tokens[op].type != TK_NOEQ && tokens[op].type != '+' && tokens[op].type != '-' &&
+            tokens[op].type != '*' && tokens[op].type != '/')) {
+          op = i;
+        }
+        i ++;
+        break;
+      }
+      case TK_DEC: {
+        i ++;
+        break;
+      }
+      case TK_HEX: {
+        i ++;
+        break;
+      }
+      case TK_REG: {
         i ++;
         break;
       }
@@ -291,10 +372,17 @@ static uint32_t eval(int p, int q) {
     return 0;
   }
 
-  // if op on the edge, only '-' on left is allowed
+  // if op on the edge, only '-' or pointer on left is allowed
   if ((op == p) || (op == q)) {
-    if ((op == p) && (tokens[op].type == '-')) {
-      return -eval(p + 1, q);
+    if (op == p) {
+      if (tokens[op].type == '-') {
+        return -eval(p + 1, q);
+      }
+      else if (tokens[op].type == TK_POINT) {
+        // to do 
+        word_t *tmp = (word_t *) guest_to_host(eval(p + 1, q));
+        return *tmp;
+      }
     }
     printf("error! the op isn't matched.\n");
     eval_success = false;
@@ -307,7 +395,8 @@ static uint32_t eval(int p, int q) {
     case '-': return eval(p, op - 1) - eval(op + 1, q);
     case '*': return eval(p, op - 1) * eval(op + 1, q);
     case '/': {
-      if (eval(op + 1, q) == 0) {
+      word_t tmp = eval(op + 1, q);
+      if (tmp == 0) {
         if (!eval_success) {
           return 0;
         }
@@ -316,15 +405,18 @@ static uint32_t eval(int p, int q) {
         return 0;
       }
       else {
-        return eval(p, op - 1) / eval(op + 1, q);
+        return eval(p, op - 1) / tmp;
       }
     }
+    case TK_AND: return eval(p, op - 1) && eval(op + 1, q);
+    case TK_EQ: return eval(p, op - 1) == eval(op + 1, q);
+    case TK_NOEQ: return eval(p, op - 1) != eval(op + 1, q);
+    case TK_POINT: word_t *tmp = (word_t *) guest_to_host(eval(op + 1, q)); return *tmp;
     default: assert(0);
   }
 
   return 0;
 }
-
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -332,15 +424,15 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
   eval_success = true;
-  uint32_t result = eval(0, nr_token-1);
+  word_t result = eval(0, nr_token-1);
   if (eval_success) {
-    printf("%u\n", result);
+    printf("%lu\n", result);
   }
 
-  // test
-  // type any expression to test
+  // test for expression
+  // type any valid expression to starttest
   // FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
-  // uint32_t test_result = 0;
+  // word_t test_result = 0;
   // char test_str[40] = {};
   // char buf[1000] = {};
   // int i = 0;
@@ -363,7 +455,7 @@ word_t expr(char *e, bool *success) {
   //   if(!eval_success || (test_result != strtoul(test_str, NULL, 10))) {
   //     printf("cal error at %d\n", i);
   //     printf("expression: %s\n", buf);
-  //     printf("cal result: %u\n", test_result);
+  //     printf("cal result: %lu\n", test_result);
   //     printf("real result: %lu\n", strtoul(test_str, NULL, 10));
   //     printf("\n");
   //   }

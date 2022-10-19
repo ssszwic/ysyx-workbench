@@ -287,14 +287,10 @@ void sdb_mainloop() {
     // there is no matching com
     if (i == NR_CMD) { 
       // if no matched cmd, consider it as expression
-      bool *success = NULL;
-      success = malloc(sizeof(bool));
-      *success = true;
-      expr(expr_str, success);
+      bool success = true;
+      expr(expr_str, &success);
 
-      free(success);
-
-      if (! *success) {
+      if (! success) {
         printf("Unknown command '%s'\n", cmd); 
       }
     }

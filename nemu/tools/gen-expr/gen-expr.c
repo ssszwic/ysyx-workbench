@@ -28,9 +28,11 @@ static char buf_unsign[65536] = {}; // buf_unsign is expression with '(unsigned)
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
+"#include <stdint.h>\n"
 "int main() { "
-"  unsigned result = %s; "
-"  printf(\"%%u\", result); "
+"  uint64_t result = %s; "
+"  printf(\"successful!\\n\"); "
+"  printf(\"%%lu\", result); "
 "  return 0; "
 "}";
 
@@ -43,18 +45,30 @@ static void gen_num() {
   num = rand();
   char num_str[32] = {};
   char num_str_unsign[32] = {};
-  sprintf(num_str_unsign, "(unsigned)%d", num);
-  sprintf(num_str, "%d", num);
-  strcat(buf_unsign, num_str_unsign);
-  strcat(buf, num_str);
+  if (choose(2)) {
+    sprintf(num_str_unsign, " (uint64_t) %d", num);
+    sprintf(num_str, "%d", num);
+    strcat(buf_unsign, num_str_unsign);
+    strcat(buf, num_str);
+  }
+  else {
+    sprintf(num_str_unsign, " (uint64_t) 0x%x ", num);
+    sprintf(num_str, " 0x%x ", num);
+    strcat(buf_unsign, num_str_unsign);
+    strcat(buf, num_str);
+  }
+  
 }
 
 static void gen_rand_op() {
-  switch(choose(4)) {
+  switch(choose(7)) {
     case 0: strcat(buf, "+"); strcat(buf_unsign, "+");break;
     case 1: strcat(buf, "-"); strcat(buf_unsign, "-");break;
     case 2: strcat(buf, "*"); strcat(buf_unsign, "*");break;
     case 3: strcat(buf, "/"); strcat(buf_unsign, "/");break;
+    case 4: strcat(buf, "&&"); strcat(buf_unsign, "&&");break;
+    case 5: strcat(buf, "=="); strcat(buf_unsign, "==");break;
+    case 6: strcat(buf, "!="); strcat(buf_unsign, "!=");break;
     default: assert(0);
   }
 }
@@ -100,6 +114,11 @@ int main(int argc, char *argv[]) {
     buf_unsign[0] = '\0';
     len = 1;
     gen_rand_expr();
+
+    // buf[0] = '\0';
+    // buf_unsign[0] = '\0';
+    // strcat(buf, "1/0");
+    // strcat(buf_unsign, "1/0");
     
     sprintf(code_buf, code_format, buf_unsign);
 
@@ -108,18 +127,30 @@ int main(int argc, char *argv[]) {
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
+    // make warnning of compile convert to error
+    int ret = system("gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr");
     if (ret != 0) continue;
 
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
 
-    uint32_t result;
-    if (fscanf(fp, "%u", &result) == 0) {
+    uint64_t result;
+    char success[100] = {};
+    success[0] = '\0';
+
+    if (fscanf(fp, "%s", success) == 0) {
       assert(0);
     }
+    if (fscanf(fp, "%lu", &result) == 0) {
+      assert(0);
+    }
+    pclose(fp);
 
-    printf("%u\n%s\n", result, buf);
+    // only save successful result
+    if (strcmp(success, "successful!") == 0) {
+        printf("%lu\n%s\n", result, buf);
+    }
+
   }
   return 0;
 }
