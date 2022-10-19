@@ -24,7 +24,8 @@
 #include "stdio.h"
 
 enum {
-  TK_NOTYPE = 256, TK_EQ = 200, TK_NOEQ = 201, TK_DEC = 202, TK_AND = 203,
+  // value must be greater than 127, because ascii num <= 127
+  TK_NOTYPE = 256, TK_EQ = 200, TK_NOEQ = 201, TK_DEC = 202, TK_HEX = 203, TK_AND = 204,
 
   /* TODO: Add more token types */
 
@@ -48,10 +49,11 @@ static struct rule {
   {"\\/", '/'},                 // div  79
   {"\\(", '('},                 // left Parentheses  72
   {"\\)", ')'},                 // right Parentheses  73
-  {"&&", TK_AND},                 // right Parentheses
-  {"!=", TK_NOEQ},                 // right Parentheses
-  {"==", TK_EQ},                 // right Parentheses
-  {"[0-9]+", TK_DEC},           // num (consider '-' when eval)
+  {"&&", TK_AND},               // AND
+  {"!=", TK_NOEQ},              // un equal
+  {"==", TK_EQ},                // equal
+  {"[0-9]+", TK_DEC},           // dec num (consider '-' when eval)
+  {"0[xX]][0-9]+", TK_HEX},     // hex num (consider '-' when eval)
 
 };
 
@@ -206,12 +208,17 @@ static uint32_t eval(int p, int q) {
      * Return the value of the number.
      */
     // check paramater type, it must be num
-    if (tokens[q].type != TK_DEC) {
+    if (tokens[q].type == TK_DEC) {
+      return strtoul(tokens[q].str, NULL, 10);
+    }
+    else if (tokens[q].type == TK_HEX) {
+      return strtoul(tokens[q].str, NULL, 16);
+    }
+    else {
       printf("error! single token must be num.\n");
       eval_success = false;
       return 0;
     }
-    return strtoul(tokens[q].str, NULL, 10);
   }
 
   // check parentheses
@@ -304,6 +311,10 @@ static uint32_t eval(int p, int q) {
         i ++;
         break;
       }
+      case TK_HEX: {
+        i ++;
+        break;
+      }
       default: assert(0);
     }
   }
@@ -367,37 +378,37 @@ word_t expr(char *e, bool *success) {
 
   // test for expression
   // type any valid expression to starttest
-  FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
-  uint32_t test_result = 0;
-  char test_str[40] = {};
-  char buf[1000] = {};
-  int i = 0;
-  while (1) {
-    if (fgets(test_str, sizeof(test_str), fp) == NULL) {
-      break;
-    }
+  // FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
+  // uint32_t test_result = 0;
+  // char test_str[40] = {};
+  // char buf[1000] = {};
+  // int i = 0;
+  // while (1) {
+  //   if (fgets(test_str, sizeof(test_str), fp) == NULL) {
+  //     break;
+  //   }
     
-    if (fgets(buf, sizeof(buf), fp) == NULL) {
-      break;
-    }
-    // delate \n
-    buf[strlen(buf) - 1] = '\0';
-    if (!make_token(buf)) {
-      printf("matched failed! at %d\n", i);
-      break;
-    }
-    eval_success = true;
-    test_result = eval(0, nr_token-1);
-    if(!eval_success || (test_result != strtoul(test_str, NULL, 10))) {
-      printf("cal error at %d\n", i);
-      printf("expression: %s\n", buf);
-      printf("cal result: %u\n", test_result);
-      printf("real result: %lu\n", strtoul(test_str, NULL, 10));
-      printf("\n");
-    }
-    i++;
-  }
-  fclose(fp);
+  //   if (fgets(buf, sizeof(buf), fp) == NULL) {
+  //     break;
+  //   }
+  //   // delate \n
+  //   buf[strlen(buf) - 1] = '\0';
+  //   if (!make_token(buf)) {
+  //     printf("matched failed! at %d\n", i);
+  //     break;
+  //   }
+  //   eval_success = true;
+  //   test_result = eval(0, nr_token-1);
+  //   if(!eval_success || (test_result != strtoul(test_str, NULL, 10))) {
+  //     printf("cal error at %d\n", i);
+  //     printf("expression: %s\n", buf);
+  //     printf("cal result: %u\n", test_result);
+  //     printf("real result: %lu\n", strtoul(test_str, NULL, 10));
+  //     printf("\n");
+  //   }
+  //   i++;
+  // }
+  // fclose(fp);
 
   return 0;
 }
