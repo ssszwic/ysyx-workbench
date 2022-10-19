@@ -50,7 +50,7 @@ static void gen_num() {
     strcat(buf, num_str);
   }
   else {
-    sprintf(num_str_unsign, " 0x%x ", num);
+    sprintf(num_str_unsign, " (unsigned)0x%x ", num);
     sprintf(num_str, " 0x%x ", num);
     strcat(buf_unsign, num_str_unsign);
     strcat(buf, num_str);
@@ -135,6 +135,7 @@ int main(int argc, char *argv[]) {
     if (fscanf(fp, "%u", &result) == 0) {
       assert(0);
     }
+    pclose(fp);
 
     printf("%u\n%s\n", result, buf);
   }
