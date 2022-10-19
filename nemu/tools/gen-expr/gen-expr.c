@@ -104,10 +104,10 @@ int main(int argc, char *argv[]) {
     len = 1;
     gen_rand_expr();
 
-    buf[0] = '\0';
-    buf_unsign[0] = '\0';
-    strcat(buf, "   (      1613001108  ==667548417   )      ");
-    strcat(buf_unsign, "   (      1613001108  ==667548417   )      ");
+    // buf[0] = '\0';
+    // buf_unsign[0] = '\0';
+    // strcat(buf, "   (      1613001108  ==667548417   )      ");
+    // strcat(buf_unsign, "   (      1613001108  ==667548417   )      ");
     
     sprintf(code_buf, code_format, buf_unsign);
 
