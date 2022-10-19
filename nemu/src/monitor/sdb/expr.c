@@ -49,7 +49,7 @@ static struct rule {
   {"\\(", '('},                 // left Parentheses  72
   {"\\)", ')'},                 // right Parentheses  73
   {"&&", TK_AND},                 // right Parentheses
-  {"!=)", TK_NOEQ},                 // right Parentheses
+  {"\\!=)", TK_NOEQ},                 // right Parentheses
   {"==)", TK_EQ},                 // right Parentheses
   {"[0-9]+", TK_NUM},           // num (consider '-' when eval)
 
