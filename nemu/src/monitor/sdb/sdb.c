@@ -195,7 +195,7 @@ static int cmd_x(char *args) {
   }
 
   // read nemu member
-  printf("%x", addr);
+  printf("%x", 156);
   word_t* host_addr = (word_t*) guest_to_host(addr);
 
   printf("0x%*x:  ", 16, addr);
