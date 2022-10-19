@@ -186,13 +186,14 @@ static int cmd_x(char *args) {
     // only one argument
     len = 1;
   }
-  printf("error! expression invalid.\n");
+  
   bool success;
   paddr_t addr = expr(expr_str, &success);
   if (!success) {
     printf("error! expression invalid.\n");
     return 0;
   }
+  printf("error! expression invalid.\n");
 
   // read nemu member
   word_t* host_addr = (word_t*) guest_to_host(addr);
