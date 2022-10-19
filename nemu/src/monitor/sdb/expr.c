@@ -46,15 +46,17 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},            // spaces
+  // opcode
   {"\\+", '+'},                 // plus 75
   {"\\-", '-'},                 // sub  77
   {"\\*", '*'},                 // mul  74
   {"\\/", '/'},                 // div  79
-  {"\\(", '('},                 // left Parentheses  72
-  {"\\)", ')'},                 // right Parentheses  73
   {"&&", TK_AND},               // AND
   {"!=", TK_NOEQ},              // un equal
   {"==", TK_EQ},                // equal
+  // expression
+  {"\\(", '('},                 // left Parentheses  72
+  {"\\)", ')'},                 // right Parentheses  73
   // TK_HEX must be in front of TK_DEC
   {"0[xX][0-9a-fA-F]+", TK_HEX},     // hex num (consider '-' when eval)
   {"[0-9]+", TK_DEC},           // dec num (consider '-' when eval)
@@ -146,7 +148,9 @@ static bool make_token(char *e) {
       if (i == 0) {
         tokens[i].type = TK_POINT;
       }
-      else if(tokens[i-1].type != TK_HEX && tokens[i-1].type != TK_DEC && tokens[i-1].type != TK_REG) {
+      else if(tokens[i-1].type == '+' || tokens[i-1].type == '+' || tokens[i-1].type == '*' ||
+              tokens[i-1].type == '/' || tokens[i-1].type == TK_EQ || tokens[i-1].type == TK_NOEQ ||
+              tokens[i-1].type == TK_AND) {
         tokens[i].type = TK_POINT;
       }
      }
