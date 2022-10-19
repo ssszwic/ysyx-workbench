@@ -19,6 +19,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include <memory/paddr.h>
 
 #include "stdlib.h"
 #include "stdio.h"
@@ -27,7 +28,7 @@
 enum {
   // value must be greater than 127, because ascii num <= 127
   TK_NOTYPE = 256, TK_EQ = 200, TK_NOEQ = 201, TK_DEC = 202, 
-  TK_HEX = 203, TK_AND = 204, TK_REG = 205, 
+  TK_HEX = 203, TK_AND = 204, TK_REG = 205, TK_POINT = 206
 
   /* TODO: Add more token types */
 
@@ -134,11 +135,21 @@ static bool make_token(char *e) {
         break;
       }
     }
-
     if (i == NR_REGEX) {
       printf("no match at position %d\n%s\n%*.s^\n", position, e, position, "");
       return false;
     }
+  }
+  // picking out pointers from '*'
+  for (int i = 0; i < nr_token; i++) {
+     if (tokens[i].type == '*') {
+      if (i == 0) {
+        tokens[i].type = TK_POINT;
+      }
+      else if(tokens[i-1].type != TK_HEX && tokens[i-1].type != TK_DEC && tokens[i-1].type != TK_REG) {
+        tokens[i].type = TK_POINT;
+      }
+     }
   }
   return true;
 }
@@ -324,6 +335,16 @@ static word_t eval(int p, int q) {
         i ++;
         break;
       }
+      case TK_POINT: {
+        if (op == -1 || 
+            (op != -1 && tokens[op].type != TK_AND && tokens[op].type != TK_EQ && 
+            tokens[op].type != TK_NOEQ && tokens[op].type != '+' && tokens[op].type != '-' &&
+            tokens[op].type != '*' && tokens[op].type != '/')) {
+          op = i;
+        }
+        i ++;
+        break;
+      }
       case TK_DEC: {
         i ++;
         break;
@@ -347,10 +368,17 @@ static word_t eval(int p, int q) {
     return 0;
   }
 
-  // if op on the edge, only '-' on left is allowed
+  // if op on the edge, only '-' or pointer on left is allowed
   if ((op == p) || (op == q)) {
-    if ((op == p) && (tokens[op].type == '-')) {
-      return -eval(p + 1, q);
+    if (op == p) {
+      if (tokens[op].type == '-') {
+        return -eval(p + 1, q);
+      }
+      else if (tokens[op].type == TK_POINT) {
+        // to do 
+        word_t *tmp = (word_t *) guest_to_host(eval(p + 1, q));
+        return *tmp;
+      }
     }
     printf("error! the op isn't matched.\n");
     eval_success = false;
@@ -384,7 +412,6 @@ static word_t eval(int p, int q) {
 
   return 0;
 }
-
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
