@@ -62,8 +62,6 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
-static int cmd_expr(char *args);
-
 static int info_reg();
 
 static int info_watch();
@@ -82,7 +80,6 @@ static struct {
   { "si", "Execute N instructions in a singel step, default 1", cmd_si},
   { "info", "Print program state, reg (r): reg status; watch (w): watch state", cmd_info},
   { "x", "Print consecutive N data from the address, default 1 data", cmd_x},
-  {"\"", "Expression evaluation", cmd_expr},
 
 };
 
@@ -176,7 +173,6 @@ static int cmd_x(char *args) {
   int len = 1;
 
   int args_num = sscanf(args, "%*[\"]%[^\"]%*[\"]%d", expr_str, &len);
-  
   if (args_num == 0) {
     // argument is space('  ')
     printf("You must specify memory address\n");
@@ -188,16 +184,13 @@ static int cmd_x(char *args) {
   }
   
   bool success;
-  
   uint64_t addr = expr(expr_str, &success);
-
   if (!success) {
     printf("error! expression invalid.\n");
     return 0;
   }
   // read nemu member
   word_t* host_addr = (word_t*) guest_to_host(addr);
-
 
   printf("0x%016lx: ", addr);
   int i;
@@ -207,12 +200,6 @@ static int cmd_x(char *args) {
     host_addr++;
   }
   printf("\n");
-
-  return 0;
-}
-
-static int cmd_expr(char *args) {
-  printf("%s\n", args);
 
   return 0;
 }
