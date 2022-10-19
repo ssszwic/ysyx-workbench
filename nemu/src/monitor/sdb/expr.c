@@ -254,7 +254,6 @@ static uint32_t eval(int p, int q) {
       }
       case TK_EQ: {
         if (op == -1 || (op != -1 && tokens[op].type != TK_AND)) {
-          printf("eq\n");
           op = i;
         }
         i ++;
@@ -262,7 +261,6 @@ static uint32_t eval(int p, int q) {
       }
       case TK_NOEQ: {
         if (op == -1 || (op != -1 && tokens[op].type != TK_AND)) {
-          printf("no eq\n");
           op = i;
         }
         i ++;
@@ -298,7 +296,6 @@ static uint32_t eval(int p, int q) {
             (op != -1 && tokens[op].type != TK_AND && tokens[op].type != TK_EQ && 
             tokens[op].type != TK_NOEQ && tokens[op].type != '+' && tokens[op].type != '-')) {
           op = i;
-          printf("div\n");
         }
         i ++;
         break;
@@ -335,7 +332,6 @@ static uint32_t eval(int p, int q) {
     case '*': return eval(p, op - 1) * eval(op + 1, q);
     case '/': {
       uint32_t tmp = eval(op + 1, q);
-      printf("div result: %u", tmp);
       if (tmp == 0) {
         if (!eval_success) {
           return 0;
