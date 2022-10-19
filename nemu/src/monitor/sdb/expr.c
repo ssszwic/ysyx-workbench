@@ -407,6 +407,7 @@ static word_t eval(int p, int q) {
     case TK_AND: return eval(p, op - 1) && eval(op + 1, q);
     case TK_EQ: return eval(p, op - 1) == eval(op + 1, q);
     case TK_NOEQ: return eval(p, op - 1) != eval(op + 1, q);
+    case TK_POINT: word_t *tmp = (word_t *) guest_to_host(eval(p + 1, q)); return *tmp;
     default: assert(0);
   }
 
