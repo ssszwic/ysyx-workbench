@@ -219,6 +219,7 @@ static uint32_t eval(int p, int q) {
       return strtoul(tokens[q].str, NULL, 16);
     }
     else if (tokens[q].type == TK_REG) {
+      printf("%s\n", tokens[q].str);
       word_t tmp;
       bool success;
       tmp = isa_reg_str2val(tokens[q].str + 1, &success);
