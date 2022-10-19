@@ -468,5 +468,5 @@ word_t expr(char *e, bool *success) {
   // }
   // fclose(fp);
 
-  return 0;
+  return result;
 }

@@ -189,8 +189,7 @@ static int cmd_x(char *args) {
   
   bool success;
   
-  paddr_t addr = expr(expr_str, &success);
-  printf("a%x\n", addr);
+  uint64_t addr = expr(expr_str, &success);
 
   if (!success) {
     printf("error! expression invalid.\n");
@@ -200,7 +199,7 @@ static int cmd_x(char *args) {
   word_t* host_addr = (word_t*) guest_to_host(addr);
 
 
-  printf("0x%x: ", addr);
+  printf("0x%16lx: ", addr);
   int i;
   for (i = 0; i < len; i++) {
     // little endian for riscv64
