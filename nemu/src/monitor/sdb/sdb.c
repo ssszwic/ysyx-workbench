@@ -178,7 +178,8 @@ static int cmd_x(char *args) {
   paddr_t addr;
   printf("%s\n", args);
 
-  int args_num = sscanf(args, "%s %s", first, second);
+  int args_num = sscanf(args, "%*[^\"]\"%s[\"]", first);
+  printf("%s\n", first);
   if (args_num == 0) {
     // argument is space('  ')
     printf("You must specify memory address\n");
