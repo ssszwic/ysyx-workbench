@@ -188,16 +188,16 @@ static int cmd_x(char *args) {
   }
   
   bool success;
-  printf("You must specify memory1\n");
+  
   paddr_t addr = expr(expr_str, &success);
   if (!success) {
     printf("error! expression invalid.\n");
     return 0;
   }
   printf("You must specify memory1\n");
-
   // read nemu member
   word_t* host_addr = (word_t*) guest_to_host(addr);
+  printf("You must specify memory1\n");
 
   printf("0x%*x:  ", 16, addr);
   int i;
