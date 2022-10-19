@@ -228,6 +228,7 @@ static uint32_t eval(int p, int q) {
       else {
         printf("error! can't find reg %s.\n", tokens[q].str + 1);
         eval_success = false;
+        return 0;
       }
     }
     else {
