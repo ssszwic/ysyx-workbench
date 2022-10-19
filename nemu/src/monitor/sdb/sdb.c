@@ -199,11 +199,11 @@ static int cmd_x(char *args) {
   word_t* host_addr = (word_t*) guest_to_host(addr);
 
 
-  printf("0x%16lx: ", addr);
+  printf("0x%0*lx: ", (int)sizeof(addr), addr);
   int i;
   for (i = 0; i < len; i++) {
     // little endian for riscv64
-    printf("0x%*lx ", 16, *host_addr);
+    printf("0x%0*lx ", (int)sizeof(*host_addr), *host_addr);
     host_addr++;
   }
   printf("\n");
