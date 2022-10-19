@@ -57,7 +57,7 @@ static struct rule {
   // TK_HEX must be in front of TK_DEC
   {"0[xX][0-9a-fA-F]+", TK_HEX},     // hex num (consider '-' when eval)
   {"[0-9]+", TK_DEC},           // dec num (consider '-' when eval)
-  {"\\$[0-9a-zA-Z]+", TK_REG},     // hex num (consider '-' when eval)
+  {"\\$[0-9a-zA-Z\\$]+", TK_REG},     // hex num (consider '-' when eval)
 
 };
 
