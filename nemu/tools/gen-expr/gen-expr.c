@@ -31,6 +31,7 @@ static char *code_format =
 "#include <stdint.h>\n"
 "int main() { "
 "  uint64_t result = %s; "
+"  printf(\"1\\n\"); "
 "  printf(\"%%lu\", result); "
 "  return 0; "
 "}";
@@ -116,8 +117,9 @@ int main(int argc, char *argv[]) {
 
     // buf[0] = '\0';
     // buf_unsign[0] = '\0';
-    // strcat(buf, "0x16");
-    // strcat(buf_unsign, "0x16");
+    // strcat(buf, "1/0");
+    // strcat(buf_unsign, "1/0");
+    
     
     sprintf(code_buf, code_format, buf_unsign);
 
@@ -133,12 +135,21 @@ int main(int argc, char *argv[]) {
     assert(fp != NULL);
 
     uint64_t result;
+    int success = 0;
+    if (fscanf(fp, "%d", &success) == 0) {
+      assert(0);
+    }
     if (fscanf(fp, "%lu", &result) == 0) {
       assert(0);
     }
     pclose(fp);
 
-    printf("%lu\n%s\n", result, buf);
+    // only save successful result
+    if (success) {
+        printf("%lu\n%s\n", result, buf);
+    }
+
+
   }
   return 0;
 }
