@@ -31,7 +31,7 @@ static char *code_format =
 "#include <stdint.h>\n"
 "int main() { "
 "  uint64_t result = %s; "
-"  printf(\"1\\n\"); "
+"  printf(\"successful!\\n\"); "
 "  printf(\"%%lu\", result); "
 "  return 0; "
 "}";
@@ -120,7 +120,6 @@ int main(int argc, char *argv[]) {
     // strcat(buf, "1/0");
     // strcat(buf_unsign, "1/0");
     
-    
     sprintf(code_buf, code_format, buf_unsign);
 
     FILE *fp = fopen("/tmp/.code.c", "w");
@@ -128,15 +127,18 @@ int main(int argc, char *argv[]) {
     fputs(code_buf, fp);
     fclose(fp);
 
-    int ret = system("gcc /tmp/.code.c -o /tmp/.expr");
+    // make warnning of compile convert to error
+    int ret = system("gcc -Werror=div-by-zero /tmp/.code.c -o /tmp/.expr");
     if (ret != 0) continue;
 
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
 
     uint64_t result;
-    int success = 0;
-    if (fscanf(fp, "%d", &success) == 0) {
+    char success[100] = {};
+    success[0] = '\0';
+
+    if (fscanf(fp, "%s", success) == 0) {
       assert(0);
     }
     if (fscanf(fp, "%lu", &result) == 0) {
@@ -145,10 +147,9 @@ int main(int argc, char *argv[]) {
     pclose(fp);
 
     // only save successful result
-    if (success) {
+    if (strcmp(success, "successful!") == 0) {
         printf("%lu\n%s\n", result, buf);
     }
-
 
   }
   return 0;
