@@ -24,7 +24,7 @@
 #include "stdio.h"
 
 enum {
-  TK_NOTYPE = 256, TK_EQ = 200, TK_NUM = 102,
+  TK_NOTYPE = 256, TK_EQ = 200, TK_NOEQ = 201, TK_NUM = 202, TK_AND = 203,
 
   /* TODO: Add more token types */
 
@@ -42,14 +42,17 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},            // spaces
-  {"\\+", '+'},                 // plus
-  {"\\-", '-'},                 // sub
-  {"\\*", '*'},                 // mul
-  {"\\/", '/'},                 // div
-  {"\\(", '('},                 // left Parentheses
-  {"\\)", ')'},                 // right Parentheses
+  {"\\+", '+'},                 // plus 75
+  {"\\-", '-'},                 // sub  77
+  {"\\*", '*'},                 // mul  74
+  {"\\/", '/'},                 // div  79
+  {"\\(", '('},                 // left Parentheses  72
+  {"\\)", ')'},                 // right Parentheses  73
+  {"&&", TK_AND},                 // right Parentheses
+  {"!=)", TK_NOEQ},                 // right Parentheses
+  {"==)", TK_EQ},                 // right Parentheses
   {"[0-9]+", TK_NUM},           // num (consider '-' when eval)
-  {"==", TK_EQ},                // equal
+
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -131,7 +134,6 @@ static bool make_token(char *e) {
       return false;
     }
   }
-
   return true;
 }
 
@@ -191,7 +193,6 @@ static uint32_t eval(int p, int q) {
   // }
   // printf("\n");
 
-
   if (p > q) {
     /* Bad expression */
     printf("p > q");
@@ -246,31 +247,54 @@ static uint32_t eval(int p, int q) {
         i = j + 1;
         break;
       }
-      case '+': {
+      case TK_AND: {
         op = i;
+        i ++;
+        break;
+      }
+      case TK_EQ: {
+        if (op == -1 || (op != -1 && tokens[op].type != TK_AND)) {
+          op = i;
+        }
+        i ++;
+        break;
+      }
+      case TK_NOEQ: {
+        if (op == -1 || (op != -1 && tokens[op].type != TK_AND)) {
+          op = i;
+        }
+        i ++;
+        break;
+      }
+      case '+': {
+        if (op == -1 || (op != -1 && tokens[op].type != TK_AND && 
+            tokens[op].type != TK_EQ && tokens[op].type != TK_NOEQ)) {
+          op = i;
+        }
         i ++;
         break;
       }
       case '-': {
-        op = i;
+        if (op == -1 || (op != -1 && tokens[op].type != TK_AND && 
+            tokens[op].type != TK_EQ && tokens[op].type != TK_NOEQ)) {
+          op = i;
+        }
         i ++;
         break;
       }
       case '*': {
-        if(op == -1) {
-          op = i;
-        }
-        else if (tokens[op].type == '*' || tokens[op].type == '/') {
+        if (op == -1 || 
+            (op != -1 && tokens[op].type != TK_AND && tokens[op].type != TK_EQ && 
+            tokens[op].type != TK_NOEQ && tokens[op].type != '+' && tokens[op].type != '-')) {
           op = i;
         }
         i ++;
         break;
       }
       case '/': {
-        if(op == -1) {
-          op = i;
-        }
-        else if (tokens[op].type == '*' || tokens[op].type == '/') {
+        if (op == -1 || 
+            (op != -1 && tokens[op].type != TK_AND && tokens[op].type != TK_EQ && 
+            tokens[op].type != TK_NOEQ && tokens[op].type != '+' && tokens[op].type != '-')) {
           op = i;
         }
         i ++;
@@ -340,37 +364,37 @@ word_t expr(char *e, bool *success) {
 
   // test for expression
   // type any valid expression to starttest
-  FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
-  uint32_t test_result = 0;
-  char test_str[40] = {};
-  char buf[1000] = {};
-  int i = 0;
-  while (1) {
-    if (fgets(test_str, sizeof(test_str), fp) == NULL) {
-      break;
-    }
+  // FILE *fp = fopen("/home/ssszw/Work/ysyx-workbench/nemu/tools/gen-expr/input", "r");
+  // uint32_t test_result = 0;
+  // char test_str[40] = {};
+  // char buf[1000] = {};
+  // int i = 0;
+  // while (1) {
+  //   if (fgets(test_str, sizeof(test_str), fp) == NULL) {
+  //     break;
+  //   }
     
-    if (fgets(buf, sizeof(buf), fp) == NULL) {
-      break;
-    }
-    // delate \n
-    buf[strlen(buf) - 1] = '\0';
-    if (!make_token(buf)) {
-      printf("matched failed! at %d\n", i);
-      break;
-    }
-    eval_success = true;
-    test_result = eval(0, nr_token-1);
-    if(!eval_success || (test_result != strtoul(test_str, NULL, 10))) {
-      printf("cal error at %d\n", i);
-      printf("expression: %s\n", buf);
-      printf("cal result: %u\n", test_result);
-      printf("real result: %lu\n", strtoul(test_str, NULL, 10));
-      printf("\n");
-    }
-    i++;
-  }
-  fclose(fp);
+  //   if (fgets(buf, sizeof(buf), fp) == NULL) {
+  //     break;
+  //   }
+  //   // delate \n
+  //   buf[strlen(buf) - 1] = '\0';
+  //   if (!make_token(buf)) {
+  //     printf("matched failed! at %d\n", i);
+  //     break;
+  //   }
+  //   eval_success = true;
+  //   test_result = eval(0, nr_token-1);
+  //   if(!eval_success || (test_result != strtoul(test_str, NULL, 10))) {
+  //     printf("cal error at %d\n", i);
+  //     printf("expression: %s\n", buf);
+  //     printf("cal result: %u\n", test_result);
+  //     printf("real result: %lu\n", strtoul(test_str, NULL, 10));
+  //     printf("\n");
+  //   }
+  //   i++;
+  // }
+  // fclose(fp);
 
   return 0;
 }

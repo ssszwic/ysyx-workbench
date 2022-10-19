@@ -100,6 +100,11 @@ int main(int argc, char *argv[]) {
     buf_unsign[0] = '\0';
     len = 1;
     gen_rand_expr();
+
+    buf[0] = '\0';
+    buf_unsign[0] = '\0';
+    strcat(buf, "3&&2");
+    strcat(buf_unsign, "3&&2");
     
     sprintf(code_buf, code_format, buf_unsign);
 
