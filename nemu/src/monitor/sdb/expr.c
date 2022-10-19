@@ -147,11 +147,13 @@ static bool make_token(char *e) {
      if (tokens[i].type == '*') {
       if (i == 0) {
         tokens[i].type = TK_POINT;
+        printf("pointer\n");
       }
       else if(tokens[i-1].type == '+' || tokens[i-1].type == '+' || tokens[i-1].type == '*' ||
               tokens[i-1].type == '/' || tokens[i-1].type == TK_EQ || tokens[i-1].type == TK_NOEQ ||
               tokens[i-1].type == TK_AND) {
         tokens[i].type = TK_POINT;
+        printf("pointer\n");
       }
      }
   }
