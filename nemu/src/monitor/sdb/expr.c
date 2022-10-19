@@ -426,7 +426,7 @@ word_t expr(char *e, bool *success) {
   eval_success = true;
   word_t result = eval(0, nr_token-1);
   if (eval_success) {
-    printf("%lx\n", result);
+    printf("%lu\n", result);
   }
 
   // test for expression
