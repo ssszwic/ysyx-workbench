@@ -272,10 +272,14 @@ void sdb_mainloop() {
     cmd_c(NULL);
     return;
   }
+  char expr_str[3000] = {};
   for (char *str; (str = rl_gets()) != NULL; ) {
     // copy str to expr_str for expression
-    char *expr_str = NULL;
-    expr_str = malloc(strlen(str) * sizeof(char));
+    expr_str[0] = '\0';
+    if (strlen(str) > 3000) {
+      printf("the string type is too long.\n");
+      assert(0);
+    }
     strcpy(expr_str, str);
 
     char *str_end = str + strlen(str);
@@ -320,7 +324,7 @@ void sdb_mainloop() {
       }
       
     }
-    free(expr_str);
+    // free(expr_str);
   }
 }
 
