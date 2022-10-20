@@ -43,14 +43,17 @@ void print_wb() {
 }
 
 void new_wp(char *expr) {
+  printf("add\n");
   if (expr == NULL) {
     printf("set watchpoint failed! no expression!\n");
     return ;
   }
+  printf("add\n");
   if (strlen(expr) > EXPR_LEN) {
     printf("set watchpoint failed! expression too long (greater %d)!\n", EXPR_LEN);
     return ;
   }
+  printf("add\n");
   // delate wp at the begining of free_
   WP* tmp = free_;
   free_ = free_->next;

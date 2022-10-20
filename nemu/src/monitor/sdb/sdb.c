@@ -239,7 +239,6 @@ static int cmd_watch(char *args) {
     printf("error! expression invalid.\n");
     return 0;
   }
-  printf("add\n");
   new_wp(expr_str);
   return 0;
 }
