@@ -23,10 +23,49 @@ typedef struct watchpoint {
 
   /* TODO: Add more members if necessary */
 
+
 } WP;
 
 static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
+
+// WP* new_wp() {
+//   // delate wp at the begining of free_
+//   WP* tmp = free_;
+//   free_ = free_->next;
+//   // add new wp at the beginning of head
+//   tmp->next = head;
+//   head = tmp;
+// }
+
+// void free_wp(WP *wp) {
+//   WP* tmp = head;
+//   if (tmp == NULL) {
+//     printf("No find wp in head!\n");
+//     return ;
+//   }
+//   // head is wp will be delated
+//   if (tmp == wp) {
+//     // delate wp in head
+//     head = head->next;
+//     // add wp at the beginning of free_
+//     tmp->next = free_;
+//     free_ = tmp;
+//     return ;
+//   }
+//   while(tmp->next != NULL) {
+//     if (tmp->next == wp) {
+//       // delate wp in head
+//       tmp->next = wp->next;
+//       // add wp at the beginning of free_
+//       wp->next = free_;
+//       free_ = tmp;
+//       return ;
+//     }
+//   }
+//   printf("No find wp in head!\n");
+//   return ;
+// }
 
 void init_wp_pool() {
   int i;

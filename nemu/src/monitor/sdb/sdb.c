@@ -169,7 +169,7 @@ static int cmd_x(char *args) {
   }
 
   char expr_str[100] = {};
-  // word_t num default: 1
+  // uint8_t num default: 1
   int len = 1;
 
   int args_num = sscanf(args, "%*[\"]%[^\"]%*[\"]%d", expr_str, &len);
@@ -190,13 +190,13 @@ static int cmd_x(char *args) {
     return 0;
   }
   // read nemu member
-  word_t* host_addr = (word_t*) guest_to_host(addr);
+  uint8_t* host_addr = guest_to_host(addr);
 
   printf("0x%016lx: ", addr);
   int i;
   for (i = 0; i < len; i++) {
     // little endian for riscv64
-    printf("0x%016lx ", *host_addr);
+    printf("0x%02x ", *host_addr);
     host_addr++;
   }
   printf("\n");
