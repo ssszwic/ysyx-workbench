@@ -126,6 +126,10 @@ config TRACE
   bool "Enable tracer"
   default y
 
+config WATCHPOINT
+  bool "Enable watchpoint"
+  default y
+
 config TRACE_START
   depends on TRACE
   int "When tracing is enabled (unit: number of instructions)"
@@ -145,7 +149,6 @@ config ITRACE_COND
   depends on ITRACE
   string "Only trace instructions when the condition is true"
   default "true"
-
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF
