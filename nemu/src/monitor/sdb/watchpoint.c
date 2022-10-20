@@ -111,11 +111,31 @@ void init_wp_pool() {
   free_ = wp_pool;
 }
 
-bool update_wp() {
+bool update_wp(char *log, bool log_flag) {
   bool change_flag = false;
   WP* tmp = head;
   bool cal_success;
   word_t result;
+
+  // Print the instruction have been executed
+
+  // detect change
+  while(tmp != NULL) {
+    result = expr(tmp->expr_str, &cal_success);
+    if (!cal_success) {
+      assert(0);
+    }
+    if (result != tmp->value) {
+      change_flag = true;
+      break;
+    }
+    tmp = tmp->next;
+  }
+
+  // first print instruction have been excuted, then print value change
+  if (change_flag && log_flag && (log != NULL)) {
+    puts(log);
+  }
 
   while(tmp != NULL) {
     result = expr(tmp->expr_str, &cal_success);
@@ -128,10 +148,10 @@ bool update_wp() {
       printf("old value = 0x%16lx\n", tmp->value);
       printf("new value = 0x%16lx\n", result);
       tmp->value = result;
-      change_flag = true;
     }
     tmp = tmp->next;
   }
+
   return change_flag;
 }
 

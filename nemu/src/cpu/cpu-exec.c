@@ -31,7 +31,7 @@ static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
 void device_update();
-bool update_wp();
+bool update_wp(char *log, bool log_flag);
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
@@ -41,13 +41,8 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
   // scan watchpoint
-  if(update_wp()) {
+  if(update_wp(IFDEF(CONFIG_ITRACE, _this->logbuf, NULL)), g_print_step) {
     nemu_state.state = NEMU_STOP;
-    // Print the instruction have been executed
-    if (!g_print_step) {
-      // don't print when g_print_step
-      IFDEF(CONFIG_ITRACE, puts(_this->logbuf));
-    }
   }
 }
 
