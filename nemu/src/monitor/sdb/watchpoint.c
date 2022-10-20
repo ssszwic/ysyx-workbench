@@ -107,6 +107,7 @@ void init_wp_pool() {
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
     wp_pool[i].expr_str[0] = '\0';
   }
+  printf("init\n");
 
   head = NULL;
   free_ = wp_pool;
