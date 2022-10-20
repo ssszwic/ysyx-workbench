@@ -110,5 +110,9 @@ void init_wp_pool() {
   free_ = wp_pool;
 }
 
+void update_wp() {
+  printf("update\n");
+}
+
 /* TODO: Implement the functionality of watchpoint */
 
