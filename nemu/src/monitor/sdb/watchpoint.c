@@ -13,7 +13,13 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
+// #include "sdb.h"
+#include <isa.h>
+#include <cpu/cpu.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include "sdb.h"
+#include <memory/paddr.h>
 
 #define NR_WP 32
 #define EXPR_LEN 300 // expression string max length
