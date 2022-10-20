@@ -33,10 +33,6 @@ static WP *head = NULL, *free_ = NULL;
 
 void print_wb() {
   WP* tmp = head;
-  if (tmp == NULL) {
-    printf("No watchpoints!\n");
-    return ;
-  }
   while(tmp != NULL) {
     printf("id: %-2d    expression: %s\n", tmp->NO, tmp->expr_str);
     tmp = tmp->next;
@@ -81,15 +77,17 @@ void free_wp(int id) {
     free_ = tmp;
     return ;
   }
-  while(tmp->next != NULL) {
+  while(tmp != NULL) {
     if (tmp->next == wp) {
       // delate wp in head
       tmp->next = wp->next;
       // add wp at the beginning of free_
       wp->next = free_;
       free_ = tmp;
+
       return ;
     }
+    tmp = tmp->next;
   }
   printf("No find in watchpoints!\n");
   return ;
