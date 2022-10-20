@@ -145,8 +145,8 @@ bool update_wp(char *log, bool log_flag) {
     if (result != tmp->value) {
       // value change
       printf("Hardware watchpoint %d: %s\n", tmp->NO, tmp->expr_str);
-      printf("old value = 0x%16lx\n", tmp->value);
-      printf("new value = 0x%16lx\n", result);
+      printf("old value = 0x%016lx\n", tmp->value);
+      printf("new value = 0x%016lx\n", result);
       tmp->value = result;
     }
     tmp = tmp->next;
