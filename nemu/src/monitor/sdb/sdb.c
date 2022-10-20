@@ -18,8 +18,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
-#include "watchpoint.c"
 #include <memory/paddr.h>
+#include "watchpoint.c"
 
 static int is_batch_mode = false;
 
