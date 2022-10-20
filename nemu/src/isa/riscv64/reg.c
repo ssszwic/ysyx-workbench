@@ -39,7 +39,7 @@ void isa_reg_display() {
 
 word_t isa_reg_str2val(const char *s, bool *success) {
   // pc reg
-  if (strcmp(s, "pc")){
+  if (strcmp(s, "pc") == 0){
     printf("receive : %s\n", s);
     *success = true;
     return cpu.pc;
