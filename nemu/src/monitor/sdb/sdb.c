@@ -215,31 +215,31 @@ static int info_reg() {
 }
 
 static int info_watch() {
-  // print_wb();
+  print_wb();
   return 0;
 }
 
 static int cmd_watch(char *args) {
-  // if (args == NULL) {
-  //   printf("You must specify expression.\n");
-  //   return 0;
-  // }
-  // char expr_str[300] = {};
+  if (args == NULL) {
+    printf("You must specify expression.\n");
+    return 0;
+  }
+  char expr_str[300] = {};
 
-  // int args_num = sscanf(args, "%*[\"]%[^\"]%*[\"]", expr_str);
-  // if (args_num == 0) {
-  //   // argument is space('  ')
-  //   printf("You must specify expression.\n");
-  //   return 0;
-  // }
+  int args_num = sscanf(args, "%*[\"]%[^\"]%*[\"]", expr_str);
+  if (args_num == 0) {
+    // argument is space('  ')
+    printf("You must specify expression.\n");
+    return 0;
+  }
 
-  // bool success;
-  // expr(expr_str, &success);
-  // if (!success) {
-  //   printf("error! expression invalid.\n");
-  //   return 0;
-  // }
-  // new_wp(expr_str);
+  bool success;
+  expr(expr_str, &success);
+  if (!success) {
+    printf("error! expression invalid.\n");
+    return 0;
+  }
+  new_wp(expr_str);
   return 0;
 }
 
