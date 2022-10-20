@@ -68,6 +68,8 @@ static int cmd_x(char *args);
 
 static int cmd_watch(char *args);
 
+static int cmd_delate(char *args);
+
 static int info_reg();
 
 static int info_watch();
@@ -86,7 +88,8 @@ static struct {
   { "si", "Execute N instructions in a singel step, default 1", cmd_si},
   { "info", "Print program state, reg (r): reg status; watch (w): watch state", cmd_info},
   { "x", "Print consecutive N uint8_t data from the address, default 1 data", cmd_x},
-  { "watch", "Add watch point.", cmd_watch},
+  { "w", "Add watch point.", cmd_watch},
+  { "d", "Delate specified watchpoint", cmd_delate},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -240,6 +243,23 @@ static int cmd_watch(char *args) {
     return 0;
   }
   new_wp(expr_str);
+  return 0;
+}
+
+static int cmd_delate(char *args) {
+  if (args == NULL) {
+    printf("You must specify watchpoint id.\n");
+    return 0;
+  }
+  int id;
+
+  int args_num = sscanf(args, "%d", &id);
+  if (args_num == 0) {
+    // argument is space('  ')
+    printf("You must specify watchpoint id.\n");
+    return 0;
+  }
+  free_wp(id);
   return 0;
 }
 
