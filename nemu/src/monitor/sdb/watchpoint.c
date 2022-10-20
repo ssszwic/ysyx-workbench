@@ -61,6 +61,7 @@ void new_wp(char *expr, word_t result) {
   head = tmp;
   strcpy(head->expr_str, expr);
   head->value = result;
+  printf("Hardware watchpoint %d: %s\n", head->NO, head->expr_str);
 }
 
 void free_wp(int id) {
