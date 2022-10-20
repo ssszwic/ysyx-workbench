@@ -110,8 +110,28 @@ void init_wp_pool() {
   free_ = wp_pool;
 }
 
-void update_wp() {
-  printf("update\n");
+bool update_wp() {
+  bool change_flag = false;
+  WP* tmp = head;
+  bool cal_success;
+  word_t result;
+
+  while(tmp != NULL) {
+    result = expr(tmp->expr_str, &cal_success);
+    if (!cal_success) {
+      assert(0);
+    }
+    if (result != tmp->value) {
+      // value change
+      printf("Hardware watchpoint %d: %s\n", tmp->NO, tmp->expr_str);
+      printf("old value = 0x%16lx\n", tmp->value);
+      printf("new value = 0x%16lx\n", result);
+      tmp->value = result;
+      change_flag = true;
+    }
+    tmp = tmp->next;
+  }
+  return change_flag;
 }
 
 /* TODO: Implement the functionality of watchpoint */
