@@ -77,8 +77,8 @@ void free_wp(int id) {
     // delate wp in head
     head = head->next;
     // add wp at the beginning of free_
-    tmp->next = free_;
-    free_ = tmp;
+    wp->next = free_;
+    free_ = wp;
     return ;
   }
   while(tmp != NULL) {
@@ -87,8 +87,7 @@ void free_wp(int id) {
       tmp->next = wp->next;
       // add wp at the beginning of free_
       wp->next = free_;
-      free_ = tmp;
-
+      free_ = wp;
       return ;
     }
     tmp = tmp->next;
