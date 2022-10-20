@@ -24,6 +24,7 @@ typedef struct watchpoint {
 
   /* TODO: Add more members if necessary */
   char expr_str[EXPR_LEN];
+  word_t value;
 
 
 } WP;
@@ -34,12 +35,12 @@ static WP *head = NULL, *free_ = NULL;
 void print_wb() {
   WP* tmp = head;
   while(tmp != NULL) {
-    printf("id: %-2d    expression: %s\n", tmp->NO, tmp->expr_str);
+    printf("id: %-2d    value: %016lx    expression: %s\n", tmp->NO, tmp->value, tmp->expr_str);
     tmp = tmp->next;
   }
 }
 
-void new_wp(char *expr) {
+void new_wp(char *expr, word_t result) {
   if (expr == NULL) {
     printf("set watchpoint failed! no expression!\n");
     return ;
@@ -59,6 +60,7 @@ void new_wp(char *expr) {
   tmp->next = head;
   head = tmp;
   strcpy(head->expr_str, expr);
+  head->value = result;
 }
 
 void free_wp(int id) {

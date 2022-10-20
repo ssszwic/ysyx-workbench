@@ -26,7 +26,7 @@ static int is_batch_mode = false;
 void init_regex();
 void init_wp_pool();
 void print_wb();
-void new_wp(char *expr);
+void new_wp(char *expr, word_t result);
 void free_wp(int id);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -237,12 +237,12 @@ static int cmd_watch(char *args) {
   }
 
   bool success;
-  expr(expr_str, &success);
+  word_t result = expr(expr_str, &success);
   if (!success) {
     printf("error! expression invalid.\n");
     return 0;
   }
-  new_wp(expr_str);
+  new_wp(expr_str, result);
   return 0;
 }
 
