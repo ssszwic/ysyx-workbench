@@ -48,6 +48,10 @@ void new_wp(char *expr) {
     printf("set watchpoint failed! expression too long (greater %d)!\n", EXPR_LEN);
     return ;
   }
+  if (free_ == NULL) {
+    printf("set watchpoint failed! exceeding the maximum number(%d)!\n", EXPR_LEN);
+    return ;
+  }
   // delate wp at the begining of free_
   WP* tmp = free_;
   free_ = free_->next;
