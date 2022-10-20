@@ -35,7 +35,7 @@ static WP *head = NULL, *free_ = NULL;
 void print_wb() {
   WP* tmp = head;
   while(tmp != NULL) {
-    printf("id: %-2d    value: %016lx    expression: %s\n", tmp->NO, tmp->value, tmp->expr_str);
+    printf("id: %-2d    value: 0x%016lx    expression: %s\n", tmp->NO, tmp->value, tmp->expr_str);
     tmp = tmp->next;
   }
 }
