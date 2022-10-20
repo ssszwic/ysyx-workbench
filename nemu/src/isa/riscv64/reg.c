@@ -39,6 +39,7 @@ void isa_reg_display() {
 
 word_t isa_reg_str2val(const char *s, bool *success) {
   // pc reg
+  printf("pc\n");
   if (strcmp(s, "pc")){
       return cpu.pc;
   }
