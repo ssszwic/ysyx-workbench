@@ -43,7 +43,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   // scan watchpoint
   if(update_wp()) {
     nemu_state.state = NEMU_STOP;
-    // Print the next instruction will be executed
+    // Print the instruction have been executed
     if (!g_print_step) {
       // don't print when g_print_step
       IFDEF(CONFIG_ITRACE, puts(_this->logbuf));
@@ -81,7 +81,6 @@ static void exec_once(Decode *s, vaddr_t pc) {
 static void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --) {
-    trace_and_difftest(&s, cpu.pc);
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
