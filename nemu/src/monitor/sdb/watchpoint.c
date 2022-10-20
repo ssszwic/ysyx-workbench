@@ -37,7 +37,7 @@ void print_wb() {
     printf("No watchpoints!\n");
     return ;
   }
-  while(tmp->next != NULL) {
+  while(tmp != NULL) {
     printf("id: %-2d    expression: %s\n", tmp->NO, tmp->expr_str);
     tmp = tmp->next;
   }
