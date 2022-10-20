@@ -18,6 +18,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include "watchpoint.c"
 #include <memory/paddr.h>
 
 static int is_batch_mode = false;
@@ -62,6 +63,8 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
+static int cmd_watch(char *args);
+
 static int info_reg();
 
 static int info_watch();
@@ -79,8 +82,8 @@ static struct {
   /* TODO: Add more commands */
   { "si", "Execute N instructions in a singel step, default 1", cmd_si},
   { "info", "Print program state, reg (r): reg status; watch (w): watch state", cmd_info},
-  { "x", "Print consecutive N data from the address, default 1 data", cmd_x},
-
+  { "x", "Print consecutive N uint8_t data from the address, default 1 data", cmd_x},
+  { "watch", "Add watch point.", cmd_watch},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -109,7 +112,6 @@ static int cmd_help(char *args) {
   return 0;
 }
 
-// ssszw add funciton 2022.10.16
 static int cmd_si(char *args) {
   int n;
   // N=1 when no extra argument
@@ -168,7 +170,7 @@ static int cmd_x(char *args) {
     return 0;
   }
 
-  char expr_str[100] = {};
+  char expr_str[300] = {};
   // uint8_t num default: 1
   int len = 1;
 
@@ -210,10 +212,33 @@ static int info_reg() {
 }
 
 static int info_watch() {
-  printf("watch not done\n");
+  print_wb();
   return 0;
 }
-// end
+
+static int cmd_watch(char *args) {
+  if (args == NULL) {
+    printf("You must specify expression.\n");
+    return 0;
+  }
+  char expr_str[300] = {};
+
+  int args_num = sscanf(args, "%*[\"]%[^\"]%*[\"]", expr_str);
+  if (args_num == 0) {
+    // argument is space('  ')
+    printf("You must specify expression.\n");
+    return 0;
+  }
+
+  bool success;
+  expr(expr_str, &success);
+  if (!success) {
+    printf("error! expression invalid.\n");
+    return 0;
+  }
+  new_wp(expr_str);
+  return 0;
+}
 
 void sdb_set_batch_mode() {
   is_batch_mode = true;
