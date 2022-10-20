@@ -59,3 +59,7 @@ else
 # Include rules to build NEMU
 include $(NEMU_HOME)/scripts/native.mk
 endif
+
+count:
+	@echo "Number of lines of code (without spaces)"
+	@find . -name *.c -or -name *.h -or -name *.cpp |xargs cat|grep -v ^$$|wc -l
