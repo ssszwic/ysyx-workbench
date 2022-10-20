@@ -44,7 +44,10 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if(update_wp()) {
     nemu_state.state = NEMU_STOP;
     // Print the next instruction will be executed
-    IFDEF(CONFIG_ITRACE, puts(_this->logbuf));
+    if (!g_print_step) {
+      // don't print when g_print_step
+      IFDEF(CONFIG_ITRACE, puts(_this->logbuf));
+    }
   }
 }
 
