@@ -39,6 +39,7 @@ void print_wb() {
   }
   while(tmp->next != NULL) {
     printf("id: %-2d    expression: %s\n", tmp->NO, tmp->expr_str);
+    tmp = tmp->next;
   }
 }
 
