@@ -42,7 +42,10 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
   // scan watchpoint
   if(update_wp(IFDEF(CONFIG_ITRACE, _this->logbuf, NULL)), g_print_step) {
-    nemu_state.state = NEMU_STOP;
+    // only state is RUNNING, stop excute and print watchpoint
+    if (nemu_state.state == NEMU_RUNNING) {
+      nemu_state.state = NEMU_STOP;
+    }
   }
 }
 
