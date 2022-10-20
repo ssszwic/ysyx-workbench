@@ -19,11 +19,15 @@
 #include <readline/history.h>
 #include "sdb.h"
 #include <memory/paddr.h>
+// #include "watchpoint.c"
 
 static int is_batch_mode = false;
 
 void init_regex();
 void init_wp_pool();
+void print_wb();
+void new_wp(char *expr, word_t result);
+void free_wp(int id);
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -62,7 +66,9 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
-static int cmd_expr(char *args);
+static int cmd_watch(char *args);
+
+static int cmd_delate(char *args);
 
 static int info_reg();
 
@@ -81,9 +87,9 @@ static struct {
   /* TODO: Add more commands */
   { "si", "Execute N instructions in a singel step, default 1", cmd_si},
   { "info", "Print program state, reg (r): reg status; watch (w): watch state", cmd_info},
-  { "x", "Print consecutive N data from the address, default 1 data", cmd_x},
-  {"\"", "Expression evaluation", cmd_expr},
-
+  { "x", "Print consecutive N uint8_t data from the address, default 1 data", cmd_x},
+  { "w", "Add watch point.", cmd_watch},
+  { "d", "Delate specified watchpoint", cmd_delate},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -112,7 +118,6 @@ static int cmd_help(char *args) {
   return 0;
 }
 
-// ssszw add funciton 2022.10.16
 static int cmd_si(char *args) {
   int n;
   // N=1 when no extra argument
@@ -171,8 +176,8 @@ static int cmd_x(char *args) {
     return 0;
   }
 
-  char expr_str[100] = {};
-  // word_t num default: 1
+  char expr_str[300] = {};
+  // uint8_t num default: 1
   int len = 1;
 
   int args_num = sscanf(args, "%*[\"]%[^\"]%*[\"]%d", expr_str, &len);
@@ -193,22 +198,16 @@ static int cmd_x(char *args) {
     return 0;
   }
   // read nemu member
-  word_t* host_addr = (word_t*) guest_to_host(addr);
+  uint8_t* host_addr = guest_to_host(addr);
 
   printf("0x%016lx: ", addr);
   int i;
   for (i = 0; i < len; i++) {
     // little endian for riscv64
-    printf("0x%016lx ", *host_addr);
+    printf("0x%02x ", *host_addr);
     host_addr++;
   }
   printf("\n");
-
-  return 0;
-}
-
-static int cmd_expr(char *args) {
-  printf("%s\n", args);
 
   return 0;
 }
@@ -219,10 +218,50 @@ static int info_reg() {
 }
 
 static int info_watch() {
-  printf("watch not done\n");
+  print_wb();
   return 0;
 }
-// end
+
+static int cmd_watch(char *args) {
+  if (args == NULL) {
+    printf("You must specify expression.\n");
+    return 0;
+  }
+  char expr_str[300] = {};
+
+  int args_num = sscanf(args, "%*[\"]%[^\"]%*[\"]", expr_str);
+  if (args_num == 0) {
+    // argument is space('  ')
+    printf("You must specify expression.\n");
+    return 0;
+  }
+
+  bool success;
+  word_t result = expr(expr_str, &success);
+  if (!success) {
+    printf("error! expression invalid.\n");
+    return 0;
+  }
+  new_wp(expr_str, result);
+  return 0;
+}
+
+static int cmd_delate(char *args) {
+  if (args == NULL) {
+    printf("You must specify watchpoint id.\n");
+    return 0;
+  }
+  int id;
+
+  int args_num = sscanf(args, "%d", &id);
+  if (args_num == 0) {
+    // argument is space('  ')
+    printf("You must specify watchpoint id.\n");
+    return 0;
+  }
+  free_wp(id);
+  return 0;
+}
 
 void sdb_set_batch_mode() {
   is_batch_mode = true;
@@ -271,11 +310,15 @@ void sdb_mainloop() {
     if (i == NR_CMD) { 
       // if no matched cmd, consider it as expression
       bool success = true;
-      expr(expr_str, &success);
+      word_t expr_result = expr(expr_str, &success);
 
       if (! success) {
         printf("Unknown command '%s'\n", cmd); 
       }
+      else {
+        printf("%lu\n", expr_result);
+      }
+      
     }
     free(expr_str);
   }

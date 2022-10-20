@@ -432,7 +432,7 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  printf("%lu\n", result);
+  // printf("%lu\n", result);
 
   // test for expression
   // type any valid expression to starttest

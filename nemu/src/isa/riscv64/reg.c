@@ -25,14 +25,25 @@ const char *regs[] = {
 
 void isa_reg_display() {
   int i;
+  // pc reg
+  printf("%-12s", "pc");
+  printf("0x%016lx    ", cpu.pc);
+  printf("%ld\n", cpu.pc);
+  // normal 32 reg
   for (i = 0; i < 32; i++) {
     printf("%-12s", reg_name(i, 0));
-    printf("0x%-18lx", gpr(i));
+    printf("0x%016lx    ", gpr(i));
     printf("%ld\n", gpr(i));
   }
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
+  // pc reg
+  if (strcmp(s, "pc") == 0){
+    *success = true;
+    return cpu.pc;
+  }
+  // noemal reg
   int i = 0;
   for (i = 0; i < 32; i++) {
     if(strcmp(s, regs[i]) == 0) {
