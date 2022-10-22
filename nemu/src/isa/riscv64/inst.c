@@ -89,6 +89,10 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 000 ????? 01110 11", mulw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) * (int32_t) BITS(src2, 31, 0), 32)); // no consider signed
   // shift ledt logical word
   INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(BITS(src1, 31, 0) << BITS(src2, 4, 0), 31, 0), 32));
+  // and
+  INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, R(dest) = src1 & src2);
+  // or
+  INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or     , R, R(dest) = src1 | src2);
 
   /*----------------------------------------- I -----------------------------------------*/
   // load double word (8 byte)
