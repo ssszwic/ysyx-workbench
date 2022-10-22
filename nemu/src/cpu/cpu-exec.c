@@ -62,6 +62,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   int ilen = s->snpc - s->pc; // instruction length (Byte)
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
+  // print from MSB
   for (i = ilen - 1; i >= 0; i --) {
     p += snprintf(p, 4, " %02x", inst[i]);
   }
