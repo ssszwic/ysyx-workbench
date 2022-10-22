@@ -97,6 +97,8 @@ static int decode_exec(Decode *s) {
   /*----------------------------------------- B -----------------------------------------*/
   // branch equal  
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, s->dnpc = (src1 == src2) ? (s->pc + imm) : s->snpc);
+  // branch not equal  
+  INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, s->dnpc = (src1 != src2) ? (s->pc + imm) : s->snpc);
 
   /*----------------------------------------- U -----------------------------------------*/
   // load upper immediate
