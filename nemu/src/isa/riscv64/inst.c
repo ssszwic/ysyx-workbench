@@ -79,6 +79,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);
   // sub word   subw rd, rs1, rs2
   INSTPAT("0100000 ????? ????? 000 ????? 01110 11", subw   , R, R(dest) = SEXT(BITS(src1 - src2, 31, 0), 32));
+  // set less than
+  INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt    , R, R(dest) = ((int64_t) src1 < (int64_t) src2));
 
   /*----------------------------------------- I -----------------------------------------*/
   // load double word (8 byte)
