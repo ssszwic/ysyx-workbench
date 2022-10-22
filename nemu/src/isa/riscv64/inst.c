@@ -81,6 +81,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("0100000 ????? ????? 000 ????? 01110 11", subw   , R, R(dest) = SEXT(BITS(src1 - src2, 31, 0), 32));
   // set less than
   INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt    , R, R(dest) = ((int64_t) src1 < (int64_t) src2));
+  // set less than unsigned
+  INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(dest) = (src1 < src2));
   // remainder word
   INSTPAT("0000001 ????? ????? 110 ????? 01110 11", remw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) % (int32_t) BITS(src2, 31, 0), 32));
   // divide word
