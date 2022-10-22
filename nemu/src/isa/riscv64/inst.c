@@ -71,8 +71,12 @@ static int decode_exec(Decode *s) {
   INSTPAT_START();
 
   /*----------------------------------------- R -----------------------------------------*/
-  // add word  addw rd, rs1, rs2
+  // add word   addw rd, rs1, rs2
   INSTPAT("0000000 ????? ????? 000 ????? 01110 11", addw   , R, R(dest) = SEXT(BITS(src1 + src2, 31, 0), 32));
+  // add        add rd, rs1, rs2
+  INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add    , R, R(dest) = src1 + src2);
+  // sub        sub rd, rs1, rs2
+  INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(dest) = src1 - src2);
 
   /*----------------------------------------- I -----------------------------------------*/
   // load double word (8 byte)
@@ -83,6 +87,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(dest) = s->snpc; s->dnpc = src1 + imm; );
   // add immediate  addi rd, rs1, imm[11:0]
   INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = src1 + imm);
+  // set less than immediate unsigned
+  INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(dest) = (src1 < imm) ? 1 : 0);
 
   /*----------------------------------------- S -----------------------------------------*/
   // store double word (8 byte)
