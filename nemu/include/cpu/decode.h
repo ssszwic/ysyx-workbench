@@ -90,7 +90,6 @@ finish:
 // --- pattern matching wrappers for decode ---
 #define INSTPAT(pattern, ...) do { \
   uint64_t key, mask, shift; \
-  printf("len: %ld\n", STRLEN(pattern)); \
   pattern_decode(pattern, STRLEN(pattern), &key, &mask, &shift); \
   if (((INSTPAT_INST(s) >> shift) & mask) == key) { \
     INSTPAT_MATCH(s, ##__VA_ARGS__); \
