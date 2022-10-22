@@ -111,6 +111,8 @@ static int decode_exec(Decode *s) {
   /*----------------------------------------- S -----------------------------------------*/
   // store double word (8 byte)
   INSTPAT("??????? ????? ????? 011 ????? 01000 11", sd     , S, Mw(src1 + imm, 8, src2));
+  // store word (4 byte)
+  INSTPAT("??????? ????? ????? 011 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, BITS(src2, 31, 0))); // uint64 -> uint32, when write pmem
   
   /*----------------------------------------- B -----------------------------------------*/
   // branch equal  
