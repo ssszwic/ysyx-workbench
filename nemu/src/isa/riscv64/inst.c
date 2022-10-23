@@ -133,6 +133,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("000000? ????? ????? 101 ????? 00100 11", srli   , I, R(dest) = src1 >> BITS(imm, 5, 0)); // all shift is logic for unsigned
   // shift left logical immediate word
   INSTPAT("0000000 ????? ????? 001 ????? 00110 11", slliw  , I, R(dest) = SEXT(BITS(src1 << BITS(imm, 4, 0), 31, 0), 32));
+  // shift right logical immediate word
+  INSTPAT("0000000 ????? ????? 101 ????? 00110 11", srliw  , I, R(dest) = SEXT(BITS(src1, 31, 0) >> BITS(imm, 4, 0), 32));
 
   /*----------------------------------------- S -----------------------------------------*/
   // store double word (8 byte)
