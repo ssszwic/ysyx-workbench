@@ -59,9 +59,10 @@ static void exec_once(Decode *s, vaddr_t pc) {
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
   p += snprintf(p, sizeof(s->logbuf), FMT_WORD ":", s->pc);
-  int ilen = s->snpc - s->pc;
+  int ilen = s->snpc - s->pc; // instruction length (Byte)
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst.val;
+  // print from MSB
   for (i = ilen - 1; i >= 0; i --) {
     p += snprintf(p, 4, " %02x", inst[i]);
   }
@@ -105,7 +106,7 @@ void assert_fail_msg() {
 
 /* Simulate how the CPU works. */
 void cpu_exec(uint64_t n) {
-  // when n(is num) < MAX_INST_TO_PRINT, print is to the screen
+  // when n(is num) < MAX_INST_TO_PRINT, print it to the screen
   g_print_step = (n < MAX_INST_TO_PRINT);
   // initial state is STOP
   switch (nemu_state.state) {

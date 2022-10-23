@@ -22,8 +22,8 @@
 #define str_temp(x) #x
 #define str(x) str_temp(x)
 
-// strlen() for string constant
-#define STRLEN(CONST_STR) (sizeof(CONST_STR) - 1)
+// strlen() for string constant (excluding '\0')
+#define STRLEN(CONST_STR) (sizeof(CONST_STR) - 1) 
 
 // calculate the length of an array
 #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
@@ -85,7 +85,7 @@
 
 #define BITMASK(bits) ((1ull << (bits)) - 1)
 #define BITS(x, hi, lo) (((x) >> (lo)) & BITMASK((hi) - (lo) + 1)) // similar to x[hi:lo] in verilog
-#define SEXT(x, len) ({ struct { int64_t n : len; } __x = { .n = x }; (uint64_t)__x.n; })
+#define SEXT(x, len) ({ struct { int64_t n : len; } __x = { .n = x }; (uint64_t)__x.n; }) // symbol expansion for risc64, extend R[31] -> R[63-31]
 
 #define ROUNDUP(a, sz)   ((((uintptr_t)a) + (sz) - 1) & ~((sz) - 1))
 #define ROUNDDOWN(a, sz) ((((uintptr_t)a)) & ~((sz) - 1))
