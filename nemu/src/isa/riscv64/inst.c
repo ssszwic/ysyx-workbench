@@ -94,7 +94,7 @@ static int decode_exec(Decode *s) {
   // shift ledt logical word
   INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(BITS(src1, 31, 0) << BITS(src2, 4, 0), 31, 0), 32));
   // shift right logical word
-  INSTPAT("0000000 ????? ????? 101 ????? 01110 11", srlw   , R, R(dest) = SEXT(BITS(src1, 31, 0) >> BITS(src2, 4, 0), 32));
+  INSTPAT("0000000 ????? ????? 101 ????? 01110 11", srlw   , R, R(dest) = SEXT(BITS(BITS(src1, 31, 0) >> BITS(src2, 4, 0), 31, 0), 32));
   // shift right arithmetic word
   INSTPAT("0100000 ????? ????? 101 ????? 01110 11", sraw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) >> BITS(src2, 4, 0), 32));
   // and
