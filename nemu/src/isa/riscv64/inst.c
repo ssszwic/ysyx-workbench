@@ -92,11 +92,11 @@ static int decode_exec(Decode *s) {
   // multiply word
   INSTPAT("0000001 ????? ????? 000 ????? 01110 11", mulw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) * (int32_t) BITS(src2, 31, 0), 32)); // no consider signed
   // shift ledt logical word
-  INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(BITS(src1, 31, 0) << BITS(src2, 4, 0), 31, 0), 32));
+  INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(src1 << BITS(src2, 4, 0), 31, 0), 32));
   // shift right logical word
   INSTPAT("0000000 ????? ????? 101 ????? 01110 11", srlw   , R, R(dest) = SEXT(BITS(BITS(src1, 31, 0) >> BITS(src2, 4, 0), 31, 0), 32));
   // shift right arithmetic word
-  INSTPAT("0100000 ????? ????? 101 ????? 01110 11", sraw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) >> BITS(src2, 4, 0), 32));
+  INSTPAT("0100000 ????? ????? 101 ????? 01110 11", sraw   , R, R(dest) = SEXT(BITS((int32_t) BITS(src1, 31, 0) >> BITS(src2, 4, 0), 31, 0), 32));
   // and
   INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, R(dest) = src1 & src2);
   // or
@@ -138,7 +138,9 @@ static int decode_exec(Decode *s) {
   // shift left logical immediate word
   INSTPAT("0000000 ????? ????? 001 ????? 00110 11", slliw  , I, R(dest) = SEXT(BITS(src1 << BITS(imm, 4, 0), 31, 0), 32));
   // shift right logical immediate word
-  INSTPAT("0000000 ????? ????? 101 ????? 00110 11", srliw  , I, R(dest) = SEXT(BITS(src1, 31, 0) >> BITS(imm, 4, 0), 32));
+  INSTPAT("0000000 ????? ????? 101 ????? 00110 11", srliw  , I, R(dest) = SEXT(BITS(BITS(src1, 31, 0) >> BITS(imm, 4, 0), 31, 0), 32));
+  // shift right arithmetic immediate word
+  INSTPAT("0100000 ????? ????? 101 ????? 00110 11", sraiw  , I, R(dest) = SEXT(BITS((int32_t) BITS(src1, 31, 0) >> BITS(imm, 4, 0), 31, 0), 32));
 
   /*----------------------------------------- S -----------------------------------------*/
   // store double word (8 byte)
