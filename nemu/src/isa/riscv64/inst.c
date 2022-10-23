@@ -87,6 +87,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 110 ????? 01110 11", remw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) % (int32_t) BITS(src2, 31, 0), 32));
   // divide word
   INSTPAT("0000001 ????? ????? 100 ????? 01110 11", divw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) / (int32_t) BITS(src2, 31, 0), 32)); // no consider exceptions 1/0
+  // multiply
+  INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, R(dest) = src1 * src2);
   // multiply word
   INSTPAT("0000001 ????? ????? 000 ????? 01110 11", mulw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) * (int32_t) BITS(src2, 31, 0), 32)); // no consider signed
   // shift ledt logical word
