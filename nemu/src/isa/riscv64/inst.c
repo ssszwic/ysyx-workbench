@@ -42,7 +42,12 @@ enum {
 #define MAX_FUNC_NAME_WIDTH 50
 #define FUN_BUF_REF 100
 #define FUNC_LIST_NUM 100
-// static char fun_buf[FUN_BUF_REF][100] = {};
+#define SINGLE_BUF_WIDTH 100
+
+// ring buf
+static char func_buf[FUN_BUF_REF][SINGLE_BUF_WIDTH] = {};
+// ring buf ref
+static int func_buf_ref = FUN_BUF_REF - 1;
 // funciton list
 struct func {
   int id;
@@ -54,7 +59,12 @@ struct func {
 // num of function list
 static int ref = 0;
 
+// function state
+static int func_state = -1;
+
 static struct func func_list[FUNC_LIST_NUM];
+
+static int func_pc(vaddr_t addr);
 
 static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst.val;
@@ -75,6 +85,7 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
 
 static int decode_exec(Decode *s) {
   int dest = 0;
+  bool jump = false;
   word_t src1 = 0, src2 = 0, imm = 0;
   // dnpc = snpc when executed sequentially
   s->dnpc = s->snpc;
@@ -141,7 +152,7 @@ static int decode_exec(Decode *s) {
   // load half word unsigned (2 byte)
   INSTPAT("??????? ????? ????? 101 ????? 00000 11", lhu    , I, R(dest) = BITS(Mr(src1 + imm, 2), 15, 0));
   // junp and link register 
-  INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(dest) = s->snpc; s->dnpc = (src1 + imm) & (~1));
+  INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(dest) = s->snpc; s->dnpc = (src1 + imm) & (~1); jump = true);
 
   // add immediate  addi rd, rs1, imm[11:0]
   INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = src1 + imm);
@@ -196,13 +207,10 @@ static int decode_exec(Decode *s) {
   // load upper immediate
   INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm);
 
-
-
   /*----------------------------------------- J -----------------------------------------*/
   // jump and link
-  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->snpc; s->dnpc = s->pc + imm; );
+  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->snpc; s->dnpc = s->pc + imm; jump = true);
 
-  
   /*----------------------------------------- N -----------------------------------------*/
   // environment bread (I type)   $a0 is status?
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
@@ -212,6 +220,19 @@ static int decode_exec(Decode *s) {
   INSTPAT_END();
 
   R(0) = 0; // reset $zero to 0
+  // check function when first is or jal or jalr
+  char tmp[SINGLE_BUF_WIDTH] = {};
+  int tmp_state;
+  if((func_state == -1) || jump) {
+    tmp_state = func_pc(s->snpc-4);
+    if (func_state != tmp_state) {
+      func_state = tmp_state;
+      memset(func_buf[func_buf_ref] + 12, ' ', 6);
+      if (++func_buf_ref == FUN_BUF_REF) {func_buf_ref = 0;}
+      sprintf(tmp, "0x%08lx: ----> jump [%s@0x%08lx] ", s->snpc-4, func_list[func_state].name, func_list[func_state].start_addr);
+      strcpy(func_buf[func_buf_ref], tmp);
+    }
+  }
 
   return 0;
 }
@@ -333,4 +354,25 @@ void print_func_list() {
     printf("start addr: \t0x%016lx\n", func_list[i].start_addr);
     printf("\n");
   }
+}
+
+void print_func_log() {
+  printf("\nfunction trace ring buff\n");
+  for (int i = 0; i < FUN_BUF_REF; i++) {
+    if (func_buf[i][0] == '\0') break;
+    printf("%s\n", func_buf[i]);
+  }
+  printf("\n");
+}
+
+// pc in which function
+static int func_pc(vaddr_t addr) {
+  for (int i = 0; i < ref; i++) {
+    if((addr >= func_list[i].start_addr) && (addr < (func_list[i].start_addr + func_list[i].size))) {
+      return i;
+    }
+  }
+  printf("no funciton match!\n");
+  assert(0);
+  return 0;
 }
