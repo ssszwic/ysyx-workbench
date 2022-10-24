@@ -24,18 +24,29 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
+#define RING_BUF_WIDTH 30
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
 static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
+// ring buff
+
+static char ring_buf[RING_BUF_WIDTH][100] = {};
+static int ring_ref = RING_BUF_WIDTH - 1;
+
 void device_update();
 bool update_wp(char *log, bool log_flag);
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
-  if (ITRACE_COND) { log_write("%s\n", "_this->logbuf"); }
+  if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
+  // add log to ring buf
+  memset(ring_buf[ring_ref], ' ', 6); // copy 5 'space' to cover '---->'
+  if (++ring_ref == RING_BUF_WIDTH) {ring_ref = 0;}
+  strcpy(ring_buf[ring_ref], "----> "); 
+  strcpy(ring_buf[ring_ref] + 6, _this->logbuf);
 #endif
   // Print the next instruction will be executed
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
@@ -129,6 +140,14 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
     case NEMU_END: case NEMU_ABORT:
+      // print ring buff
+      if (nemu_state.halt_ret != 0) {
+        printf("\nring buff\n");
+        for (int i = 0; i < RING_BUF_WIDTH; i++) {
+          printf("%s\n", ring_buf[i]);
+        }
+        printf("\n");
+      }
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
