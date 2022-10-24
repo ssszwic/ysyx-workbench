@@ -135,7 +135,7 @@ void init_monitor(int argc, char *argv[]) {
 
   // read elf file to get function list
   init_elf("/home/ssszw/Work/ysyx-workbench/am-kernels/tests/cpu-tests/build/div-riscv64-nemu.elf");
-  print_func_list();
+  // print_func_list();
 
   IFDEF(CONFIG_ITRACE, init_disasm(
     MUXDEF(CONFIG_ISA_x86,     "i686",
