@@ -69,7 +69,7 @@ word_t paddr_read(paddr_t addr, int len) {
   char tmp[50] = {};
   memset(m_ring_buf[m_ring_ref], ' ', 6);
   if (++m_ring_ref == M_RING_BUF_WIDTH) {m_ring_ref = 0;}
-  sprintf(tmp, "----> read \t%016x\t%02d", addr, len);
+  sprintf(tmp, "----> read \t0x%016x\t%02d", addr, len);
   strcpy(m_ring_buf[m_ring_ref], tmp);
 
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
@@ -83,7 +83,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
   char tmp[50] = {};
   memset(m_ring_buf[m_ring_ref], ' ', 6);
   if (++m_ring_ref == M_RING_BUF_WIDTH) {m_ring_ref = 0;}
-  sprintf(tmp, "----> write\t%016x\t%02d", addr, len);
+  sprintf(tmp, "----> write\t0x%016x\t%02d", addr, len);
   strcpy(m_ring_buf[m_ring_ref], tmp);
 
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
