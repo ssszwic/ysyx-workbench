@@ -319,7 +319,8 @@ void init_elf(char *file) {
   }
   free(start1);
   free(start2);
-
+  start1 = NULL;
+  start2 = NULL;
   fclose(fp);
 }
 
