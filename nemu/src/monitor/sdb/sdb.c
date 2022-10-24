@@ -28,6 +28,7 @@ void init_wp_pool();
 void print_wb();
 void new_wp(char *expr, word_t result);
 void free_wp(int id);
+void print_func_log();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -70,6 +71,8 @@ static int cmd_watch(char *args);
 
 static int cmd_delate(char *args);
 
+static int cmd_f();
+
 static int info_reg();
 
 static int info_watch();
@@ -90,6 +93,7 @@ static struct {
   { "x", "Print consecutive N uint8_t data from the address, default 1 data", cmd_x},
   { "w", "Add watch point.", cmd_watch},
   { "d", "Delate specified watchpoint", cmd_delate},
+  { "f", "printf function calls", cmd_f},
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -260,6 +264,11 @@ static int cmd_delate(char *args) {
     return 0;
   }
   free_wp(id);
+  return 0;
+}
+
+static int cmd_f() {
+  print_func_log();
   return 0;
 }
 
