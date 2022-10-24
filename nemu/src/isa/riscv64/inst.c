@@ -364,6 +364,10 @@ void print_func_list() {
 }
 
 void print_func_log() {
+  if(func_state == -1) {
+    printf("\nNo function trace, the program is not running or no jumps are occurring\n");
+    return;
+  }
   printf("\nfunction trace ring buff\n");
   for (int i = 0; i < FUN_BUF_REF; i++) {
     if (func_buf[i][0] == '\0') break;
