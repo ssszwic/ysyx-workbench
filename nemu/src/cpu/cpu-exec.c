@@ -46,6 +46,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   memset(ring_buf[ring_ref], ' ', 5); // copy 5 'space' to cover '---->'
   if (++ring_ref == RING_BUF_WIDTH) {ring_ref = 0;}
   strcpy(ring_buf[ring_ref], "---->"); 
+  printf("%ld\n", strlen(_this->logbuf));
   // strcpy(ring_buf[ring_ref+5], _this->logbuf);
 #endif
   // Print the next instruction will be executed
