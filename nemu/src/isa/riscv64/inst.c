@@ -237,7 +237,7 @@ static int decode_exec(Decode *s) {
     func_state = tmp_state;
     memset(func_buf[func_buf_ref] + 12, ' ', 6);
     if (++func_buf_ref == FUN_BUF_REF) {func_buf_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> jump [%s@0x%08lx] ", s->snpc-4, func_list[func_state].name, func_list[func_state].start_addr);
+    sprintf(tmp, "0x%08lx: ----> jump [%s\t@0x%08lx] ", s->snpc-4, func_list[func_state].name, func_list[func_state].start_addr);
     strcpy(func_buf[func_buf_ref], tmp);
   }
 
