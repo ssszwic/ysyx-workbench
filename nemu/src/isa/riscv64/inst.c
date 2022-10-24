@@ -323,7 +323,7 @@ void print_func_list() {
   for (int i = 0; i < ref; i++) {
     printf("id: %d\n", func_list[i].id);
     printf("start addr: \t0x%016lx\n", func_list[i].start_addr);
-    printf("size: \t\t0x%016lx\n", func_list[i].size);
+    printf("size: \t\t%ld\n", func_list[i].size);
     printf("name: \t\t%s\n", func_list[i].name);
   }
 }
