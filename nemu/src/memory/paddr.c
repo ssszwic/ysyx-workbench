@@ -102,6 +102,7 @@ void memory_trace_print() {
   printf("\nmemory trace ring buff\n");
   printf("      opcode\taddr\t\t\tlen\n");
   for (int i = 0; i < M_RING_BUF_WIDTH; i++) {
+    if (m_ring_buf[i][0] == '\0') break;
     printf("%s\n", m_ring_buf[i]);
   }
   printf("\n");
