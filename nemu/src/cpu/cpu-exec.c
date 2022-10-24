@@ -47,11 +47,6 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (++ring_ref == RING_BUF_WIDTH) {ring_ref = 0;}
   strcpy(ring_buf[ring_ref], "---->"); 
   strcpy(ring_buf[ring_ref] + 5, _this->logbuf);
-  // printf("\nring buff\n");
-  // for (int i = 0; i < RING_BUF_WIDTH; i++) {
-  //   printf("%s\n", ring_buf[i]);
-  // }
-  // printf("\n");
 #endif
   // Print the next instruction will be executed
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
@@ -145,6 +140,13 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
     case NEMU_END: case NEMU_ABORT:
+      // error info
+      // print ring buff
+      printf("\nring buff\n");
+      for (int i = 0; i < RING_BUF_WIDTH; i++) {
+        printf("%s\n", ring_buf[i]);
+      }
+      printf("\n");
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
