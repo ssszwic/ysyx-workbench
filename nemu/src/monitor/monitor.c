@@ -88,9 +88,10 @@ static int parse_args(int argc, char *argv[]) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
+      case 'e': elf_file = optarg; break;
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
-      case 'e': elf_file = optarg; break;
+      
       // all command-line options have been parsed, return -1
       case 1: img_file = optarg; return 0;
       default:
