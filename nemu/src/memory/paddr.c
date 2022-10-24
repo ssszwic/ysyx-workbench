@@ -26,6 +26,11 @@ static uint8_t *pmem = NULL;
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
+// memort trace
+#define M_RING_BUF_WIDTH 1000
+static char m_ring_buf[M_RING_BUF_WIDTH][100] = {};
+static int m_ring_ref = M_RING_BUF_WIDTH - 1;
+
 uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 
@@ -60,6 +65,13 @@ void init_mem() {
 }
 
 word_t paddr_read(paddr_t addr, int len) {
+  // memory trace
+  char tmp[50] = {};
+  memset(m_ring_buf[m_ring_ref], ' ', 6);
+  if (++m_ring_ref == M_RING_BUF_WIDTH) {m_ring_ref = 0;}
+  sprintf(tmp, "----> read \t%016x\t\t%02d\n", addr, len);
+  strcpy(m_ring_buf[m_ring_ref], tmp);
+
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
@@ -67,7 +79,22 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
+  // memory trace
+  char tmp[50] = {};
+  memset(m_ring_buf[m_ring_ref], ' ', 6);
+  if (++m_ring_ref == M_RING_BUF_WIDTH) {m_ring_ref = 0;}
+  sprintf(tmp, "----> write\t%016x\t\t%02d\n", addr, len);
+  strcpy(m_ring_buf[m_ring_ref], tmp);
+
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
+}
+
+void memory_trace_print() {
+  printf("\nmemory trace ring buff\n");
+  for (int i = 0; i < M_RING_BUF_WIDTH; i++) {
+    printf("%s\n", m_ring_buf[i]);
+  }
+  printf("\n");
 }
