@@ -144,7 +144,9 @@ void cpu_exec(uint64_t n) {
       // print ring buff
       
       if (nemu_state.halt_ret != 0) {
+#ifdef CONFIG_MEMORY_TRACE
         memory_trace_print();
+#endif
         printf("\nring buff\n");
         for (int i = 0; i < RING_BUF_WIDTH; i++) {
           printf("%s\n", ring_buf[i]);
