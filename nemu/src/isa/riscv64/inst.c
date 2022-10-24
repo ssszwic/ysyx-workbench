@@ -250,9 +250,9 @@ void init_elf(char *file) {
 	}
 
   // 解析section 分配内存 section * 数量
-	Elf64_Shdr *shdr = (Elf64_Shdr*)malloc(sizeof(Elf64_Shdr) * elf_head.e_shnum);
-  if (NULL == shdr) { assert(0);}
-  // Elf64_Shdr *start = shdr;
+	Elf64_Shdr *start = (Elf64_Shdr*)malloc(sizeof(Elf64_Shdr) * elf_head.e_shnum);
+  if (NULL == start) { assert(0);}
+  Elf64_Shdr *shdr = start;
   Elf64_Shdr *sym_shdr = NULL;
   Elf64_Shdr *str_shdr = NULL;
 	
@@ -314,9 +314,7 @@ void init_elf(char *file) {
     }
     sym++;
   }
-  // for (i = 0; i < elf_head.e_shnum; i++) {
-  //   free(start++);
-  // }
+  free(start);
   fclose(fp);
 }
 
