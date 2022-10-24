@@ -314,7 +314,9 @@ void init_elf(char *file) {
     }
     sym++;
   }
-  free(start);
+  for (i = 0; i < elf_head.e_shnum; i++) {
+    free(start++);
+  }
   fclose(fp);
 }
 
