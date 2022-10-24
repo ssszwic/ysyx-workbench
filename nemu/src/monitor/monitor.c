@@ -46,6 +46,8 @@ void sdb_set_batch_mode();
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
 static char *img_file = NULL;
+// function trace
+static char *elf_file = NULL;
 // static char *elf_file = NULL;
 static int difftest_port = 1234;
 
@@ -88,9 +90,10 @@ static int parse_args(int argc, char *argv[]) {
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
       // all command-line options have been parsed, return -1
-      case 1: img_file = optarg; return 0;
+      case 1: img_file = NULL; return 0;
+      case 2: elf_file = optarg; return 0;
       default:
-        printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
+        printf("Usage: %s [OPTION...] IMAGE [args] ELF [args]\n\n", argv[0]);
         printf("\t-b,--batch              run with batch mode\n");
         printf("\t-l,--log=FILE           output log to FILE\n");
         printf("\t-d,--diff=REF_SO        run DiffTest with reference REF_SO\n");
@@ -107,6 +110,7 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Parse arguments. */
   parse_args(argc, argv);
+  printf("elf: %s\n", elf_file);
 
   /* Set random seed. */
   init_rand();
@@ -123,7 +127,7 @@ void init_monitor(int argc, char *argv[]) {
   /* Perform ISA dependent initialization. */
   // load initial img to RESET_VECTOR
   init_isa();
-
+  
   /* Load the image to memory. This will overwrite the built-in image. */
   // load img flie to RESET_VECTOR
   long img_size = load_img();
@@ -135,6 +139,7 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
 
   // read elf file to get function list
+  printf("elf: %s", elf_file);
   init_elf("/home/ssszw/Work/ysyx-workbench/am-kernels/tests/cpu-tests/build/div-riscv64-nemu.elf");
   // print_func_list();
 
