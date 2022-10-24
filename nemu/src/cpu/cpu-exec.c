@@ -24,7 +24,7 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
-#define RING_BUF_WIDTH 10
+#define RING_BUF_WIDTH 30
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
@@ -47,9 +47,11 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (++ring_ref == RING_BUF_WIDTH) {ring_ref = 0;}
   strcpy(ring_buf[ring_ref], "---->"); 
   strcpy(ring_buf[ring_ref] + 5, _this->logbuf);
+  printf("\nring buff\n");
   for (int i = 0; i < RING_BUF_WIDTH; i++) {
     printf("%s\n", ring_buf[i]);
   }
+  printf("\n");
 #endif
   // Print the next instruction will be executed
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
