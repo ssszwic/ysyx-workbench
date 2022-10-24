@@ -42,7 +42,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
   // add log to ring buf
-  memset(ring_buf[ring_ref], ' ', 5); // copy 5 'space' to cover '---->'
+  // memset(ring_buf[ring_ref], ' ', 5); // copy 5 'space' to cover '---->'
   if (++ring_ref == RING_BUF_WIDTH) ring_ref = 0;
   strcpy(ring_buf[ring_ref], "---->"); 
   strcpy(ring_buf[ring_ref+5], _this->logbuf);
