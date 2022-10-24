@@ -33,7 +33,7 @@ static bool g_print_step = false;
 
 // ring buff
 
-static char ring_buf[RING_BUF_WIDTH][1000] = {};
+static char ring_buf[RING_BUF_WIDTH][100] = {};
 static int ring_ref = RING_BUF_WIDTH - 1;
 
 void device_update();
@@ -46,7 +46,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   memset(ring_buf[ring_ref], ' ', 5); // copy 5 'space' to cover '---->'
   if (++ring_ref == RING_BUF_WIDTH) {ring_ref = 0;}
   strcpy(ring_buf[ring_ref], "---->"); 
-  strcpy(ring_buf[ring_ref+5], _this->logbuf);
+  // strcpy(ring_buf[ring_ref+5], _this->logbuf);
 #endif
   // Print the next instruction will be executed
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
