@@ -93,6 +93,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 
 void memory_trace_print() {
   printf("\nmemory trace ring buff\n");
+  printf("      opcode\t123\n");
   for (int i = 0; i < M_RING_BUF_WIDTH; i++) {
     printf("%s\n", m_ring_buf[i]);
   }
