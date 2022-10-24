@@ -112,8 +112,6 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Parse arguments. */
   parse_args(argc, argv);
-  printf("img: %s\n", img_file);
-  printf("elf: %s\n", elf_file);
 
   /* Set random seed. */
   init_rand();
@@ -142,9 +140,11 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
 
   // read elf file to get function list
-  printf("elf: %s", elf_file);
-  init_elf("/home/ssszw/Work/ysyx-workbench/am-kernels/tests/cpu-tests/build/div-riscv64-nemu.elf");
-  // print_func_list();
+  if (elf_file != NULL) {
+    init_elf(elf_file);
+    // debug
+    // print_func_list();
+  }
 
   IFDEF(CONFIG_ITRACE, init_disasm(
     MUXDEF(CONFIG_ISA_x86,     "i686",
