@@ -32,7 +32,7 @@ static bool g_print_step = false;
 
 // ring buff
 #define RING_BUF_WIDTH 30
-char ring_buf[RING_BUF_WIDTH][100] = {};
+static char ring_buf[RING_BUF_WIDTH][100] = {};
 static int ring_ref = RING_BUF_WIDTH - 1;
 
 void device_update();
