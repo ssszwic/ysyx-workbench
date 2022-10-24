@@ -322,8 +322,8 @@ void print_func_list() {
   printf("function num: %d\n", ref);
   for (int i = 0; i < ref; i++) {
     printf("id: %d\n", func_list[i].id);
-    printf("start addr: 0x%16lx\n", func_list[i].start_addr);
-    printf("size: 0x%16lx\n", func_list[i].size);
+    printf("start addr: 0x%016lx\n", func_list[i].start_addr);
+    printf("size: 0x%016lx\n", func_list[i].size);
     printf("name: %s\n", func_list[i].name);
   }
 }
