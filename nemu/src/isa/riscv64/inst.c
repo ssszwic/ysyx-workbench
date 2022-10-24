@@ -315,6 +315,7 @@ void init_elf(char *file) {
     sym++;
   }
   free(start);
+  start = NULL;
   fclose(fp);
 }
 
