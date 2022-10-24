@@ -368,7 +368,7 @@ void print_func_log() {
 // pc in which function
 static int func_pc(vaddr_t addr) {
   for (int i = 0; i < ref; i++) {
-    if((addr >= func_list[i].start_addr) && (addr < (func_list[i].start_addr + func_list[i].size))) {
+    if(addr == func_list[i].start_addr || ((addr >= func_list[i].start_addr) && (addr < (func_list[i].start_addr + func_list[i].size)))) {
       return i;
     }
   }
