@@ -250,7 +250,7 @@ int isa_exec_once(Decode *s) {
   return decode_exec(s);
 }
 
-void init_elf(char *file) {
+void init_elf(const char *file) {
   func_state = -1;
   FILE *fp;
 	fp = fopen(file, "r");
