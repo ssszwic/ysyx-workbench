@@ -59,8 +59,8 @@ struct func {
 // num of function list
 static int ref = 0;
 
-// function state
-static int func_state = -1;
+// function state  -2: not use  -1: use
+static int func_state = -2; 
 
 static struct func func_list[FUNC_LIST_NUM];
 
@@ -221,6 +221,7 @@ static int decode_exec(Decode *s) {
 
   R(0) = 0; // reset $zero to 0
   // check function when first is or jal or jalr
+  if (func_state == -2) {return 0;}
   char tmp[SINGLE_BUF_WIDTH] = {};
   int tmp_state;
   if(func_state == -1) {
@@ -250,6 +251,7 @@ int isa_exec_once(Decode *s) {
 }
 
 void init_elf(char *file) {
+  func_state = -1;
   FILE *fp;
 	fp = fopen(file, "r");
 	if (NULL == fp)
@@ -364,8 +366,12 @@ void print_func_list() {
 }
 
 void print_func_log() {
-  if(func_state == -1) {
-    printf("\nNo function trace, the program is not running or no jumps are occurring\n");
+  if(func_state == -2) {
+    printf("No elf file\n");
+    return;
+  }
+  else if(func_state == -1) {
+    printf("No function trace, the program is not running or no jumps are occurring\n");
     return;
   }
   printf("\nfunction trace ring buff\n");
