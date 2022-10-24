@@ -27,7 +27,7 @@ static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
 // memort trace
-#define M_RING_BUF_WIDTH 1000
+#define M_RING_BUF_WIDTH 300
 static char m_ring_buf[M_RING_BUF_WIDTH][100] = {};
 static int m_ring_ref = M_RING_BUF_WIDTH - 1;
 
