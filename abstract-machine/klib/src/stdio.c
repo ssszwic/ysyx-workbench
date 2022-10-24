@@ -2,7 +2,6 @@
 #include <klib.h>
 #include <klib-macros.h>
 #include <stdarg.h>
-#include <stdio.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
@@ -29,7 +28,6 @@ int sprintf(char *out, const char *fmt, ...) {
   char buf[100] = {};
 
   while(*fmt != '\0') {
-    printf("123");
     switch(*fmt) {
       case '%' :
         fmt++;
@@ -57,6 +55,7 @@ int sprintf(char *out, const char *fmt, ...) {
         break;
       default:
         out[n++] = *fmt;
+        fmt++;
     }
   }
   out[n] = '\0';
