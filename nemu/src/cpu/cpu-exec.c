@@ -142,8 +142,6 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
     case NEMU_END: case NEMU_ABORT:
-      
-      
       if (nemu_state.halt_ret != 0) {
 #ifdef CONFIG_MEMORY_TRACE
         memory_trace_print();
@@ -152,6 +150,9 @@ void cpu_exec(uint64_t n) {
         print_func_log();
         printf("\nring buff\n");
         for (int i = 0; i < RING_BUF_WIDTH; i++) {
+          if(ring_buf[i][0] == '\0') {
+            break;
+          }
           printf("%s\n", ring_buf[i]);
         }
         printf("\n");
