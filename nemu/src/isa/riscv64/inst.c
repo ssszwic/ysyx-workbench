@@ -17,6 +17,7 @@
 #include <cpu/cpu.h>
 #include <cpu/ifetch.h>
 #include <cpu/decode.h>
+#include <elf.h>
 
 #define R(i) gpr(i)
 #define Mr vaddr_read
@@ -38,6 +39,32 @@ enum {
                             (BITS(i, 20, 20) << 11) | (BITS(i, 30, 21) << 1); } while(0)
 
 
+#define MAX_FUNC_NAME_WIDTH 50
+#define FUN_BUF_REF 100
+#define FUNC_LIST_NUM 100
+#define SINGLE_BUF_WIDTH 100
+
+// ring buf
+static char func_buf[FUN_BUF_REF][SINGLE_BUF_WIDTH] = {};
+// ring buf ref
+static int func_buf_ref = FUN_BUF_REF - 1;
+// funciton list
+struct func {
+  int id;
+  size_t size;
+  vaddr_t start_addr;
+  char name[MAX_FUNC_NAME_WIDTH];
+};
+
+// num of function list
+static int ref = 0;
+
+// function state  -2: not use  -1: use
+static int func_state = -2; 
+
+static struct func func_list[FUNC_LIST_NUM];
+
+static int func_pc(vaddr_t addr);
 
 static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst.val;
@@ -58,6 +85,7 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
 
 static int decode_exec(Decode *s) {
   int dest = 0;
+  bool jump = false;
   word_t src1 = 0, src2 = 0, imm = 0;
   // dnpc = snpc when executed sequentially
   s->dnpc = s->snpc;
@@ -124,7 +152,8 @@ static int decode_exec(Decode *s) {
   // load half word unsigned (2 byte)
   INSTPAT("??????? ????? ????? 101 ????? 00000 11", lhu    , I, R(dest) = BITS(Mr(src1 + imm, 2), 15, 0));
   // junp and link register 
-  INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(dest) = s->snpc; s->dnpc = (src1 + imm) & (~1));
+  INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(dest) = s->snpc; s->dnpc = (src1 + imm) & (~1); jump = true);
+
   // add immediate  addi rd, rs1, imm[11:0]
   INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = src1 + imm);
   // add immediate word addiw rd, rs1, imm[11:0]
@@ -178,12 +207,10 @@ static int decode_exec(Decode *s) {
   // load upper immediate
   INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(dest) = imm);
 
-
-
   /*----------------------------------------- J -----------------------------------------*/
   // jump and link
-  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->snpc; s->dnpc = s->pc + imm; );
-  
+  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->snpc; s->dnpc = s->pc + imm; jump = true);
+
   /*----------------------------------------- N -----------------------------------------*/
   // environment bread (I type)   $a0 is status?
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
@@ -193,6 +220,27 @@ static int decode_exec(Decode *s) {
   INSTPAT_END();
 
   R(0) = 0; // reset $zero to 0
+  // check function when first is or jal or jalr
+  if (func_state == -2) {return 0;}
+  char tmp[SINGLE_BUF_WIDTH] = {};
+  int tmp_state;
+  if(func_state == -1) {
+    tmp_state = func_pc(s->snpc-4);
+  }
+  else if(jump) {
+    tmp_state = func_pc(s->dnpc);
+  }
+  else {
+    return 0;
+  }
+
+  if(func_state != tmp_state) {
+    func_state = tmp_state;
+    memset(func_buf[func_buf_ref] + 12, ' ', 6);
+    if (++func_buf_ref == FUN_BUF_REF) {func_buf_ref = 0;}
+    sprintf(tmp, "0x%08lx: ----> jump [%s\t@0x%08lx] ", s->snpc-4, func_list[func_state].name, func_list[func_state].start_addr);
+    strcpy(func_buf[func_buf_ref], tmp);
+  }
 
   return 0;
 }
@@ -200,4 +248,148 @@ static int decode_exec(Decode *s) {
 int isa_exec_once(Decode *s) {
   s->isa.inst.val = inst_fetch(&s->snpc, 4); // static pc + 4
   return decode_exec(s);
+}
+
+void init_elf(const char *file) {
+  func_state = -1;
+  FILE *fp;
+	fp = fopen(file, "r");
+	if (NULL == fp)
+	{
+		printf("fail to open the file\n");
+		assert(0);
+	}
+  // analysis head
+  Elf64_Ehdr elf_head;
+	int a;
+  int i, j;
+  char name[MAX_FUNC_NAME_WIDTH] = {};
+  ref = 0;
+
+  // read head
+	a = fread(&elf_head, sizeof(Elf64_Ehdr), 1, fp);
+	if (0 == a) {assert(0);}
+
+  if (elf_head.e_ident[0] != 0x7F ||
+		elf_head.e_ident[1] != 'E' ||
+		elf_head.e_ident[2] != 'L' ||
+		elf_head.e_ident[3] != 'F')
+	{
+		printf("Not a ELF file\n");
+		assert(0);
+	}
+
+  // 解析section 分配内存 section * 数量
+	Elf64_Shdr *start1 = (Elf64_Shdr*)malloc(sizeof(Elf64_Shdr) * elf_head.e_shnum);
+  if (NULL == start1) { assert(0);}
+  Elf64_Shdr *shdr = start1;
+  Elf64_Shdr *sym_shdr = NULL;
+  Elf64_Shdr *str_shdr = NULL;
+	
+	// 设置fp偏移量 offset，e_shoff含义
+	a = fseek(fp, elf_head.e_shoff, SEEK_SET);
+	if (0 != a) {assert(0);}
+
+	// 读取section 到 shdr, 大小为shdr * 数量
+	a = fread(shdr, sizeof(Elf64_Shdr) * elf_head.e_shnum, 1, fp);
+	if (0 == a) { assert(0);}
+
+  // find symbol table
+  for (i = 0; i < elf_head.e_shnum; i++) {
+    if (shdr->sh_type == 2) {
+      sym_shdr = shdr;
+    }
+    else if (shdr->sh_type == 3) {
+      // get first resdult when there are 2 section (type is 3)
+      // .strtab is right and .shstrtab is wrong
+      if (str_shdr == NULL) {
+        str_shdr = shdr;
+      }
+    }
+    shdr++;
+  }
+  assert(sym_shdr && str_shdr);
+
+  Elf64_Sym *start2 = (Elf64_Sym*)malloc(sym_shdr->sh_size);
+  if (NULL == start2) { assert(0);}
+
+  Elf64_Sym *sym = start2;
+  int sym_num = sym_shdr->sh_size / 24;
+  rewind(fp);
+  fseek(fp, sym_shdr->sh_offset, SEEK_SET);
+  a = fread(sym, sym_shdr->sh_size, 1,  fp);
+	if (0 == a) { assert(0);}
+
+  for(i = 0; i < sym_num; i++) {
+    if ((sym->st_info & 0xf) == 2) {
+      rewind(fp);
+      a = fseek(fp, str_shdr->sh_offset + sym->st_name, SEEK_SET);
+	    if (0 != a) {assert(0);}
+      a = fread(name, MAX_FUNC_NAME_WIDTH, 1, fp);
+	    if (0 == a) { assert(0);}
+      for (j = 0; j < MAX_FUNC_NAME_WIDTH; j++) {
+        if (name[j] == '\0') {break;}
+      }
+      if (j == MAX_FUNC_NAME_WIDTH) {
+        printf("function name is too long!\n");
+        assert(0);
+      }
+      // limit num of func list
+      if(ref == FUNC_LIST_NUM) {
+        printf("function is too much!\n");
+        assert(0);
+      }
+      func_list[ref].id = ref;
+      func_list[ref].start_addr = sym->st_value;
+      func_list[ref].size = sym->st_size;
+      strcpy(func_list[ref].name, name);
+      ref++;
+    }
+    sym++;
+  }
+  free(start1);
+  free(start2);
+  start1 = NULL;
+  start2 = NULL;
+  fclose(fp);
+}
+
+void print_func_list() {
+  printf("function num: %d\n", ref);
+  for (int i = 0; i < ref; i++) {
+    printf("id: %d\n", func_list[i].id);
+    printf("name: \t\t%s\n", func_list[i].name);
+    printf("size: \t\t%ld\n", func_list[i].size);
+    printf("start addr: \t0x%016lx\n", func_list[i].start_addr);
+    printf("\n");
+  }
+}
+
+void print_func_log() {
+  if(func_state == -2) {
+    printf("No elf file\n");
+    return;
+  }
+  else if(func_state == -1) {
+    printf("No function trace, the program is not running or no jumps are occurring\n");
+    return;
+  }
+  printf("\nfunction trace ring buff\n");
+  for (int i = 0; i < FUN_BUF_REF; i++) {
+    if (func_buf[i][0] == '\0') break;
+    printf("%s\n", func_buf[i]);
+  }
+  printf("\n");
+}
+
+// pc in which function
+static int func_pc(vaddr_t addr) {
+  for (int i = 0; i < ref; i++) {
+    if(addr == func_list[i].start_addr || ((addr >= func_list[i].start_addr) && (addr < (func_list[i].start_addr + func_list[i].size)))) {
+      return i;
+    }
+  }
+  printf("0x%08lx no funciton match!\n", addr);
+  assert(0);
+  return 0;
 }

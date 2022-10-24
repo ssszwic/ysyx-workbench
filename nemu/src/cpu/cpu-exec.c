@@ -39,6 +39,7 @@ static int ring_ref = RING_BUF_WIDTH - 1;
 void device_update();
 bool update_wp(char *log, bool log_flag);
 void memory_trace_print();
+void print_func_log();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE_COND
@@ -141,14 +142,15 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
     case NEMU_END: case NEMU_ABORT:
-      // print ring buff
-      
       if (nemu_state.halt_ret != 0) {
 #ifdef CONFIG_MEMORY_TRACE
         memory_trace_print();
 #endif
+        // print ring buff
+        print_func_log();
         printf("\nring buff\n");
         for (int i = 0; i < RING_BUF_WIDTH; i++) {
+          if(ring_buf[i][0] == '\0') break;
           printf("%s\n", ring_buf[i]);
         }
         printf("\n");
