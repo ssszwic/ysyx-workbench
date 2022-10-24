@@ -25,7 +25,7 @@ int sprintf(char *out, const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
 
-  char buf[1] = {};
+  char buf[100] = {};
 
   while(*fmt != '\0') {
     switch(*fmt) {
