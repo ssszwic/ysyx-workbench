@@ -223,15 +223,22 @@ static int decode_exec(Decode *s) {
   // check function when first is or jal or jalr
   char tmp[SINGLE_BUF_WIDTH] = {};
   int tmp_state;
-  if((func_state == -1) || jump) {
+  if(func_state == -1) {
     tmp_state = func_pc(s->snpc-4);
-    if (func_state != tmp_state) {
-      func_state = tmp_state;
-      memset(func_buf[func_buf_ref] + 12, ' ', 6);
-      if (++func_buf_ref == FUN_BUF_REF) {func_buf_ref = 0;}
-      sprintf(tmp, "0x%08lx: ----> jump [%s@0x%08lx] ", s->snpc-4, func_list[func_state].name, func_list[func_state].start_addr);
-      strcpy(func_buf[func_buf_ref], tmp);
-    }
+  }
+  else if(jump) {
+    tmp_state = func_pc(s->dnpc);
+  }
+  else {
+    return 0;
+  }
+
+  if(func_state != tmp_state) {
+    func_state = tmp_state;
+    memset(func_buf[func_buf_ref] + 12, ' ', 6);
+    if (++func_buf_ref == FUN_BUF_REF) {func_buf_ref = 0;}
+    sprintf(tmp, "0x%08lx: ----> jump [%s@0x%08lx] ", s->snpc-4, func_list[func_state].name, func_list[func_state].start_addr);
+    strcpy(func_buf[func_buf_ref], tmp);
   }
 
   return 0;
