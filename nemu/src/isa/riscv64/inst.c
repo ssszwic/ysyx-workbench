@@ -372,7 +372,7 @@ static int func_pc(vaddr_t addr) {
       return i;
     }
   }
-  printf("no funciton match!\n");
+  printf("0x%08lx no funciton match!\n", addr);
   assert(0);
   return 0;
 }
