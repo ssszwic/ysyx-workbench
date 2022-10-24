@@ -150,9 +150,7 @@ void cpu_exec(uint64_t n) {
         print_func_log();
         printf("\nring buff\n");
         for (int i = 0; i < RING_BUF_WIDTH; i++) {
-          if(ring_buf[i][0] == '\0') {
-            break;
-          }
+          if(ring_buf[i][0] == '\0') break;
           printf("%s\n", ring_buf[i]);
         }
         printf("\n");
