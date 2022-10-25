@@ -29,7 +29,7 @@ void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;
 #ifdef CONFIG_DIFFTEST
 
 static bool is_skip_ref = false;
-static int skip_dut_nr_inst = 0;
+static int skip_dut_nr_inst = 0; // for QEMU
 
 // this is used to let ref skip instructions which
 // can not produce consistent behavior with NEMU
@@ -87,7 +87,9 @@ void init_difftest(char *ref_so_file, long img_size, int port) {
       "If it is not necessary, you can turn it off in menuconfig.", ref_so_file);
 
   ref_difftest_init(port);
+  // copy img instruction to ref
   ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);
+  // copy reg to ref
   ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 }
 
@@ -102,6 +104,7 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {
 void difftest_step(vaddr_t pc, vaddr_t npc) {
   CPU_state ref_r;
 
+  // for QEMU, let dut catch up ref
   if (skip_dut_nr_inst > 0) {
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
     if (ref_r.pc == npc) {
@@ -122,6 +125,7 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {
     return;
   }
 
+  // ref execute once
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
 
