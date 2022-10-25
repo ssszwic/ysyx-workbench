@@ -17,6 +17,9 @@ int printf(const char *fmt, ...) {
 
   int n = sprintf(buf, fmt, ap);
   va_end(ap);
+  putch('6');
+  putch('6');
+  putch('6');
 
   for (int i = 0; i < n; i++) {
     putch(buf[i]);
