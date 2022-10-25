@@ -4,28 +4,33 @@
 #include <stdarg.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
+#define BUF_SIZE 1000
+
+static char buf[BUF_SIZE];
 
 void itoa(char * buf, int value, int radix);
 
 int printf(const char *fmt, ...) {
-  panic("Not implemented");
+  assert(fmt);
+  buf[0] = '\0';
+
+  va_list ap;
+  va_start(ap, fmt);
+  int n = vsprintf(buf, fmt, ap);
+  va_end(ap);
+
+  for (int i = 0; i < n; i++) {
+    putch(buf[i]);
+  }
+  return n;
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  panic("Not implemented");
-}
-
-int sprintf(char *out, const char *fmt, ...) {
   assert(out && fmt);
   char *str;
   int d;
   int n = 0;
-
-  // macro for variable parameters
-  va_list ap;
-  va_start(ap, fmt);
-
-  char buf[100] = {};
+  char tmp[100] = {};
 
   while(*fmt != '\0') {
     switch(*fmt) {
@@ -35,9 +40,9 @@ int sprintf(char *out, const char *fmt, ...) {
           fmt++;
           d = va_arg(ap, int);
           // print
-          itoa(buf, d, 10);
-          for(int i = 0; i < strlen(buf); i++) {
-            out[n++] = buf[i];
+          itoa(tmp, d, 10);
+          for(int i = 0; i < strlen(tmp); i++) {
+            out[n++] = tmp[i];
           }
         }
         else if(*fmt == 's') {
@@ -59,7 +64,17 @@ int sprintf(char *out, const char *fmt, ...) {
     }
   }
   out[n] = '\0';
+  return n;
+}
+
+int sprintf(char *out, const char *fmt, ...) {
+  assert(out && fmt);
+
+  va_list ap;
+  va_start(ap, fmt);
+  int n = vsprintf(out, fmt, ap);
   va_end(ap);
+
   return n;
 }
 
