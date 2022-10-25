@@ -99,7 +99,6 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {
     nemu_state.halt_pc = pc;
     isa_reg_display();
   }
-  printf("pass\n");
 }
 
 void difftest_step(vaddr_t pc, vaddr_t npc) {

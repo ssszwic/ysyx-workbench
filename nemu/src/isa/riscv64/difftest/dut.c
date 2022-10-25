@@ -29,6 +29,13 @@ bool isa_difftest_checkregs(CPU_state *ref_r, vaddr_t pc) {
     printf("dut pc: 0x%016lx\n", cpu.pc);
     same = false;
   }
+  printf("pc (next instruction) error: \n");
+  printf("ref pc: 0x%016lx\n", ref_r->pc);
+  printf("dut pc: 0x%016lx\n", cpu.pc);
+
+  printf("reg[%d] %s error: \n", 10, regs[10]);
+  printf("ref: 0x%016lx\n", ref_r->gpr[10]);
+  printf("dut: 0x%016lx\n", cpu.gpr[10]);
 
   // compare 32 reg
   for (int i = 0; i < 32; i++) {
