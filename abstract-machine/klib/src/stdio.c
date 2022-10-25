@@ -92,6 +92,13 @@ void itoa(char * buf, int value, int radix) {
   char ch;
   char tmp_buff[100] = {};
   int i = 0, j = 0;
+  // value = 0
+  if (value == 0) {
+    buf[0] = '0';
+    buf[1] = '\n';
+    return;
+  }
+
   // negetive is aviable for 10 radix
   if ((value < 0) && (radix == 10))
 	{
