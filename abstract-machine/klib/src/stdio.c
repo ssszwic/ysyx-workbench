@@ -12,14 +12,11 @@ void itoa(char * buf, int value, int radix);
 
 int printf(const char *fmt, ...) {
   buf[0] = '5';
+  
   va_list ap;
   va_start(ap, fmt);
-
   int n = sprintf(buf, fmt, ap);
   va_end(ap);
-  putch('6');
-  putch('6');
-  putch('6');
 
   for (int i = 0; i < n; i++) {
     putch(buf[i]);
@@ -28,7 +25,45 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  panic("Not implemented");
+  assert(out && fmt);
+  char *str;
+  int d;
+  int n = 0;
+  char buf[100] = {};
+
+  while(*fmt != '\0') {
+    switch(*fmt) {
+      case '%' :
+        fmt++;
+        if(*fmt == 'd') {
+          fmt++;
+          d = va_arg(ap, int);
+          // print
+          itoa(buf, d, 10);
+          for(int i = 0; i < strlen(buf); i++) {
+            out[n++] = buf[i];
+          }
+        }
+        else if(*fmt == 's') {
+          fmt++;
+          str = va_arg(ap, char *);
+          assert(str);
+          // print
+          for(int i = 0; i < strlen(str); i++) {
+            out[n++] = str[i];
+          }
+        }
+        else {
+          assert(0);
+        }
+        break;
+      default:
+        out[n++] = *fmt;
+        fmt++;
+    }
+  }
+  out[n] = '\0';
+  return n;
 }
 
 int sprintf(char *out, const char *fmt, ...) {
