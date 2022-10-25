@@ -4,11 +4,24 @@
 #include <stdarg.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
+#define BUF_SIZE 1000
+
+static char buf[BUF_SIZE];
 
 void itoa(char * buf, int value, int radix);
 
 int printf(const char *fmt, ...) {
-  panic("Not implemented");
+  buf[0] = '\0';
+  va_list ap;
+  va_start(ap, fmt);
+
+  int n = sprintf(buf, fmt, ap);
+  va_end(ap);
+
+  for (int i = 0; i < n; i++) {
+    putch(buf[i]);
+  }
+  return n;
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
