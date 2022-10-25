@@ -24,9 +24,9 @@ uint8_t* new_space(int size);
 typedef struct {
   const char *name;
   // we treat ioaddr_t as paddr_t here
-  paddr_t low;
-  paddr_t high;
-  void *space;
+  paddr_t low;  // Simulated virtual address in guest
+  paddr_t high; // Simulated virtual address in guest
+  void *space;  // real address in host
   io_callback_t callback;
 } IOMap;
 
