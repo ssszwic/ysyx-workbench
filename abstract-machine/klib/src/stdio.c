@@ -11,11 +11,12 @@ static char buf[BUF_SIZE];
 void itoa(char * buf, int value, int radix);
 
 int printf(const char *fmt, ...) {
-  buf[0] = '5';
-  
+  assert(fmt);
+  buf[0] = '\0';
+
   va_list ap;
   va_start(ap, fmt);
-  int n = sprintf(buf, fmt, ap);
+  int n = vsprintf(buf, fmt, ap);
   va_end(ap);
 
   for (int i = 0; i < n; i++) {
@@ -29,7 +30,7 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
   char *str;
   int d;
   int n = 0;
-  char buf[100] = {};
+  char tmp[100] = {};
 
   while(*fmt != '\0') {
     switch(*fmt) {
@@ -39,9 +40,9 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           fmt++;
           d = va_arg(ap, int);
           // print
-          itoa(buf, d, 10);
-          for(int i = 0; i < strlen(buf); i++) {
-            out[n++] = buf[i];
+          itoa(tmp, d, 10);
+          for(int i = 0; i < strlen(tmp); i++) {
+            out[n++] = tmp[i];
           }
         }
         else if(*fmt == 's') {
@@ -68,49 +69,12 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
 
 int sprintf(char *out, const char *fmt, ...) {
   assert(out && fmt);
-  char *str;
-  int d;
-  int n = 0;
 
-  // macro for variable parameters
   va_list ap;
   va_start(ap, fmt);
-
-  char buf[100] = {};
-
-  while(*fmt != '\0') {
-    switch(*fmt) {
-      case '%' :
-        fmt++;
-        if(*fmt == 'd') {
-          fmt++;
-          d = va_arg(ap, int);
-          // print
-          itoa(buf, d, 10);
-          for(int i = 0; i < strlen(buf); i++) {
-            out[n++] = buf[i];
-          }
-        }
-        else if(*fmt == 's') {
-          fmt++;
-          str = va_arg(ap, char *);
-          assert(str);
-          // print
-          for(int i = 0; i < strlen(str); i++) {
-            out[n++] = str[i];
-          }
-        }
-        else {
-          assert(0);
-        }
-        break;
-      default:
-        out[n++] = *fmt;
-        fmt++;
-    }
-  }
-  out[n] = '\0';
+  int n = vsprintf(out, fmt, ap);
   va_end(ap);
+
   return n;
 }
 
