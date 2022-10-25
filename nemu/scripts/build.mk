@@ -3,7 +3,7 @@
 # Add necessary options if the target is a shared library
 ifeq ($(SHARE),1)
 SO = -so
-echo $(CFLAGS)
+
 CFLAGS  += -fPIC
 LDFLAGS += -rdynamic -shared -fPIC
 endif
@@ -51,6 +51,7 @@ $(OBJ_DIR)/%.o: %.cc
 app: $(BINARY)
 
 $(BINARY): $(OBJS) $(ARCHIVES)
+	echo $(CFLAGS)66666666666666666666666666666
 	@echo + LD $@
 	@$(LD) -o $@ $(OBJS) $(LDFLAGS) $(ARCHIVES) $(LIBS)
 
