@@ -11,7 +11,7 @@ static char buf[BUF_SIZE];
 void itoa(char * buf, int value, int radix);
 
 int printf(const char *fmt, ...) {
-  buf[0] = '\0';
+  buf[0] = '5';
   va_list ap;
   va_start(ap, fmt);
 
