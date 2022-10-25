@@ -95,7 +95,7 @@ void itoa(char * buf, int value, int radix) {
   // value = 0
   if (value == 0) {
     buf[0] = '0';
-    buf[1] = '\n';
+    buf[1] = '\0';
     return;
   }
 
