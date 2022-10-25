@@ -5,7 +5,7 @@ void __am_timer_init() {
 }
 
 void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
-  uptime->us = 0;
+  uptime->us = uptime->us + 1;
   // uptime->us = (uint32_t) inl(RTC_ADDR);
   // uptime->us = uptime->us +  (((uint64_t) inl(RTC_ADDR + 4)) << 4);
 }
