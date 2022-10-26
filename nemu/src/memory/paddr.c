@@ -26,7 +26,7 @@ static uint8_t *pmem = NULL;
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
 
-// memort trace
+// memory trace
 #ifdef CONFIG_MEMORY_TRACE
 #define M_RING_BUF_WIDTH 300
 static char m_ring_buf[M_RING_BUF_WIDTH][50] = {};
@@ -72,7 +72,7 @@ word_t paddr_read(paddr_t addr, int len) {
   char tmp[50] = {};
   memset(m_ring_buf[m_ring_ref], ' ', 6);
   if (++m_ring_ref == M_RING_BUF_WIDTH) {m_ring_ref = 0;}
-  sprintf(tmp, "----> read \t0x%016x\t%02d", addr, len);
+  sprintf(tmp, "----> read \t" FMT_PADDR "\t%02d", addr, len);
   strcpy(m_ring_buf[m_ring_ref], tmp);
 #endif
 
@@ -88,7 +88,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
   char tmp[50] = {};
   memset(m_ring_buf[m_ring_ref], ' ', 6);
   if (++m_ring_ref == M_RING_BUF_WIDTH) {m_ring_ref = 0;}
-  sprintf(tmp, "----> write\t0x%016x\t%02d", addr, len);
+  sprintf(tmp, "----> write\t" FMT_PADDR "\t%02d", addr, len);
   strcpy(m_ring_buf[m_ring_ref], tmp);
 #endif
 
@@ -100,7 +100,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 #ifdef CONFIG_MEMORY_TRACE
 void memory_trace_print() {
   printf("\nmemory trace ring buff\n");
-  printf("      opcode\taddr\t\t\tlen\n");
+  printf("      opcode\taddr\t\tlen\n");
   for (int i = 0; i < M_RING_BUF_WIDTH; i++) {
     if (m_ring_buf[i][0] == '\0') break;
     printf("%s\n", m_ring_buf[i]);

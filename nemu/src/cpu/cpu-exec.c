@@ -145,6 +145,7 @@ void cpu_exec(uint64_t n) {
 
     case NEMU_END: case NEMU_ABORT:
       device_trace_print();
+      memory_trace_print();
       if (nemu_state.halt_ret != 0) {
 #ifdef CONFIG_MEMORY_TRACE
         memory_trace_print();
