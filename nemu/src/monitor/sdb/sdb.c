@@ -268,7 +268,11 @@ static int cmd_delate(char *args) {
 }
 
 static int cmd_f() {
+#ifdef CONFIG_FUNCTION_TRACE
   print_func_log();
+  return 0;
+#endif
+  printf("function is closed in menuconfig.\n");
   return 0;
 }
 
