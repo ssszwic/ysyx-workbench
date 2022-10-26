@@ -109,6 +109,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0100000 ????? ????? 000 ????? 01110 11", subw   , R, R(dest) = SEXT(BITS(src1 - src2, 31, 0), 32));
   // set less than
   INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt    , R, R(dest) = ((int64_t) src1 < (int64_t) src2));
+  
   // set less than unsigned
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(dest) = (src1 < src2));
   // remainder unsigned
@@ -125,7 +126,9 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, R(dest) = src1 * src2);
   // multiply word
   INSTPAT("0000001 ????? ????? 000 ????? 01110 11", mulw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) * (int32_t) BITS(src2, 31, 0), 32)); // no consider signed
-  // shift ledt logical word
+  // shift left logical
+  INSTPAT("0000000 ????? ????? 001 ????? 01100 11", sll    , R, R(dest) = src1 << BITS(src2, 5, 0));
+  // shift left logical word
   INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(src1 << BITS(src2, 4, 0), 31, 0), 32));
   // shift right logical
   INSTPAT("0000000 ????? ????? 101 ????? 01100 11", srl    , R, R(dest) = src1 >> BITS(src2, 5, 0));
