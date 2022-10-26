@@ -34,7 +34,11 @@ int main(int argc, char *argv[]) {
   engine_start();
 
   // free memory of device
-  IFDEF(CONFIG_DEVICE, close_map());
+#ifdef CONFIG_DEVICE
+  close_map();
+  printf("sd");
+#endif
+  
 
   // return status
   return is_exit_status_bad();
