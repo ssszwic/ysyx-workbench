@@ -332,7 +332,7 @@ void init_elf(const char *file) {
       }
       if (j == MAX_FUNC_NAME_WIDTH) {
         printf("function name is too long!\n");
-        name[j] = '\0';
+        name[j-10] = '\0';
         // assert(0);
       }
       // limit num of func list
