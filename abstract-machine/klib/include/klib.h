@@ -10,7 +10,7 @@ extern "C" {
 #endif
 
 // link my lib to native when define for native
-#define __NATIVE_USE_KLIB__
+// #define __NATIVE_USE_KLIB__
 
 // string.h
 void  *memset    (void *s, int c, size_t n);
