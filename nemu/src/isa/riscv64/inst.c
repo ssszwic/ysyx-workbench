@@ -41,7 +41,7 @@ enum {
 
 #define MAX_FUNC_NAME_WIDTH 50
 #define FUN_BUF_REF 100
-#define FUNC_LIST_NUM 100
+#define FUNC_LIST_NUM 1000
 #define SINGLE_BUF_WIDTH 100
 
 // ring buf
