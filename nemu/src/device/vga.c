@@ -47,8 +47,8 @@ static void init_screen() {
   sprintf(title, "%s-NEMU", str(__GUEST_ISA__));
   SDL_Init(SDL_INIT_VIDEO);
   SDL_CreateWindowAndRenderer(
-      SCREEN_W,
-      SCREEN_H,
+      SCREEN_W * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)), // expend 2 when 400x300
+      SCREEN_H * (MUXDEF(CONFIG_VGA_SIZE_400x300, 2, 1)),
       0, &window, &renderer);
   SDL_SetWindowTitle(window, title);
   texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
@@ -87,7 +87,7 @@ void init_vga() {
   vmem = new_space(screen_size());
   add_mmio_map("vmem", CONFIG_FB_ADDR, vmem, screen_size(), NULL);
   IFDEF(CONFIG_VGA_SHOW_SCREEN, init_screen());
-  IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 0, screen_size()));
+  IFDEF(CONFIG_VGA_SHOW_SCREEN, memset(vmem, 255, screen_size()));
 
 
 
