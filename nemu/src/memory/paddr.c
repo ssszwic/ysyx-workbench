@@ -99,7 +99,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
 
 #ifdef CONFIG_MEMORY_TRACE
 void memory_trace_print() {
-  printf("\nmemory trace ring buff\n");
+  printf("\nmemory trace ring buff:\n");
   printf("      opcode\taddr\t\tlen\n");
   for (int i = 0; i < M_RING_BUF_WIDTH; i++) {
     if (m_ring_buf[i][0] == '\0') break;
