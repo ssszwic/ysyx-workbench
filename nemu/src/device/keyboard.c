@@ -35,6 +35,9 @@ f(UP) f(DOWN) f(LEFT) f(RIGHT) f(INSERT) f(DELETE) f(HOME) f(END) f(PAGEUP) f(PA
 
 enum {
   _KEY_NONE = 0,
+  // _KEY_ESCAPE
+  // _KEY_F1
+  // ......
   MAP(_KEYS, _KEY_NAME)
 };
 
@@ -42,6 +45,9 @@ enum {
 static uint32_t keymap[256] = {};
 
 static void init_keymap() {
+  // keymap[SDL_SCANCODE_KEY_ESCAPE] = _KEY_ESCAPE,
+  // keymap[SDL_SCANCODE_KEY_F1] = _KEY_F1
+  // ......
   MAP(_KEYS, SDL_KEYMAP)
 }
 
@@ -52,6 +58,7 @@ static int key_f = 0, key_r = 0;
 static void key_enqueue(uint32_t am_scancode) {
   key_queue[key_r] = am_scancode;
   key_r = (key_r + 1) % KEY_QUEUE_LEN;
+  // if ker_r catched key_f, key queue overflow
   Assert(key_r != key_f, "key queue overflow!");
 }
 
@@ -64,6 +71,7 @@ static uint32_t key_dequeue() {
   return key;
 }
 
+// detect key by SDL
 void send_key(uint8_t scancode, bool is_keydown) {
   if (nemu_state.state == NEMU_RUNNING && keymap[scancode] != _KEY_NONE) {
     uint32_t am_scancode = keymap[scancode] | (is_keydown ? KEYDOWN_MASK : 0);
