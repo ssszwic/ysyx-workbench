@@ -35,6 +35,5 @@ int main(int argc, char *argv[]) {
   
 
   // return status
-  printf("exit\n");
   return is_exit_status_bad();
 }
