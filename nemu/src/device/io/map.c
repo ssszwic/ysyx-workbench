@@ -85,7 +85,7 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   sprintf(tmp, "----> write\t%s\t" FMT_PADDR "\t%02d", map->name, addr, len);
   strcpy(d_ring_buf[d_ring_ref], tmp);
 #endif
-
+  printf("len3: %d\n", len);
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
   paddr_t offset = addr - map->low;
