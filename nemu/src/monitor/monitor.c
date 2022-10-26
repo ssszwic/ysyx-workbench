@@ -144,6 +144,7 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
 
   // read elf file to get function list
+  
   if (elf_file != NULL) {
     init_elf(elf_file);
     // debug
