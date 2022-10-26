@@ -147,8 +147,12 @@ void cpu_exec(uint64_t n) {
 #ifdef CONFIG_MEMORY_TRACE
         memory_trace_print();
 #endif
+
+#ifdef CONFIG_FUNCTION_TRACE
         // print ring buff
         print_func_log();
+#endif
+
 #ifdef CONFIG_ITRACE_COND
         printf("\nring buff\n");
         for (int i = 0; i < RING_BUF_WIDTH; i++) {
