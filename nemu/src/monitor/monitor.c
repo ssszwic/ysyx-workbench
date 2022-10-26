@@ -147,7 +147,7 @@ void init_monitor(int argc, char *argv[]) {
   if (elf_file != NULL) {
     init_elf(elf_file);
     // debug
-    print_func_list();
+    // print_func_list();
   }
 
   IFDEF(CONFIG_ITRACE, init_disasm(
