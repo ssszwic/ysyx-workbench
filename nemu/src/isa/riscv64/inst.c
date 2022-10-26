@@ -44,6 +44,8 @@ enum {
 #define FUNC_LIST_NUM 100
 #define SINGLE_BUF_WIDTH 100
 
+
+#ifdef CONFIG_FUNCTION_TRACE
 // ring buf
 static char func_buf[FUN_BUF_REF][SINGLE_BUF_WIDTH] = {};
 // ring buf ref
@@ -55,16 +57,13 @@ struct func {
   vaddr_t start_addr;
   char name[MAX_FUNC_NAME_WIDTH];
 };
-
 // num of function list
 static int ref = 0;
-
 // function state  -2: not use  -1: use
 static int func_state = -2; 
-
 static struct func func_list[FUNC_LIST_NUM];
-
 static int func_pc(vaddr_t addr);
+#endif
 
 static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst.val;
@@ -85,7 +84,9 @@ static void decode_operand(Decode *s, int *dest, word_t *src1, word_t *src2, wor
 
 static int decode_exec(Decode *s) {
   int dest = 0;
+#ifdef CONFIG_FUNCTION_TRACE
   bool jump = false;
+#endif
   word_t src1 = 0, src2 = 0, imm = 0;
   // dnpc = snpc when executed sequentially
   s->dnpc = s->snpc;
@@ -109,21 +110,28 @@ static int decode_exec(Decode *s) {
   INSTPAT("0100000 ????? ????? 000 ????? 01110 11", subw   , R, R(dest) = SEXT(BITS(src1 - src2, 31, 0), 32));
   // set less than
   INSTPAT("0000000 ????? ????? 010 ????? 01100 11", slt    , R, R(dest) = ((int64_t) src1 < (int64_t) src2));
+  
   // set less than unsigned
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, R(dest) = (src1 < src2));
   // remainder unsigned
   INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu   , R, R(dest) = src1 % src2);
   // remainder word
   INSTPAT("0000001 ????? ????? 110 ????? 01110 11", remw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) % (int32_t) BITS(src2, 31, 0), 32));
+  // remainder unsigned word
+  INSTPAT("0000001 ????? ????? 111 ????? 01110 11", remuw  , R, R(dest) = SEXT((uint32_t) BITS(src1, 31, 0) % (uint32_t) BITS(src2, 31, 0), 32));
   // divide unsigned
   INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu   , R, R(dest) = src1 / src2); // no consider exceptions 1/0
+  // divide unsigned word
+  INSTPAT("0000001 ????? ????? 101 ????? 01110 11", divuw  , R, R(dest) = SEXT((uint32_t) BITS(src1, 31, 0) / (uint32_t) BITS(src2, 31, 0), 32)); // no consider exceptions 1/0
   // divide word
   INSTPAT("0000001 ????? ????? 100 ????? 01110 11", divw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) / (int32_t) BITS(src2, 31, 0), 32)); // no consider exceptions 1/0
   // multiply
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, R(dest) = src1 * src2);
   // multiply word
   INSTPAT("0000001 ????? ????? 000 ????? 01110 11", mulw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) * (int32_t) BITS(src2, 31, 0), 32)); // no consider signed
-  // shift ledt logical word
+  // shift left logical
+  INSTPAT("0000000 ????? ????? 001 ????? 01100 11", sll    , R, R(dest) = src1 << BITS(src2, 5, 0));
+  // shift left logical word
   INSTPAT("0000000 ????? ????? 001 ????? 01110 11", sllw   , R, R(dest) = SEXT(BITS(src1 << BITS(src2, 4, 0), 31, 0), 32));
   // shift right logical
   INSTPAT("0000000 ????? ????? 101 ????? 01100 11", srl    , R, R(dest) = src1 >> BITS(src2, 5, 0));
@@ -141,6 +149,8 @@ static int decode_exec(Decode *s) {
   /*----------------------------------------- I -----------------------------------------*/
   // load double word (8 byte)
   INSTPAT("??????? ????? ????? 011 ????? 00000 11", ld     , I, R(dest) = Mr(src1 + imm, 8));
+  // load byte
+  INSTPAT("??????? ????? ????? 000 ????? 00000 11", lb     , I, R(dest) = SEXT(BITS(Mr(src1 + imm, 1), 7, 0), 8));
   // load byte unsigned
   INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, R(dest) = BITS(Mr(src1 + imm, 1), 7, 0)); // default add 0 for uint64
   // load single word (4 byte)
@@ -152,8 +162,7 @@ static int decode_exec(Decode *s) {
   // load half word unsigned (2 byte)
   INSTPAT("??????? ????? ????? 101 ????? 00000 11", lhu    , I, R(dest) = BITS(Mr(src1 + imm, 2), 15, 0));
   // junp and link register 
-  INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(dest) = s->snpc; s->dnpc = (src1 + imm) & (~1); jump = true);
-
+  INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(dest) = s->snpc; s->dnpc = (src1 + imm) & (~1); IFDEF(CONFIG_FUNCTION_TRACE, jump = true););
   // add immediate  addi rd, rs1, imm[11:0]
   INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = src1 + imm);
   // add immediate word addiw rd, rs1, imm[11:0]
@@ -162,6 +171,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, R(dest) = (src1 < imm));
   // and immediate
   INSTPAT("??????? ????? ????? 111 ????? 00100 11", andi   , I, R(dest) = src1 & imm);
+  // or immediate
+  INSTPAT("??????? ????? ????? 110 ????? 00100 11", ori    , I, R(dest) = src1 | imm);
   // exclusive-or immediate
   INSTPAT("??????? ????? ????? 100 ????? 00100 11", xori   , I, R(dest) = src1 ^ imm);
   // shift left logical immediate
@@ -209,7 +220,7 @@ static int decode_exec(Decode *s) {
 
   /*----------------------------------------- J -----------------------------------------*/
   // jump and link
-  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->snpc; s->dnpc = s->pc + imm; jump = true);
+  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(dest) = s->snpc; s->dnpc = s->pc + imm; IFDEF(CONFIG_FUNCTION_TRACE, jump = true););
 
   /*----------------------------------------- N -----------------------------------------*/
   // environment bread (I type)   $a0 is status?
@@ -221,6 +232,7 @@ static int decode_exec(Decode *s) {
 
   R(0) = 0; // reset $zero to 0
   // check function when first is or jal or jalr
+#ifdef CONFIG_FUNCTION_TRACE
   if (func_state == -2) {return 0;}
   char tmp[SINGLE_BUF_WIDTH] = {};
   int tmp_state;
@@ -241,6 +253,7 @@ static int decode_exec(Decode *s) {
     sprintf(tmp, "0x%08lx: ----> jump [%s\t@0x%08lx] ", s->snpc-4, func_list[func_state].name, func_list[func_state].start_addr);
     strcpy(func_buf[func_buf_ref], tmp);
   }
+#endif
 
   return 0;
 }
@@ -249,6 +262,8 @@ int isa_exec_once(Decode *s) {
   s->isa.inst.val = inst_fetch(&s->snpc, 4); // static pc + 4
   return decode_exec(s);
 }
+
+#ifdef CONFIG_FUNCTION_TRACE
 
 void init_elf(const char *file) {
   func_state = -1;
@@ -332,7 +347,8 @@ void init_elf(const char *file) {
       }
       if (j == MAX_FUNC_NAME_WIDTH) {
         printf("function name is too long!\n");
-        assert(0);
+        name[j-10] = '\0';
+        // assert(0);
       }
       // limit num of func list
       if(ref == FUNC_LIST_NUM) {
@@ -393,3 +409,5 @@ static int func_pc(vaddr_t addr) {
   assert(0);
   return 0;
 }
+
+#endif

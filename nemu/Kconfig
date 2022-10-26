@@ -130,6 +130,10 @@ config MEMORY_TRACE
   bool "Enable memory trace"
   default y
 
+config FUNCTION_TRACE
+  bool "Enable function trace"
+  default y
+
 config WATCHPOINT
   bool "Enable watchpoint"
   default y
