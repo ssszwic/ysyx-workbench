@@ -75,7 +75,6 @@ word_t paddr_read(paddr_t addr, int len) {
   sprintf(tmp, "----> read \t" FMT_PADDR "\t%02d", addr, len);
   strcpy(m_ring_buf[m_ring_ref], tmp);
 #endif
-
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
@@ -92,7 +91,6 @@ void paddr_write(paddr_t addr, int len, word_t data) {
   strcpy(m_ring_buf[m_ring_ref], tmp);
 #endif
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
-  printf("len1: %d\n", len);
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
 }
