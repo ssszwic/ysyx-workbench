@@ -35,9 +35,9 @@ void *malloc(size_t size) {
   // On native, malloc() will be called during initializaion of C runtime.
   // Therefore do not call panic() here, else it will yield a dead recursion:
   //   panic() -> putchar() -> (glibc) -> malloc() -> panic()
-  if (hbrk == NULL) {
-    hbrk = (void *)ROUNDUP(heap.start, 8);
-  }
+  // if (hbrk == NULL) {
+  //   hbrk = (void *)ROUNDUP(heap.start, 8);
+  // }
   size  = (size_t)ROUNDUP(size, 8);
   char *old = hbrk;
   hbrk += size;
