@@ -23,6 +23,13 @@
 static uint8_t *io_space = NULL;
 static uint8_t *p_space = NULL;
 
+// device trace
+#ifdef CONFIG_DEVICE_TRACE
+#define D_RING_BUF_WIDTH 300
+static char d_ring_buf[D_RING_BUF_WIDTH][100] = {};
+static int d_ring_ref = D_RING_BUF_WIDTH - 1;
+#endif
+
 uint8_t* new_space(int size) {
   uint8_t *p = p_space;
   // page aligned;
@@ -53,6 +60,15 @@ void init_map() {
 }
 
 word_t map_read(paddr_t addr, int len, IOMap *map) {
+  // device trace
+#ifdef CONFIG_DEVICE_TRACE
+  char tmp[100] = {};
+  memset(d_ring_buf[d_ring_ref], ' ', 6);
+  if (++d_ring_ref == D_RING_BUF_WIDTH) {d_ring_ref = 0;}
+  sprintf(tmp, "----> read \t%s\t" FMT_PADDR "\t%02d", map->name, addr, len);
+  strcpy(d_ring_buf[d_ring_ref], tmp);
+#endif
+
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
   paddr_t offset = addr - map->low;
@@ -62,9 +78,29 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
 }
 
 void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
+#ifdef CONFIG_DEVICE_TRACE
+  char tmp[100] = {};
+  memset(d_ring_buf[d_ring_ref], ' ', 6);
+  if (++d_ring_ref == D_RING_BUF_WIDTH) {d_ring_ref = 0;}
+  sprintf(tmp, "----> write\t%s\t" FMT_PADDR "\t%02d", map->name, addr, len);
+  strcpy(d_ring_buf[d_ring_ref], tmp);
+#endif
+
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
   paddr_t offset = addr - map->low;
   host_write(map->space + offset, len, data);
   invoke_callback(map->callback, offset, len, true);
 }
+
+#ifdef CONFIG_DEVICE_TRACE
+void device_trace_print() {
+  printf("\ndevice trace ring buff\n");
+  printf("      opcode\tname\taddr\t\t\tlen\n");
+  for (int i = 0; i < D_RING_BUF_WIDTH; i++) {
+    if (d_ring_buf[i][0] == '\0') break;
+    printf("%s\n", d_ring_buf[i]);
+  }
+  printf("\n");
+}
+#endif

@@ -127,11 +127,18 @@ config TRACE
   default y
 
 config MEMORY_TRACE
+  depends on TRACE
   bool "Enable memory trace"
   default y
 
 config FUNCTION_TRACE
+  depends on TRACE
   bool "Enable function trace"
+  default y
+
+config DEVICE_TRACE
+  depends on TRACE && DEVICE
+  bool "Enable device trace"
   default y
 
 config WATCHPOINT
