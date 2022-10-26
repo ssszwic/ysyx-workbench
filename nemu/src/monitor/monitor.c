@@ -144,12 +144,13 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
 
   // read elf file to get function list
-  
+#ifdef CONFIG_FUNCTION_TRACE
   if (elf_file != NULL) {
     init_elf(elf_file);
     // debug
     // print_func_list();
   }
+#endif
 
   IFDEF(CONFIG_ITRACE, init_disasm(
     MUXDEF(CONFIG_ISA_x86,     "i686",
