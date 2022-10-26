@@ -32,12 +32,6 @@ int main(int argc, char *argv[]) {
 
   /* Start engine. */
   engine_start();
-
-  // free memory of device
-#ifdef CONFIG_DEVICE
-  close_map();
-  printf("sd");
-#endif
   
 
   // return status
