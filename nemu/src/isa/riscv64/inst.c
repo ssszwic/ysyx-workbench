@@ -262,6 +262,8 @@ int isa_exec_once(Decode *s) {
   return decode_exec(s);
 }
 
+#ifdef CONFIG_FUNCTION_TRACE
+
 void init_elf(const char *file) {
   func_state = -1;
   FILE *fp;
@@ -406,3 +408,5 @@ static int func_pc(vaddr_t addr) {
   assert(0);
   return 0;
 }
+
+#endif
