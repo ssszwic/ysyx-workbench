@@ -32,9 +32,10 @@ static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
 // ring buff
-
+#ifdef CONFIG_ITRACE_COND
 static char ring_buf[RING_BUF_WIDTH][100] = {};
 static int ring_ref = RING_BUF_WIDTH - 1;
+#endif
 
 void device_update();
 bool update_wp(char *log, bool log_flag);
@@ -148,12 +149,14 @@ void cpu_exec(uint64_t n) {
 #endif
         // print ring buff
         print_func_log();
+#ifdef CONFIG_ITRACE_COND
         printf("\nring buff\n");
         for (int i = 0; i < RING_BUF_WIDTH; i++) {
           if(ring_buf[i][0] == '\0') break;
           printf("%s\n", ring_buf[i]);
         }
         printf("\n");
+#endif
       }
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
