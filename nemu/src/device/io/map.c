@@ -50,6 +50,7 @@ static void check_bound(IOMap *map, paddr_t addr) {
 }
 
 static void invoke_callback(io_callback_t c, paddr_t offset, int len, bool is_write) {
+  printf("in %d\n", len);
   if (c != NULL) { c(offset, len, is_write); }
 }
 
@@ -89,7 +90,6 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   check_bound(map, addr);
   paddr_t offset = addr - map->low;
   host_write(map->space + offset, len, data);
-  printf("huidiao: %d\n", len);
   invoke_callback(map->callback, offset, len, true);
 }
 
