@@ -121,6 +121,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 111 ????? 01110 11", remuw  , R, R(dest) = SEXT((uint32_t) BITS(src1, 31, 0) % (uint32_t) BITS(src2, 31, 0), 32));
   // divide unsigned
   INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu   , R, R(dest) = src1 / src2); // no consider exceptions 1/0
+  // divide unsigned word
+  INSTPAT("0000001 ????? ????? 101 ????? 01110 11", divuw  , R, R(dest) = SEXT((uint32_t) BITS(src1, 31, 0) / (uint32_t) BITS(src2, 31, 0), 32)); // no consider exceptions 1/0
   // divide word
   INSTPAT("0000001 ????? ????? 100 ????? 01110 11", divw   , R, R(dest) = SEXT((int32_t) BITS(src1, 31, 0) / (int32_t) BITS(src2, 31, 0), 32)); // no consider exceptions 1/0
   // multiply
@@ -161,7 +163,6 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 101 ????? 00000 11", lhu    , I, R(dest) = BITS(Mr(src1 + imm, 2), 15, 0));
   // junp and link register 
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, R(dest) = s->snpc; s->dnpc = (src1 + imm) & (~1); IFDEF(CONFIG_FUNCTION_TRACE, jump = true););
-
   // add immediate  addi rd, rs1, imm[11:0]
   INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(dest) = src1 + imm);
   // add immediate word addiw rd, rs1, imm[11:0]
