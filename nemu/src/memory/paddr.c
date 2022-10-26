@@ -91,7 +91,6 @@ void paddr_write(paddr_t addr, int len, word_t data) {
   sprintf(tmp, "----> write\t" FMT_PADDR "\t%02d", addr, len);
   strcpy(m_ring_buf[m_ring_ref], tmp);
 #endif
-  printf("len: %d", len);
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
