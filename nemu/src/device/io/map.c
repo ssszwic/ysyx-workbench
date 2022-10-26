@@ -97,7 +97,7 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
 #ifdef CONFIG_DEVICE_TRACE
 void device_trace_print() {
   printf("\ndevice trace ring buff\n");
-  printf("      opcode\tname\taddr\t\t\tlen\n");
+  printf("      opcode\tname\taddr\t\tlen\n");
   for (int i = 0; i < D_RING_BUF_WIDTH; i++) {
     if (d_ring_buf[i][0] == '\0') break;
     printf("%s\n", d_ring_buf[i]);
