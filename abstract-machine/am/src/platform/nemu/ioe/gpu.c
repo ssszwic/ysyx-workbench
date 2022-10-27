@@ -6,7 +6,7 @@ int printf(const char *fmt, ...);
 void __am_gpu_init() {
   uint32_t data = (uint32_t) inl(VGACTL_ADDR);
   int width = data >> 16;
-  int height = data & 0xffff0000;
+  int height = data & 0x0000ffff;
   printf("am width: %d\n", width);
   printf("am height: %d\n", height);
   int i;
@@ -20,7 +20,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   *cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
     .width = data >> 16, 
-    .height = data & 0xffff0000,
+    .height = data & 0x0000ffff,
     .vmemsz = 0
   };
 }
@@ -28,7 +28,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   uint32_t data = (uint32_t) inl(VGACTL_ADDR);
   int width = data >> 16;
-  int height = data & 0xffff0000;
+  int height = data & 0x0000ffff;
   uint32_t *addr = NULL;
   uint32_t *pixels_tmp = (uint32_t *) ctl->pixels;
   // check out-of-bounds
