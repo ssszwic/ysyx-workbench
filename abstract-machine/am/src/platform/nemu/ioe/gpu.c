@@ -7,8 +7,6 @@ void __am_gpu_init() {
   uint32_t data = (uint32_t) inl(VGACTL_ADDR);
   int width = data >> 16;
   int height = data & 0x0000ffff;
-  printf("am width: %d\n", width);
-  printf("am height: %d\n", height);
   int i;
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
   for (i = 0; i < width * height; i ++) fb[i] = i;
