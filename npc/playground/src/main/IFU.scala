@@ -1,0 +1,18 @@
+import chisel3._
+import chisel3.util._
+
+
+class IFU extends Module {
+  val io = (new Bundle {
+    val nextpc    = Input(UInt(64.W))
+    val instGet   = Input(UInt(32.W))
+    val pc        = Output(UInt(64.W))
+    val inst      = Output(UInt(32.W))
+  })
+
+  val pc = RegInit(UInt(64.W), "h80000000".U)
+  pc := io.nextpc
+
+  io.pc := pc
+  io.inst := io.instGet
+}
