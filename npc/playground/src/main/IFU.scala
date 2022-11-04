@@ -3,7 +3,7 @@ import chisel3.util._
 
 
 class IFU extends Module {
-  val io = (new Bundle {
+  val io = IO(new Bundle {
     val nextpc    = Input(UInt(64.W))
     val instGet   = Input(UInt(32.W))
     val pc        = Output(UInt(64.W))
