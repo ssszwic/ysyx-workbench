@@ -10,7 +10,7 @@ class IFU extends Module {
     val inst      = Output(UInt(32.W))
   })
 
-  val pc = RegInit(UInt(64.W), "h80000000".U)
+  val pc = RegInit("h80000000".U(64.W))
   pc := io.nextpc
 
   io.pc := pc
