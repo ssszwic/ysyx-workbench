@@ -18,9 +18,9 @@ import utest._
 object GCDSpec extends ChiselUtestTester {
   val tests = Tests {
     test("GCD") {
-      testCircuit(new IFU) { dut =>
+      // testCircuit(new IFU) { dut =>
           
-      }
+      // }
     }
   }
 }
