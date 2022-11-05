@@ -128,7 +128,7 @@ class IDU extends Module {
   funct7 := io.inst(31, 25)
   op5    := io.inst(6, 2)
 
-  typeII := (op5 === "b001?0".U)
+  typeII := (op5(4, 2) === "b001".U && op5(0) === "b0".U)
   typeIL := (op5 === "b00000".U)
   typeIJ := (op5 === "b11011".U)
 
@@ -136,7 +136,7 @@ class IDU extends Module {
   typeI := typeII || typeIL || typeIJ
   typeS := (op5 === "b01000".U)
   typeB := (op5 === "b11000".U)
-  typeU := (op5 === "b0?101".U)
+  typeU := (op5(4) === "b0".U && op5(2, 0) === "b101".U)
   typeJ := (op5 === "b11011".U)
 
   // immediate
