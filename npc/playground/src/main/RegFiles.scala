@@ -16,7 +16,7 @@ class RegFiles extends Module {
   })
 
   // val regFiles = RegInit(VecInit(Seq.fill(32)(0.U(64.W))))
-  val regFiles = RegInit(Vec(32, 0.U(64.W)))
+  val regFiles = RegInit(Vec(32, UInt(64.W)))
 
   io.rs1Data := regFiles(io.rs1Addr)
   io.rs2Data := regFiles(io.rs2Addr)
