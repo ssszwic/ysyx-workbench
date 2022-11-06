@@ -152,7 +152,7 @@ class IDU extends Module {
   when((typeII && (funct3(2, 1) === "b01".U)) || (typeR && (funct3(2, 1) === "b01".U) && (funct7 === "b0000000".U))) {
     // I:SLTI/SLTIU R:SLT/SLTU
     io_alu.aluSel := 1.U
-  }.elsewhen((typeII && (funct3(1, 0) === "b01".U)) || (typeR && (funct3(1, 0) === "b01".U) && (funct7(6) === "b0".U) && (funct7(4, 0) === "00000".U))) {
+  }.elsewhen((typeII && (funct3(1, 0) === "b01".U)) || (typeR && (funct3(1, 0) === "b01".U) && (funct7(6) === "b0".U) && (funct7(4, 0) === "b00000".U))) {
     // I:SLLI/SRLI/SRAI/SRLIW/SLLIW/SRAIW R:SLL/SRL/SRA/SLLW/SRLW/SRAW
     io_alu.aluSel := 2.U
   }.elsewhen((typeII && (funct3 === "b111".U)) || (typeR && (funct3 === "b111".U) && (funct7 === "b0000000".U))) {
