@@ -17,9 +17,7 @@ class Top extends Module {
     val length    = Output(UInt(2.W))
   })
 
-  // default nextpc = pc + 4
-  val nextpcDefault = Wire(UInt(64.W))
-  nextpcDefault := IFUInst.io.pc + 4.U
+  
 
   // IO
   io.instAddr := IFUInst.io.pc
@@ -31,6 +29,10 @@ class Top extends Module {
 
   // IFU
   val IFUInst = Module(new IFU)
+  // default nextpc = pc + 4
+  val nextpcDefault = Wire(UInt(64.W))
+  nextpcDefault := IFUInst.io.pc + 4.U
+  
   IFUInst.io.nextpc   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
   IFUInst.io.instGet  := io.instData
 
