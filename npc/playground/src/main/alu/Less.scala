@@ -19,7 +19,7 @@ class Less extends Module {
   // unsigned
   val unsignResult = Wire(Bool())
   unsignResult := (io.data1 < io.data2)
-
+  
   // signed
   val signedResult = Wire(Bool())
   // when sign is different, inverse the result
