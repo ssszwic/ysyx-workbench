@@ -17,7 +17,16 @@ class Top extends Module {
     val length    = Output(UInt(2.W))
   })
 
-  
+  // declare module
+  val IFUInst = Module(new IFU)
+  val IDUInst = Module(new IDU)
+  val RegFilesInst = Module(new RegFiles)
+  val ALUInst = Module(new ALU)
+  val MemExtendsInst = Module(new MemExtends)
+
+  // default nextpc = pc + 4
+  val nextpcDefault = Wire(UInt(64.W))
+  nextpcDefault := IFUInst.io.pc + 4.U
 
   // IO
   io.instAddr := IFUInst.io.pc
@@ -28,20 +37,13 @@ class Top extends Module {
   io.length   := IDUInst.io.lengthMem
 
   // IFU
-  val IFUInst = Module(new IFU)
-  // default nextpc = pc + 4
-  val nextpcDefault = Wire(UInt(64.W))
-  nextpcDefault := IFUInst.io.pc + 4.U
-  
   IFUInst.io.nextpc   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
   IFUInst.io.instGet  := io.instData
 
   // IDU
-  val IDUInst = Module(new IDU)
   IDUInst.io.inst := IFUInst.io.inst
 
   // RegFiles
-  val RegFilesInst = Module(new RegFiles)
   RegFilesInst.io.rs1Addr := IDUInst.io.rs1Addr
   RegFilesInst.io.rs2Addr := IDUInst.io.rs2Addr
   RegFilesInst.io.wen     := IDUInst.io.wenReg
@@ -50,7 +52,6 @@ class Top extends Module {
                                   Mux(IDUInst.io.loadMem, MemExtendsInst.io.result, ALUInst.io.result))
 
   // ALU
-  val ALUInst = Module(new ALU)
   ALUInst.io.rs1  := RegFilesInst.io.rs1Data
   ALUInst.io.rs2  := RegFilesInst.io.rs2Data
   ALUInst.io.imme := IDUInst.io.imme
@@ -58,7 +59,6 @@ class Top extends Module {
   ALUInst.io_alu  <> IDUInst.io_alu
 
   // MemExtends
-  val MemExtendsInst = Module(new MemExtends)
   MemExtendsInst.io.data      := io.rData
   MemExtendsInst.io.lengthMem := IDUInst.io.lengthMem
   MemExtendsInst.io.unsignMem := IDUInst.io.unsignMem
