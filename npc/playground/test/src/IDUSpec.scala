@@ -14,6 +14,7 @@ object IDUSpec extends ChiselUtestTester {
           println(dut.io.peek())
           println(dut.io_alu.peek())
       }
+      println("SUCCESS!")
     }
   }
 }
