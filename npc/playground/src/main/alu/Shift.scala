@@ -15,5 +15,15 @@ class Shift extends Module {
     val result    = Output(UInt(64.W))
   })
 
+  when(io.rightSel) {
+    when(io.arithSel) {
+      io.result := io.data1 >> io.data2(5, 0)
+    }.otherwise {
+      io.result := io.data1.asSInt >> io.data2(5, 0)
+    }
+  }.otherwise {
+    io.result := io.data1 << io.data2(5, 0)
+  }
+
 }
 
