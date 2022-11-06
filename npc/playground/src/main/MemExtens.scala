@@ -6,7 +6,7 @@ import chisel3.util._
 class MemExtends extends Module {
   val io = IO(new Bundle {
     // control
-    val lengthMem = Input(Bool())
+    val lengthMem = Input(UInt(2.W))
     val unsignMem = Input(Bool())
     // data flow
     val data      = Input(UInt(64.W))
@@ -19,9 +19,7 @@ class MemExtends extends Module {
     io.result := Mux(io.unsignMem, Cat(Fill(48, 0.U), io.data(15, 0)), Cat(Fill(48, io.data(15)), io.data(15, 0)))
   }.elsewhen(io.lengthMem === 2.U) {
     io.result := Mux(io.unsignMem, Cat(Fill(32, 0.U), io.data(31, 0)), Cat(Fill(32, io.data(31)), io.data(31, 0)))
-  }.elsewhen(io.lengthMem === 3.U) {
-    io.result := io.data
   }.otherwise {
-    io.result := 0.U
+    io.result := io.data
   }
 }
