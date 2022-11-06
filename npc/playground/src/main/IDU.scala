@@ -175,7 +175,7 @@ class IDU extends Module {
   io_alu.typeJSel := typeJ
   io_alu.immeSel := ~typeR
   // BEQ/BNE
-  io_alu.typeBEqSel := typeB && (funct3 === "b00?".U)
+  io_alu.typeBEqSel := typeB && (funct3(2, 1) === "b00".U)
   // JARL
   io_alu.jalrSel := (op5 === "b11001".U) && (funct3 === "b000".U)
   // SUB/SUBW
