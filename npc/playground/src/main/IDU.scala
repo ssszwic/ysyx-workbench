@@ -132,7 +132,7 @@ class IDU extends Module {
   typeIL := (op5 === "b00000".U)
   typeIJ := (op5 === "b11011".U)
 
-  typeR := (op5 === "b011?0".U)
+  typeR := (op5(4, 2) === "b011".U) && (op5(0) === "b0".U)
   typeI := typeII || typeIL || typeIJ
   typeS := (op5 === "b01000".U)
   typeB := (op5 === "b11000".U)
@@ -149,10 +149,10 @@ class IDU extends Module {
   io.rdAddr  := io.inst(11, 7)
 
   // ALU control signal
-  when((typeII && (funct3 === "b01?".U)) || (typeR && (funct3 === "b01?".U) && (funct7 === "b0000000".U))) {
+  when((typeII && (funct3(2, 1) === "b01".U)) || (typeR && (funct3(2, 1) === "b01".U) && (funct7 === "b0000000".U))) {
     // I:SLTI/SLTIU R:SLT/SLTU
     io_alu.aluSel := 1.U
-  }.elsewhen((typeII && (funct3 === "b?01".U)) || (typeR && (funct3 === "b?01".U) && (funct7 === "b0?00000".U))) {
+  }.elsewhen((typeII && (funct3(1, 0) === "b01".U)) || (typeR && (funct3(1, 0) === "b01".U) && (funct7(6) === "b0".U) && (funct7(4, 0) === "00000".U))) {
     // I:SLLI/SRLI/SRAI/SRLIW/SLLIW/SRAIW R:SLL/SRL/SRA/SLLW/SRLW/SRAW
     io_alu.aluSel := 2.U
   }.elsewhen((typeII && (funct3 === "b111".U)) || (typeR && (funct3 === "b111".U) && (funct7 === "b0000000".U))) {
@@ -181,13 +181,13 @@ class IDU extends Module {
   // SUB/SUBW
   io_alu.subSel := typeR && (funct3 === "b000".U) && (funct7 === "b0100000".U)
   // BGE/BGEU
-  io_alu.geSel := typeB && (funct3 === "b1?1".U)
+  io_alu.geSel := typeB && (funct3(2) === "b1".U && funct3(0) === "b1".U)
   // R:SLTU I:SLTIU B:BLTU/BGEU
   io_alu.unsignSel := (typeB && (funct3 === "b011".U)) || (typeII && (funct3 === "b011".U)) || (typeR && (funct3 === "b011".U) && (funct7 === "b0000000".U))
   // BNE
   io_alu.neqSel := typeB && (funct3 === "b001".U)
   // I:SRLI/SRLIW/SRAI/SRAIW R:SRL/SRLW/SRA/SRAW
-  io_alu.rightSel := (typeII && (funct3 === "b101".U)) || (typeR && (funct3 === "b101".U) && (funct7 === "b0?00000".U))
+  io_alu.rightSel := (typeII && (funct3 === "b101".U)) || (typeR && (funct3 === "b101".U) && (funct7(6) === "b0".U) && (funct7(4, 0) === "b00000".U))
   // I:SRAI/SRAIW R:SRA/SRAW
   io_alu.arithSel := (typeII && (funct3 === "b101".U) && funct7(5)) || (typeR && (funct3 === "b101".U) && (funct7 === "b0100000".U))
   // I:ADDIW/SLLIW/SRAIW/SRLIW R:ADDW/SUBW/SLLW/SRAW/SRLW
