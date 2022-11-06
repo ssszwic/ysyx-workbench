@@ -11,7 +11,7 @@ verilog:
 	mill -i __.test.runMain main.Elaborate -td $(BUILD_DIR) 
 
 help:
-	mill -i __.test.runMain Elaborate --help
+	mill -i __.test.runMain main.Elaborate --help
 
 compile:
 	mill -i __.compile
