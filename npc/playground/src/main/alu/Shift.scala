@@ -19,7 +19,7 @@ class Shift extends Module {
   val data1 = Wire(UInt(64.W))
 
   when(io.wordSel) {
-    data1 := Mux(io.arithSel, Cat(Fill(32, result(31))), Cat(Fill(32, 0.U(1.W))))
+    data1 := Mux(io.arithSel, Cat(Fill(32, io.data1(31))), Cat(Fill(32, 0.U(1.W))))
   }.otherwise {
     data1 := io.data1
   }
