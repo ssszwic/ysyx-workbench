@@ -19,7 +19,7 @@ class Shift extends Module {
     when(io.arithSel) {
       io.result := io.data1 >> io.data2(5, 0)
     }.otherwise {
-      io.result := io.data1.asSInt >> io.data2(5, 0)
+      io.result := (io.data1.asSInt >> io.data2(5, 0)).asUInt
     }
   }.otherwise {
     io.result := io.data1 << io.data2(5, 0)
