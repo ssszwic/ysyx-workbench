@@ -15,15 +15,25 @@ class Shift extends Module {
     val result    = Output(UInt(64.W))
   })
 
-  when(io.rightSel) {
-    when(io.arithSel) {
-      io.result := io.data1 >> io.data2(5, 0)
-    }.otherwise {
-      io.result := (io.data1.asSInt >> io.data2(5, 0)).asUInt
-    }
+  val result = Wire(UInt(64.W))
+  val data1 = Wire(UInt(64.W))
+
+  when(io.wordSel) {
+    data1 := Mux(io.arithSel, Cat(Fill(32, result(31))), Cat(Fill(32, 0.U(1.W))))
   }.otherwise {
-    io.result := io.data1 << io.data2(5, 0)
+    data1 := io.data1
   }
 
+  when(io.rightSel) {
+    when(io.arithSel) {
+      result := data1 >> Mux(io.wordSel, io.data2(4, 0), io.data2(5, 0))
+    }.otherwise {
+      result := (data1.asSInt >> Mux(io.wordSel, io.data2(4, 0), io.data2(5, 0))).asUInt
+    }
+  }.otherwise {
+    result := data1 << io.data2(5, 0)
+  }
+
+  io.result := Mux(io.wordSel, Cat(Fill(32, result(31))), result)
 }
 
