@@ -31,7 +31,7 @@ class Shift extends Module {
       result := (data1.asSInt >> Mux(io.wordSel, io.data2(4, 0), io.data2(5, 0))).asUInt
     }
   }.otherwise {
-    result := data1 << io.data2(5, 0)
+    result := data1 << Mux(io.wordSel, io.data2(4, 0), io.data2(5, 0))
   }
 
   io.result := Mux(io.wordSel, Cat(Fill(32, result(31))), result)
