@@ -8,7 +8,7 @@ test:
 verilog:
 	$(call git_commit, "generate verilog")
 	mkdir -p $(BUILD_DIR)
-	mill -i __.test.runMain main.Elaborate -td $(BUILD_DIR)
+	mill -i __.test.runMain main.Elaborate -td $(BUILD_DIR) --throw-on-first-error
 
 help:
 	mill -i __.test.runMain Elaborate --help
