@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-//#define CONFIG_WAVE_ON
+#define CONFIG_WAVE_ON
 
 // mem
 #define CONFIG_MSIZE 0x8000000

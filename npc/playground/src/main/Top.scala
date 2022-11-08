@@ -14,6 +14,7 @@ class Top extends Module {
     val wData     = Output(UInt(64.W))
     val wAddr     = Output(UInt(64.W))
     val wen       = Output(Bool())
+    val ren       = Output(Bool())
     val length    = Output(UInt(2.W))
   })
 
@@ -34,6 +35,7 @@ class Top extends Module {
   io.wData    := RegFilesInst.io.rs2Data
   io.wAddr    := ALUInst.io.result
   io.wen      := IDUInst.io.wenMem
+  io.ren      := IDUInst.io.renMem
   io.length   := IDUInst.io.lengthMem
 
   // IFU
@@ -49,7 +51,7 @@ class Top extends Module {
   RegFilesInst.io.wen     := IDUInst.io.wenReg
   RegFilesInst.io.wAddr   := IDUInst.io.rdAddr
   RegFilesInst.io.wData   := Mux(IDUInst.io.jumpSel, nextpcDefault, 
-                                  Mux(IDUInst.io.loadMem, MemExtendsInst.io.result, ALUInst.io.result))
+                                  Mux(IDUInst.io.renMem, MemExtendsInst.io.result, ALUInst.io.result))
 
   // ALU
   ALUInst.io.rs1  := RegFilesInst.io.rs1Data

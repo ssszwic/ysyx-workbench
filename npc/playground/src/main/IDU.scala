@@ -100,7 +100,7 @@ class IDU extends Module {
     val imme      = Output(UInt(64.W))  // immediate with sign expandsion
     // Mem control
     val wenMem    = Output(Bool())
-    val loadMem   = Output(Bool())
+    val renMem   = Output(Bool())
     val lengthMem = Output(UInt(2.W))
     val unsignMem = Output(Bool())
     // Unconditional Jump for jal or jarl
@@ -196,7 +196,7 @@ class IDU extends Module {
 
   // Mem control
   io.wenMem := typeS
-  io.loadMem := typeIL
+  io.renMem := typeIL
   // 0=>LB/LBU 1=>LH/LHU 2=>LW/LWU 3=>LD
   io.lengthMem := funct3(1, 0)
   // LWU/LHU/LBU

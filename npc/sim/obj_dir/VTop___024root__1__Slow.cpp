@@ -6132,86 +6132,102 @@ void VTop___024root___settle__TOP__4(VTop___024root* vlSelf) {
             = ((0x3ffU & (IData)(vlSelf->Top__DOT__IDUInst__DOT____Vtogcov__io_imme_imme1)) 
                | (0x400U & (IData)(vlSelf->Top__DOT__IDUInst__DOT___GEN_0)));
     }
-    vlSelf->Top__DOT__RegFilesInst_io_rs1Data = ((0x1fU 
+    vlSelf->Top__DOT__RegFilesInst_io_rs1Data = ((0U 
                                                   == 
                                                   (0x1fU 
                                                    & (IData)(
                                                              (vlSelf->io_instData 
                                                               >> 0xfU))))
-                                                  ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_31
+                                                  ? 0ULL
                                                   : 
-                                                 ((0x1eU 
+                                                 ((0x1fU 
                                                    == 
                                                    (0x1fU 
                                                     & (IData)(
                                                               (vlSelf->io_instData 
                                                                >> 0xfU))))
-                                                   ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_30
+                                                   ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_31
                                                    : 
-                                                  ((0x1dU 
+                                                  ((0x1eU 
                                                     == 
                                                     (0x1fU 
                                                      & (IData)(
                                                                (vlSelf->io_instData 
                                                                 >> 0xfU))))
-                                                    ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_29
+                                                    ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_30
                                                     : 
-                                                   ((0x1cU 
+                                                   ((0x1dU 
                                                      == 
                                                      (0x1fU 
                                                       & (IData)(
                                                                 (vlSelf->io_instData 
                                                                  >> 0xfU))))
-                                                     ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_28
+                                                     ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_29
                                                      : 
-                                                    ((0x1bU 
+                                                    ((0x1cU 
                                                       == 
                                                       (0x1fU 
                                                        & (IData)(
                                                                  (vlSelf->io_instData 
                                                                   >> 0xfU))))
-                                                      ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_27
-                                                      : Top__DOT__RegFilesInst__DOT___GEN_26)))));
-    vlSelf->Top__DOT__RegFilesInst_io_rs2Data = ((0x1fU 
+                                                      ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_28
+                                                      : 
+                                                     ((0x1bU 
+                                                       == 
+                                                       (0x1fU 
+                                                        & (IData)(
+                                                                  (vlSelf->io_instData 
+                                                                   >> 0xfU))))
+                                                       ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_27
+                                                       : Top__DOT__RegFilesInst__DOT___GEN_26))))));
+    vlSelf->Top__DOT__RegFilesInst_io_rs2Data = ((0U 
                                                   == 
                                                   (0x1fU 
                                                    & (IData)(
                                                              (vlSelf->io_instData 
                                                               >> 0x14U))))
-                                                  ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_31
+                                                  ? 0ULL
                                                   : 
-                                                 ((0x1eU 
+                                                 ((0x1fU 
                                                    == 
                                                    (0x1fU 
                                                     & (IData)(
                                                               (vlSelf->io_instData 
                                                                >> 0x14U))))
-                                                   ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_30
+                                                   ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_31
                                                    : 
-                                                  ((0x1dU 
+                                                  ((0x1eU 
                                                     == 
                                                     (0x1fU 
                                                      & (IData)(
                                                                (vlSelf->io_instData 
                                                                 >> 0x14U))))
-                                                    ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_29
+                                                    ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_30
                                                     : 
-                                                   ((0x1cU 
+                                                   ((0x1dU 
                                                      == 
                                                      (0x1fU 
                                                       & (IData)(
                                                                 (vlSelf->io_instData 
                                                                  >> 0x14U))))
-                                                     ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_28
+                                                     ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_29
                                                      : 
-                                                    ((0x1bU 
+                                                    ((0x1cU 
                                                       == 
                                                       (0x1fU 
                                                        & (IData)(
                                                                  (vlSelf->io_instData 
                                                                   >> 0x14U))))
-                                                      ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_27
-                                                      : Top__DOT__RegFilesInst__DOT___GEN_58)))));
+                                                      ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_28
+                                                      : 
+                                                     ((0x1bU 
+                                                       == 
+                                                       (0x1fU 
+                                                        & (IData)(
+                                                                  (vlSelf->io_instData 
+                                                                   >> 0x14U))))
+                                                       ? vlSelf->Top__DOT__RegFilesInst__DOT__regFiles_27
+                                                       : Top__DOT__RegFilesInst__DOT___GEN_58))))));
     if ((1U & ((IData)(vlSelf->Top__DOT__IDUInst_io_alu_aluSel) 
                ^ (IData)(vlSelf->Top__DOT____Vtogcov__IDUInst_io_alu_aluSel)))) {
         ++(vlSymsp->__Vcoverage[585]);
@@ -20063,25 +20079,5 @@ void VTop___024root___settle__TOP__4(VTop___024root* vlSelf) {
                | ((QData)((IData)((1U & (IData)((vlSelf->Top__DOT__IFUInst_io_nextpc 
                                                  >> 0x18U))))) 
                   << 0x18U));
-    }
-    if ((1U & ((IData)((vlSelf->Top__DOT__IFUInst_io_nextpc 
-                        >> 0x19U)) ^ (IData)((vlSelf->Top__DOT____Vtogcov__IFUInst_io_nextpc 
-                                              >> 0x19U))))) {
-        ++(vlSymsp->__Vcoverage[414]);
-        vlSelf->Top__DOT____Vtogcov__IFUInst_io_nextpc 
-            = ((0xfffffffffdffffffULL & vlSelf->Top__DOT____Vtogcov__IFUInst_io_nextpc) 
-               | ((QData)((IData)((1U & (IData)((vlSelf->Top__DOT__IFUInst_io_nextpc 
-                                                 >> 0x19U))))) 
-                  << 0x19U));
-    }
-    if ((1U & ((IData)((vlSelf->Top__DOT__IFUInst_io_nextpc 
-                        >> 0x1aU)) ^ (IData)((vlSelf->Top__DOT____Vtogcov__IFUInst_io_nextpc 
-                                              >> 0x1aU))))) {
-        ++(vlSymsp->__Vcoverage[415]);
-        vlSelf->Top__DOT____Vtogcov__IFUInst_io_nextpc 
-            = ((0xfffffffffbffffffULL & vlSelf->Top__DOT____Vtogcov__IFUInst_io_nextpc) 
-               | ((QData)((IData)((1U & (IData)((vlSelf->Top__DOT__IFUInst_io_nextpc 
-                                                 >> 0x1aU))))) 
-                  << 0x1aU));
     }
 }
