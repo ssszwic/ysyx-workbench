@@ -17,8 +17,8 @@ class RegFiles extends Module {
 
   val regFiles = RegInit(VecInit(Seq.fill(32)(0.U(64.W))))
 
-  io.rs1Data := regFiles(io.rs1Addr)
-  io.rs2Data := regFiles(io.rs2Addr)
+  io.rs1Data := Mux(io.rs1Addr === 0.U, 0.U, regFiles(io.rs1Addr))
+  io.rs2Data := Mux(io.rs2Addr === 0.U, 0.U, regFiles(io.rs2Addr))
 
   when(io.wen) {
     regFiles(io.wAddr) := io.wData

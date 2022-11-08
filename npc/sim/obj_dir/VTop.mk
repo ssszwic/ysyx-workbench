@@ -35,17 +35,22 @@ VM_PREFIX = VTop
 VM_MODPREFIX = VTop
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
+	-I /home/ssszw/Work/ysyx-workbench/npc/sim/include -Wall -Werror \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
+	inst \
+	mem \
 	sim_main \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
 	/home/ssszw/Work/ysyx-workbench/npc/sim/src \
+	/home/ssszw/Work/ysyx-workbench/npc/sim/src/isa \
+	/home/ssszw/Work/ysyx-workbench/npc/sim/src/mem \
 
 
 ### Default rules...
@@ -57,6 +62,10 @@ include $(VERILATOR_ROOT)/include/verilated.mk
 ### Executable rules... (from --exe)
 VPATH += $(VM_USER_DIR)
 
+inst.o: /home/ssszw/Work/ysyx-workbench/npc/sim/src/isa/inst.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
+mem.o: /home/ssszw/Work/ysyx-workbench/npc/sim/src/mem/mem.cpp
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 sim_main.o: /home/ssszw/Work/ysyx-workbench/npc/sim/src/sim_main.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST) -c -o $@ $<
 

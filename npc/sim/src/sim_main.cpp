@@ -3,36 +3,54 @@
 #include <memory>
 #include <verilated.h>
 #include "VTop.h"
+#include "commen.h"
+#include "mem/mem.h"
 
 VerilatedContext* contextp = NULL;
-// VerilatedVcdC* tfp = NULL;
+#ifdef CONFIG_WAVE_ON
+VerilatedVcdC* tfp = NULL;
+#endif
 
 static VTop* top;
 
 void sim_init(){
     contextp = new VerilatedContext;
     top = new VTop;
-    // tfp = new VerilatedVcdC;
-    // contextp->traceEverOn(true);
-    // top->trace(tfp, 0);
-    // tfp->open("dump.vcd");
+#ifdef CONFIG_WAVE_ON
+    tfp = new VerilatedVcdC;
+    contextp->traceEverOn(true);
+    top->trace(tfp, 0);
+    tfp->open("wave.vcd");
+#endif
 }
+
+void isa_init();
+void init();
 
 void step_and_dump_wave(){
   top->eval();
   contextp->timeInc(1);
-  // tfp->dump(contextp->time());
+#ifdef CONFIG_WAVE_ON
+  tfp->dump(contextp->time());
+#endif
 }
 
 void sim_exit(){
   step_and_dump_wave();
-  // tfp->close();
+#ifdef CONFIG_WAVE_ON
+  tfp->close();
+#endif
 }
 
 int main(int argc, char** argv, char** env) {
     sim_init();
+    init();
 
     step_and_dump_wave();
 
     sim_exit();
+}
+
+void init() {
+  isa_init();
 }
