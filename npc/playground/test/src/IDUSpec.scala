@@ -10,9 +10,9 @@ object IDUSpec extends ChiselUtestTester {
   val tests = Tests {
     test("IDU") {
       testCircuit(new IDU) { dut =>
-          dut.io.inst.poke("h03313423".U)
-          println(dut.io.peek())
-          println(dut.io_alu.peek())
+          // dut.io.inst.poke("h03313423".U)
+          // println(dut.io.peek())
+          // println(dut.io_alu.peek())
       }
       println("SUCCESS!")
     }
