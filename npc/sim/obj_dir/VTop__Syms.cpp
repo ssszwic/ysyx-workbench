@@ -23,4 +23,7 @@ VTop__Syms::VTop__Syms(VerilatedContext* contextp, const char* namep,VTop* model
     // Setup each module's pointers to their submodules
     // Setup each module's pointer back to symbol table (for public functions)
     TOP.__Vconfigure(this, true);
+    // Setup export functions
+    for (int __Vfinal=0; __Vfinal<2; __Vfinal++) {
+    }
 }

@@ -4,10 +4,8 @@ module Ebreak(
 
 import "DPI-C" function int cpu_inst_ebreak();
 
-always @(*) begin
-  if(ebreak) begin
-    cpu_inst_ebreak();
-  end
-end
+wire return;
+
+assign return = cpu_inst_ebreak();
 
 endmodule

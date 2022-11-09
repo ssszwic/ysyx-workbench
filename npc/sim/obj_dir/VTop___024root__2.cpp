@@ -5,6 +5,8 @@
 #include "VTop___024root.h"
 #include "VTop__Syms.h"
 
+#include "verilated_dpi.h"
+
 void VTop___024root___combo__TOP__2(VTop___024root* vlSelf);
 void VTop___024root___sequent__TOP__6(VTop___024root* vlSelf);
 void VTop___024root___sequent__TOP__7(VTop___024root* vlSelf);

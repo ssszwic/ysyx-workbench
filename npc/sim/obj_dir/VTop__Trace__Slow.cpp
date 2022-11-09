@@ -145,10 +145,10 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declBit(c+14,"Top IDUInst io_alu_rightSel", false,-1);
         tracep->declBit(c+15,"Top IDUInst io_alu_arithSel", false,-1);
         tracep->declBit(c+16,"Top IDUInst io_alu_wordSel", false,-1);
-        tracep->declBit(c+164,"Top IDUInst EbreakInst_b", false,-1);
-        tracep->declBus(c+167,"Top IDUInst funct3", false,-1, 2,0);
-        tracep->declBus(c+168,"Top IDUInst funct7", false,-1, 6,0);
-        tracep->declBus(c+169,"Top IDUInst op5", false,-1, 4,0);
+        tracep->declBit(c+167,"Top IDUInst EbreakInst_ebreak", false,-1);
+        tracep->declBus(c+168,"Top IDUInst funct3", false,-1, 2,0);
+        tracep->declBus(c+169,"Top IDUInst funct7", false,-1, 6,0);
+        tracep->declBus(c+170,"Top IDUInst op5", false,-1, 4,0);
         tracep->declBit(c+28,"Top IDUInst typeII", false,-1);
         tracep->declBit(c+161,"Top IDUInst typeIL", false,-1);
         tracep->declBit(c+164,"Top IDUInst typeIJ", false,-1);
@@ -157,15 +157,14 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declBit(c+160,"Top IDUInst typeS", false,-1);
         tracep->declBit(c+165,"Top IDUInst typeB", false,-1);
         tracep->declBit(c+31,"Top IDUInst typeU", false,-1);
-        tracep->declQuad(c+170,"Top IDUInst io_imme_imme0", false,-1, 32,0);
+        tracep->declQuad(c+171,"Top IDUInst io_imme_imme0", false,-1, 32,0);
         tracep->declBus(c+32,"Top IDUInst io_imme_imme2", false,-1, 7,0);
         tracep->declBit(c+33,"Top IDUInst io_imme_imme3", false,-1);
         tracep->declBus(c+34,"Top IDUInst io_imme_imme4", false,-1, 5,0);
         tracep->declBus(c+35,"Top IDUInst io_imme_imme5", false,-1, 3,0);
         tracep->declBit(c+36,"Top IDUInst io_imme_imme6", false,-1);
         tracep->declBus(c+37,"Top IDUInst io_imme_imme1", false,-1, 10,0);
-        tracep->declBit(c+164,"Top IDUInst EbreakInst b", false,-1);
-        tracep->declBit(c+164,"Top IDUInst EbreakInst a", false,-1);
+        tracep->declBit(c+167,"Top IDUInst EbreakInst ebreak", false,-1);
         tracep->declBit(c+138,"Top RegFilesInst clock", false,-1);
         tracep->declBit(c+139,"Top RegFilesInst reset", false,-1);
         tracep->declBus(c+157,"Top RegFilesInst io_rs1Addr", false,-1, 4,0);
@@ -440,15 +439,16 @@ void VTop___024root__traceFullSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->fullBit(oldp+166,((5U == (0x1fU & (IData)(
                                                           (vlSelf->io_instData 
                                                            >> 2U))))));
-        tracep->fullCData(oldp+167,((7U & (IData)((vlSelf->io_instData 
+        tracep->fullBit(oldp+167,((0x100073U == (IData)(vlSelf->io_instData))));
+        tracep->fullCData(oldp+168,((7U & (IData)((vlSelf->io_instData 
                                                    >> 0xcU)))),3);
-        tracep->fullCData(oldp+168,((0x7fU & (IData)(
+        tracep->fullCData(oldp+169,((0x7fU & (IData)(
                                                      (vlSelf->io_instData 
                                                       >> 0x19U)))),7);
-        tracep->fullCData(oldp+169,((0x1fU & (IData)(
+        tracep->fullCData(oldp+170,((0x1fU & (IData)(
                                                      (vlSelf->io_instData 
                                                       >> 2U)))),5);
-        tracep->fullQData(oldp+170,(((1U & (IData)(
+        tracep->fullQData(oldp+171,(((1U & (IData)(
                                                    (vlSelf->io_instData 
                                                     >> 0x1fU)))
                                       ? 0x1ffffffffULL

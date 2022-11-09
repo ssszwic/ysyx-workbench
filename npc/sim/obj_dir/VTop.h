@@ -10,6 +10,7 @@
 
 #include "verilated_heavy.h"
 #include "verilated_cov.h"
+#include "svdpi.h"
 
 class VTop__Syms;
 class VTop___024root;

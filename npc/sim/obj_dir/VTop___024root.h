@@ -148,6 +148,7 @@ VL_MODULE(VTop___024root) {
         CData/*0:0*/ Top__DOT____Vtogcov__IDUInst_io_alu_arithSel;
         CData/*0:0*/ Top__DOT____Vtogcov__IDUInst_io_alu_wordSel;
         CData/*0:0*/ Top__DOT____Vtogcov__ALUInst_io_nextpcSel;
+        CData/*0:0*/ Top__DOT__IDUInst__DOT____Vtogcov__EbreakInst_ebreak;
         CData/*0:0*/ Top__DOT__IDUInst__DOT____Vtogcov__typeII;
         CData/*0:0*/ Top__DOT__IDUInst__DOT____Vtogcov__typeR;
         CData/*0:0*/ Top__DOT__IDUInst__DOT____Vtogcov__typeI;
@@ -187,9 +188,9 @@ VL_MODULE(VTop___024root) {
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_3;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_4;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_5;
-        QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_6;
     };
     struct {
+        QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_6;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_7;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_8;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_9;

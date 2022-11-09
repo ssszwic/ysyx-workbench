@@ -16,6 +16,8 @@
 // INCLUDE MODULE CLASSES
 #include "VTop___024root.h"
 
+// DPI TYPES for DPI Export callbacks (Internal use)
+
 // SYMS CLASS (contains all model state)
 class VTop__Syms final : public VerilatedSyms {
   public:
@@ -29,7 +31,7 @@ class VTop__Syms final : public VerilatedSyms {
     VTop___024root                 TOP;
 
     // COVERAGE
-    uint32_t __Vcoverage[4107];
+    uint32_t __Vcoverage[4111];
 
     // CONSTRUCTORS
     VTop__Syms(VerilatedContext* contextp, const char* namep, VTop* modelp);
