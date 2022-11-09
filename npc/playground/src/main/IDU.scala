@@ -207,7 +207,7 @@ class IDU extends Module {
   // other control
   io.jumpSel := typeJ || typeIJ
 
-  val EbreakInst = new Ebreak
+  val EbreakInst = Module(new Ebreak)
   EbreakInst.io.b := io.jumpSel
 }
 
