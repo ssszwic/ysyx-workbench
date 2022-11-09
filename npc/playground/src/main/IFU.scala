@@ -8,15 +8,18 @@ class IFU extends Module {
     val nextpc    = Input(UInt(64.W))
     val pcEn      = Input(Bool())
     val inst      = Output(UInt(32.W))
+    val pc        = Output(UInt(64.W))
   })
 
   val pc = RegInit("h80000000".U(64.W))
   pc := Mux(io.pcEn, io.nextpc, pc)
 
+  io.pc := pc
+
   val addrAlig = Wire(UInt(64.W))
   addrAlig := Cat(pc(63, 3), Fill(3, 0.U(1.W)))
 
-  val MemInst_instruction = Module(new main.Mem)
+  val MemInst_instruction = Module(new Mem)
   MemInst_instruction.io.ren    := true.B
   MemInst_instruction.io.addr   := addrAlig
   MemInst_instruction.io.wen    := false.B

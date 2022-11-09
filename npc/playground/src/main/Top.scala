@@ -7,9 +7,6 @@ class Top extends Module {
   val io = IO(new Bundle {
     // control 
     val cpuEn     = Input(Bool())
-    // inst Memory
-    val instData  = Input(UInt(64.W))
-    val instAddr  = Output(UInt(64.W))
   })
 
   // declare module
@@ -23,8 +20,6 @@ class Top extends Module {
   val nextpcDefault = Wire(UInt(64.W))
   nextpcDefault := IFUInst.io.pc + 4.U
 
-  // IO
-  io.instAddr := IFUInst.io.pc
 
   // MemCtrlInst
   MemCtrlInst.io.wData  := RegFilesInst.io.rs2Data
@@ -36,7 +31,6 @@ class Top extends Module {
 
   // IFU
   IFUInst.io.nextpc   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
-  IFUInst.io.instGet  := io.instData
   IFUInst.io.pcEn     := io.cpuEn
 
   // IDU
