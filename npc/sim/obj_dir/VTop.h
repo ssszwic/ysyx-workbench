@@ -16,6 +16,7 @@ class VTop__Syms;
 class VTop___024root;
 class VerilatedVcdC;
 class VTop_VerilatedVcd;
+class VTop_MemVirtual;
 
 
 // This class is the main interface to the Verilated model
@@ -32,19 +33,12 @@ class VTop VL_NOT_FINAL {
     VL_IN8(&clock,0,0);
     VL_IN8(&reset,0,0);
     VL_IN8(&io_cpuEn,0,0);
-    VL_IN64(&io_instData,63,0);
-    VL_OUT64(&io_instAddr,63,0);
-    VL_IN64(&io_rData,63,0);
-    VL_OUT64(&io_rAddr,63,0);
-    VL_OUT64(&io_wData,63,0);
-    VL_OUT64(&io_wAddr,63,0);
-    VL_OUT8(&io_wen,0,0);
-    VL_OUT8(&io_ren,0,0);
-    VL_OUT8(&io_length,1,0);
 
     // CELLS
     // Public to allow access to /* verilator public */ items.
     // Otherwise the application code can consider these internals.
+    VTop_MemVirtual* const __PVT__Top__DOT__IFUInst__DOT__MemVirtualInst_instr;
+    VTop_MemVirtual* const __PVT__Top__DOT__MemCtrlInst__DOT__MemInst_data;
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.

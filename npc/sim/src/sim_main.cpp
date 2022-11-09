@@ -16,18 +16,20 @@ VerilatedContext* contextp = NULL;
 VerilatedVcdC* tfp = NULL;
 #endif
 
-static VTop* top;
-static int state;
-
 enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
+
+static VTop* top;
+static int state = NPC_RUNNING;
+
+extern "C" void cpu_inst_ebreak() {
+  state = NPC_END;
+}
 
 // current file function
 void init();
 void sim_init();
 void eval_and_wave();
 void sim_exit();
-uint64_t cpu_read(paddr_t addr, int len_code);
-void cpu_write(paddr_t addr, int len_code, uint64_t data);
 
 void isa_init();
 
@@ -39,8 +41,7 @@ int main(int argc, char** argv, char** env) {
   top->io_cpuEn = 0;
   top->reset = 1;
   top->clock = 1;
-  top->io_instData = 0;
-  top->io_rData = 0;
+  eval_and_wave();
 
   while(contextp->time() < RESET_TIME) {
     top->clock = !top->clock;
@@ -59,13 +60,8 @@ int main(int argc, char** argv, char** env) {
       // enable cpu (avoid pc reg change)
       top->io_cpuEn = 1;
       // update inst
-      top->io_instData = cpu_read(top->io_instAddr, 2);
-      top->eval();
-      // read mem
-      if(top->io_ren) { top->io_rData = cpu_read(top->io_rAddr, top->io_length); }
-      // write mem
-      if(top->io_wen) { cpu_write(top->io_wAddr, top->io_length, top->io_wData); }
       eval_and_wave();
+      if (state == NPC_END) {sim_exit();}
     }
     // negedge clk
     else {
@@ -102,37 +98,9 @@ void eval_and_wave(){
 }
 
 void sim_exit(){
+  printf("save wave\n");
+  eval_and_wave();
   #ifdef CONFIG_WAVE_ON
     tfp->close();
   #endif
 }
-
-uint64_t cpu_read(paddr_t addr, int len_code) {
-  bool success = true;
-  int len = 0;
-  switch (len_code) {
-    case 0: len = 1; break;
-    case 1: len = 2; break;
-    case 2: len = 4; break;
-    case 3: len = 8; break;
-    default: printf("len_code=%d out of range!(0 1 2 3)\n", len_code); sim_exit(); assert(0);
-  }
-  uint64_t data = paddr_read(addr, len, &success);
-  if(!success) {sim_exit(); assert(0);}
-  return data;
-}
-
-void cpu_write(paddr_t addr, int len_code, uint64_t data) {
-  bool success = true;
-  int len = 0;
-  switch (len_code) {
-    case 0: len = 1; break;
-    case 1: len = 2; break;
-    case 2: len = 4; break;
-    case 3: len = 8; break;
-    default: printf("len_code=%d out of range!(0 1 2 3)\n", len_code); sim_exit(); assert(0);
-  }
-  paddr_write(addr, len, data, &success);
-  if(!success) {sim_exit(); assert(0);}
-}
-

@@ -12,26 +12,21 @@
 
 class VTop__Syms;
 class VTop_VerilatedVcd;
+class VTop_MemVirtual;
 
 
 //----------
 
 VL_MODULE(VTop___024root) {
   public:
+    // CELLS
+    VTop_MemVirtual* __PVT__Top__DOT__IFUInst__DOT__MemVirtualInst_instr;
+    VTop_MemVirtual* __PVT__Top__DOT__MemCtrlInst__DOT__MemInst_data;
 
     // PORTS
     VL_IN8(clock,0,0);
     VL_IN8(reset,0,0);
     VL_IN8(io_cpuEn,0,0);
-    VL_OUT8(io_wen,0,0);
-    VL_OUT8(io_ren,0,0);
-    VL_OUT8(io_length,1,0);
-    VL_IN64(io_instData,63,0);
-    VL_OUT64(io_instAddr,63,0);
-    VL_IN64(io_rData,63,0);
-    VL_OUT64(io_rAddr,63,0);
-    VL_OUT64(io_wData,63,0);
-    VL_OUT64(io_wAddr,63,0);
 
     // LOCAL SIGNALS
     // Anonymous structures to workaround compiler member-count bugs
@@ -63,15 +58,21 @@ VL_MODULE(VTop___024root) {
         CData/*0:0*/ Top__DOT__ALUInst__DOT__lessInst__DOT__unsignResult;
         CData/*0:0*/ Top__DOT__ALUInst__DOT__lessInst__DOT__signedResult;
         CData/*0:0*/ Top__DOT__ALUInst__DOT__lessInst__DOT__lessResult;
+        CData/*7:0*/ Top__DOT__MemCtrlInst__DOT__dataByte;
         SData/*11:0*/ Top__DOT__IDUInst__DOT___GEN_0;
+        SData/*10:0*/ Top__DOT__MemCtrlInst__DOT___GEN_2;
+        SData/*15:0*/ Top__DOT__MemCtrlInst__DOT__dataHalf;
+        IData/*31:0*/ Top__DOT__IFUInst_io_inst;
         VlWide<4>/*126:0*/ Top__DOT__ALUInst__DOT__shiftInst__DOT___GEN_2;
+        VlWide<3>/*78:0*/ Top__DOT__MemCtrlInst__DOT___wData_T_2;
+        IData/*31:0*/ Top__DOT__MemCtrlInst__DOT__dataWord;
         QData/*63:0*/ Top__DOT__IFUInst_io_nextpc;
         QData/*63:0*/ Top__DOT__IDUInst_io_imme;
         QData/*63:0*/ Top__DOT__RegFilesInst_io_wData;
         QData/*63:0*/ Top__DOT__RegFilesInst_io_rs1Data;
         QData/*63:0*/ Top__DOT__RegFilesInst_io_rs2Data;
         QData/*63:0*/ Top__DOT__ALUInst_io_result;
-        QData/*63:0*/ Top__DOT__MemExtendsInst_io_result;
+        QData/*63:0*/ Top__DOT__MemCtrlInst_io_rData;
         QData/*63:0*/ Top__DOT__IFUInst__DOT__pc;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_0;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_1;
@@ -94,14 +95,14 @@ VL_MODULE(VTop___024root) {
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_18;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_19;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_20;
+    };
+    struct {
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_21;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_22;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_23;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_24;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_25;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_26;
-    };
-    struct {
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_27;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_28;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_29;
@@ -111,6 +112,7 @@ VL_MODULE(VTop___024root) {
         QData/*63:0*/ Top__DOT__ALUInst__DOT__plusInst_io_data2;
         QData/*63:0*/ Top__DOT__ALUInst__DOT__plusInst_io_result;
         QData/*63:0*/ Top__DOT__ALUInst__DOT__lessInst_io_data2;
+        QData/*63:0*/ Top__DOT__ALUInst__DOT__shiftInst_io_data2;
         QData/*63:0*/ Top__DOT__ALUInst__DOT__shiftInst_io_result;
         QData/*63:0*/ Top__DOT__ALUInst__DOT__src2;
         QData/*63:0*/ Top__DOT__ALUInst__DOT__plusResultTmp2;
@@ -119,6 +121,7 @@ VL_MODULE(VTop___024root) {
         QData/*63:0*/ Top__DOT__ALUInst__DOT__orResult;
         QData/*63:0*/ Top__DOT__ALUInst__DOT__xorResult;
         QData/*63:0*/ Top__DOT__ALUInst__DOT__shiftInst__DOT__data1;
+        QData/*63:0*/ Top__DOT__MemCtrlInst__DOT__dataDoub;
     };
 
     // LOCAL VARIABLES
@@ -127,9 +130,6 @@ VL_MODULE(VTop___024root) {
         CData/*0:0*/ Top__DOT____Vtogcov__clock;
         CData/*0:0*/ Top__DOT____Vtogcov__reset;
         CData/*0:0*/ Top__DOT____Vtogcov__io_cpuEn;
-        CData/*0:0*/ Top__DOT____Vtogcov__io_wen;
-        CData/*0:0*/ Top__DOT____Vtogcov__io_ren;
-        CData/*1:0*/ Top__DOT____Vtogcov__io_length;
         CData/*0:0*/ Top__DOT____Vtogcov__IDUInst_io_wenReg;
         CData/*0:0*/ Top__DOT____Vtogcov__IDUInst_io_wenMem;
         CData/*0:0*/ Top__DOT____Vtogcov__IDUInst_io_renMem;
@@ -148,6 +148,7 @@ VL_MODULE(VTop___024root) {
         CData/*0:0*/ Top__DOT____Vtogcov__IDUInst_io_alu_arithSel;
         CData/*0:0*/ Top__DOT____Vtogcov__IDUInst_io_alu_wordSel;
         CData/*0:0*/ Top__DOT____Vtogcov__ALUInst_io_nextpcSel;
+        CData/*0:0*/ Top__DOT__IFUInst__DOT____Vtogcov__MemVirtualInst_instr_ren;
         CData/*0:0*/ Top__DOT__IDUInst__DOT____Vtogcov__EbreakInst_ebreak;
         CData/*0:0*/ Top__DOT__IDUInst__DOT____Vtogcov__typeII;
         CData/*0:0*/ Top__DOT__IDUInst__DOT____Vtogcov__typeR;
@@ -164,14 +165,13 @@ VL_MODULE(VTop___024root) {
         CData/*0:0*/ Top__DOT__ALUInst__DOT__lessInst__DOT____Vtogcov__unsignResult;
         CData/*0:0*/ Top__DOT__ALUInst__DOT__lessInst__DOT____Vtogcov__signedResult;
         CData/*0:0*/ Top__DOT__ALUInst__DOT__lessInst__DOT____Vtogcov__lessResult;
+        CData/*7:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__MemInst_data_wMask;
+        CData/*7:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__dataByte;
         CData/*0:0*/ __Vclklast__TOP__clock;
         SData/*10:0*/ Top__DOT__IDUInst__DOT____Vtogcov__io_imme_imme1;
-        QData/*63:0*/ Top__DOT____Vtogcov__io_instData;
-        QData/*63:0*/ Top__DOT____Vtogcov__io_instAddr;
-        QData/*63:0*/ Top__DOT____Vtogcov__io_rData;
-        QData/*63:0*/ Top__DOT____Vtogcov__io_rAddr;
-        QData/*63:0*/ Top__DOT____Vtogcov__io_wData;
-        QData/*63:0*/ Top__DOT____Vtogcov__io_wAddr;
+        SData/*15:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__dataHalf;
+        IData/*31:0*/ Top__DOT____Vtogcov__IFUInst_io_inst;
+        IData/*31:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__dataWord;
         QData/*63:0*/ Top__DOT____Vtogcov__IFUInst_io_nextpc;
         QData/*63:0*/ Top__DOT____Vtogcov__IFUInst_io_pc;
         QData/*63:0*/ Top__DOT____Vtogcov__IDUInst_io_imme;
@@ -179,8 +179,10 @@ VL_MODULE(VTop___024root) {
         QData/*63:0*/ Top__DOT____Vtogcov__RegFilesInst_io_rs1Data;
         QData/*63:0*/ Top__DOT____Vtogcov__RegFilesInst_io_rs2Data;
         QData/*63:0*/ Top__DOT____Vtogcov__ALUInst_io_result;
-        QData/*63:0*/ Top__DOT____Vtogcov__MemExtendsInst_io_result;
+        QData/*63:0*/ Top__DOT____Vtogcov__MemCtrlInst_io_rData;
         QData/*63:0*/ Top__DOT____Vtogcov__nextpcDefault;
+        QData/*63:0*/ Top__DOT__IFUInst__DOT____Vtogcov__MemVirtualInst_instr_addr;
+        QData/*63:0*/ Top__DOT__IFUInst__DOT____Vtogcov__MemVirtualInst_instr_rData;
         QData/*32:0*/ Top__DOT__IDUInst__DOT____Vtogcov__io_imme_imme0;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_0;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_1;
@@ -188,9 +190,9 @@ VL_MODULE(VTop___024root) {
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_3;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_4;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_5;
+        QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_6;
     };
     struct {
-        QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_6;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_7;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_8;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_9;
@@ -222,6 +224,7 @@ VL_MODULE(VTop___024root) {
         QData/*63:0*/ Top__DOT__ALUInst__DOT____Vtogcov__lessInst_io_data2;
         QData/*63:0*/ Top__DOT__ALUInst__DOT____Vtogcov__shiftInst_io_data2;
         QData/*63:0*/ Top__DOT__ALUInst__DOT____Vtogcov__shiftInst_io_result;
+        QData/*63:0*/ Top__DOT__ALUInst__DOT____Vtogcov__src2;
         QData/*63:0*/ Top__DOT__ALUInst__DOT____Vtogcov__plusResultTmp2;
         QData/*63:0*/ Top__DOT__ALUInst__DOT____Vtogcov__plusResult;
         QData/*63:0*/ Top__DOT__ALUInst__DOT____Vtogcov__andResult;
@@ -229,7 +232,10 @@ VL_MODULE(VTop___024root) {
         QData/*63:0*/ Top__DOT__ALUInst__DOT____Vtogcov__xorResult;
         QData/*63:0*/ Top__DOT__ALUInst__DOT__shiftInst__DOT____Vtogcov__data1;
         QData/*63:0*/ Top__DOT__ALUInst__DOT__shiftInst__DOT____Vtogcov__result;
-        VlUnpacked<CData/*0:0*/, 3> __Vm_traceActivity;
+        QData/*63:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__MemInst_data_rData;
+        QData/*63:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__MemInst_data_wData;
+        QData/*63:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__dataDoub;
+        VlUnpacked<CData/*0:0*/, 2> __Vm_traceActivity;
     };
 
     // INTERNAL VARIABLES

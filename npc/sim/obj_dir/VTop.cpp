@@ -14,15 +14,8 @@ VTop::VTop(VerilatedContext* _vcontextp__, const char* _vcname__)
     , clock{vlSymsp->TOP.clock}
     , reset{vlSymsp->TOP.reset}
     , io_cpuEn{vlSymsp->TOP.io_cpuEn}
-    , io_instData{vlSymsp->TOP.io_instData}
-    , io_instAddr{vlSymsp->TOP.io_instAddr}
-    , io_rData{vlSymsp->TOP.io_rData}
-    , io_rAddr{vlSymsp->TOP.io_rAddr}
-    , io_wData{vlSymsp->TOP.io_wData}
-    , io_wAddr{vlSymsp->TOP.io_wAddr}
-    , io_wen{vlSymsp->TOP.io_wen}
-    , io_ren{vlSymsp->TOP.io_ren}
-    , io_length{vlSymsp->TOP.io_length}
+    , __PVT__Top__DOT__IFUInst__DOT__MemVirtualInst_instr{vlSymsp->TOP.__PVT__Top__DOT__IFUInst__DOT__MemVirtualInst_instr}
+    , __PVT__Top__DOT__MemCtrlInst__DOT__MemInst_data{vlSymsp->TOP.__PVT__Top__DOT__MemCtrlInst__DOT__MemInst_data}
     , rootp{&(vlSymsp->TOP)}
 {
 }

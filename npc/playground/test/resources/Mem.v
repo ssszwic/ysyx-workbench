@@ -7,7 +7,7 @@ module MemVirtual(
   input                 wen,
   input       [7:0]     wMask,
   input       [63:0]    wData
-)
+);
 
 import "DPI-C" function void pmem_read(input longint raddr, output longint rdata);
 import "DPI-C" function void pmem_write(input longint waddr, input longint wdata, input byte wmask);
@@ -25,4 +25,7 @@ always @(*) begin
   if(wen) begin
     pmem_write(addr, wData, wMask);
   end
+  
 end
+
+endmodule

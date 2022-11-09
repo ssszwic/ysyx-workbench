@@ -15,6 +15,7 @@
 
 // INCLUDE MODULE CLASSES
 #include "VTop___024root.h"
+#include "VTop_MemVirtual.h"
 
 // DPI TYPES for DPI Export callbacks (Internal use)
 
@@ -29,9 +30,11 @@ class VTop__Syms final : public VerilatedSyms {
 
     // MODULE INSTANCE STATE
     VTop___024root                 TOP;
+    VTop_MemVirtual                TOP__Top__DOT__IFUInst__DOT__MemVirtualInst_instr;
+    VTop_MemVirtual                TOP__Top__DOT__MemCtrlInst__DOT__MemInst_data;
 
     // COVERAGE
-    uint32_t __Vcoverage[4111];
+    uint32_t __Vcoverage[4146];
 
     // CONSTRUCTORS
     VTop__Syms(VerilatedContext* contextp, const char* namep, VTop* modelp);

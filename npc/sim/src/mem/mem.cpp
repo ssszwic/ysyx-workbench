@@ -5,9 +5,9 @@
 // 128MB for npc
 static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
 
-
 uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 uint32_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
+void sim_exit();
 
 // static uint64_t pmem_read(paddr_t addr, int len) {
 //   uint64_t ret = host_read(guest_to_host(addr), len);
@@ -17,6 +17,12 @@ uint32_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 // static void pmem_write(paddr_t addr, int len, uint64_t data) {
 //   host_write(guest_to_host(addr), len, data);
 // }
+
+static void out_of_bound(paddr_t addr) {
+  sim_exit();
+  printf("addr = 0x%08x out of bound mem!\n", addr);
+  assert(0);
+}
 
 extern "C" void pmem_read(long long raddr, long long *rdata) {
   // 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
@@ -47,10 +53,6 @@ extern "C" void pmem_write(long long waddr, long long wdata, char wmask) {
 }
 
 
-static void out_of_bound(paddr_t addr) {
-  printf("addr = 0x%08x out of bound mem!\n", addr);
-  assert(0);
-}
 
 // uint64_t paddr_read(paddr_t addr, int len, bool *success) {
 //   if (likely(in_pmem(addr))) {
