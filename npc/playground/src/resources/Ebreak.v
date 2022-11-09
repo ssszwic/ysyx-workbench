@@ -1,5 +1,5 @@
 module Ebreak(
-  input b;
+  input b
 );
 wire a;
 assign a = b;
