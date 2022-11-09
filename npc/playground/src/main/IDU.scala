@@ -207,13 +207,14 @@ class IDU extends Module {
   // other control
   io.jumpSel := typeJ || typeIJ
 
+  // tell sim break when inst is ebreak
   val EbreakInst = Module(new Ebreak)
-  EbreakInst.io.b := io.jumpSel
+  EbreakInst.io.ebreak := (io.inst === "b0000_0000_0001_0000_0000_0000_0111_0011".U)
 }
 
 class Ebreak extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle {
-    val b = Input(Bool())
+    val ebreak = Input(Bool())
   })
   addResource("/Ebreak.v")
 }

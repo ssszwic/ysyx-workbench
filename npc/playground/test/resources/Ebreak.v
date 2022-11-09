@@ -1,8 +1,13 @@
 module Ebreak(
-  input b
+  input ebreak
 );
 
-wire a;
-assign a = b;
+import "DPI-C" function int ebreak();
+
+always @(*) begin
+  if(ebreak) begin
+    ebreak();
+  end
+end
 
 endmodule

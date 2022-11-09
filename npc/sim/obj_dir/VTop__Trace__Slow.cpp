@@ -145,6 +145,7 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declBit(c+14,"Top IDUInst io_alu_rightSel", false,-1);
         tracep->declBit(c+15,"Top IDUInst io_alu_arithSel", false,-1);
         tracep->declBit(c+16,"Top IDUInst io_alu_wordSel", false,-1);
+        tracep->declBit(c+164,"Top IDUInst EbreakInst_b", false,-1);
         tracep->declBus(c+167,"Top IDUInst funct3", false,-1, 2,0);
         tracep->declBus(c+168,"Top IDUInst funct7", false,-1, 6,0);
         tracep->declBus(c+169,"Top IDUInst op5", false,-1, 4,0);
@@ -163,6 +164,8 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declBus(c+35,"Top IDUInst io_imme_imme5", false,-1, 3,0);
         tracep->declBit(c+36,"Top IDUInst io_imme_imme6", false,-1);
         tracep->declBus(c+37,"Top IDUInst io_imme_imme1", false,-1, 10,0);
+        tracep->declBit(c+164,"Top IDUInst EbreakInst b", false,-1);
+        tracep->declBit(c+164,"Top IDUInst EbreakInst a", false,-1);
         tracep->declBit(c+138,"Top RegFilesInst clock", false,-1);
         tracep->declBit(c+139,"Top RegFilesInst reset", false,-1);
         tracep->declBus(c+157,"Top RegFilesInst io_rs1Addr", false,-1, 4,0);
