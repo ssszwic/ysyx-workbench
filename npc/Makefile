@@ -9,9 +9,9 @@ verilog:
 	$(call git_commit, "generate verilog")
 	-rm $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)
-	# mill -i __.runMain main.Elaborate -td $(BUILD_DIR) 
+	# mill -i __.test.runMain main.Elaborate -td $(BUILD_DIR) 
 	-rm ./$(BUILD_DIR)/*
-	mill -i __.runMain main.Elaborate -td $(BUILD_DIR) --emit-modules verilog
+	mill -i playground.runMain main.Elaborate -td $(BUILD_DIR) --emit-modules verilog
 
 help:
 	mill -i __.test.runMain main.Elaborate --help
