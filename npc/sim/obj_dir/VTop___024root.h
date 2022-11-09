@@ -64,7 +64,6 @@ VL_MODULE(VTop___024root) {
         CData/*0:0*/ Top__DOT__ALUInst__DOT__lessInst__DOT__signedResult;
         CData/*0:0*/ Top__DOT__ALUInst__DOT__lessInst__DOT__lessResult;
         SData/*11:0*/ Top__DOT__IDUInst__DOT___GEN_0;
-        IData/*31:0*/ Top__DOT__IDUInst__DOT__EbreakInst__DOT__tmp;
         VlWide<4>/*126:0*/ Top__DOT__ALUInst__DOT__shiftInst__DOT___GEN_2;
         QData/*63:0*/ Top__DOT__IFUInst_io_nextpc;
         QData/*63:0*/ Top__DOT__IDUInst_io_imme;
@@ -100,9 +99,9 @@ VL_MODULE(VTop___024root) {
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_23;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_24;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_25;
+        QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_26;
     };
     struct {
-        QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_26;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_27;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_28;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT__regFiles_29;
@@ -167,8 +166,6 @@ VL_MODULE(VTop___024root) {
         CData/*0:0*/ Top__DOT__ALUInst__DOT__lessInst__DOT____Vtogcov__lessResult;
         CData/*0:0*/ __Vclklast__TOP__clock;
         SData/*10:0*/ Top__DOT__IDUInst__DOT____Vtogcov__io_imme_imme1;
-        IData/*31:0*/ Top__DOT__IDUInst__DOT__EbreakInst__DOT____Vtogcov__tmp;
-        IData/*31:0*/ __Vfunc_Top__DOT__IDUInst__DOT__EbreakInst__DOT__cpu_inst_ebreak__0__Vfuncout;
         QData/*63:0*/ Top__DOT____Vtogcov__io_instData;
         QData/*63:0*/ Top__DOT____Vtogcov__io_instAddr;
         QData/*63:0*/ Top__DOT____Vtogcov__io_rData;
@@ -189,10 +186,10 @@ VL_MODULE(VTop___024root) {
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_1;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_2;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_3;
-    };
-    struct {
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_4;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_5;
+    };
+    struct {
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_6;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_7;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_8;

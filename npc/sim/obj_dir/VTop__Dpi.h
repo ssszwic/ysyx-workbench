@@ -13,8 +13,8 @@ extern "C" {
 
 
     // DPI IMPORTS
-    // DPI import at /home/ssszw/Work/ysyx-workbench/npc/build/Ebreak.v:5:29
-    extern int cpu_inst_ebreak();
+    // DPI import at /home/ssszw/Work/ysyx-workbench/npc/build/Ebreak.v:5:30
+    extern void cpu_inst_ebreak();
 
 #ifdef __cplusplus
 }

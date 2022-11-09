@@ -17,12 +17,9 @@ VerilatedVcdC* tfp = NULL;
 #endif
 
 static VTop* top;
+static int state;
 
-extern "C" int cpu_inst_ebreak() {
-  printf("time: %ld\n", contextp->time());
-  printf("ok\n");
-  return 0;
-}
+enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
 
 // current file function
 void init();
