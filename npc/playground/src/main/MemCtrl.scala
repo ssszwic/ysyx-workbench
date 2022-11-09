@@ -39,7 +39,7 @@ class MemCtrl extends Module {
   val wData = Wire(UInt(64.W))
   wData := io.wData << Cat(io.addr(2, 0), "b000".U)
 
-  val MemInst_data = Module(new Mem)
+  val MemInst_data = Module(new MemVirtual)
   MemInst_data.io.ren     := io.ren
   MemInst_data.io.addr    := addrAlig
   MemInst_data.io.wen     := io.wen
@@ -106,17 +106,3 @@ class MemCtrl extends Module {
   io.rData := rData
 }
 
-class Mem extends BlackBox with HasBlackBoxResource {
-  val io = IO(new Bundle {
-    // read
-    val ren       = Input(Bool())
-    val addr      = Input(UInt(64.W))
-    val rData     = Output(UInt(64.W))
-    // write
-    val wen       = Input(Bool())
-    val wData     = Input(UInt(64.W))
-    // control
-    val wMask     = Input(UInt(8.W))
-  })
-  addResource("/Mem.v")
-}

@@ -1,4 +1,4 @@
-module Mem(
+module MemVirtual(
   // read
   input                 ren,
   input       [63:0]    addr,

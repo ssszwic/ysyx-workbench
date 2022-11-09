@@ -19,12 +19,12 @@ class IFU extends Module {
   val addrAlig = Wire(UInt(64.W))
   addrAlig := Cat(pc(63, 3), Fill(3, 0.U(1.W)))
 
-  val MemInst_instruction = Module(new Mem)
-  MemInst_instruction.io.ren    := true.B
-  MemInst_instruction.io.addr   := addrAlig
-  MemInst_instruction.io.wen    := false.B
-  MemInst_instruction.io.wData  := 0.U
-  MemInst_instruction.io.wMask  := 0.U
+  val MemVirtualInst_instruction = Module(new MemVirtual)
+  MemVirtualInst_instruction.io.ren    := true.B
+  MemVirtualInst_instruction.io.addr   := addrAlig
+  MemVirtualInst_instruction.io.wen    := false.B
+  MemVirtualInst_instruction.io.wData  := 0.U
+  MemVirtualInst_instruction.io.wMask  := 0.U
 
-  io.inst := Mux(pc(2, 0) === "100".U, MemInst_instruction.io.rData(63, 32), MemInst_instruction.io.rData(31, 0))
+  io.inst := Mux(pc(2, 0) === "100".U, MemVirtualInst_instruction.io.rData(63, 32), MemVirtualInst_instruction.io.rData(31, 0))
 }
