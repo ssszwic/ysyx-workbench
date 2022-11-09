@@ -8,7 +8,7 @@ wire [31:0] tmp;
 
 always @(*) begin
   if(ebreak) begin
-    tmp = ebreak ? cpu_inst_ebreak();
+    tmp = cpu_inst_ebreak();
   end
   else begin
     tmp = 0;
