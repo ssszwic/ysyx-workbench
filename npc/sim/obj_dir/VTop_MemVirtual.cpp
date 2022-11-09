@@ -40,13 +40,18 @@ VL_INLINE_OPT void VTop_MemVirtual___settle__TOP__Top__DOT__IFUInst__DOT__MemVir
     VTop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+          VTop_MemVirtual___settle__TOP__Top__DOT__IFUInst__DOT__MemVirtualInst_instr__1\n"); );
     // Body
-    VTop_MemVirtual____Vdpiimwrap_pmem_read_TOP__Top__DOT__IFUInst__DOT__MemVirtualInst_instr(
+    ++(vlSymsp->__Vcoverage[4143]);
+    ++(vlSymsp->__Vcoverage[4144]);
+    if (vlSymsp->TOP.io_cpuEn) {
+        VTop_MemVirtual____Vdpiimwrap_pmem_read_TOP__Top__DOT__IFUInst__DOT__MemVirtualInst_instr(
                                                                                 (0xfffffffffffffff8ULL 
                                                                                 & vlSymsp->TOP.Top__DOT__IFUInst__DOT__pc), vlSelf->__Vtask_pmem_read__0__rdata);
-    ++(vlSymsp->__Vcoverage[4141]);
-    ++(vlSymsp->__Vcoverage[4144]);
-    ++(vlSymsp->__Vcoverage[4145]);
-    vlSelf->rData = vlSelf->__Vtask_pmem_read__0__rdata;
+        ++(vlSymsp->__Vcoverage[4140]);
+        vlSelf->rData = vlSelf->__Vtask_pmem_read__0__rdata;
+    } else {
+        ++(vlSymsp->__Vcoverage[4141]);
+        vlSelf->rData = 0ULL;
+    }
 }
 
 VL_INLINE_OPT void VTop_MemVirtual___settle__TOP__Top__DOT__MemCtrlInst__DOT__MemInst_data__2(VTop_MemVirtual* vlSelf) {
@@ -54,16 +59,16 @@ VL_INLINE_OPT void VTop_MemVirtual___settle__TOP__Top__DOT__MemCtrlInst__DOT__Me
     VTop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+          VTop_MemVirtual___settle__TOP__Top__DOT__MemCtrlInst__DOT__MemInst_data__2\n"); );
     // Body
-    ++(vlSymsp->__Vcoverage[4145]);
+    ++(vlSymsp->__Vcoverage[4144]);
     if ((0U == (0x1fU & (vlSymsp->TOP.Top__DOT__IFUInst_io_inst 
                          >> 2U)))) {
         VTop_MemVirtual____Vdpiimwrap_pmem_read_TOP__Top__DOT__IFUInst__DOT__MemVirtualInst_instr(
                                                                                 (0xfffffffffffffff8ULL 
                                                                                 & vlSymsp->TOP.Top__DOT__ALUInst_io_result), vlSelf->__Vtask_pmem_read__2__rdata);
-        ++(vlSymsp->__Vcoverage[4141]);
+        ++(vlSymsp->__Vcoverage[4140]);
         vlSelf->rData = vlSelf->__Vtask_pmem_read__2__rdata;
     } else {
-        ++(vlSymsp->__Vcoverage[4142]);
+        ++(vlSymsp->__Vcoverage[4141]);
         vlSelf->rData = 0ULL;
     }
     if ((8U == (0x1fU & (vlSymsp->TOP.Top__DOT__IFUInst_io_inst 
@@ -78,8 +83,8 @@ VL_INLINE_OPT void VTop_MemVirtual___settle__TOP__Top__DOT__MemCtrlInst__DOT__Me
                                                                                 vlSymsp->TOP.Top__DOT__MemCtrlInst__DOT___wData_T_2[0U]))), 
                                                                                 (0xffU 
                                                                                 & (IData)(vlSymsp->TOP.Top__DOT__MemCtrlInst__DOT___GEN_2)));
-        ++(vlSymsp->__Vcoverage[4143]);
+        ++(vlSymsp->__Vcoverage[4142]);
     } else {
-        ++(vlSymsp->__Vcoverage[4144]);
+        ++(vlSymsp->__Vcoverage[4143]);
     }
 }

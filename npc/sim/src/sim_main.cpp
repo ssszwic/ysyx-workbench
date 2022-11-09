@@ -42,6 +42,7 @@ int main(int argc, char** argv, char** env) {
   top->reset = 1;
   top->clock = 1;
   eval_and_wave();
+  
 
   while(contextp->time() < RESET_TIME) {
     top->clock = !top->clock;
@@ -53,6 +54,7 @@ int main(int argc, char** argv, char** env) {
 
   while(contextp->time() < SIM_TIME) {
     top->clock = !top->clock;
+    
     // posedge clk
     if (top->clock) {
       // update pc register
@@ -61,7 +63,7 @@ int main(int argc, char** argv, char** env) {
       top->io_cpuEn = 1;
       // update inst
       eval_and_wave();
-      if (state == NPC_END) {sim_exit();}
+      if (state == NPC_END) {sim_exit(); return 0;}
     }
     // negedge clk
     else {
