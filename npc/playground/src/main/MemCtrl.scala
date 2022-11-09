@@ -75,6 +75,7 @@ class MemCtrl extends Module {
   }
 
   // expend
+  val rData = Wire(UInt(64.W))
   when (io.length === 0.U) {
     when(io.unsign) {
       rData := Cat(Fill(56, 0.U(1.W)), dataByte)
@@ -96,8 +97,7 @@ class MemCtrl extends Module {
   }.otherwise{
     rData := dataDoub
   }
-
-  val rData = Wire(UInt(64.W))
+  
   io.rData := rData
 }
 
