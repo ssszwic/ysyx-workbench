@@ -5,16 +5,8 @@ import chisel3.util._
 
 class Top extends Module {
   val io = IO(new Bundle {
-    // inst Memory
-    val instData  = Input(UInt(64.W))
-    val instAddr  = Output(UInt(64.W))
-    // memory
-    val rData     = Input(UInt(64.W))
-    val rAddr     = Output(UInt(64.W))
-    val wData     = Output(UInt(64.W))
-    val wAddr     = Output(UInt(64.W))
-    val wen       = Output(Bool())
-    val length    = Output(UInt(2.W))
+    // control 
+    val cpuEn     = Input(Bool())
   })
 
   // declare module
@@ -22,23 +14,24 @@ class Top extends Module {
   val IDUInst = Module(new IDU)
   val RegFilesInst = Module(new RegFiles)
   val ALUInst = Module(new ALU)
-  val MemExtendsInst = Module(new MemExtends)
+  val MemCtrlInst = Module(new MemCtrl)
 
   // default nextpc = pc + 4
   val nextpcDefault = Wire(UInt(64.W))
   nextpcDefault := IFUInst.io.pc + 4.U
 
-  // IO
-  io.instAddr := IFUInst.io.pc
-  io.rAddr    := ALUInst.io.result
-  io.wData    := RegFilesInst.io.rs2Data
-  io.wAddr    := ALUInst.io.result
-  io.wen      := IDUInst.io.wenMem
-  io.length   := IDUInst.io.lengthMem
+
+  // MemCtrlInst
+  MemCtrlInst.io.wData  := RegFilesInst.io.rs2Data
+  MemCtrlInst.io.addr   := ALUInst.io.result
+  MemCtrlInst.io.wen    := IDUInst.io.wenMem
+  MemCtrlInst.io.ren    := IDUInst.io.renMem
+  MemCtrlInst.io.length := IDUInst.io.lengthMem
+  MemCtrlInst.io.unsign := IDUInst.io.unsignMem
 
   // IFU
   IFUInst.io.nextpc   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
-  IFUInst.io.instGet  := io.instData
+  IFUInst.io.pcEn     := io.cpuEn
 
   // IDU
   IDUInst.io.inst := IFUInst.io.inst
@@ -49,7 +42,7 @@ class Top extends Module {
   RegFilesInst.io.wen     := IDUInst.io.wenReg
   RegFilesInst.io.wAddr   := IDUInst.io.rdAddr
   RegFilesInst.io.wData   := Mux(IDUInst.io.jumpSel, nextpcDefault, 
-                                  Mux(IDUInst.io.loadMem, MemExtendsInst.io.result, ALUInst.io.result))
+                                  Mux(IDUInst.io.renMem, MemCtrlInst.io.rData, ALUInst.io.result))
 
   // ALU
   ALUInst.io.rs1  := RegFilesInst.io.rs1Data
@@ -57,9 +50,4 @@ class Top extends Module {
   ALUInst.io.imme := IDUInst.io.imme
   ALUInst.io.pc   := IFUInst.io.pc
   ALUInst.io_alu  <> IDUInst.io_alu
-
-  // MemExtends
-  MemExtendsInst.io.data      := io.rData
-  MemExtendsInst.io.lengthMem := IDUInst.io.lengthMem
-  MemExtendsInst.io.unsignMem := IDUInst.io.unsignMem
 }

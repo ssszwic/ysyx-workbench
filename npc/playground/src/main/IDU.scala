@@ -71,6 +71,7 @@ class ALUControl extends Bundle {
   // data flow
   val typeBSel    = Output(Bool())
   val typeJSel    = Output(Bool())
+  val aupicSel    = Output(Bool())
   val immeSel     = Output(Bool())
   // branch
   val typeBEqSel  = Output(Bool())
@@ -100,7 +101,7 @@ class IDU extends Module {
     val imme      = Output(UInt(64.W))  // immediate with sign expandsion
     // Mem control
     val wenMem    = Output(Bool())
-    val loadMem   = Output(Bool())
+    val renMem   = Output(Bool())
     val lengthMem = Output(UInt(2.W))
     val unsignMem = Output(Bool())
     // Unconditional Jump for jal or jarl
@@ -130,7 +131,7 @@ class IDU extends Module {
   op5    := io.inst(6, 2)
 
   typeII := (op5(4, 2) === "b001".U && op5(0) === "b0".U)
-  typeIL := (op5 === "b00000".U)
+  typeIL := (op5 === "b00000".U) && (io.inst(1, 0) === "b11".U) // avoid empty inst
   typeIJ := (op5 === "b11011".U)
 
   typeR := (op5(4, 2) === "b011".U) && (op5(0) === "b0".U)
@@ -174,6 +175,7 @@ class IDU extends Module {
 
   io_alu.typeBSel := typeB
   io_alu.typeJSel := typeJ
+  io_alu.aupicSel := (op5 === "b00101".U)
   io_alu.immeSel := ~typeR
   // BEQ/BNE
   io_alu.typeBEqSel := typeB && (funct3(2, 1) === "b00".U)
@@ -196,7 +198,7 @@ class IDU extends Module {
 
   // Mem control
   io.wenMem := typeS
-  io.loadMem := typeIL
+  io.renMem := typeIL
   // 0=>LB/LBU 1=>LH/LHU 2=>LW/LWU 3=>LD
   io.lengthMem := funct3(1, 0)
   // LWU/LHU/LBU
@@ -204,4 +206,15 @@ class IDU extends Module {
 
   // other control
   io.jumpSel := typeJ || typeIJ
+
+  // tell sim break when inst is ebreak
+  val EbreakInst = Module(new Ebreak)
+  EbreakInst.io.ebreak := (io.inst === "b0000_0000_0001_0000_0000_0000_0111_0011".U)
+}
+
+class Ebreak extends BlackBox with HasBlackBoxResource {
+  val io = IO(new Bundle {
+    val ebreak = Input(Bool())
+  })
+  addResource("/Ebreak.v")
 }
