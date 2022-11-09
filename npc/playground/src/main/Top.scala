@@ -5,6 +5,8 @@ import chisel3.util._
 
 class Top extends Module {
   val io = IO(new Bundle {
+    // control 
+    val cpu_en     = Input(Bool())
     // inst Memory
     val instData  = Input(UInt(64.W))
     val instAddr  = Output(UInt(64.W))
@@ -41,6 +43,7 @@ class Top extends Module {
   // IFU
   IFUInst.io.nextpc   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
   IFUInst.io.instGet  := io.instData
+  IFUInst.io.pc_en    := io.cpu_en
 
   // IDU
   IDUInst.io.inst := IFUInst.io.inst
