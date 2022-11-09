@@ -92,7 +92,7 @@ class MemCtrl extends Module {
     when(io.unsign) {
       rData := Cat(Fill(32, 0.U(1.W)), dataWord)
     }.otherwise{
-      rData := Cat(Fill(32, dataByte(31)), dataWord)
+      rData := Cat(Fill(32, dataWord(31)), dataWord)
     }
   }.otherwise{
     rData := dataDoub
