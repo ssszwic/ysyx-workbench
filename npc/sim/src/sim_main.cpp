@@ -18,7 +18,7 @@ VerilatedVcdC* tfp = NULL;
 
 static VTop* top;
 
-extern "C" void ebreak(long long raddr, long long *rdata) {
+extern "C" void cpu_inst_ebreak(long long raddr, long long *rdata) {
   printf("ok\n");
 }
 
