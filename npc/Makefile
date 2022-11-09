@@ -11,7 +11,7 @@ verilog:
 	mkdir -p $(BUILD_DIR)
 	# mill -i __.test.runMain main.Elaborate -td $(BUILD_DIR) 
 	-rm ./$(BUILD_DIR)/*
-	cd ./playground; mill -i __.test.runMain main.Elaborate -td $(BUILD_DIR) --emit-modules verilog
+	mill -i __.test.runMain main.Elaborate -td $(BUILD_DIR) --emit-modules verilog
 
 help:
 	mill -i __.test.runMain main.Elaborate --help
