@@ -6,7 +6,7 @@
 #include "commen.h"
 #include "mem/mem.h"
 #include "svdpi.h"
-#include "Vour__Dpi.h"
+#include "VTop__Dpi.h"
 
 #define RESET_TIME 20
 #define SIM_TIME 100
@@ -18,8 +18,10 @@ VerilatedVcdC* tfp = NULL;
 
 static VTop* top;
 
-extern "C" void cpu_inst_ebreak(long long raddr, long long *rdata) {
+extern "C" int cpu_inst_ebreak() {
+  printf("time: %ld\n", contextp->time());
   printf("ok\n");
+  return 0;
 }
 
 // current file function
