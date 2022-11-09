@@ -19,7 +19,7 @@ class IFU extends Module {
   val addrAlig = Wire(UInt(64.W))
   addrAlig := Cat(pc(63, 3), Fill(3, 0.U(1.W)))
 
-  val MemInst_instruction = Module(new Mem)
+  val MemInst_instruction = Module(new main.Mem)
   MemInst_instruction.io.ren    := true.B
   MemInst_instruction.io.addr   := addrAlig
   MemInst_instruction.io.wen    := false.B
