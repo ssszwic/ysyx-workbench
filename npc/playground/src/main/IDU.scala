@@ -216,6 +216,6 @@ class Ebreak extends BlackBox with HasBlackBoxResource {
     val b = Input(Bool())
   })
 
-  addResource("../resource/Ebreak.v")
+  addResource("/home/ssszw/Work/ysyx-workbench/npc/playground/src/resource/Ebreak.v")
 
 }
