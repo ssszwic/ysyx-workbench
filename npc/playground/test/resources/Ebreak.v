@@ -4,7 +4,7 @@ module Ebreak(
 
 import "DPI-C" function int cpu_inst_ebreak();
 
-wire [31:0] tmp;
+reg [31:0] tmp;
 
 always @(*) begin
   if(ebreak) begin
