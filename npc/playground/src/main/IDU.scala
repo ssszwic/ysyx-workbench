@@ -64,6 +64,13 @@ object MyTools {
   }
 
 }
+class Ebreak extends BlackBox with HasBlackBoxResource {
+  val io = IO(new Bundle {
+    val b = Input(Bool())
+  })
+  addResource("/Ebreak.v")
+}
+
 
 class ALUControl extends Bundle {
   // operation
@@ -211,9 +218,3 @@ class IDU extends Module {
   EbreakInst.io.b := io.jumpSel
 }
 
-class Ebreak extends BlackBox with HasBlackBoxResource {
-  val io = IO(new Bundle {
-    val b = Input(Bool())
-  })
-  addResource("/Ebreak.v")
-}
