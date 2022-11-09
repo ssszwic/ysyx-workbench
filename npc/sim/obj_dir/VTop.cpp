@@ -19,6 +19,7 @@ VTop::VTop(VerilatedContext* _vcontextp__, const char* _vcname__)
     , io_wData{vlSymsp->TOP.io_wData}
     , io_wAddr{vlSymsp->TOP.io_wAddr}
     , io_wen{vlSymsp->TOP.io_wen}
+    , io_ren{vlSymsp->TOP.io_ren}
     , io_length{vlSymsp->TOP.io_length}
     , rootp{&(vlSymsp->TOP)}
 {

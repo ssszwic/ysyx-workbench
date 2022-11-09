@@ -31,7 +31,8 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declQuad(c+148,"io_wData", false,-1, 63,0);
         tracep->declQuad(c+150,"io_wAddr", false,-1, 63,0);
         tracep->declBit(c+152,"io_wen", false,-1);
-        tracep->declBus(c+153,"io_length", false,-1, 1,0);
+        tracep->declBit(c+153,"io_ren", false,-1);
+        tracep->declBus(c+154,"io_length", false,-1, 1,0);
         tracep->declBit(c+138,"Top clock", false,-1);
         tracep->declBit(c+139,"Top reset", false,-1);
         tracep->declQuad(c+140,"Top io_instData", false,-1, 63,0);
@@ -41,27 +42,28 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declQuad(c+148,"Top io_wData", false,-1, 63,0);
         tracep->declQuad(c+150,"Top io_wAddr", false,-1, 63,0);
         tracep->declBit(c+152,"Top io_wen", false,-1);
-        tracep->declBus(c+153,"Top io_length", false,-1, 1,0);
+        tracep->declBit(c+153,"Top io_ren", false,-1);
+        tracep->declBus(c+154,"Top io_length", false,-1, 1,0);
         tracep->declBit(c+138,"Top IFUInst_clock", false,-1);
         tracep->declBit(c+139,"Top IFUInst_reset", false,-1);
         tracep->declQuad(c+1,"Top IFUInst_io_nextpc", false,-1, 63,0);
-        tracep->declBus(c+154,"Top IFUInst_io_instGet", false,-1, 31,0);
+        tracep->declBus(c+155,"Top IFUInst_io_instGet", false,-1, 31,0);
         tracep->declQuad(c+70,"Top IFUInst_io_pc", false,-1, 63,0);
-        tracep->declBus(c+154,"Top IFUInst_io_inst", false,-1, 31,0);
-        tracep->declBus(c+154,"Top IDUInst_io_inst", false,-1, 31,0);
-        tracep->declBus(c+155,"Top IDUInst_io_rs1Addr", false,-1, 4,0);
-        tracep->declBus(c+156,"Top IDUInst_io_rs2Addr", false,-1, 4,0);
-        tracep->declBus(c+157,"Top IDUInst_io_rdAddr", false,-1, 4,0);
+        tracep->declBus(c+155,"Top IFUInst_io_inst", false,-1, 31,0);
+        tracep->declBus(c+155,"Top IDUInst_io_inst", false,-1, 31,0);
+        tracep->declBus(c+156,"Top IDUInst_io_rs1Addr", false,-1, 4,0);
+        tracep->declBus(c+157,"Top IDUInst_io_rs2Addr", false,-1, 4,0);
+        tracep->declBus(c+158,"Top IDUInst_io_rdAddr", false,-1, 4,0);
         tracep->declBit(c+3,"Top IDUInst_io_wenReg", false,-1);
         tracep->declQuad(c+4,"Top IDUInst_io_imme", false,-1, 63,0);
-        tracep->declBit(c+158,"Top IDUInst_io_wenMem", false,-1);
-        tracep->declBit(c+159,"Top IDUInst_io_loadMem", false,-1);
-        tracep->declBus(c+160,"Top IDUInst_io_lengthMem", false,-1, 1,0);
-        tracep->declBit(c+161,"Top IDUInst_io_unsignMem", false,-1);
-        tracep->declBit(c+162,"Top IDUInst_io_jumpSel", false,-1);
+        tracep->declBit(c+159,"Top IDUInst_io_wenMem", false,-1);
+        tracep->declBit(c+160,"Top IDUInst_io_renMem", false,-1);
+        tracep->declBus(c+161,"Top IDUInst_io_lengthMem", false,-1, 1,0);
+        tracep->declBit(c+162,"Top IDUInst_io_unsignMem", false,-1);
+        tracep->declBit(c+163,"Top IDUInst_io_jumpSel", false,-1);
         tracep->declBus(c+6,"Top IDUInst_io_alu_aluSel", false,-1, 2,0);
-        tracep->declBit(c+163,"Top IDUInst_io_alu_typeBSel", false,-1);
-        tracep->declBit(c+162,"Top IDUInst_io_alu_typeJSel", false,-1);
+        tracep->declBit(c+164,"Top IDUInst_io_alu_typeBSel", false,-1);
+        tracep->declBit(c+163,"Top IDUInst_io_alu_typeJSel", false,-1);
         tracep->declBit(c+7,"Top IDUInst_io_alu_immeSel", false,-1);
         tracep->declBit(c+8,"Top IDUInst_io_alu_typeBEqSel", false,-1);
         tracep->declBit(c+9,"Top IDUInst_io_alu_jalrSel", false,-1);
@@ -74,10 +76,10 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declBit(c+16,"Top IDUInst_io_alu_wordSel", false,-1);
         tracep->declBit(c+138,"Top RegFilesInst_clock", false,-1);
         tracep->declBit(c+139,"Top RegFilesInst_reset", false,-1);
-        tracep->declBus(c+155,"Top RegFilesInst_io_rs1Addr", false,-1, 4,0);
-        tracep->declBus(c+156,"Top RegFilesInst_io_rs2Addr", false,-1, 4,0);
+        tracep->declBus(c+156,"Top RegFilesInst_io_rs1Addr", false,-1, 4,0);
+        tracep->declBus(c+157,"Top RegFilesInst_io_rs2Addr", false,-1, 4,0);
         tracep->declBit(c+3,"Top RegFilesInst_io_wen", false,-1);
-        tracep->declBus(c+157,"Top RegFilesInst_io_wAddr", false,-1, 4,0);
+        tracep->declBus(c+158,"Top RegFilesInst_io_wAddr", false,-1, 4,0);
         tracep->declQuad(c+17,"Top RegFilesInst_io_wData", false,-1, 63,0);
         tracep->declQuad(c+19,"Top RegFilesInst_io_rs1Data", false,-1, 63,0);
         tracep->declQuad(c+21,"Top RegFilesInst_io_rs2Data", false,-1, 63,0);
@@ -88,8 +90,8 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declQuad(c+23,"Top ALUInst_io_result", false,-1, 63,0);
         tracep->declBit(c+25,"Top ALUInst_io_nextpcSel", false,-1);
         tracep->declBus(c+6,"Top ALUInst_io_alu_aluSel", false,-1, 2,0);
-        tracep->declBit(c+163,"Top ALUInst_io_alu_typeBSel", false,-1);
-        tracep->declBit(c+162,"Top ALUInst_io_alu_typeJSel", false,-1);
+        tracep->declBit(c+164,"Top ALUInst_io_alu_typeBSel", false,-1);
+        tracep->declBit(c+163,"Top ALUInst_io_alu_typeJSel", false,-1);
         tracep->declBit(c+7,"Top ALUInst_io_alu_immeSel", false,-1);
         tracep->declBit(c+8,"Top ALUInst_io_alu_typeBEqSel", false,-1);
         tracep->declBit(c+9,"Top ALUInst_io_alu_jalrSel", false,-1);
@@ -100,32 +102,32 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declBit(c+14,"Top ALUInst_io_alu_rightSel", false,-1);
         tracep->declBit(c+15,"Top ALUInst_io_alu_arithSel", false,-1);
         tracep->declBit(c+16,"Top ALUInst_io_alu_wordSel", false,-1);
-        tracep->declBus(c+160,"Top MemExtendsInst_io_lengthMem", false,-1, 1,0);
-        tracep->declBit(c+161,"Top MemExtendsInst_io_unsignMem", false,-1);
+        tracep->declBus(c+161,"Top MemExtendsInst_io_lengthMem", false,-1, 1,0);
+        tracep->declBit(c+162,"Top MemExtendsInst_io_unsignMem", false,-1);
         tracep->declQuad(c+144,"Top MemExtendsInst_io_data", false,-1, 63,0);
         tracep->declQuad(c+26,"Top MemExtendsInst_io_result", false,-1, 63,0);
         tracep->declQuad(c+72,"Top nextpcDefault", false,-1, 63,0);
         tracep->declBit(c+138,"Top IFUInst clock", false,-1);
         tracep->declBit(c+139,"Top IFUInst reset", false,-1);
         tracep->declQuad(c+1,"Top IFUInst io_nextpc", false,-1, 63,0);
-        tracep->declBus(c+154,"Top IFUInst io_instGet", false,-1, 31,0);
+        tracep->declBus(c+155,"Top IFUInst io_instGet", false,-1, 31,0);
         tracep->declQuad(c+70,"Top IFUInst io_pc", false,-1, 63,0);
-        tracep->declBus(c+154,"Top IFUInst io_inst", false,-1, 31,0);
+        tracep->declBus(c+155,"Top IFUInst io_inst", false,-1, 31,0);
         tracep->declQuad(c+70,"Top IFUInst pc", false,-1, 63,0);
-        tracep->declBus(c+154,"Top IDUInst io_inst", false,-1, 31,0);
-        tracep->declBus(c+155,"Top IDUInst io_rs1Addr", false,-1, 4,0);
-        tracep->declBus(c+156,"Top IDUInst io_rs2Addr", false,-1, 4,0);
-        tracep->declBus(c+157,"Top IDUInst io_rdAddr", false,-1, 4,0);
+        tracep->declBus(c+155,"Top IDUInst io_inst", false,-1, 31,0);
+        tracep->declBus(c+156,"Top IDUInst io_rs1Addr", false,-1, 4,0);
+        tracep->declBus(c+157,"Top IDUInst io_rs2Addr", false,-1, 4,0);
+        tracep->declBus(c+158,"Top IDUInst io_rdAddr", false,-1, 4,0);
         tracep->declBit(c+3,"Top IDUInst io_wenReg", false,-1);
         tracep->declQuad(c+4,"Top IDUInst io_imme", false,-1, 63,0);
-        tracep->declBit(c+158,"Top IDUInst io_wenMem", false,-1);
-        tracep->declBit(c+159,"Top IDUInst io_loadMem", false,-1);
-        tracep->declBus(c+160,"Top IDUInst io_lengthMem", false,-1, 1,0);
-        tracep->declBit(c+161,"Top IDUInst io_unsignMem", false,-1);
-        tracep->declBit(c+162,"Top IDUInst io_jumpSel", false,-1);
+        tracep->declBit(c+159,"Top IDUInst io_wenMem", false,-1);
+        tracep->declBit(c+160,"Top IDUInst io_renMem", false,-1);
+        tracep->declBus(c+161,"Top IDUInst io_lengthMem", false,-1, 1,0);
+        tracep->declBit(c+162,"Top IDUInst io_unsignMem", false,-1);
+        tracep->declBit(c+163,"Top IDUInst io_jumpSel", false,-1);
         tracep->declBus(c+6,"Top IDUInst io_alu_aluSel", false,-1, 2,0);
-        tracep->declBit(c+163,"Top IDUInst io_alu_typeBSel", false,-1);
-        tracep->declBit(c+162,"Top IDUInst io_alu_typeJSel", false,-1);
+        tracep->declBit(c+164,"Top IDUInst io_alu_typeBSel", false,-1);
+        tracep->declBit(c+163,"Top IDUInst io_alu_typeJSel", false,-1);
         tracep->declBit(c+7,"Top IDUInst io_alu_immeSel", false,-1);
         tracep->declBit(c+8,"Top IDUInst io_alu_typeBEqSel", false,-1);
         tracep->declBit(c+9,"Top IDUInst io_alu_jalrSel", false,-1);
@@ -136,18 +138,18 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declBit(c+14,"Top IDUInst io_alu_rightSel", false,-1);
         tracep->declBit(c+15,"Top IDUInst io_alu_arithSel", false,-1);
         tracep->declBit(c+16,"Top IDUInst io_alu_wordSel", false,-1);
-        tracep->declBus(c+164,"Top IDUInst funct3", false,-1, 2,0);
-        tracep->declBus(c+165,"Top IDUInst funct7", false,-1, 6,0);
-        tracep->declBus(c+166,"Top IDUInst op5", false,-1, 4,0);
+        tracep->declBus(c+165,"Top IDUInst funct3", false,-1, 2,0);
+        tracep->declBus(c+166,"Top IDUInst funct7", false,-1, 6,0);
+        tracep->declBus(c+167,"Top IDUInst op5", false,-1, 4,0);
         tracep->declBit(c+28,"Top IDUInst typeII", false,-1);
-        tracep->declBit(c+159,"Top IDUInst typeIL", false,-1);
-        tracep->declBit(c+162,"Top IDUInst typeIJ", false,-1);
+        tracep->declBit(c+160,"Top IDUInst typeIL", false,-1);
+        tracep->declBit(c+163,"Top IDUInst typeIJ", false,-1);
         tracep->declBit(c+29,"Top IDUInst typeR", false,-1);
         tracep->declBit(c+30,"Top IDUInst typeI", false,-1);
-        tracep->declBit(c+158,"Top IDUInst typeS", false,-1);
-        tracep->declBit(c+163,"Top IDUInst typeB", false,-1);
+        tracep->declBit(c+159,"Top IDUInst typeS", false,-1);
+        tracep->declBit(c+164,"Top IDUInst typeB", false,-1);
         tracep->declBit(c+31,"Top IDUInst typeU", false,-1);
-        tracep->declQuad(c+167,"Top IDUInst io_imme_imme0", false,-1, 32,0);
+        tracep->declQuad(c+168,"Top IDUInst io_imme_imme0", false,-1, 32,0);
         tracep->declBus(c+32,"Top IDUInst io_imme_imme2", false,-1, 7,0);
         tracep->declBit(c+33,"Top IDUInst io_imme_imme3", false,-1);
         tracep->declBus(c+34,"Top IDUInst io_imme_imme4", false,-1, 5,0);
@@ -156,10 +158,10 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declBus(c+37,"Top IDUInst io_imme_imme1", false,-1, 10,0);
         tracep->declBit(c+138,"Top RegFilesInst clock", false,-1);
         tracep->declBit(c+139,"Top RegFilesInst reset", false,-1);
-        tracep->declBus(c+155,"Top RegFilesInst io_rs1Addr", false,-1, 4,0);
-        tracep->declBus(c+156,"Top RegFilesInst io_rs2Addr", false,-1, 4,0);
+        tracep->declBus(c+156,"Top RegFilesInst io_rs1Addr", false,-1, 4,0);
+        tracep->declBus(c+157,"Top RegFilesInst io_rs2Addr", false,-1, 4,0);
         tracep->declBit(c+3,"Top RegFilesInst io_wen", false,-1);
-        tracep->declBus(c+157,"Top RegFilesInst io_wAddr", false,-1, 4,0);
+        tracep->declBus(c+158,"Top RegFilesInst io_wAddr", false,-1, 4,0);
         tracep->declQuad(c+17,"Top RegFilesInst io_wData", false,-1, 63,0);
         tracep->declQuad(c+19,"Top RegFilesInst io_rs1Data", false,-1, 63,0);
         tracep->declQuad(c+21,"Top RegFilesInst io_rs2Data", false,-1, 63,0);
@@ -202,8 +204,8 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declQuad(c+23,"Top ALUInst io_result", false,-1, 63,0);
         tracep->declBit(c+25,"Top ALUInst io_nextpcSel", false,-1);
         tracep->declBus(c+6,"Top ALUInst io_alu_aluSel", false,-1, 2,0);
-        tracep->declBit(c+163,"Top ALUInst io_alu_typeBSel", false,-1);
-        tracep->declBit(c+162,"Top ALUInst io_alu_typeJSel", false,-1);
+        tracep->declBit(c+164,"Top ALUInst io_alu_typeBSel", false,-1);
+        tracep->declBit(c+163,"Top ALUInst io_alu_typeJSel", false,-1);
         tracep->declBit(c+7,"Top ALUInst io_alu_immeSel", false,-1);
         tracep->declBit(c+8,"Top ALUInst io_alu_typeBEqSel", false,-1);
         tracep->declBit(c+9,"Top ALUInst io_alu_jalrSel", false,-1);
@@ -258,8 +260,8 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declQuad(c+49,"Top ALUInst shiftInst io_result", false,-1, 63,0);
         tracep->declQuad(c+66,"Top ALUInst shiftInst data1", false,-1, 63,0);
         tracep->declQuad(c+68,"Top ALUInst shiftInst result", false,-1, 63,0);
-        tracep->declBus(c+160,"Top MemExtendsInst io_lengthMem", false,-1, 1,0);
-        tracep->declBit(c+161,"Top MemExtendsInst io_unsignMem", false,-1);
+        tracep->declBus(c+161,"Top MemExtendsInst io_lengthMem", false,-1, 1,0);
+        tracep->declBit(c+162,"Top MemExtendsInst io_unsignMem", false,-1);
         tracep->declQuad(c+144,"Top MemExtendsInst io_data", false,-1, 63,0);
         tracep->declQuad(c+26,"Top MemExtendsInst io_result", false,-1, 63,0);
     }
@@ -393,44 +395,45 @@ void VTop___024root__traceFullSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->fullQData(oldp+148,(vlSelf->io_wData),64);
         tracep->fullQData(oldp+150,(vlSelf->io_wAddr),64);
         tracep->fullBit(oldp+152,(vlSelf->io_wen));
-        tracep->fullCData(oldp+153,(vlSelf->io_length),2);
-        tracep->fullIData(oldp+154,((IData)(vlSelf->io_instData)),32);
-        tracep->fullCData(oldp+155,((0x1fU & (IData)(
-                                                     (vlSelf->io_instData 
-                                                      >> 0xfU)))),5);
+        tracep->fullBit(oldp+153,(vlSelf->io_ren));
+        tracep->fullCData(oldp+154,(vlSelf->io_length),2);
+        tracep->fullIData(oldp+155,((IData)(vlSelf->io_instData)),32);
         tracep->fullCData(oldp+156,((0x1fU & (IData)(
                                                      (vlSelf->io_instData 
-                                                      >> 0x14U)))),5);
+                                                      >> 0xfU)))),5);
         tracep->fullCData(oldp+157,((0x1fU & (IData)(
                                                      (vlSelf->io_instData 
+                                                      >> 0x14U)))),5);
+        tracep->fullCData(oldp+158,((0x1fU & (IData)(
+                                                     (vlSelf->io_instData 
                                                       >> 7U)))),5);
-        tracep->fullBit(oldp+158,((8U == (0x1fU & (IData)(
+        tracep->fullBit(oldp+159,((8U == (0x1fU & (IData)(
                                                           (vlSelf->io_instData 
                                                            >> 2U))))));
-        tracep->fullBit(oldp+159,((0U == (0x1fU & (IData)(
+        tracep->fullBit(oldp+160,((0U == (0x1fU & (IData)(
                                                           (vlSelf->io_instData 
                                                            >> 2U))))));
-        tracep->fullCData(oldp+160,((3U & (IData)((vlSelf->io_instData 
+        tracep->fullCData(oldp+161,((3U & (IData)((vlSelf->io_instData 
                                                    >> 0xcU)))),2);
-        tracep->fullBit(oldp+161,((1U & (IData)((vlSelf->io_instData 
+        tracep->fullBit(oldp+162,((1U & (IData)((vlSelf->io_instData 
                                                  >> 0xeU)))));
-        tracep->fullBit(oldp+162,((0x1bU == (0x1fU 
+        tracep->fullBit(oldp+163,((0x1bU == (0x1fU 
                                              & (IData)(
                                                        (vlSelf->io_instData 
                                                         >> 2U))))));
-        tracep->fullBit(oldp+163,((0x18U == (0x1fU 
+        tracep->fullBit(oldp+164,((0x18U == (0x1fU 
                                              & (IData)(
                                                        (vlSelf->io_instData 
                                                         >> 2U))))));
-        tracep->fullCData(oldp+164,((7U & (IData)((vlSelf->io_instData 
+        tracep->fullCData(oldp+165,((7U & (IData)((vlSelf->io_instData 
                                                    >> 0xcU)))),3);
-        tracep->fullCData(oldp+165,((0x7fU & (IData)(
+        tracep->fullCData(oldp+166,((0x7fU & (IData)(
                                                      (vlSelf->io_instData 
                                                       >> 0x19U)))),7);
-        tracep->fullCData(oldp+166,((0x1fU & (IData)(
+        tracep->fullCData(oldp+167,((0x1fU & (IData)(
                                                      (vlSelf->io_instData 
                                                       >> 2U)))),5);
-        tracep->fullQData(oldp+167,(((1U & (IData)(
+        tracep->fullQData(oldp+168,(((1U & (IData)(
                                                    (vlSelf->io_instData 
                                                     >> 0x1fU)))
                                       ? 0x1ffffffffULL

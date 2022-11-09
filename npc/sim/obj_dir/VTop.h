@@ -37,6 +37,7 @@ class VTop VL_NOT_FINAL {
     VL_OUT64(&io_wData,63,0);
     VL_OUT64(&io_wAddr,63,0);
     VL_OUT8(&io_wen,0,0);
+    VL_OUT8(&io_ren,0,0);
     VL_OUT8(&io_length,1,0);
 
     // CELLS

@@ -26,6 +26,7 @@ void isa_init();
 
 
 int main(int argc, char** argv, char** env) {
+    bool success = true;
     sim_init();
     init();
     // initial signal
@@ -40,7 +41,8 @@ int main(int argc, char** argv, char** env) {
       contextp->timeInc(1);
     }
 
-    top->io_instData = paddr_read(top->io_instAddr, 4);
+    top->io_instData = paddr_read(top->io_instAddr, 4, &success);
+    if(!success) {sim_exit(); return -1;}
     top->reset = 0;
 
     while(contextp->time() < SIM_TIME) {
@@ -49,13 +51,18 @@ int main(int argc, char** argv, char** env) {
       // posedge clk
       if (top->clock) {
         // write mem (last instruction)
-        if(top->io_wen) {printf("write\n"); paddr_write(top->io_wAddr, top->io_length, top->io_wData);}
+        if(top->io_wen) {
+          printf("write mem\n"); 
+          paddr_write(top->io_wAddr, top->io_length, top->io_wData, &success);
+          if(!success) {sim_exit(); return -1;}
+        }
         // update inst
-        printf("read\n"); 
-        top->io_instData = paddr_read(top->io_instAddr, 4);
+        printf("read inst\n"); 
+        top->io_instData = paddr_read(top->io_instAddr, 4, &success);
+        if(!success) {sim_exit(); return -1;}
         eval_and_wave();
         // read mem
-        // top->io_rData = paddr_read(top->io_rAddr, top->io_length);
+        if(top->io_ren) {printf("reda mem\n"); top->io_rData = paddr_read(top->io_rAddr, top->io_length, &success);if(!success) {sim_exit(); return -1;}}
       }
       else {
         eval_and_wave();

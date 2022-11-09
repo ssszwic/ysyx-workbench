@@ -18,20 +18,34 @@ static void pmem_write(paddr_t addr, int len, uint64_t data) {
   host_write(guest_to_host(addr), len, data);
 }
 
-static void out_of_bound(paddr_t addr) {
-  printf("addr = 0x%08x out of bound mem!\n", addr);
-  assert(0);
+// static void out_of_bound(paddr_t addr) {
+//   printf("addr = 0x%08x out of bound mem!\n", addr);
+//   // assert(0);
+// }
+
+uint64_t paddr_read(paddr_t addr, int len, bool *success) {
+  if (likely(in_pmem(addr))) {
+    return pmem_read(addr, len);
+  }
+  else {
+    printf("addr = 0x%08x out of bound mem!\n", addr);
+    *success = false;
+    return 0;
+  }
+  // device to do
+  // out_of_bound(addr);
+
 }
 
-uint64_t paddr_read(paddr_t addr, int len) {
-  if (likely(in_pmem(addr))) return pmem_read(addr, len);
+void paddr_write(paddr_t addr, int len, uint64_t data, bool *success) {
+  if (likely(in_pmem(addr))) {
+    return pmem_write(addr, len, data);
+  }
+  else {
+    printf("addr = 0x%08x out of bound mem!\n", addr);
+    *success = false;
+    return ;
+  }
   // device to do
-  out_of_bound(addr);
-  return 0;
-}
-
-void paddr_write(paddr_t addr, int len, uint64_t data) {
-  if (likely(in_pmem(addr))) return pmem_write(addr, len, data);
-  // device to do
-  out_of_bound(addr);
+  // out_of_bound(addr);
 }

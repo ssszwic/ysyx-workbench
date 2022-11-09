@@ -29,7 +29,7 @@ class ALU extends Module {
   val plusResultTmp1 = Wire(UInt(64.W))
   val plusResultTmp2 = Wire(UInt(64.W))
   val plusInst = Module(new alu.Plus)
-  plusInst.io.data1 := Mux(io_alu.typeBSel || io_alu.typeJSel, io.pc, io.rs1)
+  plusInst.io.data1 := Mux(io_alu.typeBSel || io_alu.typeJSel || io_alu.aupicSel, io.pc, io.rs1)
   plusInst.io.data2 := Mux(io_alu.subSel, ~src2 + 1.U, src2)
   plusResultTmp1    := plusInst.io.result
   plusResultTmp2    := Mux(io_alu.wordSel, Cat(Fill(32, plusResultTmp1(31)), plusResultTmp1(31, 0)), plusResultTmp1)

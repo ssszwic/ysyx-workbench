@@ -71,6 +71,7 @@ class ALUControl extends Bundle {
   // data flow
   val typeBSel    = Output(Bool())
   val typeJSel    = Output(Bool())
+  val aupicSel    = Output(Bool())
   val immeSel     = Output(Bool())
   // branch
   val typeBEqSel  = Output(Bool())
@@ -174,6 +175,7 @@ class IDU extends Module {
 
   io_alu.typeBSel := typeB
   io_alu.typeJSel := typeJ
+  io_alu.aupicSel := (op5 === "b00101".U)
   io_alu.immeSel := ~typeR
   // BEQ/BNE
   io_alu.typeBEqSel := typeB && (funct3(2, 1) === "b00".U)
