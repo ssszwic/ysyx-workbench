@@ -25,6 +25,7 @@ class MemCtrl extends Module {
 
   // In eight-byte units
   // Consider that there is no cross-unit reading and writing
+  
   when (io.length === 0.U) {
     mask := 1.U << io.addr(2, 0)
   }.elsewhen(io.length === 1.U) {
@@ -35,11 +36,14 @@ class MemCtrl extends Module {
     mask := "b1111_1111".U
   }
 
+  val wData = Wire(UInt(64.W))
+  wData := io.wData << Cat(io.addr(2, 0), "b000".U)
+
   val MemInst_data = Module(new Mem)
   MemInst_data.io.ren     := io.ren
   MemInst_data.io.addr    := addrAlig
   MemInst_data.io.wen     := io.wen
-  MemInst_data.io.wData   := io.wData
+  MemInst_data.io.wData   := wData
   MemInst_data.io.wMask   := mask
 
   // read data
@@ -106,7 +110,7 @@ class Mem extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle {
     // read
     val ren       = Input(Bool())
-    val addr     = Input(UInt(64.W))
+    val addr      = Input(UInt(64.W))
     val rData     = Output(UInt(64.W))
     // write
     val wen       = Input(Bool())
