@@ -31,6 +31,7 @@ int main(int argc, char** argv, char** env) {
   sim_init();
   init();
   // initial signal
+  top->io_cpuEn = 0;
   top->reset = 1;
   top->clock = 1;
   top->io_instData = 0;
@@ -42,32 +43,26 @@ int main(int argc, char** argv, char** env) {
     contextp->timeInc(1);
   }
 
-  // 2: 32bits
-  // set first inst
-  top->io_instData = cpu_read(top->io_instAddr, 2);
   top->reset = 0;
 
   while(contextp->time() < SIM_TIME) {
     top->clock = !top->clock;
     // posedge clk
     if (top->clock) {
-      // 
-      top->io_
       // update pc register
       top->eval();
+      // enable cpu (avoid pc reg change)
+      top->io_cpuEn = 1;
       // update inst
       top->io_instData = cpu_read(top->io_instAddr, 2);
       top->eval();
       // read mem
-      if(top->io_ren) {
-        top->io_rData = cpu_read(top->io_rAddr, top->io_length);
-      }
+      if(top->io_ren) { top->io_rData = cpu_read(top->io_rAddr, top->io_length); }
       // write mem
-      if(top->io_wen) {
-        cpu_write(top->io_wAddr, top->io_length, top->io_wData);
-      }
+      if(top->io_wen) { cpu_write(top->io_wAddr, top->io_length, top->io_wData); }
       eval_and_wave();
     }
+    // negedge clk
     else {
       eval_and_wave();
     }
@@ -127,7 +122,7 @@ void cpu_write(paddr_t addr, int len_code, uint64_t data) {
   int len = 0;
   switch (len_code) {
     case 0: len = 1; break;
-    case 1: len = 2; break;sim_exit
+    case 1: len = 2; break;
     case 2: len = 4; break;
     case 3: len = 8; break;
     default: printf("len_code=%d out of range!(0 1 2 3)\n", len_code); sim_exit(); assert(0);

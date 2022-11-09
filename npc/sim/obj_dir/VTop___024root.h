@@ -22,6 +22,7 @@ VL_MODULE(VTop___024root) {
     // PORTS
     VL_IN8(clock,0,0);
     VL_IN8(reset,0,0);
+    VL_IN8(io_cpuEn,0,0);
     VL_OUT8(io_wen,0,0);
     VL_OUT8(io_ren,0,0);
     VL_OUT8(io_length,1,0);
@@ -125,6 +126,7 @@ VL_MODULE(VTop___024root) {
     struct {
         CData/*0:0*/ Top__DOT____Vtogcov__clock;
         CData/*0:0*/ Top__DOT____Vtogcov__reset;
+        CData/*0:0*/ Top__DOT____Vtogcov__io_cpuEn;
         CData/*0:0*/ Top__DOT____Vtogcov__io_wen;
         CData/*0:0*/ Top__DOT____Vtogcov__io_ren;
         CData/*1:0*/ Top__DOT____Vtogcov__io_length;
@@ -186,9 +188,9 @@ VL_MODULE(VTop___024root) {
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_4;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_5;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_6;
-        QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_7;
     };
     struct {
+        QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_7;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_8;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_9;
         QData/*63:0*/ Top__DOT__RegFilesInst__DOT____Vtogcov__regFiles_10;

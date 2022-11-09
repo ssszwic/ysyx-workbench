@@ -55,6 +55,9 @@ VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)"
 ######################################################################
 default: run
 
+convert:
+	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
+
 compile:
 	@echo
 	@echo "-- VERILATE ----------------"

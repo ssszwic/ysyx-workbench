@@ -12,6 +12,7 @@ VTop::VTop(VerilatedContext* _vcontextp__, const char* _vcname__)
     : vlSymsp{new VTop__Syms(_vcontextp__, _vcname__, this)}
     , clock{vlSymsp->TOP.clock}
     , reset{vlSymsp->TOP.reset}
+    , io_cpuEn{vlSymsp->TOP.io_cpuEn}
     , io_instData{vlSymsp->TOP.io_instData}
     , io_instAddr{vlSymsp->TOP.io_instAddr}
     , io_rData{vlSymsp->TOP.io_rData}

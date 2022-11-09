@@ -115,53 +115,54 @@ void VTop___024root__traceChgSub0(VTop___024root* vlSelf, VerilatedVcd* tracep) 
         }
         tracep->chgBit(oldp+137,(vlSelf->clock));
         tracep->chgBit(oldp+138,(vlSelf->reset));
-        tracep->chgQData(oldp+139,(vlSelf->io_instData),64);
-        tracep->chgQData(oldp+141,(vlSelf->io_instAddr),64);
-        tracep->chgQData(oldp+143,(vlSelf->io_rData),64);
-        tracep->chgQData(oldp+145,(vlSelf->io_rAddr),64);
-        tracep->chgQData(oldp+147,(vlSelf->io_wData),64);
-        tracep->chgQData(oldp+149,(vlSelf->io_wAddr),64);
-        tracep->chgBit(oldp+151,(vlSelf->io_wen));
-        tracep->chgBit(oldp+152,(vlSelf->io_ren));
-        tracep->chgCData(oldp+153,(vlSelf->io_length),2);
-        tracep->chgIData(oldp+154,((IData)(vlSelf->io_instData)),32);
-        tracep->chgCData(oldp+155,((0x1fU & (IData)(
-                                                    (vlSelf->io_instData 
-                                                     >> 0xfU)))),5);
+        tracep->chgBit(oldp+139,(vlSelf->io_cpuEn));
+        tracep->chgQData(oldp+140,(vlSelf->io_instData),64);
+        tracep->chgQData(oldp+142,(vlSelf->io_instAddr),64);
+        tracep->chgQData(oldp+144,(vlSelf->io_rData),64);
+        tracep->chgQData(oldp+146,(vlSelf->io_rAddr),64);
+        tracep->chgQData(oldp+148,(vlSelf->io_wData),64);
+        tracep->chgQData(oldp+150,(vlSelf->io_wAddr),64);
+        tracep->chgBit(oldp+152,(vlSelf->io_wen));
+        tracep->chgBit(oldp+153,(vlSelf->io_ren));
+        tracep->chgCData(oldp+154,(vlSelf->io_length),2);
+        tracep->chgIData(oldp+155,((IData)(vlSelf->io_instData)),32);
         tracep->chgCData(oldp+156,((0x1fU & (IData)(
                                                     (vlSelf->io_instData 
-                                                     >> 0x14U)))),5);
+                                                     >> 0xfU)))),5);
         tracep->chgCData(oldp+157,((0x1fU & (IData)(
                                                     (vlSelf->io_instData 
+                                                     >> 0x14U)))),5);
+        tracep->chgCData(oldp+158,((0x1fU & (IData)(
+                                                    (vlSelf->io_instData 
                                                      >> 7U)))),5);
-        tracep->chgBit(oldp+158,((8U == (0x1fU & (IData)(
+        tracep->chgBit(oldp+159,((8U == (0x1fU & (IData)(
                                                          (vlSelf->io_instData 
                                                           >> 2U))))));
-        tracep->chgBit(oldp+159,((0U == (0x1fU & (IData)(
+        tracep->chgBit(oldp+160,((0U == (0x1fU & (IData)(
                                                          (vlSelf->io_instData 
                                                           >> 2U))))));
-        tracep->chgCData(oldp+160,((3U & (IData)((vlSelf->io_instData 
+        tracep->chgCData(oldp+161,((3U & (IData)((vlSelf->io_instData 
                                                   >> 0xcU)))),2);
-        tracep->chgBit(oldp+161,((1U & (IData)((vlSelf->io_instData 
+        tracep->chgBit(oldp+162,((1U & (IData)((vlSelf->io_instData 
                                                 >> 0xeU)))));
-        tracep->chgBit(oldp+162,((0x1bU == (0x1fU & (IData)(
+        tracep->chgBit(oldp+163,((0x1bU == (0x1fU & (IData)(
                                                             (vlSelf->io_instData 
                                                              >> 2U))))));
-        tracep->chgBit(oldp+163,((0x18U == (0x1fU & (IData)(
+        tracep->chgBit(oldp+164,((0x18U == (0x1fU & (IData)(
                                                             (vlSelf->io_instData 
                                                              >> 2U))))));
-        tracep->chgBit(oldp+164,((5U == (0x1fU & (IData)(
+        tracep->chgBit(oldp+165,((5U == (0x1fU & (IData)(
                                                          (vlSelf->io_instData 
                                                           >> 2U))))));
-        tracep->chgCData(oldp+165,((7U & (IData)((vlSelf->io_instData 
+        tracep->chgCData(oldp+166,((7U & (IData)((vlSelf->io_instData 
                                                   >> 0xcU)))),3);
-        tracep->chgCData(oldp+166,((0x7fU & (IData)(
+        tracep->chgCData(oldp+167,((0x7fU & (IData)(
                                                     (vlSelf->io_instData 
                                                      >> 0x19U)))),7);
-        tracep->chgCData(oldp+167,((0x1fU & (IData)(
+        tracep->chgCData(oldp+168,((0x1fU & (IData)(
                                                     (vlSelf->io_instData 
                                                      >> 2U)))),5);
-        tracep->chgQData(oldp+168,(((1U & (IData)((vlSelf->io_instData 
+        tracep->chgQData(oldp+169,(((1U & (IData)((vlSelf->io_instData 
                                                    >> 0x1fU)))
                                      ? 0x1ffffffffULL
                                      : 0ULL)),33);

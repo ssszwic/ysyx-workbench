@@ -57,5 +57,7 @@ void VTop___024root___eval_debug_assertions(VTop___024root* vlSelf) {
         Verilated::overWidthError("clock");}
     if (VL_UNLIKELY((vlSelf->reset & 0xfeU))) {
         Verilated::overWidthError("reset");}
+    if (VL_UNLIKELY((vlSelf->io_cpuEn & 0xfeU))) {
+        Verilated::overWidthError("io_cpuEn");}
 }
 #endif  // VL_DEBUG
