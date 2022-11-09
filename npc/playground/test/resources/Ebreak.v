@@ -6,6 +6,13 @@ import "DPI-C" function int cpu_inst_ebreak();
 
 wire [31:0] tmp;
 
-assign tmp = ebreak ? cpu_inst_ebreak() : 0;
+always @(*) begin
+  if(ebreak) begin
+    tmp = ebreak ? cpu_inst_ebreak();
+  end
+  else begin
+    tmp = 0;
+  end
+end
 
 endmodule
