@@ -49,22 +49,24 @@ class MemCtrl extends Module {
   val dataWord = Wire(UInt(32.W))
   val dataDoub = Wire(UInt(64.W))
 
+  dataByte := 0.U
+  dataHalf := 0.U
+  dataWord := 0.U
+  dataDoub := 0.U
+
   when (io.length === 0.U) {
-    dataByte := 0.U
     for (i <- 0 until 8) {
       when(mask(i) === 1.U) {
         dataByte := MemInst_data.io.rData(8 * (i + 1) - 1, 8 * i)
       }
     }
   }.elsewhen(io.length === 1.U) {
-    dataHalf := 0.U
     for (i <- 0 until 4) {
       when(mask(2 * (i + 1) - 1, 2 * i) === "b11".U) {
         dataHalf := MemInst_data.io.rData(16 * (i + 1) - 1, 16 * i)
       }
     }
   }.elsewhen(io.length === 1.U) {
-    dataWord := 0.U
     for (i <- 0 until 2) {
       when(mask(4 * (i + 1) - 1, 4 * i) === "b1111".U) {
         dataWord := MemInst_data.io.rData(32 * (i + 1) - 1, 32 * i)
