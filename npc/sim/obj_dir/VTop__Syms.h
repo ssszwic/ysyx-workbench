@@ -34,7 +34,7 @@ class VTop__Syms final : public VerilatedSyms {
     VTop_MemVirtual                TOP__Top__DOT__MemCtrlInst__DOT__MemInst_data;
 
     // COVERAGE
-    uint32_t __Vcoverage[4145];
+    uint32_t __Vcoverage[4146];
 
     // CONSTRUCTORS
     VTop__Syms(VerilatedContext* contextp, const char* namep, VTop* modelp);

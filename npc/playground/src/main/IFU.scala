@@ -20,7 +20,7 @@ class IFU extends Module {
   addrAlig := Cat(pc(63, 3), Fill(3, 0.U(1.W)))
 
   val MemVirtualInst_instr = Module(new MemVirtual)
-  MemVirtualInst_instr.io.ren    := false.B
+  MemVirtualInst_instr.io.ren    := io.pcEn
   MemVirtualInst_instr.io.addr   := addrAlig
   MemVirtualInst_instr.io.wen    := false.B
   MemVirtualInst_instr.io.wData  := 0.U
