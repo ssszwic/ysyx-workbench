@@ -25,7 +25,6 @@ class MemCtrl extends Module {
 
   // In eight-byte units
   // Consider that there is no cross-unit reading and writing
-  val data = Wire(UInt(64.W))
   when (io.length === 0.U) {
     mask := 1.U << io.addr(2, 0)
   }.elsewhen(io.length === 1.U) {
