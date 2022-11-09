@@ -131,7 +131,7 @@ class IDU extends Module {
   op5    := io.inst(6, 2)
 
   typeII := (op5(4, 2) === "b001".U && op5(0) === "b0".U)
-  typeIL := (op5 === "b00000".U)
+  typeIL := (op5 === "b00000".U) && (io.inst(1, 0) === "b11".U) // avoid empty inst
   typeIJ := (op5 === "b11011".U)
 
   typeR := (op5(4, 2) === "b011".U) && (op5(0) === "b0".U)

@@ -55,10 +55,9 @@ void VTop___024root___settle__TOP__2(VTop___024root* vlSelf) {
     VTop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     VL_DEBUG_IF(VL_DBG_MSGF("+    VTop___024root___settle__TOP__2\n"); );
     // Body
-    if ((1U & (IData)(vlSelf->Top__DOT__IFUInst__DOT____Vtogcov__MemVirtualInst_instr_addr))) {
+    if (vlSelf->Top__DOT__IFUInst__DOT____Vtogcov__MemVirtualInst_instr_ren) {
         ++(vlSymsp->__Vcoverage[630]);
-        vlSelf->Top__DOT__IFUInst__DOT____Vtogcov__MemVirtualInst_instr_addr 
-            = (0xfffffffffffffffeULL & vlSelf->Top__DOT__IFUInst__DOT____Vtogcov__MemVirtualInst_instr_addr);
+        vlSelf->Top__DOT__IFUInst__DOT____Vtogcov__MemVirtualInst_instr_ren = 0U;
     }
     if (((IData)(vlSelf->clock) ^ (IData)(vlSelf->Top__DOT____Vtogcov__clock))) {
         ++(vlSymsp->__Vcoverage[0]);

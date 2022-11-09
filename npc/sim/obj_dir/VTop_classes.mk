@@ -35,6 +35,7 @@ VM_CLASSES_FAST += \
 VM_CLASSES_SLOW += \
 	VTop___024root__Slow \
 	VTop___024root__1__Slow \
+	VTop___024root__2__Slow \
 	VTop_MemVirtual__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization
