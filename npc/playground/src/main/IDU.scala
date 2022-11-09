@@ -215,5 +215,5 @@ class Ebreak extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle {
     val b = Input(Bool())
   })
-  addResource("/playground/src/resources/Ebreak.v")
+  addResource("playground/src/resources/Ebreak.v")
 }
