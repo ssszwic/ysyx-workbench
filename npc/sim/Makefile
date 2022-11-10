@@ -46,7 +46,7 @@ VERILATOR_INPUT := $(DESIGN_SRC) $(SRCS)
 
 # CXX FLAGS
 INC_PATH := $(WORK_DIR)/include
-INCLUDE := $(shell find $(INC_PATH) -name "*.h")
+INCLUDES := $(shell find $(INC_PATH) -name "*.h")
 CFLAGS += $(addprefix -I ,$(INC_PATH))
 CFLAGS += -Wall
 CFLAGS += -Werror
@@ -67,13 +67,13 @@ run: $(BUILD_DIR)/V$(MODULE)
 	@echo
 
 # bulid
-$(BUILD_DIR)/V$(MODULE): $(BUILD_DIR)/V$(MODULE).mk $(INCLUDE)
+$(BUILD_DIR)/V$(MODULE): $(BUILD_DIR)/V$(MODULE).mk $(INCLUDES)
 	@echo
 	@echo "-- BUILD -------------------"
 	$(MAKE) -j -C obj_dir -f V$(MODULE).mk
 
 # convert
-$(BUILD_DIR)/V$(MODULE).mk: $(VERILATOR_INPUT) $(INCLUDE)
+$(BUILD_DIR)/V$(MODULE).mk: $(VERILATOR_INPUT) $(INCLUDES)
 	@echo $(INC_PATH)
 	@echo "-- VERILATE ----------------"
 	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
