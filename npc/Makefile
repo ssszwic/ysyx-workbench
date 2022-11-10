@@ -5,7 +5,7 @@ export PATH := $(PATH):$(abspath ./utils)
 WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/build
 # design scala
-SCALA_SRC := $(shell find $(WORK_DIR)/playground/src -name "*.scala")
+SCALA_SRC := $(shell find $(WORK_DIR)/playground/src -name "*.scala" -not -name "Elaborate.scala")
 # black design
 SCALA_SRC += $(shell find $(WORK_DIR)/playground/test/resources -name "*.v")
 # rtl design
