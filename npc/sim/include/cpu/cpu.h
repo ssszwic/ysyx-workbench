@@ -18,6 +18,6 @@ static int state = NPC_INIT;
 
 void cpu_init();
 void cpu_exit();
-void cpu_exec(int n);
+void cpu_exec(uint64_t n);
 
 #endif

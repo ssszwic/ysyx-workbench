@@ -67,16 +67,14 @@ run: $(BUILD_DIR)/V$(MODULE)
 	@echo
 
 # bulid
-$(BUILD_DIR)/V$(MODULE): $(BUILD_DIR)/V$(MODULE).mk $(INCLUDES)
+$(BUILD_DIR)/V$(MODULE): $(VERILATOR_INPUT) $(INCLUDES)
+	@echo
+	@echo "-- VERILATE ----------------"
+	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
+
 	@echo
 	@echo "-- BUILD -------------------"
 	$(MAKE) -j -C obj_dir -f V$(MODULE).mk
-
-# convert
-$(BUILD_DIR)/V$(MODULE).mk: $(VERILATOR_INPUT) $(INCLUDES)
-	@echo $(VERILATOR_INPUT)
-	@echo "-- VERILATE ----------------"
-	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
 
 wave:
 	gtkwave wave.vcd
