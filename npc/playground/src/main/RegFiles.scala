@@ -5,6 +5,8 @@ import chisel3.util._
 
 class RegFiles extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle{
+    val clock   = Input(Clock())
+    val reset   = Input(Bool())
     val rs1Addr = Input(UInt(5.W))
     val rs2Addr = Input(UInt(5.W))
     val wen     = Input(Bool())

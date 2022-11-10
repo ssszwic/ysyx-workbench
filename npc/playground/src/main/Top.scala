@@ -37,6 +37,8 @@ class Top extends Module {
   IDUInst.io.inst := IFUInst.io.inst
 
   // RegFiles
+  RegFilesInst.io.clock   := clock
+  RegFilesInst.io.reset   := reset
   RegFilesInst.io.rs1Addr := IDUInst.io.rs1Addr
   RegFilesInst.io.rs2Addr := IDUInst.io.rs2Addr
   RegFilesInst.io.wen     := IDUInst.io.wenReg
