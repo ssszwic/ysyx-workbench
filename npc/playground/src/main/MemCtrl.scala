@@ -39,12 +39,12 @@ class MemCtrl extends Module {
   val wData = Wire(UInt(64.W))
   wData := io.wData << Cat(io.addr(2, 0), "b000".U)
 
-  val MemInst_data = Module(new MemVirtual)
-  MemInst_data.io.ren     := io.ren
-  MemInst_data.io.addr    := addrAlig
-  MemInst_data.io.wen     := io.wen
-  MemInst_data.io.wData   := wData
-  MemInst_data.io.wMask   := mask
+  val MemVirtualInst_data = Module(new MemVirtual)
+  MemVirtualInst_data.io.ren     := io.ren
+  MemVirtualInst_data.io.addr    := addrAlig
+  MemVirtualInst_data.io.wen     := io.wen
+  MemVirtualInst_data.io.wData   := wData
+  MemVirtualInst_data.io.wMask   := mask
 
   // read data
   val dataByte = Wire(UInt(8.W))
@@ -60,23 +60,23 @@ class MemCtrl extends Module {
   when (io.length === 0.U) {
     for (i <- 0 until 8) {
       when(mask(i) === 1.U) {
-        dataByte := MemInst_data.io.rData(8 * (i + 1) - 1, 8 * i)
+        dataByte := MemVirtualInst_data.io.rData(8 * (i + 1) - 1, 8 * i)
       }
     }
   }.elsewhen(io.length === 1.U) {
     for (i <- 0 until 4) {
       when(mask(2 * (i + 1) - 1, 2 * i) === "b11".U) {
-        dataHalf := MemInst_data.io.rData(16 * (i + 1) - 1, 16 * i)
+        dataHalf := MemVirtualInst_data.io.rData(16 * (i + 1) - 1, 16 * i)
       }
     }
   }.elsewhen(io.length === 1.U) {
     for (i <- 0 until 2) {
       when(mask(4 * (i + 1) - 1, 4 * i) === "b1111".U) {
-        dataWord := MemInst_data.io.rData(32 * (i + 1) - 1, 32 * i)
+        dataWord := MemVirtualInst_data.io.rData(32 * (i + 1) - 1, 32 * i)
       }
     }
   }.otherwise{
-    dataDoub := MemInst_data.io.rData
+    dataDoub := MemVirtualInst_data.io.rData
   }
 
   // expend
