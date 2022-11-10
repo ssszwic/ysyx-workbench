@@ -11,11 +11,6 @@
 #include "svdpi.h"
 #include "VTop__Dpi.h"
 
-VerilatedContext* contextp = NULL;
-#ifdef CONFIG_WAVE_ON
-VerilatedVcdC* tfp = NULL;
-#endif
-
 enum { NPC_INIT, NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
 
 static VTop* top;

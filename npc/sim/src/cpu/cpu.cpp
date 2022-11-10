@@ -3,6 +3,11 @@
 #define RESET_TIME 20
 #define SIM_TIME 100
 
+VerilatedContext* contextp = NULL;
+#ifdef CONFIG_WAVE_ON
+VerilatedVcdC* tfp = NULL;
+#endif
+
 // DPI_C
 extern "C" void cpu_inst_ebreak() {
   state = NPC_END;
