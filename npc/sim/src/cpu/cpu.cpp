@@ -3,9 +3,9 @@
 #define RESET_TIME 20
 #define SIM_TIME 100
 
-VerilatedContext* contextp = NULL;
+static VerilatedContext* contextp = NULL;
 #ifdef CONFIG_WAVE_ON
-VerilatedVcdC* tfp = NULL;
+static VerilatedVcdC* tfp = NULL;
 #endif
 
 // DPI_C
