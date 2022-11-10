@@ -17,4 +17,3 @@ class MemVirtual extends BlackBox with HasBlackBoxResource {
   })
   addResource("/MemVirtual.v")
 }
-//
