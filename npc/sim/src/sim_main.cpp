@@ -1,9 +1,9 @@
 #include "cpu/cpu.h"
 
-void isa_init();
+void init_monitor(int, char *[]);
 
 int main(int argc, char *argv[]) {
-  isa_init();
+  init_monitor(argc, argv);
   cpu_init();
   cpu_exec(-1);
   cpu_exit();
