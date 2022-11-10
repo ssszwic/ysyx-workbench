@@ -14,16 +14,18 @@ module RegFiles(
 reg   [63:0]  regFiles [31:0];
 genvar i;
 
-generate 
+generate
   for(i = 0; i < 32; i = i + 1) begin
-    if(reset) begin
-	    regFiles[i] <= 64'b0;
-    end
-    else if(wen & (wAddr == i)) begin
-      regFiles[i] <= wData;
-    end
-    else begin
-      regFiles[i] <= regFiles[i];
+    always@(posedge clock) begin
+      if(reset) begin
+        regFiles[i] <= 64'b0;
+      end
+      else if(wen & (wAddr == i)) begin
+        regFiles[i] <= wData;
+      end
+      else begin
+        regFiles[i] <= regFiles[i];
+      end
     end
   end
 endgenerate
