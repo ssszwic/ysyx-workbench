@@ -18,6 +18,7 @@ static int parse_args(int argc, char *argv[]);
 static long load_img();
 
 void init_monitor(int argc, char *argv[]) {
+  parse_args(argc, argv);
   load_img();
 }
 
