@@ -79,7 +79,7 @@ static void exec_once() {
 static void eval_and_wave(){
   top->eval();
   #ifdef CONFIG_WAVE_ON
-  tfp->dump(contextp->time());
+  tfp->dump(contextp->time());//
   #endif
 }
 
