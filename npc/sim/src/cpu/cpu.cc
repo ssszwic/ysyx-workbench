@@ -12,7 +12,6 @@ extern "C" void cpu_inst_ebreak() {
 static void eval_and_wave();
 static void exec_once();
 
-
 void cpu_exec(int n) {
   for(int i = 0; i < n; i++) {
     exec_once();
