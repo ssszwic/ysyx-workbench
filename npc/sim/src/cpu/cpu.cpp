@@ -4,7 +4,7 @@
 #define SIM_TIME 100
 
 static int state = NPC_INIT;
-static uint64_t half_ret = 0;
+uint64_t half_ret = 0;
 static VTop* top;
 static VerilatedContext* contextp = NULL;
 #ifdef CONFIG_WAVE_ON
