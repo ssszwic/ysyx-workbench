@@ -73,7 +73,7 @@ $(BUILD_DIR)/V$(MODULE): $(BUILD_DIR)/V$(MODULE).mk $(INC_PATH)
 
 # convert
 $(BUILD_DIR)/V$(MODULE).mk: $(VERILATOR_INPUT) $(INC_PATH)
-	@echo $(VERILATOR_INPUT)
+	@echo $(INC_PATH)
 	@echo "-- VERILATE ----------------"
 	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
 
