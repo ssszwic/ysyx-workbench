@@ -27,7 +27,6 @@ run: image
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run ARGS="$(NEMUFLAGS)" IMG=$(IMAGE).bin
 
 run_batch: image
-	echo 6666666666666666666
 	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run ARGS="-b $(NEMUFLAGS)" IMG=$(IMAGE).bin
 
 gdb: image
