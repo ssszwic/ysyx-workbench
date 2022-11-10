@@ -72,6 +72,7 @@ run: $(BUILD_DIR)/V$(MODULE)
 
 # bulid
 $(BUILD_DIR)/V$(MODULE): $(VERILATOR_INPUT) $(INCLUDES)
+	@-rm -r $(BUILD_DIR)
 	@echo
 	@echo "-- VERILATE ----------------"
 	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
