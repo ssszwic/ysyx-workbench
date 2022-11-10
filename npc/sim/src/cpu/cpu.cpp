@@ -3,6 +3,8 @@
 #define RESET_TIME 20
 #define SIM_TIME 100
 
+static int state = NPC_INIT;
+static VTop* top;
 static VerilatedContext* contextp = NULL;
 #ifdef CONFIG_WAVE_ON
 static VerilatedVcdC* tfp = NULL;
