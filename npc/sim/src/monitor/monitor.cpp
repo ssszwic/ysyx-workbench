@@ -15,7 +15,7 @@ static const uint32_t img [] = {
 };
 
 static int parse_args(int argc, char *argv[]);
-static void load_img(char *);
+static long load_img();
 
 void init_monitor(int argc, char *argv[]) {
   load_img();
