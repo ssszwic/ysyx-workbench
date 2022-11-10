@@ -15,9 +15,9 @@ extern "C" {
     // DPI IMPORTS
     // DPI import at /home/ssszw/Work/ysyx-workbench/npc/build/Ebreak.v:5:30
     extern void cpu_inst_ebreak();
-    // DPI import at /home/ssszw/Work/ysyx-workbench/npc/build/Mem.v:12:30
+    // DPI import at /home/ssszw/Work/ysyx-workbench/npc/build/MemVirtual.v:12:30
     extern void pmem_read(long long raddr, long long* rdata);
-    // DPI import at /home/ssszw/Work/ysyx-workbench/npc/build/Mem.v:13:30
+    // DPI import at /home/ssszw/Work/ysyx-workbench/npc/build/MemVirtual.v:13:30
     extern void pmem_write(long long waddr, long long wdata, char wmask);
 
 #ifdef __cplusplus

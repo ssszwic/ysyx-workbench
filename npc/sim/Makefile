@@ -33,57 +33,52 @@ VERILATOR_FLAGS += --coverage
 #VERILATOR_FLAGS += --gdbbt
 
 WORK_DIR := $(shell pwd)
+BUILD_DIR := $(WORK_DIR)/obj_dir
 DESIGN_DIR := $(shell cd ../; pwd)/build
-DESIGNS := $(shell find $(DESIGN_DIR) -name "*.v")
+DESIGN_SRC := $(shell find $(DESIGN_DIR) -name "*.v")
 SRCS := $(shell find $(WORK_DIR)/src -name "*.cpp")
 INPUT_VC := $(shell find $(WORK_DIR)/src -name "input.vc")
 MODULE := Top
 
 # Input files for Verilator
 # Parse arguments from a file
-VERILATOR_INPUT := -f $(INPUT_VC)
-VERILATOR_INPUT += $(DESIGNS) $(SRCS)
+VERILATOR_INPUT := $(DESIGN_SRC) $(SRCS)
 
-# CXX 
+# CXX FLAGS
 INC_PATH := $(WORK_DIR)/include
 CFLAGS += $(addprefix -I ,$(INC_PATH))
 CFLAGS += -Wall
 CFLAGS += -Werror
-
-VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)"
+VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC)
 
 ######################################################################
 default: run
 
-convert:
-	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
-
-compile:
-	@echo
-	@echo "-- VERILATE ----------------"
-	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
-
-	@echo
-	@echo "-- BUILD -------------------"
-	$(MAKE) -j -C obj_dir -f V$(MODULE).mk
-
-run:
+run: $(BUILD_DIR)/V$(MODULE)
 	@echo
 	@echo "-- RUN ---------------------"
 	@rm -rf logs
 	@mkdir -p logs
-
 	@obj_dir/V$(MODULE) +trace
-
 	@echo
 	@echo "-- DONE --------------------"
 	@echo "To see waveforms, make wave"
 	@echo
 
+# bulid
+$(BUILD_DIR)/V$(MODULE): $(BUILD_DIR)/V$(MODULE).mk $(INC_PATH)
+	@echo
+	@echo "-- BUILD -------------------"
+	$(MAKE) -j -C obj_dir -f V$(MODULE).mk
+
+# convert
+$(BUILD_DIR)/V$(MODULE).mk: $(VERILATOR_INPUT) $(INC_PATH)
+	@echo
+	@echo "-- VERILATE ----------------"
+	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
+
 wave:
 	gtkwave wave.vcd
-
-
 
 ######################################################################
 # Other targets

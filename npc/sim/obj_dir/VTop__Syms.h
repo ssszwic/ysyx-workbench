@@ -31,7 +31,7 @@ class VTop__Syms final : public VerilatedSyms {
     // MODULE INSTANCE STATE
     VTop___024root                 TOP;
     VTop_MemVirtual                TOP__Top__DOT__IFUInst__DOT__MemVirtualInst_instr;
-    VTop_MemVirtual                TOP__Top__DOT__MemCtrlInst__DOT__MemInst_data;
+    VTop_MemVirtual                TOP__Top__DOT__MemCtrlInst__DOT__MemVirtualInst_data;
 
     // COVERAGE
     uint32_t __Vcoverage[4146];

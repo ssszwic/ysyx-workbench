@@ -266,12 +266,12 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declQuad(c+32,"Top MemCtrlInst io_wData", false,-1, 63,0);
         tracep->declBus(c+12,"Top MemCtrlInst io_length", false,-1, 1,0);
         tracep->declBit(c+13,"Top MemCtrlInst io_unsign", false,-1);
-        tracep->declBit(c+11,"Top MemCtrlInst MemInst_data_ren", false,-1);
-        tracep->declQuad(c+92,"Top MemCtrlInst MemInst_data_addr", false,-1, 63,0);
-        tracep->declQuad(c+94,"Top MemCtrlInst MemInst_data_rData", false,-1, 63,0);
-        tracep->declBit(c+10,"Top MemCtrlInst MemInst_data_wen", false,-1);
-        tracep->declQuad(c+96,"Top MemCtrlInst MemInst_data_wData", false,-1, 63,0);
-        tracep->declBus(c+98,"Top MemCtrlInst MemInst_data_wMask", false,-1, 7,0);
+        tracep->declBit(c+11,"Top MemCtrlInst MemVirtualInst_data_ren", false,-1);
+        tracep->declQuad(c+92,"Top MemCtrlInst MemVirtualInst_data_addr", false,-1, 63,0);
+        tracep->declQuad(c+94,"Top MemCtrlInst MemVirtualInst_data_rData", false,-1, 63,0);
+        tracep->declBit(c+10,"Top MemCtrlInst MemVirtualInst_data_wen", false,-1);
+        tracep->declQuad(c+96,"Top MemCtrlInst MemVirtualInst_data_wData", false,-1, 63,0);
+        tracep->declBus(c+98,"Top MemCtrlInst MemVirtualInst_data_wMask", false,-1, 7,0);
         tracep->declBus(c+98,"Top MemCtrlInst mask", false,-1, 7,0);
         tracep->declBus(c+99,"Top MemCtrlInst dataByte", false,-1, 7,0);
         tracep->declBus(c+100,"Top MemCtrlInst dataHalf", false,-1, 15,0);
@@ -283,12 +283,12 @@ void VTop___024root__traceInitSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
         tracep->declBit(c+177,"Top IFUInst MemVirtualInst_instr wen", false,-1);
         tracep->declBus(c+180,"Top IFUInst MemVirtualInst_instr wMask", false,-1, 7,0);
         tracep->declQuad(c+178,"Top IFUInst MemVirtualInst_instr wData", false,-1, 63,0);
-        tracep->declBit(c+11,"Top MemCtrlInst MemInst_data ren", false,-1);
-        tracep->declQuad(c+92,"Top MemCtrlInst MemInst_data addr", false,-1, 63,0);
-        tracep->declQuad(c+94,"Top MemCtrlInst MemInst_data rData", false,-1, 63,0);
-        tracep->declBit(c+10,"Top MemCtrlInst MemInst_data wen", false,-1);
-        tracep->declBus(c+98,"Top MemCtrlInst MemInst_data wMask", false,-1, 7,0);
-        tracep->declQuad(c+96,"Top MemCtrlInst MemInst_data wData", false,-1, 63,0);
+        tracep->declBit(c+11,"Top MemCtrlInst MemVirtualInst_data ren", false,-1);
+        tracep->declQuad(c+92,"Top MemCtrlInst MemVirtualInst_data addr", false,-1, 63,0);
+        tracep->declQuad(c+94,"Top MemCtrlInst MemVirtualInst_data rData", false,-1, 63,0);
+        tracep->declBit(c+10,"Top MemCtrlInst MemVirtualInst_data wen", false,-1);
+        tracep->declBus(c+98,"Top MemCtrlInst MemVirtualInst_data wMask", false,-1, 7,0);
+        tracep->declQuad(c+96,"Top MemCtrlInst MemVirtualInst_data wData", false,-1, 63,0);
     }
 }
 
@@ -414,7 +414,7 @@ void VTop___024root__traceFullSub0(VTop___024root* vlSelf, VerilatedVcd* tracep)
                                                                  vlSelf->Top__DOT__ALUInst__DOT__shiftInst__DOT___GEN_2[0U])))),64);
         tracep->fullQData(oldp+92,((0xfffffffffffffff8ULL 
                                     & vlSelf->Top__DOT__ALUInst_io_result)),64);
-        tracep->fullQData(oldp+94,(vlSymsp->TOP__Top__DOT__MemCtrlInst__DOT__MemInst_data.rData),64);
+        tracep->fullQData(oldp+94,(vlSymsp->TOP__Top__DOT__MemCtrlInst__DOT__MemVirtualInst_data.rData),64);
         tracep->fullQData(oldp+96,((((QData)((IData)(
                                                      vlSelf->Top__DOT__MemCtrlInst__DOT___wData_T_2[1U])) 
                                      << 0x20U) | (QData)((IData)(

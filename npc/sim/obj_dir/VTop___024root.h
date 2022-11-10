@@ -21,7 +21,7 @@ VL_MODULE(VTop___024root) {
   public:
     // CELLS
     VTop_MemVirtual* __PVT__Top__DOT__IFUInst__DOT__MemVirtualInst_instr;
-    VTop_MemVirtual* __PVT__Top__DOT__MemCtrlInst__DOT__MemInst_data;
+    VTop_MemVirtual* __PVT__Top__DOT__MemCtrlInst__DOT__MemVirtualInst_data;
 
     // PORTS
     VL_IN8(clock,0,0);
@@ -167,7 +167,7 @@ VL_MODULE(VTop___024root) {
         CData/*0:0*/ Top__DOT__ALUInst__DOT__lessInst__DOT____Vtogcov__unsignResult;
         CData/*0:0*/ Top__DOT__ALUInst__DOT__lessInst__DOT____Vtogcov__signedResult;
         CData/*0:0*/ Top__DOT__ALUInst__DOT__lessInst__DOT____Vtogcov__lessResult;
-        CData/*7:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__MemInst_data_wMask;
+        CData/*7:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__MemVirtualInst_data_wMask;
         CData/*7:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__dataByte;
         CData/*0:0*/ __Vclklast__TOP__clock;
         SData/*10:0*/ Top__DOT__IDUInst__DOT____Vtogcov__io_imme_imme1;
@@ -234,8 +234,8 @@ VL_MODULE(VTop___024root) {
         QData/*63:0*/ Top__DOT__ALUInst__DOT____Vtogcov__xorResult;
         QData/*63:0*/ Top__DOT__ALUInst__DOT__shiftInst__DOT____Vtogcov__data1;
         QData/*63:0*/ Top__DOT__ALUInst__DOT__shiftInst__DOT____Vtogcov__result;
-        QData/*63:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__MemInst_data_rData;
-        QData/*63:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__MemInst_data_wData;
+        QData/*63:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__MemVirtualInst_data_rData;
+        QData/*63:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__MemVirtualInst_data_wData;
         QData/*63:0*/ Top__DOT__MemCtrlInst__DOT____Vtogcov__dataDoub;
         VlUnpacked<CData/*0:0*/, 3> __Vm_traceActivity;
     };

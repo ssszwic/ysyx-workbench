@@ -54,10 +54,10 @@ VL_INLINE_OPT void VTop_MemVirtual___settle__TOP__Top__DOT__IFUInst__DOT__MemVir
     }
 }
 
-VL_INLINE_OPT void VTop_MemVirtual___settle__TOP__Top__DOT__MemCtrlInst__DOT__MemInst_data__2(VTop_MemVirtual* vlSelf) {
+VL_INLINE_OPT void VTop_MemVirtual___settle__TOP__Top__DOT__MemCtrlInst__DOT__MemVirtualInst_data__2(VTop_MemVirtual* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     VTop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+          VTop_MemVirtual___settle__TOP__Top__DOT__MemCtrlInst__DOT__MemInst_data__2\n"); );
+    VL_DEBUG_IF(VL_DBG_MSGF("+          VTop_MemVirtual___settle__TOP__Top__DOT__MemCtrlInst__DOT__MemVirtualInst_data__2\n"); );
     // Body
     ++(vlSymsp->__Vcoverage[4145]);
     if (vlSymsp->TOP.Top__DOT__IDUInst_io_renMem) {

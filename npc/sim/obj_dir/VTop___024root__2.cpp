@@ -3689,7 +3689,7 @@ void VTop___024root___combo__TOP__6(VTop___024root* vlSelf);
 void VTop___024root___sequent__TOP__7(VTop___024root* vlSelf);
 void VTop_MemVirtual___settle__TOP__Top__DOT__IFUInst__DOT__MemVirtualInst_instr__1(VTop_MemVirtual* vlSelf);
 void VTop___024root___settle__TOP__4(VTop___024root* vlSelf);
-void VTop_MemVirtual___settle__TOP__Top__DOT__MemCtrlInst__DOT__MemInst_data__2(VTop_MemVirtual* vlSelf);
+void VTop_MemVirtual___settle__TOP__Top__DOT__MemCtrlInst__DOT__MemVirtualInst_data__2(VTop_MemVirtual* vlSelf);
 void VTop___024root___settle__TOP__5(VTop___024root* vlSelf);
 
 void VTop___024root___eval(VTop___024root* vlSelf) {
@@ -3706,7 +3706,7 @@ void VTop___024root___eval(VTop___024root* vlSelf) {
     }
     VTop_MemVirtual___settle__TOP__Top__DOT__IFUInst__DOT__MemVirtualInst_instr__1((&vlSymsp->TOP__Top__DOT__IFUInst__DOT__MemVirtualInst_instr));
     VTop___024root___settle__TOP__4(vlSelf);
-    VTop_MemVirtual___settle__TOP__Top__DOT__MemCtrlInst__DOT__MemInst_data__2((&vlSymsp->TOP__Top__DOT__MemCtrlInst__DOT__MemInst_data));
+    VTop_MemVirtual___settle__TOP__Top__DOT__MemCtrlInst__DOT__MemVirtualInst_data__2((&vlSymsp->TOP__Top__DOT__MemCtrlInst__DOT__MemVirtualInst_data));
     VTop___024root___settle__TOP__5(vlSelf);
     // Final
     vlSelf->__Vclklast__TOP__clock = vlSelf->clock;

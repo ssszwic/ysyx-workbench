@@ -15,7 +15,7 @@ VTop::VTop(VerilatedContext* _vcontextp__, const char* _vcname__)
     , reset{vlSymsp->TOP.reset}
     , io_cpuEn{vlSymsp->TOP.io_cpuEn}
     , __PVT__Top__DOT__IFUInst__DOT__MemVirtualInst_instr{vlSymsp->TOP.__PVT__Top__DOT__IFUInst__DOT__MemVirtualInst_instr}
-    , __PVT__Top__DOT__MemCtrlInst__DOT__MemInst_data{vlSymsp->TOP.__PVT__Top__DOT__MemCtrlInst__DOT__MemInst_data}
+    , __PVT__Top__DOT__MemCtrlInst__DOT__MemVirtualInst_data{vlSymsp->TOP.__PVT__Top__DOT__MemCtrlInst__DOT__MemVirtualInst_data}
     , rootp{&(vlSymsp->TOP)}
 {
 }

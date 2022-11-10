@@ -1,9 +1,10 @@
 BUILD_DIR = ./build
 
-export PATH := $(PATH):$(abspath ./utils)
+# export PATH := $(PATH):$(abspath ./utils)
 
 WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/build
+SIM_DIR := $(WORK_DIR)/sim
 # design scala
 SCALA_SRC := $(shell find $(WORK_DIR)/playground/src -name "*.scala" -not -name "Elaborate.scala")
 # black design
@@ -24,6 +25,10 @@ $(DESIGN_SRC): $(SCALA_SRC)
 	mkdir -p $(BUILD_DIR)
 	mill -i __.test.runMain main.Elaborate -td $(BUILD_DIR) --emit-modules verilog
 
+sim:
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	make -C $(SIM_DIR)
+
 help:
 	mill -i __.test.runMain main.Elaborate --help
 
@@ -42,10 +47,8 @@ checkformat:
 clean:
 	-rm -rf $(BUILD_DIR)
 
-.PHONY: test verilog help compile bsp reformat checkformat clean
+.PHONY: test verilog help compile bsp reformat checkformat clean sim
 
-sim:
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@echo "Write this Makefile by yourself."
+
 
 include ../Makefile

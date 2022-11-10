@@ -38,7 +38,7 @@ class VTop VL_NOT_FINAL {
     // Public to allow access to /* verilator public */ items.
     // Otherwise the application code can consider these internals.
     VTop_MemVirtual* const __PVT__Top__DOT__IFUInst__DOT__MemVirtualInst_instr;
-    VTop_MemVirtual* const __PVT__Top__DOT__MemCtrlInst__DOT__MemInst_data;
+    VTop_MemVirtual* const __PVT__Top__DOT__MemCtrlInst__DOT__MemVirtualInst_data;
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.
