@@ -60,7 +60,7 @@ static void exec_once() {
     top->eval();
     // enable cpu (avoid pc reg change)
     top->io_cpuEn = 1;
-    state == NPC_RUNNING;
+    state = NPC_RUNNING;
   }
   // update inst
   eval_and_wave();
