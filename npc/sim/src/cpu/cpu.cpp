@@ -4,20 +4,27 @@
 #define SIM_TIME 100
 
 static int state = NPC_INIT;
+static uint64_t half_ret = 0;
 static VTop* top;
 static VerilatedContext* contextp = NULL;
 #ifdef CONFIG_WAVE_ON
 static VerilatedVcdC* tfp = NULL;
 #endif
 
-// DPI_C
-extern "C" void cpu_inst_ebreak() {
-  state = NPC_END;
-}
+
 uint64_t *cpu_gpr = NULL;
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
   cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
 }
+
+// DPI_C
+extern "C" void cpu_inst_ebreak() {
+  // half = $a0
+  half_ret = *(cpu_gpr + 5);
+  state = NPC_END;
+}
+
+
 
 // current file function
 static void eval_and_wave();
