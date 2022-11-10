@@ -52,6 +52,10 @@ CFLAGS += -Wall
 CFLAGS += -Werror
 VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC)
 
+# NPCFLAGS
+override ARGS ?=
+IMG ?=
+
 ######################################################################
 default: run
 
@@ -60,7 +64,7 @@ run: $(BUILD_DIR)/V$(MODULE)
 	@echo "-- RUN ---------------------"
 	@rm -rf logs
 	@mkdir -p logs
-	@obj_dir/V$(MODULE) +trace
+	@obj_dir/V$(MODULE) $(ARGS) $(IMG)
 	@echo
 	@echo "-- DONE --------------------"
 	@echo "To see waveforms, make wave"
