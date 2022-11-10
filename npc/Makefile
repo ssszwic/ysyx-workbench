@@ -3,7 +3,7 @@ BUILD_DIR = ./build
 export PATH := $(PATH):$(abspath ./utils)
 
 WORK_DIR := $(shell pwd)
-BUILD_DIR := WORK_DIR/build
+BUILD_DIR := $(WORK_DIR)/build
 
 
 test:
