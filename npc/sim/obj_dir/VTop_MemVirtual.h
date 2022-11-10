@@ -28,6 +28,7 @@ VL_MODULE(VTop_MemVirtual) {
     VL_IN64(wData,63,0);
 
     // LOCAL VARIABLES
+    QData/*63:0*/ __Vtask_pmem_read__0__rdata;
     QData/*63:0*/ __Vtask_pmem_read__2__rdata;
 
     // INTERNAL VARIABLES

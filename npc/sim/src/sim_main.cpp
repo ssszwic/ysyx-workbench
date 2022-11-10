@@ -72,7 +72,6 @@ int main(int argc, char** argv, char** env) {
     contextp->timeInc(1);
   }
 
-  eval_and_wave();
   sim_exit();
 }
 
@@ -101,7 +100,6 @@ void eval_and_wave(){
 
 void sim_exit(){
   printf("save wave\n");
-  eval_and_wave();
   #ifdef CONFIG_WAVE_ON
     tfp->close();
   #endif

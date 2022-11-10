@@ -41,17 +41,6 @@ void VTop_MemVirtual::__vlCoverInsert(uint32_t* countp, bool enable, const char*
         "hier",std::string(name())+hierp,  "page",pagep,  "comment",commentp,  (linescovp[0] ? "linescov" : ""), linescovp);
 }
 
-void VTop_MemVirtual___settle__TOP__Top__DOT__IFUInst__DOT__MemVirtualInst_instr__1(VTop_MemVirtual* vlSelf) {
-    if (false && vlSelf) {}  // Prevent unused
-    VTop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    VL_DEBUG_IF(VL_DBG_MSGF("+          VTop_MemVirtual___settle__TOP__Top__DOT__IFUInst__DOT__MemVirtualInst_instr__1\n"); );
-    // Body
-    ++(vlSymsp->__Vcoverage[4142]);
-    ++(vlSymsp->__Vcoverage[4144]);
-    ++(vlSymsp->__Vcoverage[4145]);
-    vlSelf->rData = 0ULL;
-}
-
 void VTop_MemVirtual___ctor_var_reset(VTop_MemVirtual* vlSelf) {
     if (false && vlSelf) {}  // Prevent unused
     VTop__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
@@ -63,6 +52,7 @@ void VTop_MemVirtual___ctor_var_reset(VTop_MemVirtual* vlSelf) {
     vlSelf->wen = VL_RAND_RESET_I(1);
     vlSelf->wMask = VL_RAND_RESET_I(8);
     vlSelf->wData = VL_RAND_RESET_Q(64);
+    vlSelf->__Vtask_pmem_read__0__rdata = 0;
     vlSelf->__Vtask_pmem_read__2__rdata = 0;
 }
 
@@ -72,7 +62,7 @@ void VTop_MemVirtual___configure_coverage(VTop_MemVirtual* vlSelf, bool first) {
     VL_DEBUG_IF(VL_DBG_MSGF("+          VTop_MemVirtual___configure_coverage\n"); );
     // Body
     if (false && first) {}  // Prevent unused
-    vlSelf->__vlCoverInsert(&(vlSymsp->__Vcoverage[630]), first, "/home/ssszw/Work/ysyx-workbench/npc/build/Mem.v", 3, 25, "", "v_toggle/MemVirtual", "ren", "");
+    vlSelf->__vlCoverInsert(&(vlSymsp->__Vcoverage[229]), first, "/home/ssszw/Work/ysyx-workbench/npc/build/Mem.v", 3, 25, "", "v_toggle/MemVirtual", "ren", "");
     vlSelf->__vlCoverInsert(&(vlSymsp->__Vcoverage[630]), first, "/home/ssszw/Work/ysyx-workbench/npc/build/Mem.v", 4, 25, "", "v_toggle/MemVirtual", "addr[0]", "");
     vlSelf->__vlCoverInsert(&(vlSymsp->__Vcoverage[630]), first, "/home/ssszw/Work/ysyx-workbench/npc/build/Mem.v", 4, 25, "", "v_toggle/MemVirtual", "addr[1]", "");
     vlSelf->__vlCoverInsert(&(vlSymsp->__Vcoverage[630]), first, "/home/ssszw/Work/ysyx-workbench/npc/build/Mem.v", 4, 25, "", "v_toggle/MemVirtual", "addr[2]", "");
