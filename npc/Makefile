@@ -6,7 +6,6 @@ WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/build
 SCALA_SRC := $(shell find $(WORK_DIR)/playground -name "*.scala" -or -name "*.v")
 
-
 test:
 	mill -i __.test
 
