@@ -7,7 +7,7 @@ static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
 
 uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 uint32_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
-void sim_exit();
+void cpu_exit();
 
 // static uint64_t pmem_read(paddr_t addr, int len) {
 //   uint64_t ret = host_read(guest_to_host(addr), len);
@@ -19,7 +19,7 @@ void sim_exit();
 // }
 
 static void out_of_bound(paddr_t addr) {
-  sim_exit();
+  cpu_exit();
   printf("addr = 0x%08x out of bound mem!\n", addr);
   assert(0);
 }
