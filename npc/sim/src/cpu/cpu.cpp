@@ -84,7 +84,9 @@ static void eval_and_wave(){
 }
 
 void cpu_exit(){
-  eval_and_wave();
+  #ifdef CONFIG_WAVE_ON
+  tfp->dump(contextp->time());
+  #endif
   #ifdef CONFIG_WAVE_ON
     printf("save wave successful!\n");
     tfp->close();
