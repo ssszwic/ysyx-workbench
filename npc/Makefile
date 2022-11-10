@@ -45,6 +45,7 @@ checkformat:
 	mill -i __.checkFormat
 
 clean:
+	$(MAKE) -C sim clean
 	-rm -rf $(BUILD_DIR)
 
 .PHONY: test verilog help compile bsp reformat checkformat clean sim
