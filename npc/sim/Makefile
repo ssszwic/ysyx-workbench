@@ -74,7 +74,7 @@ $(BUILD_DIR)/V$(MODULE): $(BUILD_DIR)/V$(MODULE).mk $(INCLUDES)
 
 # convert
 $(BUILD_DIR)/V$(MODULE).mk: $(VERILATOR_INPUT) $(INCLUDES)
-	@echo $(INCLUDES)
+	@echo $(VERILATOR_INPUT)
 	@echo "-- VERILATE ----------------"
 	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)
 
