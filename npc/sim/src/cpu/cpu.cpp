@@ -14,7 +14,7 @@ static VerilatedVcdC* tfp = NULL;
 extern "C" void cpu_inst_ebreak() {
   state = NPC_END;
 }
-
+uint64_t *cpu_gpr = NULL;
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
   cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
 }
