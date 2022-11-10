@@ -10,11 +10,13 @@
 #include "mem/mem.h"
 #include "svdpi.h"
 #include "VTop__Dpi.h"
+#include "verilated_dpi.h"
 
 enum { NPC_INIT, NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
 
 static VTop* top;
 static int state = NPC_INIT;
+uint64_t *cpu_gpr = NULL;
 
 void cpu_init();
 void cpu_exit();

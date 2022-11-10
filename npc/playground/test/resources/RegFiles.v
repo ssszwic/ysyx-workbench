@@ -11,7 +11,7 @@ module RegFiles(
   output    [63:0]  rs2Data
 );
 
-reg   [63:0]  regFiles [31:0];
+reg   [63:0]  regFiles [0:31];
 genvar i;
 
 generate
@@ -32,5 +32,8 @@ endgenerate
 
 assign rs1Data = (rs1Addr == 5'd0) ? 64'd0 : regFiles[rs1Addr];
 assign rs2Data = (rs2Addr == 5'd0) ? 64'd0 : regFiles[rs2Addr];
+
+import "DPI-C" function void set_gpr_ptr(input logic [63:0] a []);
+initial set_gpr_ptr(regFiles);
 
 endmodule
