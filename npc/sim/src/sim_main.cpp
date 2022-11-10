@@ -7,5 +7,5 @@ int main(int argc, char *argv[]) {
   cpu_init();
   cpu_exec(-1);
   cpu_exit();
-  return 0;
+  return -1;
 }
