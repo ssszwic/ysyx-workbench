@@ -4,12 +4,21 @@ export PATH := $(PATH):$(abspath ./utils)
 
 WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/build
-SCALA_SRC := $(shell find $(WORK_DIR)/playground -name "*.scala" -or -name "*.v")
+# design scala
+SCALA_SRC := $(shell find $(WORK_DIR)/playground/src -name "*.scala")
+# black design
+SCALA_SRC += $(shell find $(WORK_DIR)/playground/test/resources -name "*.v")
+# rtl design
+DESIGN_SRC := $(addsuffix .v,$(sort $(basename $(notdir $(SCALA_SRC)))))
+DESIGN_SRC := $(addprefix $(BUILD_DIR)/,$(DESIGN_SRC))
 
 test:
-	mill -i __.test
+	@echo $(DESIGN_SRC)
+	# mill -i __.test
 
-verilog: $(SCALA_SRC)
+verilog: $(DESIGN_SRC)
+
+$(DESIGN_SRC): $(SCALA_SRC)
 	$(call git_commit, "generate verilog")
 	-rm -r $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)
