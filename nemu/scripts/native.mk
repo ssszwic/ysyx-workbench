@@ -36,13 +36,13 @@ run-env: $(BINARY) $(DIFF_REF_SO)
 run: run-env
 	echo 66666666666666666666
 	$(call git_commit, "run NEMU")
+	echo $(NEMU_EXEC)
 	$(NEMU_EXEC)
 
 nemu_help: 
 	$(NEMU_EXEC) -help
 
 batch: 
-	echo 66666666666666666666
 	$(NEMU_EXEC) -b
 
 gdb: run-env
