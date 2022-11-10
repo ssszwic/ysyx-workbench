@@ -4,12 +4,13 @@ export PATH := $(PATH):$(abspath ./utils)
 
 WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/build
+SCALA_SRC := $(shell find $(WORK_DIR)/playground -name "*.scala" -or -name "*.v")
 
 
 test:
 	mill -i __.test
 
-verilog: 
+verilog: $(SCALA_SRC)
 	$(call git_commit, "generate verilog")
 	-rm -r $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)
