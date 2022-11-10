@@ -19,7 +19,7 @@ void cpu_exec(int n) {
   }
 }
 
-static void cpu_init() {
+void cpu_init() {
   contextp = new VerilatedContext;
   top = new VTop;
   #ifdef CONFIG_WAVE_ON
