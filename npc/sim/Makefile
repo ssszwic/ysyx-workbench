@@ -67,7 +67,7 @@ run: $(BUILD_DIR)/V$(MODULE)
 
 # bulid
 $(BUILD_DIR)/V$(MODULE): $(BUILD_DIR)/V$(MODULE).mk $(INC_PATH)
-	@echo
+	@echo $(SRCS)
 	@echo "-- BUILD -------------------"
 	$(MAKE) -j -C obj_dir -f V$(MODULE).mk
 
