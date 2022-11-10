@@ -41,6 +41,7 @@ nemu_help:
 	$(NEMU_EXEC) -help
 
 batch: 
+	echo $(NEMU_EXEC)
 	$(NEMU_EXEC) -b
 
 gdb: run-env
