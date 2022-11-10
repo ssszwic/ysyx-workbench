@@ -1,4 +1,6 @@
 module RegFiles(
+  input             clock,
+  input             reset,
   input     [4:0]   rs1Addr,
   input     [4:0]   rs2Addr,
   input             wen,
