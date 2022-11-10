@@ -25,7 +25,7 @@ $(DESIGN_SRC): $(SCALA_SRC)
 	mkdir -p $(BUILD_DIR)
 	mill -i __.test.runMain main.Elaborate -td $(BUILD_DIR) --emit-modules verilog
 
-sim: $(DESIGN_SRC)
+run: $(DESIGN_SRC)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	make -C $(SIM_DIR)
 
