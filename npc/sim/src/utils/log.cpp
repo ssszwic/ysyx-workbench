@@ -10,16 +10,12 @@ void log_init(char *file) {
     printf("can't open or create log file: %s\n", file);
     assert(0);
   }
-  log_write("open log file\n");
-  log_write("open log file: \n", file);
 }
 
 void log_exit() {
-  if(fp == NULL) {
-    printf("log file is not opened!\n");
-    assert(0);
+  if(fp != NULL) {
+    fclose(fp);
   }
-  fclose(fp);
 }
 
 void log_write(const char *fmt, ...) {
@@ -31,8 +27,10 @@ void log_write(const char *fmt, ...) {
   int n = vsprintf(buff, fmt, ap);
   va_end(ap);
 
+  if(fp != NULL) {
+    // write to log file
+    fprintf(fp, buff);
+  }
   // print to screen
   printf("%s", buff);
-  // write to log file
-  fprintf(fp, buff);
 }

@@ -21,8 +21,13 @@ extern "C" void init_disasm(const char *triple);
 
 void init_monitor(int argc, char *argv[]) {
   parse_args(argc, argv);
-  if(log_file == NULL) {log_file = "/home/ssszw/Work/ysyx-workbench/npc/sim/log.txt";}
-  log_init(log_file);
+  if(log_file != NULL) {
+    printf("create log file\n");
+    log_init(log_file);
+  }
+  else {
+    printf("there is no log, log file will not be creat\n");
+  }
   load_img();
   init_disasm("riscv64" "-pc-linux-gnu");
 }
