@@ -21,11 +21,8 @@ extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
 extern "C" void cpu_inst_ebreak() {
   // half = $a0
   half_ret = *(cpu_gpr + 10);
-  printf("0x%lx", half_ret);
   state = NPC_END;
 }
-
-
 
 // current file function
 static void eval_and_wave();
