@@ -52,6 +52,15 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   out_of_bound(paddr);
 }
 
+uint32_t get_inst(vaddr_t paddr) {
+  if (likely(in_pmem(paddr))) {
+    return host_read(guest_to_host(paddr), 4);
+  }
+  printf("get insttruction addr = 0x%08x out of bound mem!\n", paddr);
+  assert(0);
+  return 0;
+}
+
 
 
 // uint64_t paddr_read(paddr_t addr, int len, bool *success) {
