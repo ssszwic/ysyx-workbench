@@ -1,6 +1,6 @@
 #include "cpu/cpu.h"
 
-void init_monitor(int, char *[]);
+extern "C" void init_monitor(int, char *[]);
 
 int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
