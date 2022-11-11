@@ -3,8 +3,6 @@ package main
 import chisel3._
 import chisel3.util._
 
-
-
 class IFU  extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle {
     val nextpc    = Input(UInt(64.W))
@@ -42,4 +40,4 @@ class IFU  extends BlackBox with HasBlackBoxResource {
   // MemVirtualInst_instr.io.wMask  := 0.U
 
   // io.inst := Mux(pc(2, 0) === "b100".U, MemVirtualInst_instr.io.rData(63, 32), MemVirtualInst_instr.io.rData(31, 0))
-}
+// }
