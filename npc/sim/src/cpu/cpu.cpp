@@ -34,10 +34,10 @@ void cpu_exec(uint64_t n) {
     if(state == NPC_END) {break;}
   }
   if (half_ret == 0) {
-    printf(ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN));
+    printf(ANSI_FMT("HIT GOOD TRAP\n", ANSI_FG_GREEN));
   }
   else {
-    printf(ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED));
+    printf(ANSI_FMT("HIT BAD TRAP\n", ANSI_FG_RED));
   }
 }
 
