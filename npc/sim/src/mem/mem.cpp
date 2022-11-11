@@ -29,8 +29,6 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
   uint32_t paddr = raddr & ~0x7;
   if (likely(in_pmem(paddr))) {
     *rdata = host_read(guest_to_host(paddr), 8);
-    printf("raddr: 0x%llx\n", raddr);
-    printf("rdata: 0x%llx\n", *rdata);
     return;
   }
   out_of_bound(paddr);
@@ -49,6 +47,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, char wmask) {
     for (int i = 0; i < 8; i++) {
       if((wmask >> i) % 2 == 1) {
         data_byte = (uint8_t) (wdata >> (8 * i)) & 0xFF;
+        printf("data_byte: %d", data_byte);
         host_write(guest_to_host(paddr + i), 1, data_byte);
       }
     }
