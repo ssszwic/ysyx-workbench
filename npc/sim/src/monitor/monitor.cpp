@@ -19,6 +19,7 @@ static long load_img();
 extern "C" void init_disasm(const char *triple);
 
 void init_monitor(int argc, char *argv[]) {
+  
   parse_args(argc, argv);
   load_img();
   init_disasm("riscv64" "-pc-linux-gnu");
