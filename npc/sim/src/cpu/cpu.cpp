@@ -56,7 +56,7 @@ void trace_and_difftest() {
   #ifdef CONFIG_ITRACE
   char *p = cpu.logbuf;
   
-  p += snprintf(p, sizeof(cpu.logbuf), "0x016lx:  ", *cpu.pc);
+  p += snprintf(p, sizeof(cpu.logbuf), "0x%016lx:  ", *cpu.pc);
   // print from MSB
   uint32_t inst = get_inst(*cpu.pc);
   uint8_t *inst_byte = (uint8_t *) &inst;
