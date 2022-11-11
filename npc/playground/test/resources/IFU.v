@@ -20,7 +20,7 @@ always@(posedge clock) begin
     pcReg <= 64'h80000000;
   end
   else if(pcEn) begin
-    pcReg <= nextPc;
+    pcReg <= nextpc;
   end
   else begin
     pcReg <= pcReg;
@@ -28,8 +28,14 @@ always@(posedge clock) begin
 end
 
 assign addrAlig = {pcReg[63:3], 3'b0};
-pmem_read(addrAlig, rData);
-assign inst = (pcReg[2, 0] == 3'b100) ? rData[63, 32] : rData[31, 0];
+
+always@(*) begin
+  if(pcEn) begin
+    pmem_read(addrAlig, rData);
+  end
+end
+
+assign inst = (pcReg[2:0] == 3'b100) ? rData[63:32] : rData[31:0];
 assign pc = pcReg;
 
 endmodule
