@@ -50,6 +50,10 @@ INCLUDES := $(shell find $(INC_PATH) -name "*.h")
 CFLAGS += $(addprefix -I ,$(INC_PATH))
 CFLAGS += -Wall
 CFLAGS += -Werror
+# config itrace llvm
+CFLAGS += $(shell llvm-config --cxxflags) -fPIE
+CFLAGS += $(shell llvm-config --libs)
+#
 VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC)
 
 # NPCFLAGS
