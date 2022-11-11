@@ -20,6 +20,10 @@ extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
   cpu.gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
 }
 
+extern "C" void set_pc_ptr(const svOpenArrayHandle r) {
+  cpu.pc = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
+}
+
 // DPI_C
 extern "C" void cpu_inst_ebreak() {
   // half = $a0
@@ -90,6 +94,8 @@ static void exec_once() {
   top->clock = !top->clock;
   eval_and_wave();
   contextp->timeInc(1);
+  // the instruction just executed
+
 }
 
 static void eval_and_wave(){
