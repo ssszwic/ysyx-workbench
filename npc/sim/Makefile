@@ -58,7 +58,6 @@ LDFLAGS += $(shell llvm-config --libs)
 VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
 
 # NPCFLAGS
-# override ARGS ?=
 ARGS += --log=/home/ssszw/Work/ysyx-workbench/npc/sim/log.txt
 IMG ?=
 
@@ -66,7 +65,6 @@ IMG ?=
 default: run
 
 run: $(BUILD_DIR)/V$(MODULE)
-	echo $(ARGS)
 	@echo
 	@echo "-- RUN ---------------------"
 	@rm -rf logs

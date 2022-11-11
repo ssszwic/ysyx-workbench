@@ -43,10 +43,10 @@ void cpu_exec(uint64_t n) {
     if(npc_state.state == NPC_END) {break;}
   }
   if (npc_state.halt_ret == 0) {
-    printf(ANSI_FMT("HIT GOOD TRAP\n", ANSI_FG_GREEN));
+    log_write(ANSI_FMT("HIT GOOD TRAP\n", ANSI_FG_GREEN));
   }
   else {
-    printf(ANSI_FMT("HIT BAD TRAP\n", ANSI_FG_RED));
+    log_write(ANSI_FMT("HIT BAD TRAP\n", ANSI_FG_RED));
   }
 }
 
@@ -67,12 +67,8 @@ void trace_and_difftest() {
     p += snprintf(p, sizeof(cpu.logbuf), "%02x ", *(inst_byte + i));
   }
 
-  
-
-
   disassemble(p, cpu.logbuf + sizeof(cpu.logbuf) - p, *cpu.pc, inst_byte, 4);
-
-  printf("%s\n", cpu.logbuf);
+  log_write("%s\n", cpu.logbuf);
   #endif
 }
 
