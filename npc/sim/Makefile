@@ -51,7 +51,8 @@ CFLAGS += $(addprefix -I ,$(INC_PATH))
 CFLAGS += -Wall
 CFLAGS += -Werror
 # config itrace llvm
-CFLAGS += $(shell llvm-config --cxxflags) -fPIE
+# CFLAGS += $(shell llvm-config --cxxflags) -fPIE
+CFLAGS += -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE 
 LDFLAGS += $(shell llvm-config --libs)
 #
 VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
