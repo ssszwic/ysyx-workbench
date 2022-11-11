@@ -16,6 +16,7 @@ CPUState cpu = { .gpr = NULL };
 static void eval_and_wave();
 static void isa_exec_once();
 static void exec_once();
+static void trace_and_difftest();
 
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
   cpu.gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
@@ -35,6 +36,7 @@ extern "C" void cpu_inst_ebreak() {
 void cpu_exec(uint64_t n) {
   for(int i = 0; i < n; i++) {
     exec_once();
+    trace_and_difftest();
     if(npc_state.state == NPC_END) {break;}
   }
   if (npc_state.halt_ret == 0) {
@@ -47,6 +49,9 @@ void cpu_exec(uint64_t n) {
 
 void exec_once() {
   isa_exec_once();
+}
+
+void trace_and_difftest() {
   // itrace
   #ifdef CONFIG_ITRACE
   uint32_t inst = get_inst(*cpu.pc);
