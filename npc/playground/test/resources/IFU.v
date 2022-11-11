@@ -9,7 +9,7 @@ module IFU(
 
 reg         [63:0]  pcReg;
 wire        [63:0]  addrAlig;
-wire  reg   [63:0]  rData;
+reg         [63:0]  rData;
 
 import "DPI-C" function void pmem_read(input longint raddr, output longint rdata);
 import "DPI-C" function void set_pc_ptr(input logic [63:0] a []);
