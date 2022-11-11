@@ -47,7 +47,6 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
       printf("i %d\n", (wmask >> i) % 2);
       if((wmask >> i) % 2 == 1) {
         data_byte = (uint8_t) (wdata >> (8 * i)) & 0xFF;
-        printf("data_byte: %d", data_byte);
         host_write(guest_to_host(paddr + i), 1, data_byte);
       }
     }
