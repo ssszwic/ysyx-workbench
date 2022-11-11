@@ -16,7 +16,7 @@ static const uint32_t img [] = {
 
 static int parse_args(int argc, char *argv[]);
 static long load_img();
-void init_disasm(const char *triple);
+extern "C" void init_disasm(const char *triple);
 
 void init_monitor(int argc, char *argv[]) {
   parse_args(argc, argv);
