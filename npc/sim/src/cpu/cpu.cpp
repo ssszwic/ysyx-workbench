@@ -77,12 +77,12 @@ void cpu_init() {
 static void exec_once() {
   top->clock = !top->clock;
   // posedge clk
-  if(state == NPC_INIT) {
+  if(npc_state.state == NPC_INIT) {
     // update pc register
     top->eval();
     // enable cpu (avoid pc reg change)
     top->io_cpuEn = 1;
-    state = NPC_RUNNING;
+    npc_state.state = NPC_RUNNING;
   }
   // update inst
   eval_and_wave();
