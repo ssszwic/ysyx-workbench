@@ -49,8 +49,13 @@ void exec_once() {
   isa_exec_once();
   // itrace
   #ifdef CONFIG_ITRACE
-
-  printf("0x%016lx 0x%08x\n", *cpu.pc, get_inst(*cpu.pc));
+  uint32_t inst = get_inst(*cpu.pc);
+  printf("0x%016lx ", *cpu.pc, inst);
+  uint8_t *inst_byte = (uint8_t *)&inst;
+  for(int i = 4; i > 0; i--) {
+    printf("0x%02x ", *(inst_byte + i));
+  }
+  printf("\n");
   #endif
 }
 
