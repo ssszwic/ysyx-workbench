@@ -47,6 +47,11 @@ void cpu_exec(uint64_t n) {
 
 void exec_once() {
   isa_exec_once();
+  // itrace
+  #ifdef CONFIG_ITRACE
+
+  printf("0x%016lx 0x%08lx\n", *cpu.pc, get_inst(*cpu.pc));
+  #endif
 }
 
 void cpu_init() {

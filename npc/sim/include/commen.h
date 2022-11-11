@@ -8,17 +8,10 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
-
-#define CONFIG_WAVE_ON
-
-// mem
-#define CONFIG_MSIZE 0x8000000
-#define CONFIG_MBASE 0x80000000
+#include "config.h"
 
 typedef uint64_t vaddr_t;
 typedef uint32_t paddr_t;
-
-
 
 // branch prediction optimization gor gcc: tell gcc the probability of cond is true is larger
 #define likely(cond)   __builtin_expect(cond, 1)

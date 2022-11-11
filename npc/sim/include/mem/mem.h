@@ -8,6 +8,7 @@
 
 uint64_t paddr_read(paddr_t addr, int len, bool *success);
 void paddr_write(paddr_t addr, int len, uint64_t data, bool *success);
+uint32_t get_inst(vaddr_t paddr);
 
 /* convert the guest physical address in the guest program to host virtual address in npc */
 uint8_t* guest_to_host(paddr_t paddr);
