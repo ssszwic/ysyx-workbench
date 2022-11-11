@@ -59,6 +59,7 @@ VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
 
 # NPCFLAGS
 override ARGS ?=
+ARGS += --log=/home/ssszw/Work/ysyx-workbench/npc/sim/log.txt
 IMG ?=
 
 ######################################################################
