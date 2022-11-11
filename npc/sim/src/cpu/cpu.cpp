@@ -33,6 +33,12 @@ void cpu_exec(uint64_t n) {
     exec_once();
     if(state == NPC_END) {break;}
   }
+  if (half_ret == 0) {
+    ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN);
+  }
+  else {
+    ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED);
+  }
 }
 
 void cpu_init() {
