@@ -14,6 +14,8 @@
 
 enum { NPC_INIT, NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
 
+extern uint64_t *cpu_gpr;
+
 void cpu_init();
 void cpu_exit();
 void cpu_exec(uint64_t n);
