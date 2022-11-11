@@ -43,8 +43,8 @@ extern "C" void pmem_write(long long waddr, long long wdata, char wmask) {
   uint32_t paddr = waddr & ~0x7;
   uint8_t data_byte;
   if (likely(in_pmem(paddr))) {
-    printf("in peme\n");
     for (int i = 0; i < 8; i++) {
+      printf("i %d\n", (wmask >> i) % 2);
       if((wmask >> i) % 2 == 1) {
         data_byte = (uint8_t) (wdata >> (8 * i)) & 0xFF;
         printf("data_byte: %d", data_byte);
