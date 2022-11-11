@@ -53,7 +53,7 @@ void exec_once() {
   printf("0x%016lx ", *cpu.pc);
   uint8_t *inst_byte = (uint8_t *)&inst;
   for(int i = 4; i > 0; i--) {
-    printf("0x%02x ", *(inst_byte + i));
+    printf("%02x ", *(inst_byte + i));
   }
   printf("\n");
   #endif
