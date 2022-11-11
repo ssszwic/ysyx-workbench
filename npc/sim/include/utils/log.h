@@ -3,6 +3,6 @@
 
 void log_init(char *file);
 void log_exit();
-void log_write(const char *fmt, ...)
+void log_write(const char *fmt, ...);
 
 #endif
