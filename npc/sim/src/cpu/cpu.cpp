@@ -3,16 +3,19 @@
 #define RESET_TIME 20
 #define SIM_TIME 100
 
-static int state = NPC_INIT;
-uint64_t half_ret = 0;
 static VTop* top;
 static VerilatedContext* contextp = NULL;
 #ifdef CONFIG_WAVE_ON
 static VerilatedVcdC* tfp = NULL;
 #endif
 
-
+NPCState npc_state = { .state = NPC_INIT };
 uint64_t *cpu_gpr = NULL;
+
+// current file function
+static void eval_and_wave();
+static void exec_once();
+
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
   cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
 }
@@ -20,20 +23,16 @@ extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
 // DPI_C
 extern "C" void cpu_inst_ebreak() {
   // half = $a0
-  half_ret = *(cpu_gpr + 10);
-  state = NPC_END;
+  npc_state.halt_ret = *(cpu_gpr + 10);
+  npc_state.state = NPC_END;
 }
-
-// current file function
-static void eval_and_wave();
-static void exec_once();
 
 void cpu_exec(uint64_t n) {
   for(int i = 0; i < n; i++) {
     exec_once();
-    if(state == NPC_END) {break;}
+    if(npc_state.state == NPC_END) {break;}
   }
-  if (half_ret == 0) {
+  if (npc_state.halt_ret == 0) {
     printf(ANSI_FMT("HIT GOOD TRAP\n", ANSI_FG_GREEN));
   }
   else {
