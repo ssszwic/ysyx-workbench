@@ -5,6 +5,8 @@ import chisel3.util._
 
 class IFU  extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle {
+    val clock     = Input(Clock())
+    val reset     = Input(Bool())
     val nextpc    = Input(UInt(64.W))
     val pcEn      = Input(Bool())
     val inst      = Output(UInt(32.W))

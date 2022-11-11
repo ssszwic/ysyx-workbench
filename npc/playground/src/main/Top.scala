@@ -30,8 +30,8 @@ class Top extends Module {
   MemCtrlInst.io.unsign := IDUInst.io.unsignMem
 
   // IFU
-  IFUInst.clock       := clock
-  IFUInst.reset       := reset
+  IFUInst.io.clock       := clock
+  IFUInst.io.reset       := reset
   IFUInst.io.nextpc   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
   IFUInst.io.pcEn     := io.cpuEn
 
