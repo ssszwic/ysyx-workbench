@@ -50,7 +50,7 @@ void exec_once() {
   // itrace
   #ifdef CONFIG_ITRACE
   uint32_t inst = get_inst(*cpu.pc);
-  printf("0x%016lx   ", *cpu.pc);
+  printf("0x%016lx  ", *cpu.pc);
   uint8_t *inst_byte = (uint8_t *)&inst;
   for(int i = 4; i > 0; i--) {
     printf("%02x ", *(inst_byte + i));
