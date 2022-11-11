@@ -10,20 +10,20 @@ static VerilatedVcdC* tfp = NULL;
 #endif
 
 NPCState npc_state = { .state = NPC_INIT };
-uint64_t *cpu_gpr = NULL;
+CPUState cpu = { .gpr = NULL };
 
 // current file function
 static void eval_and_wave();
 static void exec_once();
 
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
-  cpu_gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
+  cpu.gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
 }
 
 // DPI_C
 extern "C" void cpu_inst_ebreak() {
   // half = $a0
-  npc_state.halt_ret = *(cpu_gpr + 10);
+  npc_state.halt_ret = *(cpu.gpr + 10);
   npc_state.state = NPC_END;
 }
 

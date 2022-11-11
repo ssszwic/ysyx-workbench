@@ -14,8 +14,21 @@
 
 enum { NPC_INIT, NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT, NPC_QUIT };
 
-extern uint64_t *cpu_gpr;
+typedef struct {
+  int state;
+  vaddr_t halt_pc;
+  uint32_t halt_ret;
+} NPCState;
+
+typedef struct {
+  // uint_64 for riscv64
+  uint64_t *gpr;
+  vaddr_t pc;
+  uint32_t inst;
+} CPUState;
+
 extern NPCState npc_state;
+extern CPUState cpu;
 
 void cpu_init();
 void cpu_exit();

@@ -18,11 +18,7 @@
 typedef uint64_t vaddr_t;
 typedef uint32_t paddr_t;
 
-typedef struct {
-  int state;
-  vaddr_t halt_pc;
-  uint32_t halt_ret;
-} NPCState;
+
 
 // branch prediction optimization gor gcc: tell gcc the probability of cond is true is larger
 #define likely(cond)   __builtin_expect(cond, 1)
