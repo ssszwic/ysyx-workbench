@@ -14,6 +14,7 @@ CPUState cpu = { .gpr = NULL };
 
 // current file function
 static void eval_and_wave();
+static void isa_exec_once();
 static void exec_once();
 
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
@@ -42,6 +43,10 @@ void cpu_exec(uint64_t n) {
   else {
     printf(ANSI_FMT("HIT BAD TRAP\n", ANSI_FG_RED));
   }
+}
+
+void exec_once() {
+  isa_exec_once();
 }
 
 void cpu_init() {
@@ -78,7 +83,7 @@ void cpu_init() {
   }
 }
 
-static void exec_once() {
+static void isa_exec_once() {
   top->clock = !top->clock;
   // posedge clk
   if(npc_state.state == NPC_INIT) {
@@ -94,8 +99,6 @@ static void exec_once() {
   top->clock = !top->clock;
   eval_and_wave();
   contextp->timeInc(1);
-  // the instruction just executed
-
 }
 
 static void eval_and_wave(){
