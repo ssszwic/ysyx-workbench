@@ -66,6 +66,7 @@ IMG ?=
 default: run
 
 run: $(BUILD_DIR)/V$(MODULE)
+	echo $(ARGS)
 	@echo
 	@echo "-- RUN ---------------------"
 	@rm -rf logs
