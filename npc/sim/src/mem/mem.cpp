@@ -40,7 +40,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, char wmask) {
   // 如`wmask = 0x3`代表只写入最低2个字节, 内存中的其它字节保持不变
   printf("waddr: 0x%llx\n", waddr);
   printf("wdata: 0x%llx\n", wdata);
-  printf("mask: 0x%d\n", wmask);
+  printf("mask: 0x%x\n", (uint8_t) wmask);
   uint32_t paddr = waddr & ~0x7;
   uint8_t data_byte;
   if (likely(in_pmem(paddr))) {
