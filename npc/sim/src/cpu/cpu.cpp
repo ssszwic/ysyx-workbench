@@ -64,10 +64,10 @@ void trace_and_difftest() {
     p += snprintf(p, sizeof(cpu.logbuf), "%02x ", *(inst_byte + i));
   }
 
-  // void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  // disassemble(p, cpu.logbuf + sizeof(cpu.logbuf) - p, *cpu.pc, inst_byte, 4);
+  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  disassemble(p, cpu.logbuf + sizeof(cpu.logbuf) - p, *cpu.pc, inst_byte, 4);
 
-  // printf("%s\n", cpu.logbuf);
+  printf("%s\n", cpu.logbuf);
   #endif
 }
 
