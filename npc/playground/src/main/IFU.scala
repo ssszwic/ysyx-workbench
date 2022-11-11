@@ -13,7 +13,7 @@ class IFU  extends BlackBox with HasBlackBoxResource {
     val pc        = Output(UInt(64.W))
   })
 
-  addResource("/MemVirtual.v")
+  addResource("/IFU.v")
 
 }
 
