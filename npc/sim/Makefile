@@ -54,7 +54,7 @@ CFLAGS += -Werror
 # CFLAGS += $(shell llvm-config --cxxflags) -fPIE
 LDFLAGS += $(shell llvm-config --libs)
 #
-VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC)
+VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
 
 # NPCFLAGS
 override ARGS ?=
