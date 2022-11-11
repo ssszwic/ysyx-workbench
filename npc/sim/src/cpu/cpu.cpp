@@ -17,6 +17,7 @@ static void eval_and_wave();
 static void isa_exec_once();
 static void exec_once();
 static void trace_and_difftest();
+extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
   cpu.gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
@@ -65,10 +66,10 @@ void trace_and_difftest() {
   for(int i = 4; i > 0; i--) {
     p += snprintf(p, sizeof(cpu.logbuf), "%02x ", *(inst_byte + i));
   }
-  extern "C" {
-    void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  }
+
   
+
+
   disassemble(p, cpu.logbuf + sizeof(cpu.logbuf) - p, *cpu.pc, inst_byte, 4);
 
   printf("%s\n", cpu.logbuf);
