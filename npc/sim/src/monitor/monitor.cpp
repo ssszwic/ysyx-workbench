@@ -5,6 +5,7 @@
 
 static char *img_file = NULL;
 static char *elf_file = NULL;
+static char *log_file = NULL;
 
 static const uint32_t img [] = {
   0x00000297,  // auipc t0,0
@@ -19,8 +20,9 @@ static long load_img();
 extern "C" void init_disasm(const char *triple);
 
 void init_monitor(int argc, char *argv[]) {
-  
   parse_args(argc, argv);
+  if(log_file == NULL) {log_file = "/home/ssszw/Work/ysyx-workbench/npc/sim/log.txt";}
+  log_init(log_file);
   load_img();
   init_disasm("riscv64" "-pc-linux-gnu");
 }
@@ -30,6 +32,7 @@ static int parse_args(int argc, char *argv[]) {
     {"batch"    , no_argument      , NULL, 'b'},
     {"help"     , no_argument      , NULL, 'h'},
     {"elf"      , required_argument, NULL, 'e'},
+    {"log"      , required_argument, NULL, 'l'},
     {0          , 0                , NULL,  0 },
   };
   int o;
@@ -37,6 +40,7 @@ static int parse_args(int argc, char *argv[]) {
     switch (o) {
       case 'b': break;
       case 'e': elf_file = optarg; break;
+      case 'l': log_file = optarg; break;
       // 如果optstring的第一个参数是'-'，则会将所有的非选项当选项处理，并且返回1
       case 1: img_file = optarg; return 0;
       default:
@@ -59,7 +63,7 @@ static long load_img() {
 
   FILE *fp = fopen(img_file, "rb");
   if(fp == NULL) {
-    printf("Can not open '%s'\n", img_file);
+    log_write("Can not open '%s'\n", img_file);
     assert(0);
   }
 
