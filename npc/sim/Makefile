@@ -52,9 +52,9 @@ CFLAGS += -Wall
 CFLAGS += -Werror
 # config itrace llvm
 CFLAGS += $(shell llvm-config --cxxflags) -fPIE
-CFLAGS += $(shell llvm-config --libs)
+LDFALGS += $(shell llvm-config --libs)
 #
-VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC)
+VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFALGS "$(LDFALGS)"
 
 # NPCFLAGS
 override ARGS ?=
