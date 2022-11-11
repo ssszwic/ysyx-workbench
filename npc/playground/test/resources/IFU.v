@@ -33,6 +33,9 @@ always@(*) begin
   if(pcEn) begin
     pmem_read(addrAlig, rData);
   end
+  else begin
+    rData = 64'd0;
+  end
 end
 
 assign inst = (pcReg[2:0] == 3'b100) ? rData[63:32] : rData[31:0];
