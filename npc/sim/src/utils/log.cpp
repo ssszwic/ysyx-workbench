@@ -29,7 +29,7 @@ void log_write(const char *fmt, ...) {
 
   if(fp != NULL) {
     // write to log file
-    fprintf(fp, buff);
+    fprintf(fp, "%s", buff);
   }
   // print to screen
   printf("%s", buff);
