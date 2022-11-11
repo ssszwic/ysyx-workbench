@@ -38,8 +38,6 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   // 总是往地址为`waddr & ~0x7ull`的8字节按写掩码`wmask`写入`wdata`
   // `wmask`中每比特表示`wdata`中1个字节的掩码,
   // 如`wmask = 0x3`代表只写入最低2个字节, 内存中的其它字节保持不变
-  printf("waddr: 0x%llx\n", waddr);
-  printf("wdata: 0x%llx\n", wdata);
   uint32_t paddr = waddr & ~0x7;
   uint8_t data_byte;
   if (likely(in_pmem(paddr))) {
