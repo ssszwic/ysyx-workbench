@@ -54,13 +54,20 @@ void exec_once() {
 void trace_and_difftest() {
   // itrace
   #ifdef CONFIG_ITRACE
+  char *p = cpu.logbuf;
+  
+  p += snprintf(p, sizeof(cpu.logbuf), "0x016lx:  ", *cpu.pc);
+  // print from MSB
   uint32_t inst = get_inst(*cpu.pc);
-  printf("0x%016lx  ", *cpu.pc);
-  uint8_t *inst_byte = (uint8_t *)&inst;
+  uint8_t *inst_byte = (uint8_t *) &inst;
   for(int i = 4; i > 0; i--) {
-    printf("%02x ", *(inst_byte + i));
+    p += snprintf(p, sizeof(cpu.logbuf), "%02x ", *(inst_byte + i));
   }
-  printf("\n");
+
+  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
+  disassemble(p, cpu.logbuf + sizeof(cpu.logbuf) - p, *cpu.pc, inst_byte, 4);
+
+  printf("%s\n", cpu.logbuf);
   #endif
 }
 

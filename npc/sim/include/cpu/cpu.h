@@ -25,6 +25,9 @@ typedef struct {
   uint64_t *gpr;
   vaddr_t *pc;
   uint32_t inst;
+  #ifdef CONFIG_ITRACE
+  char logbuf[128];
+  #endif
 } CPUState;
 
 extern NPCState npc_state;
