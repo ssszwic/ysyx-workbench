@@ -29,6 +29,7 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
   uint32_t paddr = raddr & ~0x7;
   if (likely(in_pmem(paddr))) {
     *rdata = host_read(guest_to_host(paddr), 8);
+    printf("raddr: 0x%llx\n", raddr);
     printf("rdata: 0x%llx\n", *rdata);
     return;
   }
