@@ -36,5 +36,7 @@ extern CPUState cpu;
 void cpu_init();
 void cpu_exit();
 void cpu_exec(uint64_t n);
+isa_reg_str2val
 
 #endif
+

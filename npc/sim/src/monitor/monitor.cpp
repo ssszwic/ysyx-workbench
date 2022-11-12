@@ -20,7 +20,10 @@ static long load_img();
 extern "C" void init_disasm(const char *triple);
 
 void init_monitor(int argc, char *argv[]) {
+  // 1. Parsing parameters
   parse_args(argc, argv);
+
+  // 2. create log file
   if(log_file != NULL) {
     printf("create log file %s\n", log_file);
     log_init(log_file);
@@ -28,8 +31,14 @@ void init_monitor(int argc, char *argv[]) {
   else {
     printf("there is no log, log file will not be creat\n");
   }
+
+  // 3. log binary image
   load_img();
+
+  // 4. initial disasm
   init_disasm("riscv64" "-pc-linux-gnu");
+
+  // 5. 
 }
 
 static int parse_args(int argc, char *argv[]) {
