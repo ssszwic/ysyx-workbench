@@ -170,9 +170,9 @@ static void isa_exec_once() {
   printf("once\n");
   contextp->timeInc(1);
   top->clock = !top->clock;
-  printf("once\n");
-  eval_and_wave();
-  printf("once\n");
+  // printf("once\n");
+  // eval_and_wave();
+  // printf("once\n");
   contextp->timeInc(1);
 }
 
