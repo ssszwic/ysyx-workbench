@@ -4,7 +4,7 @@
 // switch
 #define CONFIG_WAVE_ON
 #define CONFIG_ITRACE
-// #define CONFIT_WATCHPOINT
+#define CONFIT_WATCHPOINT
 
 // mem
 #define CONFIG_MSIZE 0x8000000

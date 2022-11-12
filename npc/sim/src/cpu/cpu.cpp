@@ -36,8 +36,6 @@ extern "C" void cpu_inst_ebreak() {
   npc_state.state = NPC_END;
 }
 
-
-
 void cpu_exec(uint64_t n) {
   // program end or error
   if(npc_state.state == NPC_END || npc_state.state == NPC_ABORT) {
@@ -50,7 +48,7 @@ void cpu_exec(uint64_t n) {
     trace_and_difftest();
     if(npc_state.state == NPC_END) {break;}
   }
-  
+
   if(npc_state.state == NPC_END) {
     if (npc_state.halt_ret == 0) {
       log_write(true, ANSI_FMT("HIT GOOD TRAP\n", ANSI_FG_GREEN));
@@ -69,7 +67,7 @@ void trace_and_difftest() {
   // itrace
   #ifdef CONFIG_ITRACE
   char *p = cpu.logbuf;
-  
+
   p += snprintf(p, sizeof(cpu.logbuf), "0x%016lx:  ", *cpu.pc);
   // print from MSB
   uint32_t inst = get_inst(*cpu.pc);
@@ -80,6 +78,11 @@ void trace_and_difftest() {
 
   disassemble(p, cpu.logbuf + sizeof(cpu.logbuf) - p, *cpu.pc, inst_byte, 4);
   log_write(screen_display_inst, "%s\n", cpu.logbuf);
+  #endif
+
+  // watch point
+  #ifdef CONFIT_WATCHPOINT
+  
   #endif
 }
 
