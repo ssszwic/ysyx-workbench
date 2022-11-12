@@ -168,7 +168,7 @@ static int cmd_x(char *args) {
     return 0;
   }
 
-  char expr_str[300] = {};
+  char expr_str[MAX_EXPR_LENGTH] = {};
   // uint8_t num default: 1
   int len = 1;
 
