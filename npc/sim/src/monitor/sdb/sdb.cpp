@@ -209,11 +209,19 @@ static int info_reg() {
 }
 
 static int info_watch() {
+  #ifndef CONFIT_WATCHPOINT
+    printf("watch point is closed in config.\n");
+    return ;
+  #endif
   print_wb();
   return 0;
 }
 
 static int cmd_watch(char *args) {
+  #ifndef CONFIT_WATCHPOINT
+    printf("watch point is closed in config.\n");
+    return ;
+  #endif
   if (args == NULL) {
     printf("You must specify expression.\n");
     return 0;
@@ -259,7 +267,7 @@ static int cmd_f(char *args) {
   print_func_log();
   return 0;
   #endif
-  printf("function is closed in menuconfig.\n");
+  printf("function trace is closed in config.\n");
   return 0;
 }
 
