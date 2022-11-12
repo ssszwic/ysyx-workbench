@@ -71,9 +71,8 @@ void trace_and_difftest() {
   p += snprintf(p, sizeof(cpu.logbuf), "0x%016lx:  ", *cpu.pc);
   // print from MSB
   uint32_t inst = get_inst(*cpu.pc);
-  printf("0x%08x\n", inst);
   uint8_t *inst_byte = (uint8_t *) &inst;
-  for(int i = 4; i > 0; i--) {
+  for(int i = 3; i >= 0; i--) {
     p += snprintf(p, sizeof(cpu.logbuf), "%02x ", *(inst_byte + i));
   }
 
