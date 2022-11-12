@@ -97,7 +97,7 @@ void init_wp_pool() {
   free_ = wp_pool;
 }
 
-bool update_wp() {
+void update_wp() {
   WP* tmp = head;
   bool cal_success;
   word_t result;
