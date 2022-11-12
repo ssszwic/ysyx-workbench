@@ -11,7 +11,7 @@ reg         [63:0]  pcReg;
 wire        [63:0]  addrAlig;
 reg         [63:0]  rData;
 
-import "DPI-C" function void pmem_read(input longint raddr, output longint rdata);
+import "DPI-C" function void inst_pmem_read(input longint raddr, output longint rdata);
 import "DPI-C" function void set_pc_ptr(input logic [63:0] a []);
 initial set_pc_ptr(pcReg);
 
@@ -31,7 +31,7 @@ assign addrAlig = {pcReg[63:3], 3'b0};
 
 always@(*) begin
   if(pcEn) begin
-    pmem_read(addrAlig, rData);
+    inst_pmem_read(addrAlig, rData);
   end
   else begin
     rData = 64'd0;
