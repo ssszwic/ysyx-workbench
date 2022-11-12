@@ -65,7 +65,7 @@ uint32_t get_inst(vaddr_t paddr) {
 uint64_t extern_pmem_read(paddr_t raddr, int len) {
   printf("666");
   if (likely(in_pmem(raddr))) {
-    return host_read(guest_to_host(raddr), 8);
+    return host_read(guest_to_host(raddr), len);
   }
   out_of_bound(raddr);
   return 0;

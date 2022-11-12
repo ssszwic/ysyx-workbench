@@ -184,20 +184,19 @@ static int cmd_x(char *args) {
   }
   
   bool success;
-  uint64_t addr = expr(expr_str, &success);
+  paddr_t addr = expr(expr_str, &success);
   if (!success) {
     printf("error! expression invalid.\n");
     return 0;
   }
-  // read nemu member
-  uint8_t* host_addr = guest_to_host(addr);
 
+  // read npc member
   printf("0x%016lx: ", addr);
   int i;
   for (i = 0; i < len; i++) {
     // little endian for riscv64
-    printf("0x%02x ", *host_addr);
-    host_addr++;
+    printf("0x%02x ", extern_pmem_read(addr, 1));
+    addr++;
   }
   printf("\n");
 
