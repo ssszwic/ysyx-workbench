@@ -165,10 +165,14 @@ static void isa_exec_once() {
     cpu_state_init = true;
   }
   // update inst
+  printf("once");
   eval_and_wave();
+  printf("once");
   contextp->timeInc(1);
   top->clock = !top->clock;
+  printf("once");
   eval_and_wave();
+  printf("once");
   contextp->timeInc(1);
 }
 
