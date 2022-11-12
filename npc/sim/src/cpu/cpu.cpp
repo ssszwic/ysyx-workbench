@@ -39,11 +39,18 @@ extern "C" void cpu_inst_ebreak() {
 
 
 void cpu_exec(uint64_t n) {
+  // program end or error
+  if(npc_state.state == NPC_END || npc_state.state == NPC_ABORT) {
+    printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
+    return;
+  }
+
   for(int i = 0; i < n; i++) {
     exec_once();
     trace_and_difftest();
     if(npc_state.state == NPC_END) {break;}
   }
+  
   if(npc_state.state == NPC_END) {
     if (npc_state.halt_ret == 0) {
       log_write(true, ANSI_FMT("HIT GOOD TRAP\n", ANSI_FG_GREEN));
