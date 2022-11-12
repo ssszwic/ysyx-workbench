@@ -102,8 +102,6 @@ void update_wp() {
   bool cal_success;
   word_t result;
 
-  // Print the instruction have been executed
-
   // detect change
   while(tmp != NULL) {
     result = expr(tmp->expr_str, &cal_success);

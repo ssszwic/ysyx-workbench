@@ -19,6 +19,9 @@ static void eval_and_wave();
 static void isa_exec_once();
 static void exec_once();
 static void trace_and_difftest();
+
+void update_wp();
+
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
@@ -82,8 +85,7 @@ void trace_and_difftest() {
 
   // watch point
   #ifdef CONFIT_WATCHPOINT
-  
-  
+  update_wp();
   #endif
 }
 
