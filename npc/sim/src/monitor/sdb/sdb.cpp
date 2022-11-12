@@ -195,7 +195,7 @@ static int cmd_x(char *args) {
   int i;
   for (i = 0; i < len; i++) {
     // little endian for riscv64
-    printf("0x%02x ", extern_pmem_read(addr, 1));
+    printf("0x%02x ", (uint8_t) extern_pmem_read(addr, 1));
     addr++;
   }
   printf("\n");
