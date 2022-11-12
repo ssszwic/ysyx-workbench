@@ -125,6 +125,7 @@ void cpu_init() {
 }
 
 static void isa_exec_once() {
+  printf("666\n");
   top->clock = !top->clock;
   // posedge clk
   if(npc_state.state == NPC_INIT) {
