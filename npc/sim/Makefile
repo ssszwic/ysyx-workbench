@@ -27,7 +27,6 @@ VERILATOR_FLAGS += --trace
 VERILATOR_FLAGS += --assert
 # Generate coverage analysis
 VERILATOR_FLAGS += --coverage
-VERILATOR_FLAGS += --timing
 # Run Verilator in debug mode
 #VERILATOR_FLAGS += --debugINPUT_VC
 # Add this trace to get a backtrace in gdb
