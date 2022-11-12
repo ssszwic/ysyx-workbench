@@ -69,6 +69,7 @@ run: $(BUILD_DIR)/V$(MODULE)
 	@echo "-- RUN ---------------------"
 	@rm -rf logs
 	@mkdir -p logs
+	echo $(ARGS)
 	@obj_dir/V$(MODULE) $(ARGS) $(IMG)
 	@echo
 	@echo "-- DONE --------------------"
