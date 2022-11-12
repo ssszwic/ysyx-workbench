@@ -22,7 +22,7 @@ extern "C" void init_disasm(const char *triple);
 void init_monitor(int argc, char *argv[]) {
   parse_args(argc, argv);
   if(log_file != NULL) {
-    printf("create log file\n");
+    printf("create log file %s\n", log_file);
     log_init(log_file);
   }
   else {
