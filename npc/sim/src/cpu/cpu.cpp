@@ -136,7 +136,7 @@ void cpu_exit(){
   tfp->dump(contextp->time());//
   #endif
   #ifdef CONFIG_WAVE_ON
-    printf("save wave successful!\n");
+    log_write(true, "save wave successful!\n");
     tfp->close();
   #endif
 }

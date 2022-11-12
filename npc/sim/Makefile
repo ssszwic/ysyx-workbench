@@ -58,7 +58,8 @@ LDFLAGS += $(shell llvm-config --libs)
 VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
 
 # NPCFLAGS
-override ARGS += --log=$(WORK_DIR)/sim_log.txt
+LOG := $(WORK_DIR)/sim_log.txt
+override ARGS += --log=$(LOG)
 IMG ?=
 
 ######################################################################
@@ -68,6 +69,7 @@ run: $(BUILD_DIR)/V$(MODULE)
 	@echo
 	@echo "-- RUN ---------------------"
 	@rm -rf logs
+	@-rm $(LOG)
 	@mkdir -p logs
 	@obj_dir/V$(MODULE) $(ARGS) $(IMG)
 	@echo
