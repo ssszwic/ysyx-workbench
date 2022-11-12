@@ -184,7 +184,7 @@ static int cmd_x(char *args) {
   }
   
   bool success;
-  paddr_t addr = expr(expr_str, &success);
+  vaddr_t addr = expr(expr_str, &success);
   if (!success) {
     printf("error! expression invalid.\n");
     return 0;

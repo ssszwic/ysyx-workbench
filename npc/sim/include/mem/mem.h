@@ -37,7 +37,7 @@ static inline void host_write(void *addr, int len, uint64_t data) {
   return;
 }
 
-static inline bool in_pmem(paddr_t addr) {
+static inline bool in_pmem(vaddr_t addr) {
   return addr - CONFIG_MBASE < CONFIG_MSIZE;
 }
 
