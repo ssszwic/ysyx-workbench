@@ -18,7 +18,7 @@ void log_exit() {
   }
 }
 
-void log_write(const char *fmt, ...) {
+void log_write(bool print_screen, const char *fmt, ...) {
   assert(fmt);
   buff[0] = '\0';
 
@@ -32,5 +32,7 @@ void log_write(const char *fmt, ...) {
     fprintf(fp, "%s", buff);
   }
   // print to screen
-  printf("%s", buff);
+  if(print_screen) {
+    printf("%s", buff);
+  }
 }

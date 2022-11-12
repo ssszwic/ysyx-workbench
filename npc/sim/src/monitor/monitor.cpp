@@ -68,7 +68,7 @@ static long load_img() {
 
   FILE *fp = fopen(img_file, "rb");
   if(fp == NULL) {
-    log_write("Can not open '%s'\n", img_file);
+    log_write(true, "Can not open '%s'\n", img_file);
     assert(0);
   }
 
