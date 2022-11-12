@@ -209,19 +209,20 @@ static int info_reg() {
 }
 
 static int info_watch() {
-  #ifndef CONFIT_WATCHPOINT
-    printf("watch point is closed in config.\n");
+  #ifdef CONFIT_WATCHPOINT
+    printf(ANSI_FMT("watch point is closed in config.\n", ANSI_FG_YELLOW));
+    return 0;
+  #else
+    print_wb();
     return 0;
   #endif
-  print_wb();
-  return 0;
 }
 
 static int cmd_watch(char *args) {
-  #ifndef CONFIT_WATCHPOINT
-    printf("watch point is closed in config.\n");
+  #ifdef CONFIT_WATCHPOINT
+    printf(ANSI_FMT("watch point is closed in config.\n", ANSI_FG_YELLOW));
     return 0;
-  #endif
+  #else
   if (args == NULL) {
     printf("You must specify expression.\n");
     return 0;
@@ -243,6 +244,7 @@ static int cmd_watch(char *args) {
   }
   new_wp(expr_str, result);
   return 0;
+  #endif
 }
 
 static int cmd_delate(char *args) {
