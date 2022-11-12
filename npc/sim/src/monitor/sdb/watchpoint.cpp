@@ -97,8 +97,7 @@ void init_wp_pool() {
   free_ = wp_pool;
 }
 
-bool update_wp(char *log, bool log_flag) {
-  bool change_flag = false;
+bool update_wp() {
   WP* tmp = head;
   bool cal_success;
   word_t result;
@@ -112,33 +111,14 @@ bool update_wp(char *log, bool log_flag) {
       assert(0);
     }
     if (result != tmp->value) {
-      change_flag = true;
-      break;
-    }
-    tmp = tmp->next;
-  }
-
-  // first print instruction have been excuted, then print value change
-  if (change_flag && log_flag && (log != NULL)) {
-    puts(log);
-  }
-
-  while(tmp != NULL) {
-    result = expr(tmp->expr_str, &cal_success);
-    if (!cal_success) {
-      assert(0);
-    }
-    if (result != tmp->value) {
       // value change
-      printf("Hardware watchpoint %d: %s\n", tmp->NO, tmp->expr_str);
+      printf(ANSI_FMT("Hardware watchpoint %d: %s\n", ANSI_FG_BLUE), tmp->NO, tmp->expr_str);
       printf("old value = 0x%016lx\n", tmp->value);
       printf("new value = 0x%016lx\n", result);
       tmp->value = result;
     }
     tmp = tmp->next;
   }
-
-  return change_flag;
 }
 
 /* TODO: Implement the functionality of watchpoint */

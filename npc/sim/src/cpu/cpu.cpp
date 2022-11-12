@@ -83,6 +83,7 @@ void trace_and_difftest() {
   // watch point
   #ifdef CONFIT_WATCHPOINT
   
+  
   #endif
 }
 
