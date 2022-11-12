@@ -23,7 +23,7 @@ static void isa_exec_once();
 static void exec_once();
 static void trace_and_difftest();
 
-bool update_wp();
+bool update_wp(char *log);
 
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
@@ -85,12 +85,15 @@ void trace_and_difftest() {
 
   disassemble(p, cpu.logbuf + sizeof(cpu.logbuf) - p, *cpu.pc, inst_byte, 4);
   log_write(screen_display_inst, "%s\n", cpu.logbuf);
+
+  #ifdef CONFIT_WATCHPOINT
+  if(update_wp(cpu.logbuf)) { npc_state.state = NPC_STOP; }
+  #endif
+
 #endif
 
   // watch point
-#ifdef CONFIT_WATCHPOINT
-  if(update_wp()) { npc_state.state = NPC_STOP; }
-#endif
+
 }
 
 void cpu_init() {
