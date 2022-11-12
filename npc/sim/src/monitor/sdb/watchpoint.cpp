@@ -111,8 +111,8 @@ void update_wp() {
     if (result != tmp->value) {
       // value change
       printf(ANSI_FMT("Hardware watchpoint %d: %s\n", ANSI_FG_BLUE), tmp->NO, tmp->expr_str);
-      printf("old value = 0x%016lx\n", tmp->value);
-      printf("new value = 0x%016lx\n", result);
+      printf("\told value = 0x%016lx\n", tmp->value);
+      printf("\tnew value = 0x%016lx\n", result);
       tmp->value = result;
     }
     tmp = tmp->next;
