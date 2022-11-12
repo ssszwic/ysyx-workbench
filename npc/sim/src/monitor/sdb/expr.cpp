@@ -3,6 +3,9 @@
  */
 #include <regex.h>
 #include "commen.h"
+#include "cpu/reg.h"
+#include "mem/mem.h"
+
 
 enum {
   // value must be greater than 127, because ascii num <= 127
@@ -356,7 +359,7 @@ static uint64_t eval(int p, int q) {
       }
       else if (tokens[op].type == TK_POINT) {
         // to do 
-        word_t *tmp = (word_t *) guest_to_host(eval(p + 1, q));
+        uint64_t *tmp = (uint64_t *) guest_to_host(eval(p + 1, q));
         return *tmp;
       }
     }
@@ -371,7 +374,7 @@ static uint64_t eval(int p, int q) {
     case '-': return eval(p, op - 1) - eval(op + 1, q);
     case '*': return eval(p, op - 1) * eval(op + 1, q);
     case '/': {
-      word_t tmp = eval(op + 1, q);
+      uint64_t tmp = eval(op + 1, q);
       if (tmp == 0) {
         if (!eval_success) {
           return 0;
@@ -387,7 +390,7 @@ static uint64_t eval(int p, int q) {
     case TK_AND: return eval(p, op - 1) && eval(op + 1, q);
     case TK_EQ: return eval(p, op - 1) == eval(op + 1, q);
     case TK_NOEQ: return eval(p, op - 1) != eval(op + 1, q);
-    case TK_POINT: word_t *tmp = (word_t *) guest_to_host(eval(op + 1, q)); return *tmp;
+    case TK_POINT: return extern_pmem_read(eval(op + 1, q), 8);
     default: assert(0);
   }
 

@@ -1,9 +1,9 @@
-#include <cpu/cpu.h>
+#include "cpu/cpu.h"
+#include "cpu/reg.h"
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
-#include <mem.h>
-
+#include "mem.h"
 
 #define NR_CMD ARRLEN(cmd_table)
 #define MAX_EXPR_LENGTH 100
@@ -14,6 +14,10 @@ void init_regex();
 void init_wp_pool();
 void print_wb();
 void free_wp(int id);
+uint64_t expr(char *e, bool *success);
+void new_wp(char *expr, word_t result);
+uint64_t isa_reg_str2val(const char *s, bool *success);
+void isa_reg_display();
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -224,7 +228,7 @@ static int cmd_watch(char *args) {
   }
 
   bool success;
-  word_t result = expr(expr_str, &success);
+  uint64_t result = expr(expr_str, &success);
   if (!success) {
     printf("error! expression invalid.\n");
     return 0;

@@ -17,6 +17,8 @@ static const uint32_t img [] = {
 
 static int parse_args(int argc, char *argv[]);
 static long load_img();
+void init_sdb();
+void cpu_init();
 extern "C" void init_disasm(const char *triple);
 
 void init_monitor(int argc, char *argv[]) {
@@ -38,7 +40,11 @@ void init_monitor(int argc, char *argv[]) {
   // 4. initial disasm
   init_disasm("riscv64" "-pc-linux-gnu");
 
-  // 5. 
+  // 5. inittial sdb
+  init_sdb();
+
+  // 6. initial cpu
+  cpu_init();
 }
 
 static int parse_args(int argc, char *argv[]) {

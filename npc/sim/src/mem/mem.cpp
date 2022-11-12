@@ -62,20 +62,13 @@ uint32_t get_inst(vaddr_t paddr) {
 }
 
 
-
-// uint64_t paddr_read(paddr_t addr, int len, bool *success) {
-//   if (likely(in_pmem(addr))) {
-//     return pmem_read(addr, len);
-//   }
-//   else {
-//     printf("addr = 0x%08x out of bound mem!\n", addr);
-//     *success = false;
-//     return 0;
-//   }
-//   // device to do
-//   // out_of_bound(addr);
-
-// }
+uint64_t extern_pmem_read(paddr_t raddr, int len) {
+  if (likely(in_pmem(raddr))) {
+    return host_read(guest_to_host(raddr), 8);
+  }
+  out_of_bound(raddr);
+  return 0;
+}
 
 void paddr_write(paddr_t addr, int len, uint64_t data, bool *success) {
   if (likely(in_pmem(addr))) {

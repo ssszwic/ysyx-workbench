@@ -1,3 +1,4 @@
+#include "commen.h"
 #include "cpu/cpu.h"
 
 const char *regs[] = {
@@ -8,16 +9,15 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
-  int i;
   // pc reg
   printf("%-12s", "pc");
-  printf("0x%016lx    ", cpu.pc);
-  printf("%ld\n", cpu.pc);
+  printf("0x%016lx\t", *cpu.pc);
+  printf("%ld\n", *cpu.pc);
   // normal 32 reg
-  for (i = 0; i < 32; i++) {
-    printf("%-12s", reg_name(i, 0));
-    printf("0x%016lx    ", gpr(i));
-    printf("%ld\n", gpr(i));
+  for (int i = 0; i < 32; i++) {
+    printf("%-12s", regs[i]);
+    printf("0x%016lx\t", *(cpu.gpr + i));
+    printf("%ld\n", *(cpu.gpr + i));
   }
 }
 
@@ -25,7 +25,7 @@ uint64_t isa_reg_str2val(const char *s, bool *success) {
   // pc reg
   if (strcmp(s, "pc") == 0){
     *success = true;
-    return cpu.pc;
+    return *cpu.pc;
   }
   // noemal reg
   int i = 0;
@@ -40,6 +40,6 @@ uint64_t isa_reg_str2val(const char *s, bool *success) {
   }
   else {
     *success = true;
-    return gpr(i);
+    return *(cpu.gpr + i);
   }
 }
