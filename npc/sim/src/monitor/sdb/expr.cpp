@@ -359,8 +359,7 @@ static uint64_t eval(int p, int q) {
       }
       else if (tokens[op].type == TK_POINT) {
         // to do 
-        uint64_t *tmp = (uint64_t *) guest_to_host(eval(p + 1, q));
-        return *tmp;
+        return extern_pmem_read(eval(op + 1, q), 8);;
       }
     }
     printf("error! the op isn't matched.\n");
