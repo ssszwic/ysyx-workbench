@@ -9,10 +9,13 @@ static VerilatedContext* contextp = NULL;
 static VerilatedVcdC* tfp = NULL;
 #endif
 
+// only for cmd si, print inst to screen
 bool screen_display_inst = false;
 
-NPCState npc_state = { .state = NPC_INIT };
+NPCState npc_state = { .state = NPC_STOP };
 CPUState cpu = { .gpr = NULL };
+// Ensure cpu initialization is complete
+static bool cpu_state_init = false;
 
 // current file function
 static void eval_and_wave();
@@ -125,15 +128,14 @@ void cpu_init() {
 }
 
 static void isa_exec_once() {
-  printf("666\n");
   top->clock = !top->clock;
   // posedge clk
-  if(npc_state.state == NPC_INIT) {
+  if(!cpu_state_init) {
     // update pc register
     top->eval();
     // enable cpu (avoid pc reg change)
     top->io_cpuEn = 1;
-    npc_state.state = NPC_RUNNING;
+    cpu_state_init = true;
   }
   // update inst
   eval_and_wave();
