@@ -5,7 +5,7 @@
 // 128MB for npc
 static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
 
-uint8_t* guest_to_host(vaddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
+uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 uint32_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 void cpu_exit();
 
