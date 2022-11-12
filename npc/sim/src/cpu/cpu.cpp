@@ -131,7 +131,7 @@ void cpu_init() {
   #endif
 
   // initial signal
-  top->io_cpuEn = 1;
+  top->io_cpuEn = 0;
   top->reset = 1;
   top->clock = 0;
 
