@@ -30,7 +30,7 @@ end
 assign addrAlig = {pcReg[63:3], 3'b0};
 
 always@(pcEn) begin
-  if(pcEn & clock) begin
+  if(pcEn) begin
     inst_pmem_read(addrAlig, rData);
     $display("read inst");
   end
