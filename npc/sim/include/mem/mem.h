@@ -7,7 +7,7 @@
 #define RESET_VECTOR PMEM_LEFT
 
 // exteral read pmem for sdb
-uint64_t extern_pmem_read(paddr_t raddr, int len);
+uint64_t extern_pmem_read(vaddr_t raddr, int len);
 uint32_t get_inst(vaddr_t paddr);
 
 /* convert the guest physical address in the guest program to host virtual address in npc */
