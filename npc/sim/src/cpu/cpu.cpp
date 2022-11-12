@@ -132,7 +132,7 @@ void cpu_init() {
 
   // initial signal
   top->io_cpuEn = 0;
-  top->reset = 0;
+  top->reset = 1;
   top->clock = 0;
 
   // reset
@@ -166,7 +166,6 @@ static void isa_exec_once() {
   }
   // update inst
   eval_and_wave();
-  contextp->timeInc(1);
 
   top->clock = !top->clock;
 
