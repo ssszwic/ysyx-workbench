@@ -46,7 +46,7 @@ void cpu_exec(uint64_t n) {
     return;
   }
 
-  npc_state.state == NPC_RUNNING;
+  npc_state.state = NPC_RUNNING;
   for(int i = 0; i < n; i++) {
     exec_once();
     trace_and_difftest();
