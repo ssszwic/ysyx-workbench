@@ -84,9 +84,9 @@ void trace_and_difftest() {
 #endif
 
   // watch point
-  #ifdef CONFIT_WATCHPOINT
+#ifdef CONFIT_WATCHPOINT
   update_wp();
-  #endif
+#endif
 }
 
 void cpu_init() {
