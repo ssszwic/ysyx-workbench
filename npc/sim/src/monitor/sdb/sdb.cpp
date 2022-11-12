@@ -16,6 +16,7 @@ uint64_t expr(char *e, bool *success);
 void new_wp(char *expr, word_t result);
 uint64_t isa_reg_str2val(const char *s, bool *success);
 void isa_reg_display();
+extern bool screen_display_inst;
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -129,7 +130,9 @@ static int cmd_si(char *args) {
     printf("Invalid input, N must be greater than 0\n");
     return 0;
   }
+  screen_display_inst = true;
   cpu_exec(n);
+  screen_display_inst = false;
   return 0;
 }
 

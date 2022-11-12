@@ -9,6 +9,8 @@ static VerilatedContext* contextp = NULL;
 static VerilatedVcdC* tfp = NULL;
 #endif
 
+bool screen_display_inst = false;
+
 NPCState npc_state = { .state = NPC_INIT };
 CPUState cpu = { .gpr = NULL };
 
@@ -70,7 +72,7 @@ void trace_and_difftest() {
   }
 
   disassemble(p, cpu.logbuf + sizeof(cpu.logbuf) - p, *cpu.pc, inst_byte, 4);
-  log_write(false, "%s\n", cpu.logbuf);
+  log_write(screen_display_inst, "%s\n", cpu.logbuf);
   #endif
 }
 
