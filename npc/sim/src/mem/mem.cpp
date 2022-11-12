@@ -26,7 +26,7 @@ static void out_of_bound(vaddr_t addr) {
 
 extern "C" void pmem_read(long long raddr, long long *rdata) {
   // 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
-  uint32_t paddr = raddr & ~0x7;
+  uint64_t paddr = raddr & ~0x7;
   if (likely(in_pmem(paddr))) {
     *rdata = host_read(guest_to_host(paddr), 8);
     return;
