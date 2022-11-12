@@ -51,6 +51,7 @@ void cpu_exec(uint64_t n) {
     exec_once();
     trace_and_difftest();
     if(npc_state.state == NPC_END || npc_state.state == NPC_STOP) {break;}
+    printf("%d\n", i);
   }
 
   if(npc_state.state == NPC_END) {
