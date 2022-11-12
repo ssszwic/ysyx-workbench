@@ -179,6 +179,7 @@ void cpu_exit(){
   #endif
 }
 
+#ifdef CONFIG_ITRACE
 void log_inst_ring(bool print_screen) {
   if(inst_ring_buf[0][0] == '\0') {
     log_write(print_screen, ANSI_FMT("instruction ring buff is empty.", ANSI_FG_YELLOW));
@@ -193,3 +194,4 @@ void log_inst_ring(bool print_screen) {
   }
   log_write(print_screen, "\n");
 }
+#endif
