@@ -42,11 +42,13 @@ void cpu_exec(uint64_t n) {
     trace_and_difftest();
     if(npc_state.state == NPC_END) {break;}
   }
-  if (npc_state.halt_ret == 0) {
-    log_write(true, ANSI_FMT("HIT GOOD TRAP\n", ANSI_FG_GREEN));
-  }
-  else {
-    log_write(true, ANSI_FMT("HIT BAD TRAP\n", ANSI_FG_RED));
+  if(npc_state.state == NPC_END) {
+    if (npc_state.halt_ret == 0) {
+      log_write(true, ANSI_FMT("HIT GOOD TRAP\n", ANSI_FG_GREEN));
+    }
+    else {
+      log_write(true, ANSI_FMT("HIT BAD TRAP\n", ANSI_FG_RED));
+    }
   }
 }
 
