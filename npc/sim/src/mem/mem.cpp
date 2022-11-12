@@ -60,7 +60,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   char tmp[50] = {};
   memset(mem_ring_buf[mem_ring_ref], ' ', 6);
   if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
-  sprintf(tmp, "----> read \t0x%016lx\t", waddr);
+  sprintf(tmp, "----> read \t0x%016llx\t", waddr);
   strcpy(mem_ring_buf[mem_ring_ref], tmp);
 #endif
 
@@ -82,7 +82,7 @@ uint32_t get_inst(vaddr_t paddr) {
   if (likely(in_pmem(paddr))) {
     return host_read(guest_to_host(paddr), 4);
   }
-  log_write(true, "get insttruction addr = 0x%08lx out of bound mem!\n", paddr);
+  log_write(true, "get insttruction addr = 0x%08llx out of bound mem!\n", paddr);
   assert(0);
   return 0;
 }
