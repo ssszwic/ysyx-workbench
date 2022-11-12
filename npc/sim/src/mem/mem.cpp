@@ -9,6 +9,12 @@ uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 uint32_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 void cpu_exit();
 
+#ifdef CONFIG_MEMORY_TRACE
+#define MEM_RING_BUF_WIDTH 300
+static char mem_ring_buf[MEM_RING_BUF_WIDTH][50] = {};
+static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
+#endif
+
 // static uint64_t pmem_read(paddr_t addr, int len) {
 //   uint64_t ret = host_read(guest_to_host(addr), len);
 //   return ret;
@@ -26,6 +32,16 @@ static void out_of_bound(vaddr_t addr) {
 
 extern "C" void pmem_read(long long raddr, long long *rdata) {
   // 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
+
+  // memory trace
+#ifdef CONFIG_MEMORY_TRACE
+  char tmp[50] = {};
+  memset(mem_ring_buf[mem_ring_ref], ' ', 6);
+  if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
+  sprintf(tmp, "----> read \t0x016lx\t", raddr);
+  strcpy(mem_ring_buf[mem_ring_ref], tmp);
+#endif
+
   uint64_t paddr = raddr & ~0x7;
   if (likely(in_pmem(paddr))) {
     *rdata = host_read(guest_to_host(paddr), 8);
@@ -38,6 +54,16 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   // 总是往地址为`waddr & ~0x7ull`的8字节按写掩码`wmask`写入`wdata`
   // `wmask`中每比特表示`wdata`中1个字节的掩码,
   // 如`wmask = 0x3`代表只写入最低2个字节, 内存中的其它字节保持不变
+
+  // memory trace
+#ifdef CONFIG_MEMORY_TRACE
+  char tmp[50] = {};
+  memset(mem_ring_buf[mem_ring_ref], ' ', 6);
+  if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
+  sprintf(tmp, "----> read \t0x016lx\t", waddr);
+  strcpy(mem_ring_buf[mem_ring_ref], tmp);
+#endif
+
   uint32_t paddr = waddr & ~0x7;
   uint8_t data_byte;
   if (likely(in_pmem(paddr))) {
@@ -61,7 +87,6 @@ uint32_t get_inst(vaddr_t paddr) {
   return 0;
 }
 
-
 uint64_t extern_pmem_read(vaddr_t raddr, int len) {
   if (likely(in_pmem(raddr))) {
     return host_read(guest_to_host(raddr), len);
@@ -69,4 +94,22 @@ uint64_t extern_pmem_read(vaddr_t raddr, int len) {
   out_of_bound(raddr);
   return 0;
 }
+
+#ifdef CONFIG_MEMORY_TRACE
+void log_mem_ring(bool print_screen) {
+  if(mem_ring_buf[0][0] == '\0') {
+    log_write(print_screen, ANSI_FMT("instruction ring buff is empty.", ANSI_FG_YELLOW));
+    log_write(print_screen, "\n");
+    return;
+  }
+  log_write(print_screen, ANSI_FMT("instruction ring buff.", ANSI_FG_BLUE));
+  log_write(print_screen, "\n");
+  for (int i = 0; i < MEM_RING_BUF_WIDTH; i++) {
+    if(mem_ring_buf[i][0] == '\0') break;
+    log_write(print_screen, "%s\n", mem_ring_buf[i]);
+  }
+  log_write(print_screen, "\n");
+}
+#endif
+
 

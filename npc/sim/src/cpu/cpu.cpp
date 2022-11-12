@@ -30,7 +30,12 @@ static void exec_once();
 static void trace_and_difftest();
 
 bool update_wp(char *log);
+#ifdef CONFIG_ITRACE
 void log_inst_ring(bool print_screen);
+#endif
+#ifdef CONFIG_MEMORY_TRACE
+void log_mem_ring(bool print_screen);
+#endif
 
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
@@ -70,10 +75,15 @@ void cpu_exec(uint64_t n) {
     else {
       log_write(true, ANSI_FMT("HIT BAD TRAP\n", ANSI_FG_RED));
     }
-    #ifdef CONFIG_ITRACE
+#ifdef CONFIG_ITRACE
     // only print to log
-    log_inst_ring(true);
-    #endif
+    log_inst_ring(false);
+#endif
+
+#ifdef CONFIG_MEMORY_TRACE
+    // only print to log
+    log_mem_ring(false);
+#endif
   }
 }
 
