@@ -248,6 +248,7 @@ static int cmd_watch(char *args) {
 }
 
 static int cmd_delate(char *args) {
+  #ifdef CONFIT_WATCHPOINT
   if (args == NULL) {
     printf("You must specify watchpoint id.\n");
     return 0;
@@ -262,15 +263,20 @@ static int cmd_delate(char *args) {
   }
   free_wp(id);
   return 0;
+  #else
+    printf(ANSI_FMT("watch point is closed in config.\n", ANSI_FG_YELLOW));
+    return 0;
+  #endif
 }
 
 static int cmd_f(char *args) {
   #ifdef CONFIG_FUNCTION_TRACE
   print_func_log();
   return 0;
-  #endif
-  printf("function trace is closed in config.\n");
+  #else
+  printf(ANSI_FMT("function trace is closed in config.\n", ANSI_FG_YELLOW));
   return 0;
+  #endif
 }
 
 void sdb_set_batch_mode() {
