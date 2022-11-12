@@ -71,7 +71,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   char tmp[50] = {};
   memset(mem_ring_buf[mem_ring_ref], ' ', 6);
   if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
-  sprintf(tmp, "----> read \t0x%016llx\t", waddr);
+  sprintf(tmp, "----> write\t0x%016llx\t", waddr);
   strcpy(mem_ring_buf[mem_ring_ref], tmp);
 #endif
 
