@@ -18,9 +18,9 @@ void cpu_exit();
 //   host_write(guest_to_host(addr), len, data);
 // }
 
-static void out_of_bound(paddr_t addr) {
+static void out_of_bound(vaddr_t addr) {
   cpu_exit();
-  log_write(true, "addr = 0x%08x out of bound mem!\n", addr);
+  log_write(true, "addr = 0x%016lx out of bound mem!\n", addr);
   assert(0);
 }
 
@@ -75,7 +75,7 @@ void paddr_write(paddr_t addr, int len, uint64_t data, bool *success) {
     return pmem_write(addr, len, data);
   }
   else {
-    printf("addr = 0x%08x out of bound mem!\n", addr);
+    printf("addr = 0x%016lx out of bound mem!\n", addr);
     *success = false;
     return ;
   }
