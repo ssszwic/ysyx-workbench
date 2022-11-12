@@ -131,7 +131,7 @@ void cpu_init() {
   #endif
 
   // initial signal
-  top->io_cpuEn = 0;
+  top->io_cpuEn = 1;
   top->reset = 1;
   top->clock = 0;
 
@@ -157,18 +157,16 @@ void cpu_init() {
 static void isa_exec_once() {
   top->clock = !top->clock;
   // posedge clk
-  if(!cpu_state_init) {
-    // update pc register
-    top->eval();
-    // enable cpu (avoid pc reg change)
-    top->io_cpuEn = 1;
-    cpu_state_init = true;
-  }
+  // if(!cpu_state_init) {
+  //   // update pc register
+  //   top->eval();
+  //   // enable cpu (avoid pc reg change)
+  //   top->io_cpuEn = 1;
+  //   cpu_state_init = true;
+  // }
   // update inst
-  tfp->dump(contextp->time());//
-  // eval_and_wave();
+  eval_and_wave();
 
-  contextp->timeInc(1);
   top->clock = !top->clock;
 
   eval_and_wave();
