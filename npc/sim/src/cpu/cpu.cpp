@@ -20,7 +20,7 @@ static void isa_exec_once();
 static void exec_once();
 static void trace_and_difftest();
 
-void update_wp();
+bool update_wp();
 
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
@@ -46,10 +46,11 @@ void cpu_exec(uint64_t n) {
     return;
   }
 
+  npc_state.state == NPC_RUNNING;
   for(int i = 0; i < n; i++) {
     exec_once();
     trace_and_difftest();
-    if(npc_state.state == NPC_END) {break;}
+    if(npc_state.state == NPC_END || npc_state.state == NPC_STOP) {break;}
   }
 
   if(npc_state.state == NPC_END) {
@@ -85,7 +86,7 @@ void trace_and_difftest() {
 
   // watch point
 #ifdef CONFIT_WATCHPOINT
-  update_wp();
+  if(update_wp()) { npc_state.state = NPC_STOP; }
 #endif
 }
 
