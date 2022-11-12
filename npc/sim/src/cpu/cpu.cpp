@@ -50,9 +50,7 @@ void cpu_exec(uint64_t n) {
   for(int i = 0; i < n; i++) {
     exec_once();
     trace_and_difftest();
-    printf("%d\n", npc_state.state);
     if(npc_state.state == NPC_END || npc_state.state == NPC_STOP) {break;}
-    printf("%d\n", i);
   }
 
   if(npc_state.state == NPC_END) {
