@@ -72,7 +72,9 @@ void cpu_exec(uint64_t n) {
     }
     #ifdef CONFIG_ITRACE
     // only print to log
+    log_write(false, "666");
     log_inst_ring(false);
+    log_write(false, "666");
     #endif
   }
 }
