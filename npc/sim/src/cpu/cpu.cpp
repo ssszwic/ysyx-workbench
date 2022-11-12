@@ -166,12 +166,11 @@ static void isa_exec_once() {
   }
   // update inst
 
-  eval_and_wave();
+  top->eval_end_step();
 
   contextp->timeInc(1);
   top->clock = !top->clock;
 
-  eval_and_wave();
   eval_and_wave();
   contextp->timeInc(1);
 }
