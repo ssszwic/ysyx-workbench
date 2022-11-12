@@ -33,9 +33,11 @@ static void out_of_bound(vaddr_t addr) {
 // only for instruction read, no memory trace
 extern "C" void inst_pmem_read(long long raddr, long long *rdata) {
   // 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
+  printf("read inst ...\n");
   uint64_t paddr = raddr & ~0x7;
   if (likely(in_pmem(paddr))) {
     *rdata = host_read(guest_to_host(paddr), 8);
+    printf("read inst over...\n");
     return;
   }
   out_of_bound(paddr);
