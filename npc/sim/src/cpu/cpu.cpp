@@ -3,6 +3,13 @@
 #define RESET_TIME 20
 #define SIM_TIME 100
 
+// instruction ring buff
+#ifdef CONFIG_ITRACE
+#define INST_RING_BUF_WIDTH 30
+static char inst_ring_buf[INST_RING_BUF_WIDTH][100] = {};
+static int inst_ring_ref = INST_RING_BUF_WIDTH - 1;
+#endif
+
 static VTop* top;
 static VerilatedContext* contextp = NULL;
 #ifdef CONFIG_WAVE_ON
@@ -11,7 +18,6 @@ static VerilatedVcdC* tfp = NULL;
 
 // only for cmd si, print inst to screen
 bool screen_display_inst = false;
-
 NPCState npc_state = { .state = NPC_STOP };
 CPUState cpu = { .gpr = NULL };
 // Ensure cpu initialization is complete
@@ -24,6 +30,7 @@ static void exec_once();
 static void trace_and_difftest();
 
 bool update_wp(char *log);
+void log_inst_ring(bool print_screen);
 
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
@@ -63,6 +70,10 @@ void cpu_exec(uint64_t n) {
     else {
       log_write(true, ANSI_FMT("HIT BAD TRAP\n", ANSI_FG_RED));
     }
+    #ifdef CONFIG_ITRACE
+    // only print to log
+    log_inst_ring(false);
+    #endif
   }
 }
 
@@ -86,14 +97,17 @@ void trace_and_difftest() {
   disassemble(p, cpu.logbuf + sizeof(cpu.logbuf) - p, *cpu.pc, inst_byte, 4);
   log_write(screen_display_inst, "%s\n", cpu.logbuf);
 
+  // instruction ring buff
+  memset(inst_ring_buf[inst_ring_ref], ' ', 6); // copy 5 'space' to cover '---->'
+  if (++inst_ring_ref == INST_RING_BUF_WIDTH) {inst_ring_ref = 0;}
+  strcpy(inst_ring_buf[inst_ring_ref], "----> "); 
+  strcpy(inst_ring_buf[inst_ring_ref] + 6, cpu.logbuf);
+
   #ifdef CONFIT_WATCHPOINT
   if(update_wp(cpu.logbuf)) { npc_state.state = NPC_STOP; }
   #endif
 
 #endif
-
-  // watch point
-
 }
 
 void cpu_init() {
@@ -163,4 +177,17 @@ void cpu_exit(){
     log_write(true, "save wave successful!\n");
     tfp->close();
   #endif
+}
+
+void log_inst_ring(bool print_screen) {
+  if(inst_ring_buf[0][0] == '\0') {
+    log_write(print_screen, ANSI_FMT("instruction ring buff is empty.\n", ANSI_FG_YELLOW));
+    return;
+  }
+  log_write(print_screen, ANSI_FMT("instruction ring buff.\n", ANSI_FG_BLUE));
+  for (int i = 0; i < INST_RING_BUF_WIDTH; i++) {
+    if(inst_ring_buf[i][0] == '\0') break;
+    log_write(print_screen, "%s\n", inst_ring_buf[i]);
+  }
+  log_write(print_screen, "\n");
 }
