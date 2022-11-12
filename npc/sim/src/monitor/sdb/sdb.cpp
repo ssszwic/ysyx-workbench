@@ -27,7 +27,7 @@ static char* rl_gets() {
   }
 
   // using prompt as a prompt
-  line_read = readline("(nemu) ");
+  line_read = readline("(npc) ");
 
   if (line_read && *line_read) {
     add_history(line_read);
