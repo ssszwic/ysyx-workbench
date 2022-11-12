@@ -5,6 +5,7 @@
 // 128MB for npc
 static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
 
+
 uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 uint32_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 void cpu_exit();
@@ -13,6 +14,8 @@ void cpu_exit();
 #define MEM_RING_BUF_WIDTH 300
 static char mem_ring_buf[MEM_RING_BUF_WIDTH][50] = {};
 static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
+// erda or write twice every cycle, only trace once
+static bool flip = true;
 #endif
 
 // static uint64_t pmem_read(paddr_t addr, int len) {
@@ -46,11 +49,14 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
 
   // memory trace
 #ifdef CONFIG_MEMORY_TRACE
-  char tmp[50] = {};
-  memset(mem_ring_buf[mem_ring_ref], ' ', 6);
-  if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
-  sprintf(tmp, "----> read \t0x%016llx\t", raddr);
-  strcpy(mem_ring_buf[mem_ring_ref], tmp);
+  if(flip) {
+    char tmp[50] = {};
+    memset(mem_ring_buf[mem_ring_ref], ' ', 6);
+    if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
+    sprintf(tmp, "----> read \t0x%016llx\t", raddr);
+    strcpy(mem_ring_buf[mem_ring_ref], tmp);
+  }
+  flip = !flip;
 #endif
 
   uint64_t paddr = raddr & ~0x7;
@@ -68,11 +74,14 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
 
   // memory trace
 #ifdef CONFIG_MEMORY_TRACE
-  char tmp[50] = {};
-  memset(mem_ring_buf[mem_ring_ref], ' ', 6);
-  if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
-  sprintf(tmp, "----> write\t0x%016llx\t", waddr);
-  strcpy(mem_ring_buf[mem_ring_ref], tmp);
+  if(flip) {
+    char tmp[50] = {};
+    memset(mem_ring_buf[mem_ring_ref], ' ', 6);
+    if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
+    sprintf(tmp, "----> write\t0x%016llx\t", waddr);
+    strcpy(mem_ring_buf[mem_ring_ref], tmp);
+  }
+  flip = !flip;
 #endif
 
   uint32_t paddr = waddr & ~0x7;
