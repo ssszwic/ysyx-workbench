@@ -72,9 +72,7 @@ void cpu_exec(uint64_t n) {
     }
     #ifdef CONFIG_ITRACE
     // only print to log
-    log_write(false, "666");
     log_inst_ring(false);
-    log_write(false, "666");
     #endif
   }
 }
@@ -183,10 +181,12 @@ void cpu_exit(){
 
 void log_inst_ring(bool print_screen) {
   if(inst_ring_buf[0][0] == '\0') {
-    log_write(print_screen, ANSI_FMT("instruction ring buff is empty.\n", ANSI_FG_YELLOW));
+    log_write(print_screen, ANSI_FMT("instruction ring buff is empty.", ANSI_FG_YELLOW));
+    log_write(print_screen, "\n");
     return;
   }
-  log_write(print_screen, ANSI_FMT("instruction ring buff.\n", ANSI_FG_BLUE));
+  log_write(print_screen, ANSI_FMT("instruction ring buff.", ANSI_FG_BLUE));
+  log_write(print_screen, "\n");
   for (int i = 0; i < INST_RING_BUF_WIDTH; i++) {
     if(inst_ring_buf[i][0] == '\0') break;
     log_write(print_screen, "%s\n", inst_ring_buf[i]);
