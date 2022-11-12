@@ -82,7 +82,7 @@ void cpu_exec(uint64_t n) {
 
 #ifdef CONFIG_MEMORY_TRACE
     // only print to log
-    log_mem_ring(true);
+    log_mem_ring(false);
 #endif
   }
 }
