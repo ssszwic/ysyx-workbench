@@ -13,6 +13,7 @@ enum {
 };
 
 static bool eval_success;
+uint64_t isa_reg_str2val(const char *s, bool *success);
 
 static struct rule {
   const char *regex;
