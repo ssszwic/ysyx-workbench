@@ -170,6 +170,7 @@ static void isa_exec_once() {
 
   top->clock = !top->clock;
   // eval_and_wave();
+  tfp->dump(contextp->time());
   contextp->timeInc(1);
 }
 
