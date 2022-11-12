@@ -211,7 +211,7 @@ static int info_reg() {
 static int info_watch() {
   #ifndef CONFIT_WATCHPOINT
     printf("watch point is closed in config.\n");
-    return ;
+    return 0;
   #endif
   print_wb();
   return 0;
@@ -220,7 +220,7 @@ static int info_watch() {
 static int cmd_watch(char *args) {
   #ifndef CONFIT_WATCHPOINT
     printf("watch point is closed in config.\n");
-    return ;
+    return 0;
   #endif
   if (args == NULL) {
     printf("You must specify expression.\n");
