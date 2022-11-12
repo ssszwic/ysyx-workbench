@@ -3,7 +3,6 @@
  */
 #include <regex.h>
 #include "commen.h"
-#include "cpu/reg.h"
 #include "mem/mem.h"
 
 

@@ -1,5 +1,4 @@
 #include "cpu/cpu.h"
-#include "cpu/reg.h"
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
