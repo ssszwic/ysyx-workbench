@@ -70,15 +70,3 @@ uint64_t extern_pmem_read(vaddr_t raddr, int len) {
   return 0;
 }
 
-void paddr_write(paddr_t addr, int len, uint64_t data, bool *success) {
-  if (likely(in_pmem(addr))) {
-    return pmem_write(addr, len, data);
-  }
-  else {
-    printf("addr = 0x%016lx out of bound mem!\n", addr);
-    *success = false;
-    return ;
-  }
-  // device to do
-  // out_of_bound(addr);
-}
