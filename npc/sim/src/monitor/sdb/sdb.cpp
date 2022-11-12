@@ -1,8 +1,7 @@
 #include "cpu/cpu.h"
 #include <readline/readline.h>
 #include <readline/history.h>
-#include "sdb.h"
-#include "mem.h"
+#include "mem/mem.h"
 
 #define NR_CMD ARRLEN(cmd_table)
 #define MAX_EXPR_LENGTH 100
