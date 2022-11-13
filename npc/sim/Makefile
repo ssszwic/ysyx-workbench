@@ -58,7 +58,7 @@ CFLAGS += -Werror
 # config itrace llvm
 # CFLAGS += $(shell llvm-config --cxxflags) -fPIE
 CFLAGS += -O2 -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -fPIE
-LDFLAGS += $(shell llvm-config --libs) -lreadline -ldl $(DIFFSET_SO)
+LDFLAGS += $(shell llvm-config --libs) -lreadline -ldl
 #
 VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
 
