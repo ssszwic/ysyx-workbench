@@ -78,7 +78,6 @@ extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
 }
 
 extern "C" void set_pc_ptr(const svOpenArrayHandle r) {
-  printf("%ln\n", cpu.pc);
   cpu.pc = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
 }
 
