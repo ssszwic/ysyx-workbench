@@ -116,6 +116,11 @@ void cpu_exec(uint64_t n) {
     // only print to log
     log_mem_ring(false);
 #endif
+
+#ifdef CONFIG_FUNCTION_TRACE
+    // only print to log
+    log_func_ring(true);
+#endif
   }
 }
 
