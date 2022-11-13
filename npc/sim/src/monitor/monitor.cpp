@@ -40,20 +40,17 @@ void init_monitor(int argc, char *argv[]) {
   }
 
   // 3. print config info
-  printf("-2");
   log_config();
 
-  printf("-2");
   // 4. log binary image
   long image_size = load_img();
 
   // 5. initial disasm
-  printf("-2");
   init_disasm("riscv64" "-pc-linux-gnu");
 
   // 6. inittial sdb
   init_sdb();
-  printf("-2");
+  printf("-2165156156");
   // 7. initial cpu
   cpu_init();
 
