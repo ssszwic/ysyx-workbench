@@ -142,10 +142,12 @@ void trace_and_difftest() {
 printf("555\n");
 #ifdef CONFIG_ITRACE
   char *p = cpu.logbuf;
-  printf("555\n");
+  printf("52\n");
   p += snprintf(p, sizeof(cpu.logbuf), "0x%016lx:  ", *cpu.pc);
   // print from MSB
+  printf("523\n");
   uint32_t inst = get_inst(*cpu.pc);
+  printf("54\n");
   uint8_t *inst_byte = (uint8_t *) &inst;
   for(int i = 3; i >= 0; i--) {
     p += snprintf(p, sizeof(cpu.logbuf), "%02x ", *(inst_byte + i));
