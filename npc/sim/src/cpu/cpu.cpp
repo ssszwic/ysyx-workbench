@@ -49,7 +49,6 @@ static VerilatedContext* contextp = NULL;
   static bool jal         = false;
   static bool jalr        = false;
   static uint64_t jump_pc = 0;
-  static void update_nextpc();
   static void log_func_list(bool print_screen);
   void log_func_ring(bool print_screen);
 #endif
