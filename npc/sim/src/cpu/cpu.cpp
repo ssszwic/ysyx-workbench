@@ -45,8 +45,10 @@ static VerilatedContext* contextp = NULL;
   // num of function
   static int ref = 0;
   // next pc
-  static bool jump = false;
-  static uint64_t next_pc = 0;
+  static int func_state   = -1;  // initial state
+  static bool jal         = false;
+  static bool jalr        = false;
+  static uint64_t jump_pc = 0;
   static void update_nextpc();
 
 #endif
@@ -153,6 +155,9 @@ void trace_and_difftest() {
   // detect jump inst: JAL or JALR
   // JAL: enter function
   // JALR: leave function
+  if(func_state == -1) {
+
+  }
 
 #endif
 }
@@ -212,9 +217,8 @@ static void isa_exec_once() {
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
   jump = top->io_jumpSel;
-  next_pc = top->io_nextPC;
+  jump_pc = top->io_jumpPC;
 #endif
-
 }
 
 static void eval_and_wave(){

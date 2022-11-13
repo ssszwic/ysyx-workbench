@@ -8,7 +8,8 @@ class Top extends Module {
     // control 
     val cpuEn     = Input(Bool())
     // verilator debug
-    val jumpSel   = Output(Bool()) // jal or jalr
+    val jalSel    = Output(Bool()) // jal
+    val jalrSel   = Output(Bool()) // jalr
     val jumpPC    = Output(UInt(64.W))
   })
 
@@ -24,7 +25,8 @@ class Top extends Module {
   nextpcDefault := IFUInst.io.pc + 4.U
 
   // IO
-  io.jumpSel  := IDUInst.io.jumpSel
+  io.jalSel   := IDUInst.io_alu.typeJSel
+  io.jalrSel  := IDUInst.io_alu.jalrSel
   io.jumpPC   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
 
 
