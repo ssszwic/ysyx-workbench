@@ -170,7 +170,7 @@ void trace_and_difftest() {
     id = func_pc(*cpu.pc);
     memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> call [%s\t@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
+    sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
     strcpy(func_ring_buf[func_ring_ref], tmp);
     func_state = id;
   }
@@ -179,7 +179,7 @@ void trace_and_difftest() {
     id = func_pc(jump_pc);
     memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> call [%s\t@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
+    sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
     strcpy(func_ring_buf[func_ring_ref], tmp);
     func_state = id;
   }
@@ -188,7 +188,7 @@ void trace_and_difftest() {
     id = func_pc(jump_pc);
     memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> ret  [%s\t@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
+    sprintf(tmp, "0x%08lx: ----> ret  [%s@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
     strcpy(func_ring_buf[func_ring_ref], tmp);
     func_state = id;
   }
