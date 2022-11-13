@@ -139,7 +139,6 @@ void exec_once() {
 
 void trace_and_difftest() {
 // itrace
-printf("555\n");
 #ifdef CONFIG_ITRACE
   char *p = cpu.logbuf;
   printf("%ld\n",*cpu.pc);
@@ -201,7 +200,6 @@ printf("555\n");
     func_state = id;
   }
 #endif
-printf("777\n");
 // difftest
 #ifdef CONFIG_DIFFTEST
   difftest_step();
