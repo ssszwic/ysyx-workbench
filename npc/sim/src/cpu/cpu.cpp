@@ -45,7 +45,7 @@ static VerilatedContext* contextp = NULL;
   // num of function
   static int ref = 0;
   // next pc
-  static int func_state   = -1;  // initial state
+  static int func_state   = -2;  // initial state, -2: no function
   static bool jal         = false;
   static bool jalr        = false;
   static uint64_t jump_pc = 0;
@@ -157,7 +157,10 @@ void trace_and_difftest() {
   // JALR: leave function
   int id;
   char tmp[SINGLE_BUF_WIDTH] = {};
-  if(func_state == -1) {
+  if(func_state == -2) {
+    // no function in elf or no elf
+  }
+  else if(func_state == -1) {
     // call initial function
     id = func_pc(*cpu.pc);
     memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
@@ -393,6 +396,7 @@ void init_elf(const char *file) {
     log_write(true, "no function in elf file!\n");
     assert(0);
   }
+  func_state = -1;
   log_write(false, "read elf file finfished\n");
   log_func_list(true);
 }
