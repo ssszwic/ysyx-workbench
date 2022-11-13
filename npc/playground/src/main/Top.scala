@@ -7,6 +7,9 @@ class Top extends Module {
   val io = IO(new Bundle {
     // control 
     val cpuEn     = Input(Bool())
+    // verilator debug
+    val jumpSel   = Output(Bool()) // jal or jalr
+    val jumpPC    = Output(UInt(64.W))
   })
 
   // declare module
@@ -20,6 +23,10 @@ class Top extends Module {
   val nextpcDefault = Wire(UInt(64.W))
   nextpcDefault := IFUInst.io.pc + 4.U
 
+  // IO
+  io.jumpSel  := IDUInst.io.jumpSel
+  io.jumpPC   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
+
 
   // MemCtrlInst
   MemCtrlInst.io.wData  := RegFilesInst.io.rs2Data
@@ -30,8 +37,8 @@ class Top extends Module {
   MemCtrlInst.io.unsign := IDUInst.io.unsignMem
 
   // IFU
-  IFUInst.io.clock       := clock
-  IFUInst.io.reset       := reset
+  IFUInst.io.clock    := clock
+  IFUInst.io.reset    := reset
   IFUInst.io.nextpc   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
   IFUInst.io.pcEn     := io.cpuEn
 

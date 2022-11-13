@@ -1,19 +1,54 @@
 #include "cpu/cpu.h"
+#include <elf.h>
 
 #define RESET_TIME 20
 #define SIM_TIME 100
 
-// instruction ring buff
-#ifdef CONFIG_ITRACE
-#define INST_RING_BUF_WIDTH 30
-static char inst_ring_buf[INST_RING_BUF_WIDTH][100] = {};
-static int inst_ring_ref = INST_RING_BUF_WIDTH - 1;
-#endif
-
 static VTop* top;
 static VerilatedContext* contextp = NULL;
+
+// instruction ring buff
+#ifdef CONFIG_ITRACE
+  #define INST_RING_BUF_WIDTH 30
+  static char inst_ring_buf[INST_RING_BUF_WIDTH][100] = {};
+  static int inst_ring_ref = INST_RING_BUF_WIDTH - 1;
+  void log_inst_ring(bool print_screen);
+#endif
+
+#ifdef CONFIG_MEMORY_TRACE
+  void log_mem_ring(bool print_screen);
+#endif
+
 #ifdef CONFIG_WAVE_ON
-static VerilatedVcdC* tfp = NULL;
+  static VerilatedVcdC* tfp = NULL;
+#endif
+
+#ifdef CONFIG_FUNCTION_TRACE
+  // the list to store function
+  #define MAX_FUNC_NAME_WIDTH 50  // max function name length, the excess will be stage
+  #define FUNC_LIST_NUM 100       // max function number
+  struct func {
+    int id;
+    size_t size;
+    vaddr_t start_addr;
+    char name[MAX_FUNC_NAME_WIDTH];
+  };
+  static struct func func_list[FUNC_LIST_NUM];
+  // the function trace buff
+  #define FUNC_RING_BUF_WIDTH 100
+  #define SINGLE_BUF_WIDTH (FUNC_LIST_NUM + 50)
+  // ring buf
+  static char func_ring_buf[FUNC_RING_BUF_WIDTH][SINGLE_BUF_WIDTH] = {};
+  // ring buf ref
+  static int func_ring_ref = FUNC_RING_BUF_WIDTH - 1;
+  static int func_pc(vaddr_t addr);
+  // num of function
+  static int ref = 0;
+  // next pc
+  static bool jump = false;
+  static uint64_t next_pc = 0;
+  static void update_nextpc();
+
 #endif
 
 // only for cmd si, print inst to screen
@@ -30,12 +65,7 @@ static void exec_once();
 static void trace_and_difftest();
 
 bool update_wp(char *log);
-#ifdef CONFIG_ITRACE
-void log_inst_ring(bool print_screen);
-#endif
-#ifdef CONFIG_MEMORY_TRACE
-void log_mem_ring(bool print_screen);
-#endif
+
 
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
@@ -92,7 +122,7 @@ void exec_once() {
 }
 
 void trace_and_difftest() {
-  // itrace
+// itrace
 #ifdef CONFIG_ITRACE
   char *p = cpu.logbuf;
 
@@ -116,6 +146,13 @@ void trace_and_difftest() {
   #ifdef CONFIT_WATCHPOINT
   if(update_wp(cpu.logbuf)) { npc_state.state = NPC_STOP; }
   #endif
+#endif
+
+// function trace
+#ifdef CONFIG_FUNCTION_TRACE
+  // detect jump inst: JAL or JALR
+  // JAL: enter function
+  // JALR: leave function
 
 #endif
 }
@@ -171,6 +208,13 @@ static void isa_exec_once() {
   top->clock = !top->clock;
   eval_and_wave();
   contextp->timeInc(1);
+
+#ifdef CONFIG_FUNCTION_TRACE
+  // upadte next pc
+  jump = top->io_jumpSel;
+  next_pc = top->io_nextPC;
+#endif
+
 }
 
 static void eval_and_wave(){
@@ -205,4 +249,133 @@ void log_inst_ring(bool print_screen) {
   }
   log_write(print_screen, "\n");
 }
+#endif
+
+#ifdef CONFIG_FUNCTION_TRACE
+void init_elf(const char *file) {
+  log_write(false, "read elf file\n");
+  FILE *fp;
+	fp = fopen(file, "r");
+	if (NULL == fp)
+	{
+		printf("fail to open the file\n");
+		assert(0);
+	}
+  // analysis head
+  Elf64_Ehdr elf_head;
+	int a;
+  int i, j;
+  char name[MAX_FUNC_NAME_WIDTH] = {};
+  ref = 0;
+
+  // read head
+  // read data for stream
+	a = fread(&elf_head, sizeof(Elf64_Ehdr), 1, fp);
+	assert(a != 0);
+
+  if (elf_head.e_ident[0] != 0x7F ||
+		elf_head.e_ident[1] != 'E' ||
+		elf_head.e_ident[2] != 'L' ||
+		elf_head.e_ident[3] != 'F')
+	{
+		printf("Not a ELF file\n");
+		assert(0);
+	}
+
+  // 解析section 分配内存 section * 数量
+	Elf64_Shdr *start1 = (Elf64_Shdr*)malloc(sizeof(Elf64_Shdr) * elf_head.e_shnum);
+  if (NULL == start1) { assert(0);}
+  Elf64_Shdr *shdr = start1;
+  Elf64_Shdr *sym_shdr = NULL;
+  Elf64_Shdr *str_shdr = NULL;
+	
+	// set offset 
+	a = fseek(fp, elf_head.e_shoff, SEEK_SET);
+	assert(a == 0);
+
+	// read section to shdr, size : shdr * num
+	a = fread(shdr, sizeof(Elf64_Shdr) * elf_head.e_shnum, 1, fp);
+	assert(a != 0);
+
+  // find symbol table
+  for (i = 0; i < elf_head.e_shnum; i++) {
+    if (shdr->sh_type == 2) {
+      sym_shdr = shdr;
+    }
+    else if (shdr->sh_type == 3) {
+      // get first resdult when there are 2 section (type is 3)
+      // .strtab is right and .shstrtab is wrong
+      if (str_shdr == NULL) {
+        str_shdr = shdr;
+      }
+    }
+    shdr++;
+  }
+  assert(sym_shdr && str_shdr);
+
+  Elf64_Sym *start2 = (Elf64_Sym*)malloc(sym_shdr->sh_size);
+  assert(start2 != NULL);
+
+  Elf64_Sym *sym = start2;
+  // function numer
+  int sym_num = sym_shdr->sh_size / 24;
+  // point the file pointer to the beginning
+  rewind(fp);
+  fseek(fp, sym_shdr->sh_offset, SEEK_SET);
+  a = fread(sym, sym_shdr->sh_size, 1,  fp);
+	assert(a != 0);
+
+  for(i = 0; i < sym_num; i++) {
+    // symbol type is function
+    if ((sym->st_info & 0xf) == 2) {
+      rewind(fp);
+      a = fseek(fp, str_shdr->sh_offset + sym->st_name, SEEK_SET);
+	    assert(a == 0);
+      a = fread(name, MAX_FUNC_NAME_WIDTH, 1, fp);
+	    assert(a != 0);
+      for (j = 0; j < MAX_FUNC_NAME_WIDTH; j++) {
+        if (name[j] == '\0') {break;}
+      }
+      if (j == MAX_FUNC_NAME_WIDTH) {
+        log_write(true, "ftrace: function name is too long, the excess will be stage\n");
+        name[j-10] = '\0';
+        // assert(0);
+      }
+      // limit num of func list
+      if(ref == FUNC_LIST_NUM) {
+        log_write(true, "ftrace: function is too much, more than %d!\n", FUNC_LIST_NUM);
+        assert(0);
+      }
+      func_list[ref].id = ref;
+      func_list[ref].start_addr = sym->st_value;
+      func_list[ref].size = sym->st_size;
+      strcpy(func_list[ref].name, name);
+      ref++;
+    }
+    sym++;
+  }
+  free(start1);
+  free(start2);
+  start1 = NULL;
+  start2 = NULL;
+  fclose(fp);
+  if(ref == 0) {
+    log_write(true, "no function in elf file!\n");
+    assert(0);
+  }
+  log_write(false, "read elf file finfished\n");
+}
+
+// pc in which function
+static int func_pc(vaddr_t addr) {
+  for (int i = 0; i < ref; i++) {
+    if(addr == func_list[i].start_addr || ((addr >= func_list[i].start_addr) && (addr < (func_list[i].start_addr + func_list[i].size)))) {
+      return i;
+    }
+  }
+  log_write(true, "0x%016lx no funciton match!\n", addr);
+  assert(0);
+  return 0;
+}
+
 #endif
