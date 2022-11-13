@@ -76,6 +76,7 @@ void init_difftest(char *ref_so_file, long img_size) {
 }
 
 void difftest_step() {
+  printf("666\n");
   NEMUCPUState ref_r;
 
   // ref execute once

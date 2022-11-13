@@ -60,7 +60,6 @@ void init_monitor(int argc, char *argv[]) {
     printf("there is no difftest file input!\n");
     assert(0);
   }
-  printf("init\n");
   init_difftest(diff_file, image_size);
 #endif
 
