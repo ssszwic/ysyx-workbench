@@ -414,7 +414,7 @@ static int func_pc(vaddr_t addr) {
 }
 
 static void log_func_list(bool print_screen) {
-  log_write(print_screen, ANSI_FMT("function list.\n", ANSI_FG_BLUE));
+  log_write(print_screen, ANSI_FMT("function list:\n", ANSI_FG_BLUE));
   log_write(print_screen, "function number: %d\n", ref);
   for (int i = 0; i < ref; i++) {
     log_write(print_screen, "id: %d\n", func_list[i].id);
