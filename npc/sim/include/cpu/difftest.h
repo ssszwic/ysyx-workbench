@@ -11,4 +11,11 @@ extern void (*ref_difftest_exec)(uint64_t n);
 extern void (*ref_difftest_raise_intr)(uint64_t NO);
 extern void (*ref_difftest_init)();
 
+// CPU state is different between nemu and npc
+typedef struct {
+  // uint_64 for riscv64
+  word_t gpr[32];
+  vaddr_t pc;
+} NEMUCPUState;
+
 #endif

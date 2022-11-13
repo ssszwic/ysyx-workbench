@@ -10,7 +10,7 @@ class Top extends Module {
     // verilator debug
     val jalSel    = Output(Bool()) // jal
     val jalrSel   = Output(Bool()) // jalr
-    val jumpPC    = Output(UInt(64.W))
+    val nextPC    = Output(UInt(64.W))
   })
 
   // declare module
@@ -27,7 +27,7 @@ class Top extends Module {
   // IO
   io.jalSel   := IDUInst.io_alu.typeJSel
   io.jalrSel  := IDUInst.io_alu.jalrSel
-  io.jumpPC   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
+  io.nextPC   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
 
 
   // MemCtrlInst

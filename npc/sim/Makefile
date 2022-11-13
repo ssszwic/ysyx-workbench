@@ -59,8 +59,8 @@ VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
 
 # NPCFLAGS
 LOG := $(WORK_DIR)/sim_log.txt
-DIFFSET_SO := 
-override ARGS += --log=$(LOG)
+DIFFSET_SO := /home/ssszw/Work/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so
+override ARGS += --log=$(LOG) --diff=$(DIFFSET_SO)
 
 IMG ?=
 

@@ -43,12 +43,7 @@ void init_monitor(int argc, char *argv[]) {
   log_config();
 
   // 4. log binary image
-  load_img();
-
-  // 5. init difftest
-#ifdef CONFIG_FUNCTION_TRACE
-  init_difftest();
-#endif
+  long image_size = load_img();
 
   // 5. initial disasm
   init_disasm("riscv64" "-pc-linux-gnu");
@@ -59,7 +54,16 @@ void init_monitor(int argc, char *argv[]) {
   // 7. initial cpu
   cpu_init();
 
-  // 8. read elf file
+  // 8. init difftest must be after cpu_init();
+#ifdef CONFIG_FUNCTION_TRACE
+  if(diff_file == NULL) {
+    printf("there is no difftest file input!\n");
+    assert(0);
+  }
+  init_difftest(diff_file, image_size);
+#endif
+
+  // 9. read elf file
 #ifdef CONFIG_FUNCTION_TRACE
   if(elf_file != NULL) {
     init_elf(elf_file);
@@ -155,6 +159,13 @@ void log_config() {
 
   log_write(true, ANSI_FMT("FUNCTION_TRACE: ", ANSI_FG_BLUE));
 #ifdef CONFIG_FUNCTION_TRACE
+  log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
+#else
+  log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
+#endif
+
+  log_write(true, ANSI_FMT("DIFFTEST: ", ANSI_FG_BLUE));
+#ifdef CONFIG_DIFFTEST
   log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
 #else
   log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
