@@ -42,6 +42,7 @@ void init_monitor(int argc, char *argv[]) {
   // 3. print config info
   log_config();
 
+
   // 4. log binary image
   long image_size = load_img();
 
@@ -50,7 +51,7 @@ void init_monitor(int argc, char *argv[]) {
 
   // 6. inittial sdb
   init_sdb();
-
+  printf("-2");
   // 7. initial cpu
   cpu_init();
 
