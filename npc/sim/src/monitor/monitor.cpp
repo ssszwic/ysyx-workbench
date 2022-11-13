@@ -56,12 +56,12 @@ void init_monitor(int argc, char *argv[]) {
 
   // 8. init difftest must be after cpu_init();
 #ifdef CONFIG_DIFFTEST
-  if(diff_file == NULL) {
-    printf("there is no difftest file input!\n");
-    assert(0);
-  }
-  printf("-2");
-  init_difftest(diff_file, image_size);
+  // if(diff_file == NULL) {
+  //   printf("there is no difftest file input!\n");
+  //   assert(0);
+  // }
+  // printf("-2");
+  // init_difftest(diff_file, image_size);
 #endif
 
   // 9. read elf file
