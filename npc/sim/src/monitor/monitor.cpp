@@ -174,5 +174,6 @@ void log_config() {
 #else
   log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
 #endif
+  printf("-3");
 
 }
