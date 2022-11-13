@@ -54,7 +54,7 @@ INC_PATH := $(WORK_DIR)/include
 INCLUDES := $(shell find $(INC_PATH) -name "*.h")
 CFLAGS += $(addprefix -I ,$(INC_PATH))
 CFLAGS += -Wall
-CFLAGS += -Werror
+CFLAGS += -Werror -fsanitize=address -static-libasa
 # config itrace llvm
 # CFLAGS += $(shell llvm-config --cxxflags) -fPIE
 CFLAGS += -O2 -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -fPIE
