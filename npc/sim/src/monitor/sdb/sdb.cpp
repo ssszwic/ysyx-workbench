@@ -270,13 +270,13 @@ static int cmd_delate(char *args) {
 }
 
 static int cmd_f(char *args) {
-  #ifdef CONFIG_FUNCTION_TRACE
-  print_func_log();
-  return 0;
-  #else
-  printf(ANSI_FMT("function trace is closed in config.\n", ANSI_FG_YELLOW));
-  return 0;
-  #endif
+  // #ifdef CONFIG_FUNCTION_TRACE
+  // print_func_log();
+  // return 0;
+  // #else
+  // printf(ANSI_FMT("function trace is closed in config.\n", ANSI_FG_YELLOW));
+  // return 0;
+  // #endif
 }
 
 void sdb_set_batch_mode() {
