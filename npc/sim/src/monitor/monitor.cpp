@@ -118,37 +118,37 @@ static long load_img() {
 void log_config() {
   log_write(true, ANSI_FMT("WAVE: ", ANSI_FG_BLUE));
 #ifdef CONFIG_WAVE
-  log_write(true, ANSI_FMT("ON", ANSI_FG_GREEN));
+  log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
 #else
-  log_write(true, ANSI_FMT("OFF", ANSI_FG_YELLOW));
+  log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
 #endif
 
   log_write(true, ANSI_FMT("ITRACE: ", ANSI_FG_BLUE));
 #ifdef CONFIG_ITRACE
-  log_write(true, ANSI_FMT("ON", ANSI_FG_GREEN));
+  log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
 #else
-  log_write(true, ANSI_FMT("OFF", ANSI_FG_YELLOW));
+  log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
 #endif
 
   log_write(true, ANSI_FMT("WATCHPOINT: ", ANSI_FG_BLUE));
 #if (defined CONFIG_ITRACE) && (defined CONFIT_WATCHPOINT)
-  log_write(true, ANSI_FMT("ON", ANSI_FG_GREEN));
+  log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
 #else
-  log_write(true, ANSI_FMT("OFF", ANSI_FG_YELLOW));
+  log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
 #endif
 
   log_write(true, ANSI_FMT("MEMORY_TRACE: ", ANSI_FG_BLUE));
 #ifdef CONFIG_MEMORY_TRACE
-  log_write(true, ANSI_FMT("ON", ANSI_FG_GREEN));
+  log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
 #else
-  log_write(true, ANSI_FMT("OFF", ANSI_FG_YELLOW));
+  log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
 #endif
 
   log_write(true, ANSI_FMT("FUNCTION_TRACE: ", ANSI_FG_BLUE));
 #ifdef CONFIG_FUNCTION_TRACE
-  log_write(true, ANSI_FMT("ON", ANSI_FG_GREEN));
+  log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
 #else
-  log_write(true, ANSI_FMT("OFF", ANSI_FG_YELLOW));
+  log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
 #endif
 
 }
