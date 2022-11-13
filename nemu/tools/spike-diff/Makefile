@@ -42,7 +42,8 @@ NAME = $(GUEST_ISA)-spike-so
 BINARY = $(BUILD_DIR)/$(NAME)
 SRCS = difftest.cc
 
-$(BINARY): $(SPIKE) $(SRCS)
+$(BINARY): $(SPIKE) $(SRCS)+
+	echo 66666666666
 	g++ -O2 -shared -fPIC $(INC_PATH) $(SRCS) $(INC_LIBS) -o $@
 
 clean:
