@@ -59,7 +59,9 @@ VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
 
 # NPCFLAGS
 LOG := $(WORK_DIR)/sim_log.txt
+DIFFSET_SO := 
 override ARGS += --log=$(LOG)
+
 IMG ?=
 
 ######################################################################
