@@ -164,6 +164,7 @@ void trace_and_difftest() {
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
     sprintf(tmp, "0x%08lx: ----> call [%s\t@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
     strcpy(func_ring_buf[func_ring_ref], tmp);
+    func_state = id;
   }
   else if(jal) {
     // call function
@@ -172,6 +173,7 @@ void trace_and_difftest() {
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
     sprintf(tmp, "0x%08lx: ----> call [%s\t@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
     strcpy(func_ring_buf[func_ring_ref], tmp);
+    func_state = id;
   }
   else if(jalr) {
     // ret function
@@ -180,8 +182,8 @@ void trace_and_difftest() {
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
     sprintf(tmp, "0x%08lx: ----> ret  [%s\t@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
     strcpy(func_ring_buf[func_ring_ref], tmp);
+    func_state = id;
   }
-  func_state = id;
 #endif
 }
 
