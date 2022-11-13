@@ -142,7 +142,7 @@ void trace_and_difftest() {
 printf("555\n");
 #ifdef CONFIG_ITRACE
   char *p = cpu.logbuf;
-
+  printf("555\n");
   p += snprintf(p, sizeof(cpu.logbuf), "0x%016lx:  ", *cpu.pc);
   // print from MSB
   uint32_t inst = get_inst(*cpu.pc);
@@ -150,10 +150,10 @@ printf("555\n");
   for(int i = 3; i >= 0; i--) {
     p += snprintf(p, sizeof(cpu.logbuf), "%02x ", *(inst_byte + i));
   }
-
+  printf("666\n");
   disassemble(p, cpu.logbuf + sizeof(cpu.logbuf) - p, *cpu.pc, inst_byte, 4);
   log_write(screen_display_inst, "%s\n", cpu.logbuf);
-
+  printf("777\n");
   // instruction ring buff
   memset(inst_ring_buf[inst_ring_ref], ' ', 6); // copy 5 'space' to cover '---->'
   if (++inst_ring_ref == INST_RING_BUF_WIDTH) {inst_ring_ref = 0;}
@@ -166,7 +166,6 @@ printf("555\n");
 #endif
 
 // function trace
-printf("666\n");
 #ifdef CONFIG_FUNCTION_TRACE
   // detect jump inst: JAL or JALR
   // JAL: enter function
