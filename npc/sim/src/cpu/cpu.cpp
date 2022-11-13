@@ -139,6 +139,7 @@ void exec_once() {
 
 void trace_and_difftest() {
 // itrace
+printf("555\n");
 #ifdef CONFIG_ITRACE
   char *p = cpu.logbuf;
 
@@ -165,6 +166,7 @@ void trace_and_difftest() {
 #endif
 
 // function trace
+printf("666\n");
 #ifdef CONFIG_FUNCTION_TRACE
   // detect jump inst: JAL or JALR
   // JAL: enter function
@@ -202,10 +204,9 @@ void trace_and_difftest() {
     func_state = id;
   }
 #endif
-
+printf("777\n");
 // difftest
 #ifdef CONFIG_DIFFTEST
-  printf("666\n");
   difftest_step();
 #endif
 }
