@@ -60,7 +60,7 @@ void init_monitor(int argc, char *argv[]) {
     printf("there is no difftest file input!\n");
     assert(0);
   }
-  init_difftest(diff_file, image_size);
+  // init_difftest(diff_file, image_size);
 #endif
 
   // 9. read elf file
