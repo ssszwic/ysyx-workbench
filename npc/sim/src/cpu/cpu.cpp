@@ -19,7 +19,7 @@ static VerilatedContext* contextp = NULL;
   void log_mem_ring(bool print_screen);
 #endif
 
-#ifdef CONFIG_WAVE_ON
+#ifdef CONFIG_WAVE
   static VerilatedVcdC* tfp = NULL;
 #endif
 
@@ -119,7 +119,7 @@ void cpu_exec(uint64_t n) {
 
 #ifdef CONFIG_FUNCTION_TRACE
     // only print to log
-    log_func_ring(true);
+    log_func_ring(false);
 #endif
   }
 }
@@ -198,7 +198,7 @@ void trace_and_difftest() {
 void cpu_init() {
   contextp = new VerilatedContext;
   top = new VTop;
-  #ifdef CONFIG_WAVE_ON
+  #ifdef CONFIG_WAVE
   tfp = new VerilatedVcdC;
   contextp->traceEverOn(true);
   top->trace(tfp, 0);
@@ -257,16 +257,16 @@ static void isa_exec_once() {
 
 static void eval_and_wave(){
   top->eval();
-  #ifdef CONFIG_WAVE_ON
+  #ifdef CONFIG_WAVE
   tfp->dump(contextp->time());//
   #endif
 }
 
 void cpu_exit(){
-  #ifdef CONFIG_WAVE_ON
+  #ifdef CONFIG_WAVE
   tfp->dump(contextp->time());//
   #endif
-  #ifdef CONFIG_WAVE_ON
+  #ifdef CONFIG_WAVE
     log_write(true, "save wave successful!\n");
     tfp->close();
   #endif

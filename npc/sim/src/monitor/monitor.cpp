@@ -20,6 +20,8 @@ static long load_img();
 void init_sdb();
 void cpu_init();
 void init_elf(const char *file);
+void log_config();
+
 extern "C" void init_disasm(const char *triple);
 
 void init_monitor(int argc, char *argv[]) {
@@ -35,19 +37,22 @@ void init_monitor(int argc, char *argv[]) {
     printf("there is no log, log file will not be creat\n");
   }
 
-  // 3. log binary image
+  // 3. print config info
+  log_config();
+
+  // 4. log binary image
   load_img();
 
-  // 4. initial disasm
+  // 5. initial disasm
   init_disasm("riscv64" "-pc-linux-gnu");
 
-  // 5. inittial sdb
+  // 6. inittial sdb
   init_sdb();
 
-  // 6. initial cpu
+  // 7. initial cpu
   cpu_init();
 
-  // 7. read elf file
+  // 8. read elf file
 #ifdef CONFIG_FUNCTION_TRACE
   if(elf_file != NULL) {
     init_elf(elf_file);
@@ -108,4 +113,42 @@ static long load_img() {
 
   fclose(fp);
   return size;
+}
+
+void log_config() {
+  log_write(true, ANSI_FMT("WAVE: ", ANSI_FG_BLUE));
+#ifdef CONFIG_WAVE
+  log_write(true, ANSI_FMT("ON", ANSI_FG_GREEN));
+#else
+  log_write(true, ANSI_FMT("OFF", ANSI_FG_YELLOW));
+#endif
+
+  log_write(true, ANSI_FMT("ITRACE: ", ANSI_FG_BLUE));
+#ifdef CONFIG_ITRACE
+  log_write(true, ANSI_FMT("ON", ANSI_FG_GREEN));
+#else
+  log_write(true, ANSI_FMT("OFF", ANSI_FG_YELLOW));
+#endif
+
+  log_write(true, ANSI_FMT("WATCHPOINT: ", ANSI_FG_BLUE));
+#if (defined CONFIG_ITRACE) && (defined CONFIT_WATCHPOINT)
+  log_write(true, ANSI_FMT("ON", ANSI_FG_GREEN));
+#else
+  log_write(true, ANSI_FMT("OFF", ANSI_FG_YELLOW));
+#endif
+
+  log_write(true, ANSI_FMT("MEMORY_TRACE: ", ANSI_FG_BLUE));
+#ifdef CONFIG_MEMORY_TRACE
+  log_write(true, ANSI_FMT("ON", ANSI_FG_GREEN));
+#else
+  log_write(true, ANSI_FMT("OFF", ANSI_FG_YELLOW));
+#endif
+
+  log_write(true, ANSI_FMT("FUNCTION_TRACE: ", ANSI_FG_BLUE));
+#ifdef CONFIG_FUNCTION_TRACE
+  log_write(true, ANSI_FMT("ON", ANSI_FG_GREEN));
+#else
+  log_write(true, ANSI_FMT("OFF", ANSI_FG_YELLOW));
+#endif
+
 }
