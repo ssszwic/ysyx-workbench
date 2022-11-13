@@ -55,7 +55,7 @@ void init_monitor(int argc, char *argv[]) {
   cpu_init();
 
   // 8. init difftest must be after cpu_init();
-#ifdef CONFIG_FUNCTION_TRACE
+#ifdef CONFIG_DIFFTEST
   if(diff_file == NULL) {
     printf("there is no difftest file input!\n");
     assert(0);
