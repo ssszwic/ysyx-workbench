@@ -216,7 +216,7 @@ static void isa_exec_once() {
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
-  jump = top->io_jumpSel;
+  jal = top->
   jump_pc = top->io_jumpPC;
 #endif
 }
