@@ -53,7 +53,7 @@ override ARGS += --log=$(LOG) --diff=$(DIFFSET_SO)
 INC_PATH := $(WORK_DIR)/include
 INCLUDES := $(shell find $(INC_PATH) -name "*.h")
 CFLAGS += $(addprefix -I ,$(INC_PATH))
-CFLAGS += -Wall
+CFLAGS += -Wall -fsanitize=address
 CFLAGS += -Werror
 # config itrace llvm
 # CFLAGS += $(shell llvm-config --cxxflags) -fPIE
