@@ -54,7 +54,7 @@ INC_PATH := $(WORK_DIR)/include
 INCLUDES := $(shell find $(INC_PATH) -name "*.h")
 CFLAGS += $(addprefix -I ,$(INC_PATH))
 CFLAGS += -Wall
-CFLAGS += -Werror
+CFLAGS += -Werror -g
 # config itrace llvm
 # CFLAGS += $(shell llvm-config --cxxflags) -fPIE
 CFLAGS += -O2 -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -fPIE -pie
@@ -76,6 +76,19 @@ run: $(BUILD_DIR)/V$(MODULE)
 	@-rm $(LOG)
 	@mkdir -p logs
 	@obj_dir/V$(MODULE) $(ARGS) $(IMG)
+	@echo
+	@echo "-- DONE --------------------"
+	@echo "To see waveforms, make wave"
+	@echo
+
+
+gdb: $(BUILD_DIR)/V$(MODULE)
+	@echo
+	@echo "-- RUN ---------------------"
+	@rm -rf logs
+	@-rm $(LOG)
+	@mkdir -p logs
+	@gdb obj_dir/V$(MODULE) $(ARGS) $(IMG)
 	@echo
 	@echo "-- DONE --------------------"
 	@echo "To see waveforms, make wave"
