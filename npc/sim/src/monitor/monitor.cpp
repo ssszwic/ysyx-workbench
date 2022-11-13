@@ -19,6 +19,7 @@ static int parse_args(int argc, char *argv[]);
 static long load_img();
 void init_sdb();
 void cpu_init();
+void init_elf(const char *file);
 extern "C" void init_disasm(const char *triple);
 
 void init_monitor(int argc, char *argv[]) {
@@ -45,6 +46,11 @@ void init_monitor(int argc, char *argv[]) {
 
   // 6. initial cpu
   cpu_init();
+
+  // 7. read elf file
+  if(elf_file != NULL) {
+    init_elf(elf_file);
+  }
 }
 
 static int parse_args(int argc, char *argv[]) {
