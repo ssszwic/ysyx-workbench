@@ -42,11 +42,12 @@ void init_monitor(int argc, char *argv[]) {
   // 3. print config info
   log_config();
 
-
+  printf("-2");
   // 4. log binary image
   long image_size = load_img();
 
   // 5. initial disasm
+  printf("-2");
   init_disasm("riscv64" "-pc-linux-gnu");
 
   // 6. inittial sdb
