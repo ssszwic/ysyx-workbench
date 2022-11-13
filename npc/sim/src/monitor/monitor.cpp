@@ -170,6 +170,7 @@ void log_config() {
 
   log_write(true, ANSI_FMT("DIFFTEST: ", ANSI_FG_BLUE));
 #ifdef CONFIG_DIFFTEST
+  printf("-5");
   log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
   printf("-5");
 #else
