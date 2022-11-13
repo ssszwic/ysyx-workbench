@@ -277,6 +277,7 @@ static int cmd_f(char *args) {
   // printf(ANSI_FMT("function trace is closed in config.\n", ANSI_FG_YELLOW));
   // return 0;
   // #endif
+  return 0;
 }
 
 void sdb_set_batch_mode() {
