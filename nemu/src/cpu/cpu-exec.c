@@ -54,6 +54,8 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   // Print the next instruction will be executed
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
+  // _this->pc: the pc aster exec
+  // dnpc: next pc that will be executed
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
   // scan watchpoint
 #ifdef CONFIG_WATCHPOINT
