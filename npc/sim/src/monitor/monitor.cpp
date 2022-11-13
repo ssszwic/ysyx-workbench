@@ -22,6 +22,7 @@ void init_sdb();
 void cpu_init();
 void init_elf(const char *file);
 void log_config();
+void init_difftest(char *ref_so_file, long img_size);
 
 extern "C" void init_disasm(const char *triple);
 
@@ -43,6 +44,11 @@ void init_monitor(int argc, char *argv[]) {
 
   // 4. log binary image
   load_img();
+
+  // 5. init difftest
+#ifdef CONFIG_FUNCTION_TRACE
+  init_difftest();
+#endif
 
   // 5. initial disasm
   init_disasm("riscv64" "-pc-linux-gnu");
