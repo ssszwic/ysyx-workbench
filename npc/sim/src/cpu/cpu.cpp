@@ -50,8 +50,8 @@ static VerilatedContext* contextp = NULL;
   static bool jalr        = false;
   static uint64_t jump_pc = 0;
   static void update_nextpc();
-  static void log_func_list();
-
+  static void log_func_list(bool print_screen);
+  void log_func_ring(bool print_screen);
 #endif
 
 // only for cmd si, print inst to screen
