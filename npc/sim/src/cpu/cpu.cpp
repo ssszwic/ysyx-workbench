@@ -200,6 +200,7 @@ void trace_and_difftest() {
   }
 #endif
 // difftest
+printf("77\n");
 #ifdef CONFIG_DIFFTEST
   difftest_step();
 #endif
