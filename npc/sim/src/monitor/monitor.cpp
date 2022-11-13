@@ -50,17 +50,15 @@ void init_monitor(int argc, char *argv[]) {
 
   // 6. inittial sdb
   init_sdb();
-  printf("-2165156156");
   // 7. initial cpu
   cpu_init();
 
   // 8. init difftest must be after cpu_init();
 #ifdef CONFIG_DIFFTEST
-  // if(diff_file == NULL) {
-  //   printf("there is no difftest file input!\n");
-  //   assert(0);
-  // }
-  // printf("-2");
+  if(diff_file == NULL) {
+    printf("there is no difftest file input!\n");
+    assert(0);
+  }
   // init_difftest(diff_file, image_size);
 #endif
 
