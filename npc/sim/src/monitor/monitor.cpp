@@ -48,9 +48,15 @@ void init_monitor(int argc, char *argv[]) {
   cpu_init();
 
   // 7. read elf file
+#ifdef CONFIG_FUNCTION_TRACE
   if(elf_file != NULL) {
     init_elf(elf_file);
   }
+  else {
+    log_write(true, ANSI_FMT("the function trace is open but no elf file.\n", ANSI_FG_YELLOW));
+  }
+#endif
+
 }
 
 static int parse_args(int argc, char *argv[]) {
