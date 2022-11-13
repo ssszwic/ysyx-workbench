@@ -50,7 +50,17 @@ INCLUDES := $(shell find $(INC_PATH) -name "*.h")
 CFLAGS += $(addprefix -I ,$(INC_PATH))
 CFLAGS += -Wall
 CFLAGS += -Werror
-VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC)
+# config itrace llvm
+# CFLAGS += $(shell llvm-config --cxxflags) -fPIE
+CFLAGS += -O2 -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS -fPIE
+LDFLAGS += $(shell llvm-config --libs) -lreadline -ldl -pie
+#
+VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
+
+# NPCFLAGS
+LOG := $(WORK_DIR)/sim_log.txt
+override ARGS += --log=$(LOG)
+IMG ?=
 
 ######################################################################
 default: run
@@ -59,8 +69,9 @@ run: $(BUILD_DIR)/V$(MODULE)
 	@echo
 	@echo "-- RUN ---------------------"
 	@rm -rf logs
+	@-rm $(LOG)
 	@mkdir -p logs
-	@obj_dir/V$(MODULE) +trace
+	@obj_dir/V$(MODULE) $(ARGS) $(IMG)
 	@echo
 	@echo "-- DONE --------------------"
 	@echo "To see waveforms, make wave"
@@ -68,6 +79,7 @@ run: $(BUILD_DIR)/V$(MODULE)
 
 # bulid
 $(BUILD_DIR)/V$(MODULE): $(VERILATOR_INPUT) $(INCLUDES)
+	@-rm -r $(BUILD_DIR)
 	@echo
 	@echo "-- VERILATE ----------------"
 	$(VERILATOR) $(VERILATOR_FLAGS) $(VERILATOR_INPUT)

@@ -7,6 +7,10 @@ class Top extends Module {
   val io = IO(new Bundle {
     // control 
     val cpuEn     = Input(Bool())
+    // verilator debug
+    val jalSel    = Output(Bool()) // jal
+    val jalrSel   = Output(Bool()) // jalr
+    val jumpPC    = Output(UInt(64.W))
   })
 
   // declare module
@@ -20,6 +24,11 @@ class Top extends Module {
   val nextpcDefault = Wire(UInt(64.W))
   nextpcDefault := IFUInst.io.pc + 4.U
 
+  // IO
+  io.jalSel   := IDUInst.io_alu.typeJSel
+  io.jalrSel  := IDUInst.io_alu.jalrSel
+  io.jumpPC   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
+
 
   // MemCtrlInst
   MemCtrlInst.io.wData  := RegFilesInst.io.rs2Data
@@ -30,6 +39,8 @@ class Top extends Module {
   MemCtrlInst.io.unsign := IDUInst.io.unsignMem
 
   // IFU
+  IFUInst.io.clock    := clock
+  IFUInst.io.reset    := reset
   IFUInst.io.nextpc   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
   IFUInst.io.pcEn     := io.cpuEn
 
@@ -37,6 +48,8 @@ class Top extends Module {
   IDUInst.io.inst := IFUInst.io.inst
 
   // RegFiles
+  RegFilesInst.io.clock   := clock
+  RegFilesInst.io.reset   := reset
   RegFilesInst.io.rs1Addr := IDUInst.io.rs1Addr
   RegFilesInst.io.rs2Addr := IDUInst.io.rs2Addr
   RegFilesInst.io.wen     := IDUInst.io.wenReg
