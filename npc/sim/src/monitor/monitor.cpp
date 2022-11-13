@@ -6,6 +6,7 @@
 static char *img_file = NULL;
 static char *elf_file = NULL;
 static char *log_file = NULL;
+static char *diff_file = NULL;
 
 static const uint32_t img [] = {
   0x00000297,  // auipc t0,0
@@ -68,6 +69,7 @@ static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"    , no_argument      , NULL, 'b'},
     {"help"     , no_argument      , NULL, 'h'},
+    {"diff"     , required_argument, NULL, 'd'},
     {"elf"      , required_argument, NULL, 'e'},
     {"log"      , required_argument, NULL, 'l'},
     {0          , 0                , NULL,  0 },
@@ -78,6 +80,7 @@ static int parse_args(int argc, char *argv[]) {
       case 'b': break;
       case 'e': elf_file = optarg; break;
       case 'l': log_file = optarg; break;
+      case 'd': diff_file = optarg; break;
       // 如果optstring的第一个参数是'-'，则会将所有的非选项当选项处理，并且返回1
       case 1: img_file = optarg; return 0;
       default:
