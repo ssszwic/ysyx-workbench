@@ -40,6 +40,7 @@ void init_monitor(int argc, char *argv[]) {
   }
 
   // 3. print config info
+  printf("-2");
   log_config();
 
   printf("-2");
