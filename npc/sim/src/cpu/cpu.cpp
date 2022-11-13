@@ -140,7 +140,7 @@ void exec_once() {
 void trace_and_difftest() {
 // itrace
 #ifdef CONFIG_ITRACE
-  char *p = cpu.logbuf;+
+  char *p = cpu.logbuf;
   printf("777\n");
   p += snprintf(p, sizeof(cpu.logbuf), "0x%016lx:  ", *cpu.pc);
   printf("888\n");
