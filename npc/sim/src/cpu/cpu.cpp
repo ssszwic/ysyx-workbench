@@ -139,6 +139,7 @@ void exec_once() {
 
 void trace_and_difftest() {
 // itrace
+printf("666\n");
 #ifdef CONFIG_ITRACE
   char *p = cpu.logbuf;
 
