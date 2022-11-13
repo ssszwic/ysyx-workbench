@@ -50,6 +50,7 @@ static VerilatedContext* contextp = NULL;
   static bool jalr        = false;
   static uint64_t jump_pc = 0;
   static void update_nextpc();
+  static void log_func_list();
 
 #endif
 
@@ -155,10 +156,33 @@ void trace_and_difftest() {
   // detect jump inst: JAL or JALR
   // JAL: enter function
   // JALR: leave function
+  int id;
+  char tmp[SINGLE_BUF_WIDTH] = {};
   if(func_state == -1) {
-
+    // call initial function
+    id = func_pc(*cpu.pc);
+    memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
+    if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
+    sprintf(tmp, "0x%08lx: ----> call [%s\t@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
+    strcpy(func_ring_buf[func_ring_ref], tmp);
   }
-
+  else if(jal) {
+    // call function
+    id = func_pc(jump_pc);
+    memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
+    if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
+    sprintf(tmp, "0x%08lx: ----> call [%s\t@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
+    strcpy(func_ring_buf[func_ring_ref], tmp);
+  }
+  else if(jalr) {
+    // ret function
+    id = func_pc(jump_pc);
+    memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
+    if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
+    sprintf(tmp, "0x%08lx: ----> ret  [%s\t@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
+    strcpy(func_ring_buf[func_ring_ref], tmp);
+  }
+  func_state = id;
 #endif
 }
 
@@ -216,7 +240,8 @@ static void isa_exec_once() {
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
-  jal = top->
+  jal     = top->io_jalSel;
+  jalr    = top->io_jalrSel;
   jump_pc = top->io_jumpPC;
 #endif
 }
@@ -368,6 +393,7 @@ void init_elf(const char *file) {
     assert(0);
   }
   log_write(false, "read elf file finfished\n");
+  log_func_list(true);
 }
 
 // pc in which function
@@ -380,6 +406,33 @@ static int func_pc(vaddr_t addr) {
   log_write(true, "0x%016lx no funciton match!\n", addr);
   assert(0);
   return 0;
+}
+
+static void log_func_list(bool print_screen) {
+  log_write(print_screen, ANSI_FMT("function list.", ANSI_FG_BLUE));
+  log_write(print_screen, "function number: %d\n", ref);
+  for (int i = 0; i < ref; i++) {
+    log_write(print_screen, "id: %d\n", func_list[i].id);
+    log_write(print_screen, "name: \t\t%s\n", func_list[i].name);
+    log_write(print_screen, "size: \t\t%ld\n", func_list[i].size);
+    log_write(print_screen, "start addr: \t0x%016lx\n", func_list[i].start_addr);
+    log_write(print_screen, "\n");
+  }
+}
+
+void log_func_ring(bool print_screen) {
+  if(func_ring_buf[0][0] == '\0') {
+    log_write(print_screen, ANSI_FMT("function ring buff is empty.", ANSI_FG_YELLOW));
+    log_write(print_screen, "\n");
+    return;
+  }
+  log_write(print_screen, ANSI_FMT("function ring buff.", ANSI_FG_BLUE));
+  log_write(print_screen, "\n");
+  for (int i = 0; i < FUNC_RING_BUF_WIDTH; i++) {
+    if(func_ring_buf[i][0] == '\0') break;
+    log_write(print_screen, "%s\n", func_ring_buf[i]);
+  }
+  log_write(print_screen, "\n");
 }
 
 #endif
