@@ -76,7 +76,7 @@ void init_difftest(char *ref_so_file, long img_size) {
   memcpy(&cpu_diff, cpu.gpr, sizeof(cpu_diff.gpr[0]));
   printf("2%lx\n", *cpu.pc);
   cpu_diff.pc = *cpu.pc;
-  printf("3%lx\n", *cpu.pc);
+  printf("3%lx\n", cpu_diff.pc);
   ref_difftest_regcpy(&cpu_diff, DIFFTEST_TO_DUT);
   printf("4%lx\n", *cpu.pc);
 }
