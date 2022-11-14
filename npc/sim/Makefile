@@ -63,8 +63,6 @@ LDFLAGS += $(shell llvm-config --libs) -lreadline -ldl -pie $(DIFFSET_SO)
 #
 VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
 
-
-
 IMG ?=
 
 ######################################################################
