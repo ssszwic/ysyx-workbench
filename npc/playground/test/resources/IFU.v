@@ -13,7 +13,7 @@ reg         [63:0]  rData;
 
 import "DPI-C" function void inst_pmem_read(input longint raddr, output longint rdata);
 import "DPI-C" function void set_pc_ptr(input logic [63:0] a []);
-// initial set_pc_ptr(pcReg);
+initial set_pc_ptr(pcReg);
 
 always@(posedge clock) begin
   if(reset) begin
