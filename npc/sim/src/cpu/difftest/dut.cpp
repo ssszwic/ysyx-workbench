@@ -37,6 +37,7 @@ static void checkregs(NEMUCPUState *ref) {
 }
 
 void init_difftest(char *ref_so_file, long img_size) {
+  printf("1cpu: %lx", *cpu.pc);
   assert(ref_so_file != NULL);
 
   void *handle;
@@ -68,16 +69,16 @@ void init_difftest(char *ref_so_file, long img_size) {
 
   // ref_difftest_init();
   // copy img instruction to ref
-  printf("0%ln\n", cpu.pc);
+  printf("0%lx\n", *cpu.pc);
   ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);
   // copy reg to ref
-  printf("1%ln", cpu.pc);
+  printf("1%lx", *cpu.pc);
   memcpy(&cpu_diff, cpu.gpr, sizeof(cpu_diff.gpr[0]));
-  printf("2%ln", cpu.pc);
+  printf("2%lx", *cpu.pc);
   cpu_diff.pc = *cpu.pc;
-  printf("3%ln", cpu.pc);
+  printf("3%lx", *cpu.pc);
   ref_difftest_regcpy(&cpu_diff, DIFFTEST_TO_DUT);
-  printf("4%ln", cpu.pc);
+  printf("4%lx", *cpu.pc);
 }
 
 void difftest_step() {
