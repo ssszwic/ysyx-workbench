@@ -75,7 +75,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   // memory trace
 #ifdef CONFIG_MEMORY_TRACE
   if(flip) {
-    char tmp[50] = {};
+    char tmp[80] = {};
     memset(mem_ring_buf[mem_ring_ref], ' ', 6);
     if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
     sprintf(tmp, "----> write\t0x%016llx\t0x%016llx\t0x%02x", waddr, wdata, wmask);
