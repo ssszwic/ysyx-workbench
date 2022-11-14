@@ -36,6 +36,7 @@ void difftest_regcpy(void *dut, bool direction) {
   else {
     memcpy(dut, &cpu, sizeof(cpu));
   }
+  isa_reg_display();
 }
 
 void difftest_exec(uint64_t n) {
