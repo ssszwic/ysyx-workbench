@@ -15,7 +15,7 @@ void free_wp(int id);
 uint64_t expr(char *e, bool *success);
 void new_wp(char *expr, word_t result);
 uint64_t isa_reg_str2val(const char *s, bool *success);
-void isa_reg_display();
+void isa_reg_display(bool *err_list);
 extern bool screen_display_inst;
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -204,7 +204,9 @@ static int cmd_x(char *args) {
 }
 
 static int info_reg() {
-  isa_reg_display();
+  // print white color
+  bool err_list[34] = {0};
+  isa_reg_display(err_list);
   return 0;
 }
 

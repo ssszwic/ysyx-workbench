@@ -5,17 +5,19 @@
 
 extern const char *regs;
 
-void isa_reg_display();
+void isa_reg_display(bool *err_list);
 
 NEMUCPUState cpu_diff = {};
 static void checkregs(NEMUCPUState *ref) {
   bool same = true;
+  bool err_list[34] = {};
   // check next pc
   if(ref->pc != npc_cpu.next_pc) {
     log_write(true, ANSI_FMT("pc (next instruction) error: \n", ANSI_FG_RED));
     log_write(true, "ref pc: 0x%016lx\n", ref->pc);
     log_write(true, "dut pc: 0x%016lx\n", npc_cpu.next_pc);
     same = false;
+    err_list[33] = true;
   }
 
   // check reg
@@ -25,12 +27,13 @@ static void checkregs(NEMUCPUState *ref) {
       log_write(true, "ref %s: 0x%016lx\n", regs[i], ref->gpr[i]);
       log_write(true, "dut %s: 0x%016lx\n", regs[i], *(npc_cpu.gpr + i));
       same = false;
+      err_list[i] = true;
     }
   }
 
   if(!same) {
     // print all dut regs when error
-    isa_reg_display();
+    isa_reg_display(err_list);
     npc_state.state = NPC_ABORT;
     npc_state.halt_pc = *npc_cpu.pc;
   }

@@ -8,17 +8,28 @@ const char *regs[] = {
   "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
 };
 
-void isa_reg_display() {
+// print white color for error data
+void isa_reg_display(bool *err_list) {
   // pc reg
   printf(ANSI_FMT("CPU register state: \n", ANSI_FG_BLUE));
   printf("pc:  0x%016lx\t  ", *npc_cpu.pc);
-  printf("npc: 0x%016lx\t\n", npc_cpu.next_pc);
+  if(err_list[33]) {
+    printf(ANSI_FMT("npc: 0x%016lx\t\n", ANSI_FG_RED), npc_cpu.next_pc);
+  }
+  else {
+    printf("npc: 0x%016lx\t\n", npc_cpu.next_pc);
+  }
+  
   // normal 32 reg
   int i = 0;
   while (i < 32) {
     for (int j = 0; j < 4; j++) {
-      printf("%-5s", regs[i]);
-      printf("0x%016lx\t  ", *(npc_cpu.gpr + i));
+      if(err_list[i]) {
+        printf(ANSI_FMT("%-5s0x%016lx\t  ", ANSI_FG_RED), regs[i], *(npc_cpu.gpr + i));
+      }
+      else {
+        printf("%-5s0x%016lx\t  ", regs[i], *(npc_cpu.gpr + i));
+      }
       i++;
     }
     printf("\n");
