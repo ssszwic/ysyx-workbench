@@ -41,7 +41,7 @@ void init_difftest(char *ref_so_file, long img_size) {
   assert(ref_so_file != NULL);
 
   void *handle;
-  handle = dlopen(ref_so_file, RTLD_LOCAL);
+  handle = dlopen(ref_so_file, RTLD_LAZY);
   assert(handle);
 
   // for c++, type must be same
@@ -76,9 +76,15 @@ void init_difftest(char *ref_so_file, long img_size) {
   memcpy(&cpu_diff, cpu.gpr, 32*sizeof(cpu_diff.gpr[0]));
   printf("2%lx\n", *cpu.pc);
   cpu_diff.pc = *cpu.pc;
+
+  uint64_t tmp1 = (uint64_t) cpu.pc;
+  uint64_t tmp2 = (uint64_t) cpu.gpr;
+
   printf("3%lx\n", (uint64_t) cpu.pc);
   ref_difftest_regcpy(&cpu_diff, DIFFTEST_TO_REF);
-  printf("4%lx\n", (uint64_t) cpu.pc);
+  // cpu value change
+  cpu.pc = (vaddr_t *) tmp1;
+  cpu.gpr = (vaddr_t *) tmp2;
 }
 
 void difftest_step() {
