@@ -79,6 +79,7 @@ extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
 
 extern "C" void set_pc_ptr(const svOpenArrayHandle r) {
   cpu.pc = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
+  printf("1cpu: %lx\n", *cpu.pc);
 }
 
 // DPI_C
@@ -231,17 +232,20 @@ void cpu_init() {
   top->reset = 0;
 
   if(!top->clock) {
+    printf("2cpu: %lx\n", *cpu.pc);
     return ;
   }
   else {
     top->clock = !top->clock;
     eval_and_wave();
     contextp->timeInc(1);
+    printf("2cpu: %lx\n", *cpu.pc);
     return ;
   }
 }
 
 static void isa_exec_once() {
+  printf("3cpu: %lx\n", *cpu.pc);
   top->clock = !top->clock;
   // posedge clk
   if(!cpu_state_init) {
