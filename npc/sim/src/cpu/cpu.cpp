@@ -59,7 +59,7 @@ RegWrite reg_write;
 // only for cmd si, print inst to screen
 bool screen_display_inst = false;
 NPCState npc_state = { .state = NPC_STOP };
-CPUState npc_cpu = { .gpr = NULL };
+CPUState npc_cpu = { };
 static uint64_t *rtl_pc;
 static uint64_t *rtl_gpr;
 // Ensure cpu initialization is complete
