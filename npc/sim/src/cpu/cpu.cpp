@@ -90,6 +90,7 @@ extern "C" void cpu_inst_ebreak() {
 }
 
 void cpu_exec(uint64_t n) {
+  printf("4cpu: %lx\n", *cpu.pc);
   // program end or error
   if(npc_state.state == NPC_END || npc_state.state == NPC_ABORT) {
     printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
