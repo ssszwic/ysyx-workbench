@@ -18,6 +18,8 @@
 #include <difftest-def.h>
 #include <memory/paddr.h>
 
+void isa_reg_display();
+
 void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
   if(direction == DIFFTEST_TO_REF) {
     memcpy(guest_to_host(addr), buf, n);
@@ -30,6 +32,7 @@ void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
 void difftest_regcpy(void *dut, bool direction) {
   if(direction == DIFFTEST_TO_REF) {
     memcpy(&cpu, dut, sizeof(cpu));
+    isa_reg_display();
   }
   else {
     memcpy(dut, &cpu, sizeof(cpu));
