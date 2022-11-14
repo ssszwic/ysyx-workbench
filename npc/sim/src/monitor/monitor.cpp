@@ -106,7 +106,7 @@ static int parse_args(int argc, char *argv[]) {
 
 static long load_img() {
   if (img_file == NULL) {
-    // Log("No image is given. Use the default build-in image.");
+    log_write(true, "No image is given. Use the default build-in image.\n");
     memcpy(guest_to_host(RESET_VECTOR), img, sizeof(img));
     return 4096; // built-in image size
   }
@@ -125,6 +125,7 @@ static long load_img() {
   assert(ret == 1);
 
   fclose(fp);
+  log_write(false, "Image is given. size: %d\n.", size);
   return size;
 }
 
