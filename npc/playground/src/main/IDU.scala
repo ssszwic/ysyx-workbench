@@ -67,7 +67,7 @@ object MyTools {
 
 class ALUControl extends Bundle {
   // operation
-  val aluSel      = Output(UInt(3.W))
+  val aluSel      = Output(UInt(4.W))
   // data flow
   val typeBSel    = Output(Bool())
   val typeJSel    = Output(Bool())
@@ -87,6 +87,8 @@ class ALUControl extends Bundle {
   val rightSel    = Output(Bool())
   val arithSel    = Output(Bool())
   val wordSel     = Output(Bool())
+  // mul
+  val mulOp       = Output(UInt(2.W))
 }
 
 class IDU extends Module {
@@ -169,6 +171,15 @@ class IDU extends Module {
   }.elsewhen(op5 === "b01101".U) {
     // LUI
     io_alu.aluSel := 6.U
+  }.elsewhen(typeR && (funct7 === "b0000001".U) && (funct3(2) === 0.U)) {
+    // MUL
+    io_alu.aluSel := 7.U
+  }.elsewhen(typeR && (funct7 === "b0000001".U) && (funct3(2, 1) === "b10".U)) {
+    // DIV
+    io_alu.aluSel := 8.U
+  }.elsewhen(typeR && (funct7 === "b0000001".U) && (funct3(2, 1) === "b11".U)) {
+    // REM
+    io_alu.aluSel := 9.U
   }.otherwise {
     io_alu.aluSel := 0.U
   }
@@ -185,16 +196,19 @@ class IDU extends Module {
   io_alu.subSel := typeR && (funct3 === "b000".U) && (funct7 === "b0100000".U)
   // BGE/BGEU
   io_alu.geSel := typeB && (funct3(2) === "b1".U && funct3(0) === "b1".U)
-  // R:SLTU I:SLTIU B:BLTU/BGEU
-  io_alu.unsignSel := (typeB && (funct3 === "b011".U)) || (typeII && (funct3 === "b011".U)) || (typeR && (funct3 === "b011".U) && (funct7 === "b0000000".U))
+  // R:SLTU/DIVU/DIVUW/REMU/REMUW I:SLTIU B:BLTU/BGEU 
+  io_alu.unsignSel := (typeB && (funct3 === "b011".U)) || (typeII && (funct3 === "b011".U)) || (typeR && (funct3 === "b011".U) && (funct7 === "b0000000".U)) || 
+                      (typeR && (funct3(2) === 1.U) && (funct3(0) === 1.U) && (funct7 === "b0000001".U))
   // BNE
   io_alu.neqSel := typeB && (funct3 === "b001".U)
   // I:SRLI/SRLIW/SRAI/SRAIW R:SRL/SRLW/SRA/SRAW
   io_alu.rightSel := (typeII && (funct3 === "b101".U)) || (typeR && (funct3 === "b101".U) && (funct7(6) === "b0".U) && (funct7(4, 0) === "b00000".U))
   // I:SRAI/SRAIW R:SRA/SRAW
   io_alu.arithSel := (typeII && (funct3 === "b101".U) && funct7(5)) || (typeR && (funct3 === "b101".U) && (funct7 === "b0100000".U))
-  // I:ADDIW/SLLIW/SRAIW/SRLIW R:ADDW/SUBW/SLLW/SRAW/SRLW
+  // I:ADDIW/SLLIW/SRAIW/SRLIW R:ADDW/SUBW/SLLW/SRAW/SRLW/MULW/DIVW/DIVUW/REMW/REMUW
   io_alu.wordSel := (typeII  && op5(1)) || (typeR  && op5(1))
+  // mulOP
+  io_alu.mulOp := funct3(1, 0);
 
   // Mem control
   io.wenMem := typeS

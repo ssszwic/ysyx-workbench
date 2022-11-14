@@ -11,6 +11,6 @@ int main(int argc, char *argv[]) {
 
   cpu_exit();
   log_exit();
-  if(npc_state.halt_ret != 0) {return 1;}
+  if((npc_state.halt_ret != 0) || (npc_state.state == NPC_ABORT)) {return 1;}
   return 0;
 }

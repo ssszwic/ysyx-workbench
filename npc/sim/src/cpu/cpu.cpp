@@ -72,9 +72,6 @@ static void exec_once();
 static void trace_and_difftest();
 static void log_trace(bool print_screen);
 void difftest_step();
-
-
-
 bool update_wp(char *log);
 
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
@@ -118,9 +115,13 @@ void cpu_exec(uint64_t n) {
       log_write(true, ANSI_FMT("HIT BAD TRAP\n", ANSI_FG_RED));
       log_trace(true);
     }
+    // stop sim and save wave
+    cpu_exit();
   }
   else if(npc_state.state == NPC_ABORT) {
     log_trace(true);
+    // stop sim and save wave
+    cpu_exit();
   }
 }
 

@@ -24,6 +24,7 @@ void cpu_init();
 void init_elf(const char *file);
 void log_config();
 void init_difftest(char *ref_so_file, long img_size);
+void sdb_set_batch_mode();
 
 extern "C" void init_disasm(const char *triple);
 
@@ -87,8 +88,8 @@ static int parse_args(int argc, char *argv[]) {
   int o;
   while ( (o = getopt_long(argc, argv, "-bh", table, NULL)) != -1) {
     switch (o) {
-      case 'b': break;
-      case 'e': elf_file = optarg; break;
+      case 'b': sdb_set_batch_mode();break;
+      case 'e': elf_file = optarg; break; 
       case 'l': log_file = optarg; break;
       case 'd': diff_file = optarg; break;
       // 如果optstring的第一个参数是'-'，则会将所有的非选项当选项处理，并且返回1
@@ -106,7 +107,7 @@ static int parse_args(int argc, char *argv[]) {
 
 static long load_img() {
   if (img_file == NULL) {
-    // Log("No image is given. Use the default build-in image.");
+    log_write(true, "No image is given. Use the default build-in image.\n");
     memcpy(guest_to_host(RESET_VECTOR), img, sizeof(img));
     return 4096; // built-in image size
   }
@@ -125,6 +126,7 @@ static long load_img() {
   assert(ret == 1);
 
   fclose(fp);
+  log_write(false, "Image is given. size: %d\n.", size);
   return size;
 }
 

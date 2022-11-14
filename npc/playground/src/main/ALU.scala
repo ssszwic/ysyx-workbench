@@ -52,6 +52,27 @@ class ALU extends Module {
   shiftInst.io.data2     := src2
   shiftResult := shiftInst.io.result
 
+  // mul alu
+  val mulInst = Module(new alu.Mul)
+  mulInst.io.mulOp    := io_alu.mulOp
+  mulInst.io.wordSel  := io_alu.wordSel
+  mulInst.io.data1    := io.rs1
+  mulInst.io.data2    := io.rs2
+
+  // div alu
+  val divInst = Module(new alu.Div)
+  divInst.io.unsignSel  := io_alu.unsignSel
+  divInst.io.wordSel    := io_alu.wordSel
+  divInst.io.data1      := io.rs1
+  divInst.io.data2      := io.rs2
+
+  // rem alu
+  val remInst = Module(new alu.Rem)
+  remInst.io.unsignSel  := io_alu.unsignSel
+  remInst.io.wordSel    := io_alu.wordSel
+  remInst.io.data1      := io.rs1
+  remInst.io.data2      := io.rs2
+
   // and or xor
   andResult := io.rs1 & src2
   orResult  := io.rs1 | src2
@@ -87,6 +108,15 @@ class ALU extends Module {
   }.elsewhen(io_alu.aluSel === 6.U) {
     // imme
     io.result := io.imme
+  }.elsewhen(io_alu.aluSel === 7.U) {
+    // mul
+    io.result := mulInst.io.result
+  }.elsewhen(io_alu.aluSel === 8.U) {
+    // imme
+    io.result := divInst.io.result
+  }.elsewhen(io_alu.aluSel === 9.U) {
+    // imme
+    io.result := remInst.io.result
   }.otherwise {
     // less
     io.result := 0.U
