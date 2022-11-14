@@ -18,9 +18,10 @@ void isa_reg_display() {
   while (i < 32) {
     for (int j = 0; j < 4; j++) {
       printf("%-6s", regs[i]);
-      printf("0x%016lx\t\n", *(npc_cpu.gpr + i));
+      printf("0x%016lx\t", *(npc_cpu.gpr + i));
       i++;
     }
+    printf("\n");
   }
 }
 
