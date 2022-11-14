@@ -109,6 +109,7 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_si(char *args) {
+  printf("9cpu: %lx\n", *cpu.pc);
   int n;
   // N=1 when no extra argument
   if (args == NULL) {
@@ -285,6 +286,7 @@ void sdb_set_batch_mode() {
 }
 
 void sdb_mainloop() {
+  printf("8cpu: %lx\n", *cpu.pc);
   if (is_batch_mode) {
     cmd_c(NULL);
     return;
