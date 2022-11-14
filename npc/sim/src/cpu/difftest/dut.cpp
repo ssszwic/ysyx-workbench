@@ -3,7 +3,7 @@
 #include "cpu/difftest.h"
 #include <dlfcn.h>
 
-extern char *regs;
+extern const char *regs[];
 
 void isa_reg_display(bool *err_list);
 
