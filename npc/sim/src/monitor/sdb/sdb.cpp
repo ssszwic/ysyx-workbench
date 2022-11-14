@@ -285,7 +285,6 @@ void sdb_set_batch_mode() {
 }
 
 void sdb_mainloop() {
-  printf("8cpu: %lx\n", *cpu.pc);
   if (is_batch_mode) {
     cmd_c(NULL);
     return;
