@@ -24,6 +24,7 @@ void cpu_init();
 void init_elf(const char *file);
 void log_config();
 void init_difftest(char *ref_so_file, long img_size);
+void sdb_set_batch_mode();
 
 extern "C" void init_disasm(const char *triple);
 
@@ -87,7 +88,7 @@ static int parse_args(int argc, char *argv[]) {
   int o;
   while ( (o = getopt_long(argc, argv, "-bh", table, NULL)) != -1) {
     switch (o) {
-      case 'b': break;
+      case 'b': sdb_set_batch_mode();break;
       case 'e': elf_file = optarg; break;
       case 'l': log_file = optarg; break;
       case 'd': diff_file = optarg; break;
