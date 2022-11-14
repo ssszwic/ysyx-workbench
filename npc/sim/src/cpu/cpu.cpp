@@ -234,6 +234,11 @@ void cpu_init() {
   }
   top->reset = 0;
 
+  // initial npc_cpu
+  npc_cpu.pc = *rtl_pc;
+  npc_cpu.next_pc = top->io_nextPC;
+  memcpy(npc_cpu.gpr, rtl_gpr, sizeof(npc_cpu.gpr));
+
   if(!top->clock) {
     return ;
   }
@@ -280,8 +285,6 @@ static void isa_exec_once() {
   jal = top->io_jalSel;
   jalr = top->io_jalrSel;
 #endif
-
-  
 }
 
 static void eval_and_wave(){
