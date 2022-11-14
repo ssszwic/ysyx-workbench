@@ -279,6 +279,8 @@ static void isa_exec_once() {
       npc_cpu.gpr[i] = *(rtl_gpr + i);
     }
   }
+  // $0 always 0
+  npc_cpu.gpr[0] = 0;
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
