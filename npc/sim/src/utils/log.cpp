@@ -35,5 +35,4 @@ void log_write(bool print_screen, const char *fmt, ...) {
   if(print_screen) {
     printf("%s", buff);
   }
-  printf("-3");
 }

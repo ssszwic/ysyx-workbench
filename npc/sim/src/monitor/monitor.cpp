@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mem/mem.h"
+#include "cpu/cpu.h"
 
 static char *img_file = NULL;
 static char *elf_file = NULL;
@@ -52,6 +53,7 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
   // 7. initial cpu
   cpu_init();
+  printf("%ln\n", cpu.pc);
 
   // 8. init difftest must be after cpu_init();
 #ifdef CONFIG_DIFFTEST

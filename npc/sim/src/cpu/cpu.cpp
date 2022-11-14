@@ -1,7 +1,7 @@
 #include "cpu/cpu.h"
 #include <elf.h>
 
-#define RESET_TIME 20
+#define RESET_TIME 21
 #define SIM_TIME 100
 
 static VTop* top;
