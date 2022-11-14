@@ -56,7 +56,7 @@ static VerilatedContext* contextp = NULL;
 // only for cmd si, print inst to screen
 bool screen_display_inst = false;
 NPCState npc_state = { .state = NPC_STOP };
-CPUState cpu = { .gpr = NULL };
+CPUState npc_cpu = { .gpr = NULL };
 // Ensure cpu initialization is complete
 static bool cpu_state_init = false;
 
@@ -74,17 +74,17 @@ bool update_wp(char *log);
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
 extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
-  cpu.gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
+  npc_cpu.gpr = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
 }
 
 extern "C" void set_pc_ptr(const svOpenArrayHandle r) {
-  cpu.pc = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
+  npc_cpu.pc = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
 }
 
 // DPI_C
 extern "C" void cpu_inst_ebreak() {
   // half = $a0
-  npc_state.halt_ret = *(cpu.gpr + 10);
+  npc_state.halt_ret = *(npc_cpu.gpr + 10);
   npc_state.state = NPC_END;
 }
 
@@ -140,24 +140,24 @@ void exec_once() {
 void trace_and_difftest() {
 // itrace
 #ifdef CONFIG_ITRACE
-  char *p = cpu.logbuf;
-  p += snprintf(p, sizeof(cpu.logbuf), "0x%016lx:  ", *cpu.pc);
+  char *p = npc_cpu.logbuf;
+  p += snprintf(p, sizeof(npc_cpu.logbuf), "0x%016lx:  ", *npc_cpu.pc);
   // print from MSB
-  uint32_t inst = get_inst(*cpu.pc);
+  uint32_t inst = get_inst(*npc_cpu.pc);
   uint8_t *inst_byte = (uint8_t *) &inst;
   for(int i = 3; i >= 0; i--) {
-    p += snprintf(p, sizeof(cpu.logbuf), "%02x ", *(inst_byte + i));
+    p += snprintf(p, sizeof(npc_cpu.logbuf), "%02x ", *(inst_byte + i));
   }
-  disassemble(p, cpu.logbuf + sizeof(cpu.logbuf) - p, *cpu.pc, inst_byte, 4);
-  log_write(screen_display_inst, "%s\n", cpu.logbuf);
+  disassemble(p, npc_cpu.logbuf + sizeof(npc_cpu.logbuf) - p, *npc_cpu.pc, inst_byte, 4);
+  log_write(screen_display_inst, "%s\n", npc_cpu.logbuf);
   // instruction ring buff
   memset(inst_ring_buf[inst_ring_ref], ' ', 6); // copy 5 'space' to cover '---->'
   if (++inst_ring_ref == INST_RING_BUF_WIDTH) {inst_ring_ref = 0;}
   strcpy(inst_ring_buf[inst_ring_ref], "----> "); 
-  strcpy(inst_ring_buf[inst_ring_ref] + 6, cpu.logbuf);
+  strcpy(inst_ring_buf[inst_ring_ref] + 6, npc_cpu.logbuf);
 
   #ifdef CONFIT_WATCHPOINT
-  if(update_wp(cpu.logbuf)) { npc_state.state = NPC_STOP; }
+  if(update_wp(npc_cpu.logbuf)) { npc_state.state = NPC_STOP; }
   #endif
 #endif
 
@@ -173,28 +173,28 @@ void trace_and_difftest() {
   }
   else if(func_state == -1) {
     // call initial function
-    id = func_pc(*cpu.pc);
+    id = func_pc(*npc_cpu.pc);
     memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
+    sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", *npc_cpu.pc, func_list[id].name, func_list[id].start_addr);
     strcpy(func_ring_buf[func_ring_ref], tmp);
     func_state = id;
   }
   else if(jal) {
     // call function
-    id = func_pc(cpu.next_pc);
+    id = func_pc(npc_cpu.next_pc);
     memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
+    sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", *npc_cpu.pc, func_list[id].name, func_list[id].start_addr);
     strcpy(func_ring_buf[func_ring_ref], tmp);
     func_state = id;
   }
   else if(jalr) {
     // ret function
-    id = func_pc(cpu.next_pc);
+    id = func_pc(npc_cpu.next_pc);
     memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> ret  [%s@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
+    sprintf(tmp, "0x%08lx: ----> ret  [%s@0x%08lx] ", *npc_cpu.pc, func_list[id].name, func_list[id].start_addr);
     strcpy(func_ring_buf[func_ring_ref], tmp);
     func_state = id;
   }
@@ -261,7 +261,7 @@ static void isa_exec_once() {
   // upadte next pc
   jal = top->io_jalSel;
   jalr = top->io_jalrSel;
-  cpu.next_pc = top->io_nextPC;
+  npc_cpu.next_pc = top->io_nextPC;
 #endif
 }
 

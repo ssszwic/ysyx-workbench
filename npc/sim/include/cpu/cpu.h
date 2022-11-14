@@ -32,7 +32,7 @@ typedef struct {
 } CPUState;
 
 extern NPCState npc_state;
-extern CPUState cpu;
+extern CPUState npc_cpu;
 
 void cpu_init();
 void cpu_exit();

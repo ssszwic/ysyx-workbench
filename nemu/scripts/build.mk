@@ -5,7 +5,7 @@ ifeq ($(SHARE),1)
 SO = -so
 
 CFLAGS  += -fPIC
-LDFLAGS += -shared -fPIC
+LDFLAGS += -rdynamic -shared -fPIC
 endif
 
 WORK_DIR  = $(shell pwd)
