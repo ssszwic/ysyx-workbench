@@ -41,7 +41,7 @@ void init_difftest(char *ref_so_file, long img_size) {
   assert(ref_so_file != NULL);
 
   void *handle;
-  handle = dlopen(ref_so_file, RTLD_GLOBAL);
+  handle = dlopen(ref_so_file, RTLD_LOCAL);
   assert(handle);
 
   // for c++, type must be same
