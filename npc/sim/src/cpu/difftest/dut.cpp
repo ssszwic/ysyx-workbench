@@ -82,6 +82,7 @@ void init_difftest(char *ref_so_file, long img_size) {
   printf("pc addr: %lx\n", tmp1);
 
   printf("3%lx\n", (uint64_t) cpu.pc);
+  printf("cpu in dut addr: %lx\n", (uint64_t) &cpu);
   ref_difftest_regcpy(&cpu_diff, DIFFTEST_TO_REF);
   // cpu value change
   cpu.pc = (vaddr_t *) tmp1;

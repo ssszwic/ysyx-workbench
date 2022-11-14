@@ -37,6 +37,7 @@ void difftest_regcpy(void *dut, bool direction) {
     memcpy(dut, &cpu, sizeof(cpu));
   }
   isa_reg_display();
+  printf("cpu in ref addr: %lx\n", (uint64_t) &cpu);
 }
 
 void difftest_exec(uint64_t n) {
