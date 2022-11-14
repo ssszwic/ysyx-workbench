@@ -67,7 +67,7 @@ void init_difftest(char *ref_so_file, long img_size) {
       "This will help you a lot for debugging, but also significantly reduce the performance. "
       "If it is not necessary, you can turn it off in menuconfig.\n", ref_so_file);
 
-  // ref_difftest_init();
+  ref_difftest_init();
   // copy img instruction to ref
   printf("0%lx\n", *cpu.pc);
   ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);
