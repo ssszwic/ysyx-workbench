@@ -35,7 +35,7 @@ class Div extends Module {
     }
   }
 
-  val result = Wire(SInt(65.W))
+  val result = Wire(SInt(66.W))
   result := data1Tmp.asSInt / data1Tmp.asSInt
 
   when(io.wordSel) {
