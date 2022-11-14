@@ -74,13 +74,12 @@ void init_difftest(char *ref_so_file, long img_size) {
   ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);
   // copy reg to ref
   memcpy(&cpu_diff, npc_cpu.gpr, 32*sizeof(cpu_diff.gpr[0]));
-  cpu_diff.pc = *npc_cpu.pc;
+  cpu_diff.pc = npc_cpu.pc;
 
   ref_difftest_regcpy(&cpu_diff, DIFFTEST_TO_REF);
 }
 
 void difftest_step() {
-  printf("5%lx\n", *npc_cpu.pc);
   NEMUCPUState ref_r;
 
   // ref execute once
