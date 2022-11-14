@@ -240,7 +240,6 @@ void cpu_init() {
 }
 
 static void isa_exec_once() {
-  printf("3cpu: %lx\n", *cpu.pc);
   top->clock = !top->clock;
   // posedge clk
   if(!cpu_state_init) {
