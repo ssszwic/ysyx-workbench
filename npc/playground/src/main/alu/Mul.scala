@@ -31,8 +31,8 @@ class Mul extends Module {
     data2Tmp := Cat(io.data1(63), io.data2)
   }
 
-  val result = Wire(UInt(130.W))
-  result := (data1Tmp.asSInt * data1Tmp.asSInt).asUInt
+  val result = Wire(SInt(130.W))
+  result := data1Tmp.asSInt * data1Tmp.asSInt
 
   when(io.wordSel) {
     io.result := Cat(Fill(32, result(32)), result(31, 0))

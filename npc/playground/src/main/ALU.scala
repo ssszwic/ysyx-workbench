@@ -110,13 +110,13 @@ class ALU extends Module {
     io.result := io.imme
   }.elsewhen(io_alu.aluSel === 7.U) {
     // mul
-    io.result := mulInst.result
+    io.result := mulInst.io.result
   }.elsewhen(io_alu.aluSel === 8.U) {
     // imme
-    io.result := divInst.result
+    io.result := divInst.io.result
   }.elsewhen(io_alu.aluSel === 9.U) {
     // imme
-    io.result := remInst.result
+    io.result := remInst.io.result
   }.otherwise {
     // less
     io.result := 0.U
