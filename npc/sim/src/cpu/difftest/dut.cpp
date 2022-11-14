@@ -85,7 +85,10 @@ void init_difftest(char *ref_so_file, long img_size) {
   ref_difftest_regcpy(&cpu_diff, DIFFTEST_TO_REF);
   // cpu value change
   cpu.pc = (vaddr_t *) tmp1;
-  cpu.gpr = (vaddr_t *) tmp2;  
+  cpu.gpr = (vaddr_t *) tmp2;
+  for(int i = 0; i < 32; i++) {
+    printf("gpr: %lx", *(cpu.gpr + i));
+  }
 }
 
 void difftest_step() {
