@@ -12,7 +12,7 @@ void cpu_exit();
 
 #ifdef CONFIG_MEMORY_TRACE
 #define MEM_RING_BUF_WIDTH 300
-static char mem_ring_buf[MEM_RING_BUF_WIDTH][50] = {};
+static char mem_ring_buf[MEM_RING_BUF_WIDTH][80] = {};
 static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
 // erda or write twice every cycle, only trace once
 static bool flip = true;
@@ -78,7 +78,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
     char tmp[50] = {};
     memset(mem_ring_buf[mem_ring_ref], ' ', 6);
     if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
-    sprintf(tmp, "----> write\t0x%016llx\t0x%016llx\tx%02x", waddr, wdata, wmask);
+    sprintf(tmp, "----> write\t0x%016llx\t0x%016llx\t0x%02x", waddr, wdata, wmask);
     strcpy(mem_ring_buf[mem_ring_ref], tmp);
   }
   flip = !flip;
