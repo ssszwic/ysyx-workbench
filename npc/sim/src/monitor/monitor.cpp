@@ -53,7 +53,7 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
   // 7. initial cpu
   cpu_init();
-  printf("%ln\n", cpu.pc);
+  printf("6cpu: %lx\n", *cpu.pc);
 
   // 8. init difftest must be after cpu_init();
 #ifdef CONFIG_DIFFTEST
