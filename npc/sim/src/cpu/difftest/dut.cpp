@@ -75,7 +75,7 @@ void init_difftest(char *ref_so_file, long img_size) {
   printf("size: %ld\n", sizeof(cpu_diff.gpr[0]));
   memcpy(&cpu_diff, cpu.gpr, 32*sizeof(cpu_diff.gpr[0]));
   for(int i = 0; i < 32; i++){
-    printf("%d: %ls\n", i, cpu_diff.gpr[i]);
+    printf("%d: %lx\n", i, cpu_diff.gpr[i]);
   }
   printf("2%lx\n", *cpu.pc);
   cpu_diff.pc = *cpu.pc;
