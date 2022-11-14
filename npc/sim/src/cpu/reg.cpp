@@ -14,9 +14,11 @@ void isa_reg_display() {
   printf("0x%016lx\t", *npc_cpu.pc);
   printf("%ld\n", *npc_cpu.pc);
   // normal 32 reg
-  for (int i = 0; i < 32; i++) {
-    printf("%-6s", regs[i]);
-    printf("0x%016lx\t", *(npc_cpu.gpr + i));
+  for (int i = 0; i < 4; i++) {
+    fpr (int j = 0; j < 4; j++) {
+      printf("%-6s", regs[i]);
+      printf("0x%016lx\t\n", *(npc_cpu.gpr + i));
+    }
   }
 }
 
