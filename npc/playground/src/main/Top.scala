@@ -11,6 +11,9 @@ class Top extends Module {
     val jalSel    = Output(Bool()) // jal
     val jalrSel   = Output(Bool()) // jalr
     val nextPC    = Output(UInt(64.W))
+    val regWen    = Output(Bool())
+    val regAddr   = Output(UInt(5.W))
+    val regWData  = Output(UInt(64.W))
   })
 
   // declare module
@@ -28,6 +31,12 @@ class Top extends Module {
   io.jalSel   := IDUInst.io_alu.typeJSel
   io.jalrSel  := IDUInst.io_alu.jalrSel
   io.nextPC   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
+  // difftest
+  io.regWen   := IDUInst.io.wenReg
+  io.regAddr  := IDUInst.io.rdAddr
+  io.regWData := Mux(IDUInst.io.jumpSel, nextpcDefault, 
+                            Mux(IDUInst.io.renMem, MemCtrlInst.io.rData, ALUInst.io.result))
+
 
 
   // MemCtrlInst
