@@ -141,9 +141,7 @@ void trace_and_difftest() {
 // itrace
 #ifdef CONFIG_ITRACE
   char *p = cpu.logbuf;
-  printf("777\n");
   p += snprintf(p, sizeof(cpu.logbuf), "0x%016lx:  ", *cpu.pc);
-  printf("888\n");
   // print from MSB
   uint32_t inst = get_inst(*cpu.pc);
   uint8_t *inst_byte = (uint8_t *) &inst;
@@ -231,14 +229,12 @@ void cpu_init() {
   top->reset = 0;
 
   if(!top->clock) {
-    printf("2cpu: %lx\n", *cpu.pc);
     return ;
   }
   else {
     top->clock = !top->clock;
     eval_and_wave();
     contextp->timeInc(1);
-    printf("2cpu: %lx\n", *cpu.pc);
     return ;
   }
 }
