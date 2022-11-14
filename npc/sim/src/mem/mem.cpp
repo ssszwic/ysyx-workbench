@@ -118,11 +118,11 @@ uint64_t extern_pmem_read(vaddr_t raddr, int len) {
 #ifdef CONFIG_MEMORY_TRACE
 void log_mem_ring(bool print_screen) {
   if(mem_ring_buf[0][0] == '\0') {
-    log_write(print_screen, ANSI_FMT("instruction ring buff is empty.", ANSI_FG_YELLOW));
+    log_write(print_screen, ANSI_FMT("memory ring buff is empty.", ANSI_FG_YELLOW));
     log_write(print_screen, "\n");
     return;
   }
-  log_write(print_screen, ANSI_FMT("instruction ring buff.", ANSI_FG_BLUE));
+  log_write(print_screen, ANSI_FMT("memory ring buff.", ANSI_FG_BLUE));
   log_write(print_screen, "\n");
   for (int i = 0; i < MEM_RING_BUF_WIDTH; i++) {
     if(mem_ring_buf[i][0] == '\0') break;
