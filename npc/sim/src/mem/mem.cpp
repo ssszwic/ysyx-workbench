@@ -12,7 +12,8 @@ void cpu_exit();
 
 #ifdef CONFIG_MEMORY_TRACE
 #define MEM_RING_BUF_WIDTH 300
-static char mem_ring_buf[MEM_RING_BUF_WIDTH][80] = {};
+#define MAX_SINGLE_WIDTH 80
+static char mem_ring_buf[MEM_RING_BUF_WIDTH][MAX_SINGLE_WIDTH] = {};
 static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
 // erda or write twice every cycle, only trace once
 static bool flip = true;
@@ -50,7 +51,7 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
   // memory trace
 #ifdef CONFIG_MEMORY_TRACE
   if(flip) {
-    char tmp[80] = {};
+    char tmp[MAX_SINGLE_WIDTH] = {};
     memset(mem_ring_buf[mem_ring_ref], ' ', 6);
     if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
     sprintf(tmp, "----> read \t0x%016llx\t0x%016llx", raddr, *rdata);
@@ -75,7 +76,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   // memory trace
 #ifdef CONFIG_MEMORY_TRACE
   if(flip) {
-    char tmp[80] = {};
+    char tmp[MAX_SINGLE_WIDTH] = {};
     memset(mem_ring_buf[mem_ring_ref], ' ', 6);
     if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
     sprintf(tmp, "----> write\t0x%016llx\t0x%016llx\t0x%02x", waddr, wdata, wmask);
