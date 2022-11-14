@@ -8,33 +8,33 @@ extern const char *regs;
 void isa_reg_display();
 
 NEMUCPUState cpu_diff = {};
-static void checkregs(NEMUCPUState *ref) {
-  bool same = true;
-  // check next pc
-  if(ref->pc != cpu.next_pc) {
-    log_write(true, ANSI_FMT("pc (next instruction) error: \n", ANSI_FG_RED));
-    log_write(true, "ref pc: 0x%016lx\n", ref->pc);
-    log_write(true, "dut pc: 0x%016lx\n", cpu.next_pc);
-    same = false;
-  }
+// static void checkregs(NEMUCPUState *ref) {
+//   bool same = true;
+//   // check next pc
+//   if(ref->pc != cpu.next_pc) {
+//     log_write(true, ANSI_FMT("pc (next instruction) error: \n", ANSI_FG_RED));
+//     log_write(true, "ref pc: 0x%016lx\n", ref->pc);
+//     log_write(true, "dut pc: 0x%016lx\n", cpu.next_pc);
+//     same = false;
+//   }
 
-  // check reg
-  for(int i = 0; i < 32; i++) {
-    if(ref->gpr[i] != *(cpu.gpr + i)) {
-      log_write(true, ANSI_FMT("reg[%d] %s error: \n", ANSI_FG_RED), i, regs[i]);
-      log_write(true, "ref %s: 0x%016lx\n", regs[i], ref->gpr[i]);
-      log_write(true, "dut %s: 0x%016lx\n", regs[i], *(cpu.gpr + i));
-      same = false;
-    }
-  }
+//   // check reg
+//   for(int i = 0; i < 32; i++) {
+//     if(ref->gpr[i] != *(cpu.gpr + i)) {
+//       log_write(true, ANSI_FMT("reg[%d] %s error: \n", ANSI_FG_RED), i, regs[i]);
+//       log_write(true, "ref %s: 0x%016lx\n", regs[i], ref->gpr[i]);
+//       log_write(true, "dut %s: 0x%016lx\n", regs[i], *(cpu.gpr + i));
+//       same = false;
+//     }
+//   }
 
-  if(!same) {
-    // print all dut regs when error
-    isa_reg_display();
-    npc_state.state = NPC_ABORT;
-    npc_state.halt_pc = *cpu.pc;
-  }
-}
+//   if(!same) {
+//     // print all dut regs when error
+//     isa_reg_display();
+//     npc_state.state = NPC_ABORT;
+//     npc_state.halt_pc = *cpu.pc;
+//   }
+// }
 
 void init_difftest(char *ref_so_file, long img_size) {
   printf("1cpu: %lx", *cpu.pc);
