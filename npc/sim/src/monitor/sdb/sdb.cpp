@@ -109,7 +109,6 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_si(char *args) {
-  printf("9cpu: %lx\n", *cpu.pc);
   int n;
   // N=1 when no extra argument
   if (args == NULL) {
