@@ -48,7 +48,7 @@ VERILATOR_INPUT := $(DESIGN_SRC) $(SRCS)
 LOG := $(WORK_DIR)/sim_log.txt
 DIFFSET_SO := /home/ssszw/Work/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so
 override ARGS += --log=$(LOG) --diff=$(DIFFSET_SO)
---log=/home/ssszw/Work/ysyx-workbench/npc/sim/sim_log.txt --diff=/home/ssszw/Work/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so
+
 
 # CXX FLAGS
 INC_PATH := $(WORK_DIR)/include
@@ -62,6 +62,8 @@ CFLAGS += -O2 -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURC
 LDFLAGS += $(shell llvm-config --libs) -lreadline -ldl -pie $(DIFFSET_SO)
 #
 VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
+
+# --log=/home/ssszw/Work/ysyx-workbench/npc/sim/sim_log.txt --diff=/home/ssszw/Work/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so
 
 IMG ?=
 
