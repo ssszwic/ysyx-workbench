@@ -105,7 +105,7 @@ void cpu_exec(uint64_t n) {
   for(int i = 0; i < n; i++) {
     exec_once();
     trace_and_difftest();
-    if(npc_state.state == NPC_END || npc_state.state == NPC_STOP) {break;}
+    if(npc_state.state == NPC_END || npc_state.state == NPC_STOP || npc_state.state == NPC_ABORT) {break;}
   }
 
   if(npc_state.state == NPC_END) {
@@ -435,7 +435,7 @@ void init_elf(const char *file) {
   }
   func_state = -1;
   log_write(false, "read elf file finfished\n");
-  log_func_list(true);
+  log_func_list(false);
 }
 
 // pc in which function
