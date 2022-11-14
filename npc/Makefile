@@ -14,8 +14,7 @@ DESIGN_SRC := $(addsuffix .v,$(sort $(basename $(notdir $(SCALA_SRC)))))
 DESIGN_SRC := $(addprefix $(BUILD_DIR)/,$(DESIGN_SRC))
 
 test:
-	@echo $(DESIGN_SRC)
-	# mill -i __.test
+	mill -i __.test
 
 verilog: $(DESIGN_SRC)
 

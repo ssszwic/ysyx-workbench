@@ -89,7 +89,7 @@ static int parse_args(int argc, char *argv[]) {
   while ( (o = getopt_long(argc, argv, "-bh", table, NULL)) != -1) {
     switch (o) {
       case 'b': sdb_set_batch_mode();break;
-      case 'e': elf_file = optarg; break;
+      case 'e': elf_file = optarg; break; 
       case 'l': log_file = optarg; break;
       case 'd': diff_file = optarg; break;
       // 如果optstring的第一个参数是'-'，则会将所有的非选项当选项处理，并且返回1
