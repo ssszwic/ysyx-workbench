@@ -6,7 +6,6 @@ void sdb_mainloop();
 
 int main(int argc, char *argv[]) {
   init_monitor(argc, argv);
-  printf("7cpu: %lx\n", *cpu.pc);
 
   sdb_mainloop();
 
