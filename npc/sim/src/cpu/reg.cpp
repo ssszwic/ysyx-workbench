@@ -14,10 +14,10 @@ void isa_reg_display(bool *err_list) {
   printf(ANSI_FMT("CPU register state: \n", ANSI_FG_BLUE));
   printf("pc:  0x%016lx\t  ", *npc_cpu.pc);
   if(err_list[33]) {
-    printf(ANSI_FMT("npc: 0x%016lx\t\n", ANSI_FG_RED), npc_cpu.next_pc);
+    printf(ANSI_FMT("npc: 0x%016lx\n", ANSI_FG_RED), npc_cpu.next_pc);
   }
   else {
-    printf("npc: 0x%016lx\t\n", npc_cpu.next_pc);
+    printf("npc: 0x%016lx\n", npc_cpu.next_pc);
   }
   
   // normal 32 reg
@@ -25,10 +25,10 @@ void isa_reg_display(bool *err_list) {
   while (i < 32) {
     for (int j = 0; j < 4; j++) {
       if(err_list[i]) {
-        printf(ANSI_FMT("%-5s0x%016lx\t  ", ANSI_FG_RED), regs[i], *(npc_cpu.gpr + i));
+        printf(ANSI_FMT("%-5s0x%016lx  ", ANSI_FG_RED), regs[i], *(npc_cpu.gpr + i));
       }
       else {
-        printf("%-5s0x%016lx\t  ", regs[i], *(npc_cpu.gpr + i));
+        printf("%-5s0x%016lx  ", regs[i], *(npc_cpu.gpr + i));
       }
       i++;
     }
