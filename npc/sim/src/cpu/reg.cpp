@@ -11,13 +11,13 @@ const char *regs[] = {
 void isa_reg_display() {
   // pc reg
   printf("%-12s", "pc");
-  printf("0x%016lx\t", *cpu.pc);
-  printf("%ld\n", *cpu.pc);
+  printf("0x%016lx\t", *npc_cpu.pc);
+  printf("%ld\n", *npc_cpu.pc);
   // normal 32 reg
   for (int i = 0; i < 32; i++) {
     printf("%-12s", regs[i]);
-    printf("0x%016lx\t", *(cpu.gpr + i));
-    printf("%ld\n", *(cpu.gpr + i));
+    printf("0x%016lx\t", *(npc_cpu.gpr + i));
+    printf("%ld\n", *(npc_cpu.gpr + i));
   }
 }
 
@@ -25,7 +25,7 @@ uint64_t isa_reg_str2val(const char *s, bool *success) {
   // pc reg
   if (strcmp(s, "pc") == 0){
     *success = true;
-    return *cpu.pc;
+    return *npc_cpu.pc;
   }
   // noemal reg
   int i = 0;
@@ -40,6 +40,6 @@ uint64_t isa_reg_str2val(const char *s, bool *success) {
   }
   else {
     *success = true;
-    return *(cpu.gpr + i);
+    return *(npc_cpu.gpr + i);
   }
 }
