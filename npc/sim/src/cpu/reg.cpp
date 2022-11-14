@@ -10,7 +10,7 @@ const char *regs[] = {
 
 void isa_reg_display() {
   // pc reg
-  printf("%-12s", "pc");
+  printf(ANSI_FMT("CPU register state: \n", ANSI_FG_BLUE));
   printf("0x%016lx\t", *npc_cpu.pc);
   printf("%ld\n", *npc_cpu.pc);
   // normal 32 reg
