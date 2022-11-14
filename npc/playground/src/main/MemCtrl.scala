@@ -69,7 +69,7 @@ class MemCtrl extends Module {
         dataHalf := MemVirtualInst_data.io.rData(16 * (i + 1) - 1, 16 * i)
       }
     }
-  }.elsewhen(io.length === 1.U) {
+  }.elsewhen(io.length === 2.U) {
     for (i <- 0 until 2) {
       when(mask(4 * (i + 1) - 1, 4 * i) === "b1111".U) {
         dataWord := MemVirtualInst_data.io.rData(32 * (i + 1) - 1, 32 * i)
@@ -93,7 +93,7 @@ class MemCtrl extends Module {
     }.otherwise{
       rData := Cat(Fill(48, dataHalf(15)), dataHalf)
     }
-  }.elsewhen(io.length === 1.U) {
+  }.elsewhen(io.length === 2.U) {
     when(io.unsign) {
       rData := Cat(Fill(32, 0.U(1.W)), dataWord)
     }.otherwise{

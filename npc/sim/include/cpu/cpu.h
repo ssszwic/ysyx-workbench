@@ -22,8 +22,8 @@ typedef struct {
 
 typedef struct {
   // uint_64 for riscv64
-  uint64_t *gpr;
-  vaddr_t *pc;
+  uint64_t gpr[32];
+  vaddr_t pc;
   uint32_t inst;
   vaddr_t next_pc;
   #ifdef CONFIG_ITRACE
@@ -31,8 +31,17 @@ typedef struct {
   #endif
 } CPUState;
 
+#ifdef CONFIG_DIFFTEST
+typedef struct {
+  bool wen;
+  int addr;
+  uint64_t data;
+} RegWrite;
+extern RegWrite reg_write;
+#endif
+
 extern NPCState npc_state;
-extern CPUState cpu;
+extern CPUState npc_cpu;
 
 void cpu_init();
 void cpu_exit();

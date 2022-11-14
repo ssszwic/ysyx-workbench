@@ -29,6 +29,9 @@ run: $(DESIGN_SRC)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	make -C $(SIM_DIR)
 
+gdb: $(DESIGN_SRC)
+	make -C $(SIM_DIR) gdb
+
 help:
 	mill -i __.test.runMain main.Elaborate --help
 
@@ -45,7 +48,7 @@ checkformat:
 	mill -i __.checkFormat
 
 clean:
-	$(MAKE) -C ./sim clean
+	$(MAKE) -C $(SIM_DIR) clean
 	-rm -rf $(BUILD_DIR)
 
 wave:
