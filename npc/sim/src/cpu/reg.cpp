@@ -17,7 +17,7 @@ void isa_reg_display() {
   int i = 0;
   while (i < 32) {
     for (int j = 0; j < 4; j++) {
-      printf("%-5s:", regs[i]);
+      printf("%-5s", regs[i]);
       printf("0x%016lx\t", *(npc_cpu.gpr + i));
       i++;
     }
