@@ -79,7 +79,6 @@ extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
 
 extern "C" void set_pc_ptr(const svOpenArrayHandle r) {
   cpu.pc = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
-  printf("1cpu: %lx\n", *cpu.pc);
 }
 
 // DPI_C
@@ -90,7 +89,6 @@ extern "C" void cpu_inst_ebreak() {
 }
 
 void cpu_exec(uint64_t n) {
-  printf("4cpu: %lx\n", *cpu.pc);
   // program end or error
   if(npc_state.state == NPC_END || npc_state.state == NPC_ABORT) {
     printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
