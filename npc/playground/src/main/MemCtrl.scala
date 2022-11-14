@@ -30,7 +30,7 @@ class MemCtrl extends Module {
     mask := 1.U << io.addr(2, 0)
   }.elsewhen(io.length === 1.U) {
     mask := "b11".U << io.addr(2, 0)
-  }.elsewhen(io.length === 1.U) {
+  }.elsewhen(io.length === 2.U) {
     mask := "b1111".U << io.addr(2, 0)
   }.otherwise{
     mask := "b1111_1111".U
