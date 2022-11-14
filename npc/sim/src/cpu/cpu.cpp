@@ -1,7 +1,7 @@
 #include "cpu/cpu.h"
 #include <elf.h>
 
-#define RESET_TIME 20
+#define RESET_TIME 21
 #define SIM_TIME 100
 
 static VTop* top;
@@ -19,7 +19,7 @@ static VerilatedContext* contextp = NULL;
   void log_mem_ring(bool print_screen);
 #endif
 
-#ifdef CONFIG_WAVE_ON
+#ifdef CONFIG_WAVE
   static VerilatedVcdC* tfp = NULL;
 #endif
 
@@ -48,10 +48,10 @@ static VerilatedContext* contextp = NULL;
   static int func_state   = -2;  // initial state, -2: no function
   static bool jal         = false;
   static bool jalr        = false;
-  static uint64_t jump_pc = 0;
   static void log_func_list(bool print_screen);
   void log_func_ring(bool print_screen);
 #endif
+
 
 // only for cmd si, print inst to screen
 bool screen_display_inst = false;
@@ -65,9 +65,11 @@ static void eval_and_wave();
 static void isa_exec_once();
 static void exec_once();
 static void trace_and_difftest();
+static void log_trace(bool print_screen);
+void difftest_step();
+
 
 bool update_wp(char *log);
-
 
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
@@ -103,25 +105,32 @@ void cpu_exec(uint64_t n) {
   if(npc_state.state == NPC_END) {
     if (npc_state.halt_ret == 0) {
       log_write(true, ANSI_FMT("HIT GOOD TRAP\n", ANSI_FG_GREEN));
+      // for return successful, don't print to screen
+      log_trace(false);
     }
     else {
       log_write(true, ANSI_FMT("HIT BAD TRAP\n", ANSI_FG_RED));
+      log_trace(true);
     }
-#ifdef CONFIG_ITRACE
-    // only print to log
-    log_inst_ring(false);
-#endif
-
-#ifdef CONFIG_MEMORY_TRACE
-    // only print to log
-    log_mem_ring(false);
-#endif
-
-#ifdef CONFIG_FUNCTION_TRACE
-    // only print to log
-    log_func_ring(false);
-#endif
   }
+  else if(npc_state.state == NPC_ABORT) {
+    log_trace(true);
+  }
+}
+
+static void log_trace(bool print_screen) {
+  #ifdef CONFIG_ITRACE
+    // only print to log
+    log_inst_ring(print_screen);
+  #endif
+  #ifdef CONFIG_MEMORY_TRACE
+    // only print to log
+    log_mem_ring(print_screen);
+  #endif
+  #ifdef CONFIG_FUNCTION_TRACE
+    // only print to log
+    log_func_ring(print_screen);
+  #endif
 }
 
 void exec_once() {
@@ -132,7 +141,6 @@ void trace_and_difftest() {
 // itrace
 #ifdef CONFIG_ITRACE
   char *p = cpu.logbuf;
-
   p += snprintf(p, sizeof(cpu.logbuf), "0x%016lx:  ", *cpu.pc);
   // print from MSB
   uint32_t inst = get_inst(*cpu.pc);
@@ -140,10 +148,8 @@ void trace_and_difftest() {
   for(int i = 3; i >= 0; i--) {
     p += snprintf(p, sizeof(cpu.logbuf), "%02x ", *(inst_byte + i));
   }
-
   disassemble(p, cpu.logbuf + sizeof(cpu.logbuf) - p, *cpu.pc, inst_byte, 4);
   log_write(screen_display_inst, "%s\n", cpu.logbuf);
-
   // instruction ring buff
   memset(inst_ring_buf[inst_ring_ref], ' ', 6); // copy 5 'space' to cover '---->'
   if (++inst_ring_ref == INST_RING_BUF_WIDTH) {inst_ring_ref = 0;}
@@ -176,7 +182,7 @@ void trace_and_difftest() {
   }
   else if(jal) {
     // call function
-    id = func_pc(jump_pc);
+    id = func_pc(cpu.next_pc);
     memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
     sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
@@ -185,7 +191,7 @@ void trace_and_difftest() {
   }
   else if(jalr) {
     // ret function
-    id = func_pc(jump_pc);
+    id = func_pc(cpu.next_pc);
     memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
     sprintf(tmp, "0x%08lx: ----> ret  [%s@0x%08lx] ", *cpu.pc, func_list[id].name, func_list[id].start_addr);
@@ -193,12 +199,16 @@ void trace_and_difftest() {
     func_state = id;
   }
 #endif
+// difftest
+#ifdef CONFIG_DIFFTEST
+  difftest_step();
+#endif
 }
 
 void cpu_init() {
   contextp = new VerilatedContext;
   top = new VTop;
-  #ifdef CONFIG_WAVE_ON
+  #ifdef CONFIG_WAVE
   tfp = new VerilatedVcdC;
   contextp->traceEverOn(true);
   top->trace(tfp, 0);
@@ -249,24 +259,24 @@ static void isa_exec_once() {
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
-  jal     = top->io_jalSel;
-  jalr    = top->io_jalrSel;
-  jump_pc = top->io_jumpPC;
+  jal = top->io_jalSel;
+  jalr = top->io_jalrSel;
+  cpu.next_pc = top->io_nextPC;
 #endif
 }
 
 static void eval_and_wave(){
   top->eval();
-  #ifdef CONFIG_WAVE_ON
+  #ifdef CONFIG_WAVE
   tfp->dump(contextp->time());//
   #endif
 }
 
 void cpu_exit(){
-  #ifdef CONFIG_WAVE_ON
+  #ifdef CONFIG_WAVE
   tfp->dump(contextp->time());//
   #endif
-  #ifdef CONFIG_WAVE_ON
+  #ifdef CONFIG_WAVE
     log_write(true, "save wave successful!\n");
     tfp->close();
   #endif

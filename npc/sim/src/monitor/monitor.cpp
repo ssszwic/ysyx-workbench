@@ -2,10 +2,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "mem/mem.h"
+#include "cpu/cpu.h"
 
 static char *img_file = NULL;
 static char *elf_file = NULL;
 static char *log_file = NULL;
+static char *diff_file = NULL;
 
 static const uint32_t img [] = {
   0x00000297,  // auipc t0,0
@@ -20,6 +22,9 @@ static long load_img();
 void init_sdb();
 void cpu_init();
 void init_elf(const char *file);
+void log_config();
+void init_difftest(char *ref_so_file, long img_size);
+
 extern "C" void init_disasm(const char *triple);
 
 void init_monitor(int argc, char *argv[]) {
@@ -35,19 +40,30 @@ void init_monitor(int argc, char *argv[]) {
     printf("there is no log, log file will not be creat\n");
   }
 
-  // 3. log binary image
-  load_img();
+  // 3. print config info
+  log_config();
 
-  // 4. initial disasm
+  // 4. log binary image
+  long image_size = load_img();
+
+  // 5. initial disasm
   init_disasm("riscv64" "-pc-linux-gnu");
 
-  // 5. inittial sdb
+  // 6. inittial sdb
   init_sdb();
-
-  // 6. initial cpu
+  // 7. initial cpu
   cpu_init();
 
-  // 7. read elf file
+  // 8. init difftest must be after cpu_init();
+#ifdef CONFIG_DIFFTEST
+  if(diff_file == NULL) {
+    printf("there is no difftest file input!\n");
+    assert(0);
+  }
+  init_difftest(diff_file, image_size);
+#endif
+
+  // 9. read elf file
 #ifdef CONFIG_FUNCTION_TRACE
   if(elf_file != NULL) {
     init_elf(elf_file);
@@ -63,6 +79,7 @@ static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"    , no_argument      , NULL, 'b'},
     {"help"     , no_argument      , NULL, 'h'},
+    {"diff"     , required_argument, NULL, 'd'},
     {"elf"      , required_argument, NULL, 'e'},
     {"log"      , required_argument, NULL, 'l'},
     {0          , 0                , NULL,  0 },
@@ -73,6 +90,7 @@ static int parse_args(int argc, char *argv[]) {
       case 'b': break;
       case 'e': elf_file = optarg; break;
       case 'l': log_file = optarg; break;
+      case 'd': diff_file = optarg; break;
       // 如果optstring的第一个参数是'-'，则会将所有的非选项当选项处理，并且返回1
       case 1: img_file = optarg; return 0;
       default:
@@ -108,4 +126,49 @@ static long load_img() {
 
   fclose(fp);
   return size;
+}
+
+void log_config() {
+  log_write(true, ANSI_FMT("WAVE: ", ANSI_FG_BLUE));
+#ifdef CONFIG_WAVE
+  log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
+#else
+  log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
+#endif
+
+  log_write(true, ANSI_FMT("ITRACE: ", ANSI_FG_BLUE));
+#ifdef CONFIG_ITRACE
+  log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
+#else
+  log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
+#endif
+
+  log_write(true, ANSI_FMT("WATCHPOINT: ", ANSI_FG_BLUE));
+#if (defined CONFIG_ITRACE) && (defined CONFIT_WATCHPOINT)
+  log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
+#else
+  log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
+#endif
+
+  log_write(true, ANSI_FMT("MEMORY_TRACE: ", ANSI_FG_BLUE));
+#ifdef CONFIG_MEMORY_TRACE
+  log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
+#else
+  log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
+#endif
+
+  log_write(true, ANSI_FMT("FUNCTION_TRACE: ", ANSI_FG_BLUE));
+#ifdef CONFIG_FUNCTION_TRACE
+  log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
+#else
+  log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
+#endif
+
+  log_write(true, ANSI_FMT("DIFFTEST: ", ANSI_FG_BLUE));
+#ifdef CONFIG_DIFFTEST
+  log_write(true, ANSI_FMT("ON\n", ANSI_FG_GREEN));
+#else
+  log_write(true, ANSI_FMT("OFF\n", ANSI_FG_YELLOW));
+#endif
+
 }

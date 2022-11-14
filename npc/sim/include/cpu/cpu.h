@@ -25,6 +25,7 @@ typedef struct {
   uint64_t *gpr;
   vaddr_t *pc;
   uint32_t inst;
+  vaddr_t next_pc;
   #ifdef CONFIG_ITRACE
   char logbuf[128];
   #endif
