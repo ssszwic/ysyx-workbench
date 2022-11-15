@@ -35,7 +35,7 @@ static void check_bound(IOMap *map, paddr_t addr) {
   }
 }
 
-static void invoke_callback(io_callback_t c, paddr_t offset, uint8_t mask, bool is_write) {
+static void invoke_callback(io_callback_t c, uint32_t offset, uint8_t mask, bool is_write) {
   if (c != NULL) { c(offset, mask, is_write); }
 }
 
