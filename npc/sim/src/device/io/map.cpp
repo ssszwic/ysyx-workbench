@@ -29,7 +29,7 @@ static void check_bound(IOMap *map, paddr_t addr) {
   } 
   else {
     if(!(addr <= map->high && addr >= map->low)) {
-      log_write(true, ANSI_FMT("address (0x%08lx) is out of bound {%s} [0x%016lx, 0x%016lx] at pc = 0x%016lx", ANSI_FG_RED), 
+      log_write(true, ANSI_FMT("address (0x%08lx) is out of bound {%s} [0x%016lx, 0x%016lx] at pc = 0x%016lx\n", ANSI_FG_RED), 
             addr, map->name, map->low, map->high, npc_cpu);
     }
   }
