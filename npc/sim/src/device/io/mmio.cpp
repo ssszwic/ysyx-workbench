@@ -41,7 +41,7 @@ uint64_t mmio_read(paddr_t addr) {
   return map_read(addr, fetch_mmio_map(addr));
 }
 
-void mmio_write(paddr_t addr, word_t data, char mask) {
+void mmio_write(paddr_t addr, word_t data, uint8_t mask) {
   map_write(addr, data, mask, fetch_mmio_map(addr));
 }
 
