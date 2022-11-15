@@ -13,4 +13,7 @@
 #define CONFIG_MSIZE 0x8000000
 #define CONFIG_MBASE 0x80000000
 
+// device
+#define CONFIG_SERIAL_MMIO 0xa00003f8
+
 #endif

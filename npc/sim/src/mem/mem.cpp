@@ -108,6 +108,7 @@ uint32_t get_inst(vaddr_t paddr) {
   return 0;
 }
 
+// expr
 uint64_t extern_pmem_read(vaddr_t raddr, int len) {
   if (likely(in_pmem(raddr))) {
     return host_read(guest_to_host(raddr), len);
