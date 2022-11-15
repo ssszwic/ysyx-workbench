@@ -26,7 +26,7 @@ static VerilatedContext* contextp = NULL;
 #ifdef CONFIG_FUNCTION_TRACE
   // the list to store function
   #define MAX_FUNC_NAME_WIDTH 50  // max function name length, the excess will be stage
-  #define FUNC_LIST_NUM 500       // max function number
+  #define FUNC_LIST_NUM 100       // max function number
   struct func {
     int id;
     size_t size;
