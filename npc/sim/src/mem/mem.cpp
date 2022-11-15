@@ -17,7 +17,7 @@ void cpu_exit();
 static char mem_ring_buf[MEM_RING_BUF_WIDTH][MAX_SINGLE_WIDTH] = {};
 static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
 // erda or write twice every cycle, only trace once
-static bool flip = true;
+static bool flip = false;
 #endif
 
 // static uint64_t pmem_read(paddr_t addr, int len) {
@@ -48,7 +48,7 @@ extern "C" void inst_pmem_read(long long raddr, long long *rdata) {
 
 extern "C" void pmem_read(long long raddr, long long *rdata) {
   // 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
-
+  flip = !flip;
   // memory trace
 #ifdef CONFIG_MEMORY_TRACE
   if(flip) {
@@ -58,7 +58,6 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
     sprintf(tmp, "----> read \t0x%016llx\t0x%016llx", raddr, *rdata);
     strcpy(mem_ring_buf[mem_ring_ref], tmp);
   }
-  flip = !flip;
 #endif
 
   uint64_t paddr = raddr & ~0x7;
@@ -81,6 +80,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   // 如`wmask = 0x3`代表只写入最低2个字节, 内存中的其它字节保持不变
 
   // memory trace
+  flip = !flip;
 #ifdef CONFIG_MEMORY_TRACE
   if(flip) {
     char tmp[MAX_SINGLE_WIDTH] = {};
@@ -89,7 +89,6 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
     sprintf(tmp, "----> write\t0x%016llx\t0x%016llx\t0x%02x", waddr, wdata, wmask);
     strcpy(mem_ring_buf[mem_ring_ref], tmp);
   }
-  flip = !flip;
 #endif
 
   uint32_t paddr = waddr & ~0x7;
@@ -105,7 +104,9 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   }
 
 #ifdef CONFIG_DEVICE
-  mmio_write(paddr, wdata, wmask);
+  if(flip) {
+    mmio_write(paddr, wdata, wmask);
+  }
   return;
 #endif
 
