@@ -1,6 +1,7 @@
 #include <am.h>
 #include <klib-macros.h>
 #include "npc.h"
+#include "riscv/riscv.h"
 
 # define nemu_trap(code) asm volatile("mv a0, %0; ebreak" : :"r"(code))
 
