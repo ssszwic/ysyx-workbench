@@ -17,8 +17,9 @@ void cpu_exit();
 static char mem_ring_buf[MEM_RING_BUF_WIDTH][MAX_SINGLE_WIDTH] = {};
 static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
 // erda or write twice every cycle, only trace once
-static bool flip = false;
 #endif
+
+static bool flip = false;
 
 static void out_of_bound(vaddr_t addr) {
   cpu_exit();
