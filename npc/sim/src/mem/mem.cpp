@@ -20,15 +20,6 @@ static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
 static bool flip = false;
 #endif
 
-// static uint64_t pmem_read(paddr_t addr, int len) {
-//   uint64_t ret = host_read(guest_to_host(addr), len);
-//   return ret;
-// }
-
-// static void pmem_write(paddr_t addr, int len, uint64_t data) {
-//   host_write(guest_to_host(addr), len, data);
-// }
-
 static void out_of_bound(vaddr_t addr) {
   cpu_exit();
   log_write(true, "addr = 0x%016lx out of bound mem!\n", addr);
@@ -78,9 +69,8 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   // 总是往地址为`waddr & ~0x7ull`的8字节按写掩码`wmask`写入`wdata`
   // `wmask`中每比特表示`wdata`中1个字节的掩码,
   // 如`wmask = 0x3`代表只写入最低2个字节, 内存中的其它字节保持不变
-
-  // memory trace
   flip = !flip;
+  // memory trace
 #ifdef CONFIG_MEMORY_TRACE
   if(flip) {
     char tmp[MAX_SINGLE_WIDTH] = {};
@@ -103,12 +93,10 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
     return;
   }
 
-#ifdef CONFIG_DEVICE
-  if(flip) {
-    mmio_write(paddr, wdata, wmask);
-  }
-  return;
-#endif
+
+  // write once every cycle
+  IFDEF(CONFIG_DEVICE, if(flip) {mmio_write(paddr, wdata, wmask); return});
+  // write once every cycle
 
   out_of_bound(paddr);
 }
