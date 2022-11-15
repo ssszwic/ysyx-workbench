@@ -25,12 +25,11 @@ void isa_reg_display(bool *err_list) {
     for (int j = 0; j < 4; j++) {
       // Vertical print
       if(err_list[i + 8 * j]) {
-        printf(ANSI_FMT("%-5s0x%016lx   ", ANSI_FG_RED), regs[i], *(npc_cpu.gpr + i));
+        printf(ANSI_FMT("%-5s0x%016lx   ", ANSI_FG_RED), regs[i + 8 * j], npc_cpu.gpr[i + 8 * j]);
       }
       else {
-        printf("%-5s0x%016lx   ", regs[i], *(npc_cpu.gpr + i));
+        printf("%-5s0x%016lx   ", regs[i + 8 * j], npc_cpu.gpr[i + 8 * j]);
       }
-      i++;
     }
     printf("\n");
   }
