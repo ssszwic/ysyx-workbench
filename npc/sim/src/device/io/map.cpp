@@ -56,7 +56,7 @@ void map_write(paddr_t addr, uint64_t data, uint8_t mask, IOMap *map) {
   for (int i = 0; i < 8; i++) {
     if((mask >> i) % 2 == 1) {
       data_byte = (uint8_t) (data >> (8 * i)) & 0xFF;
-      host_write(map->space + offset + i, 1, data_byte);
+      host_write((uint8_t *) map->space + offset + i, 1, data_byte);
     }
   }
   invoke_callback(map->callback, offset, mask, true);
