@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include "config.h"
 #include "utils/log.h"
-#include "macro.h"
 
 typedef uint64_t vaddr_t;
 typedef uint32_t paddr_t;
