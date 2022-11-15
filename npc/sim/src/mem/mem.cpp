@@ -125,7 +125,7 @@ void log_mem_ring(bool print_screen) {
   }
   log_write(print_screen, ANSI_FMT("memory ring buff.", ANSI_FG_BLUE));
   log_write(print_screen, "\n");
-  log_write(print_screen, ANSI_FMT("op\taddr\tdata\tmask\n", ANSI_FG_BLUE));
+  log_write(print_screen, ANSI_FMT("op    addr\tdata\tmask\n", ANSI_FG_BLUE));
   for (int i = 0; i < MEM_RING_BUF_WIDTH; i++) {
     if(mem_ring_buf[i][0] == '\0') break;
     log_write(print_screen, "%s\n", mem_ring_buf[i]);
