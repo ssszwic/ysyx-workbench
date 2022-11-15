@@ -12,8 +12,8 @@
 #include "utils/log.h"
 
 typedef uint64_t vaddr_t;
-typedef uint32_t paddr_t;
-typedef uint64_t word_t;
+  typedef uint32_t paddr_t;
+  typedef uint64_t word_t;
 
 // branch prediction optimization gor gcc: tell gcc the probability of cond is true is larger
 #define likely(cond)   __builtin_expect(cond, 1)
