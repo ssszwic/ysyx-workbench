@@ -18,5 +18,6 @@
 
 // device
 #define CONFIG_SERIAL_MMIO 0xa00003f8
+#define CONFIG_TIMER_MMIO 0xa0000048
 
 #endif
