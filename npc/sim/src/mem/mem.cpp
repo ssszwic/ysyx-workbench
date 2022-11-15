@@ -94,7 +94,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   }
 
   // device
-  IFDEF(CONFIG_DEVICE, if(flip) {mmio_write(paddr, wdata, wmask);return})
+  IFDEF(CONFIG_DEVICE, if(flip) {mmio_write(paddr, wdata, wmask);return;})
 #ifdef CONFIG_DEVICE
   // // write once every cycle
   // if(flip) {mmio_write(paddr, wdata, wmask);return;}
