@@ -37,7 +37,7 @@ class MemCtrl extends Module {
   }
 
   val wData = Wire(UInt(64.W))
-  wData := io.wData << Cat(io.addr(2, 0), "b000".U)
+  wData := io.wData << Cat(io.addr(2, 0), "b000".U(3.W))
 
   val MemVirtualInst_data = Module(new MemVirtual)
   MemVirtualInst_data.io.ren     := io.ren
