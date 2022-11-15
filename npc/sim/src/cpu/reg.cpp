@@ -33,6 +33,7 @@ void isa_reg_display(bool *err_list) {
     }
     printf("\n");
   }
+  printf("\n");
 }
 
 uint64_t isa_reg_str2val(const char *s, bool *success) {
