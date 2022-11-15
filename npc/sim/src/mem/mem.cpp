@@ -51,14 +51,11 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
   if (flip) {
   // memory trace
   #ifdef CONFIG_MEMORY_TRACE
-    if(flip) {
-      char tmp[MAX_SINGLE_WIDTH] = {};
-      memset(mem_ring_buf[mem_ring_ref], ' ', 6);
-      if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
-      sprintf(tmp, "----> read \t0x%016llx\t0x%016llx", raddr, *rdata);
-      strcpy(mem_ring_buf[mem_ring_ref], tmp);
-    }
-    flip = !flip;
+    char tmp[MAX_SINGLE_WIDTH] = {};
+    memset(mem_ring_buf[mem_ring_ref], ' ', 6);
+    if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
+    sprintf(tmp, "----> read \t0x%016llx\t0x%016llx", raddr, *rdata);
+    strcpy(mem_ring_buf[mem_ring_ref], tmp);
   #endif
 
     uint64_t paddr = raddr & ~0x7;
