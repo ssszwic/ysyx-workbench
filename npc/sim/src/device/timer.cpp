@@ -41,7 +41,7 @@ static void timer_io_handler(uint32_t offset, uint8_t mask, bool is_write) {
 void init_timer() {
   boot_time = get_time_internal();
   timer_base = (uint32_t *) new_space(32);
-  add_mmio_map("serial", CONFIG_TIMER_MMIO, timer_base, 8, (io_callback_t) timer_io_handler);
+  add_mmio_map("timer", CONFIG_TIMER_MMIO, timer_base, 8, (io_callback_t) timer_io_handler);
 }
 
 
