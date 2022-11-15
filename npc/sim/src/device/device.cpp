@@ -5,5 +5,5 @@ void init_map();
 
 void init_device() {
   init_map();
-  init_serial();
+  IFDEF(CONFIG_HAS_SERIAL, init_serial());
 }

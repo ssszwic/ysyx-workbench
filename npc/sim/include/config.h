@@ -9,6 +9,7 @@
 #define CONFIG_FUNCTION_TRACE
 // #define CONFIG_DIFFTEST
 #define CONFIG_DEVICE
+#define CONFIG_HAS_SERIAL
 
 // mem
 #define CONFIG_MSIZE 0x8000000
