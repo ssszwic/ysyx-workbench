@@ -1,5 +1,6 @@
 #include "mem/mem.h"
 #include "commen.h"
+#include "device/mmio.h"
 
 
 // 128MB for npc
@@ -65,6 +66,12 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
     *rdata = host_read(guest_to_host(paddr), 8);
     return;
   }
+  
+#ifdef CONFIG_DEVICE
+  *rdata = mmio_read(paddr);
+  return;
+#endif
+
   out_of_bound(paddr);
 }
 
@@ -96,6 +103,12 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
     }
     return;
   }
+
+#ifdef CONFIG_DEVICE
+  mmio_write(paddr, wdata, wmask);
+  return;
+#endif
+
   out_of_bound(paddr);
 }
 

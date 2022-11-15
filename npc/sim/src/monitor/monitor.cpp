@@ -25,6 +25,7 @@ void init_elf(const char *file);
 void log_config();
 void init_difftest(char *ref_so_file, long img_size);
 void sdb_set_batch_mode();
+void init_device();
 
 extern "C" void init_disasm(const char *triple);
 
@@ -54,6 +55,8 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
   // 7. initial cpu
   cpu_init();
+  // 8. initial device
+  init_device();
 
   // 8. init difftest must be after cpu_init();
 #ifdef CONFIG_DIFFTEST
