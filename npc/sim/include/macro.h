@@ -19,7 +19,7 @@
 #include <string.h>
 
 // macro stringizing
-#define str_temp(x) #x
+#define str_temp(x)
 #define str(x) str_temp(x)
 
 // strlen() for string constant (excluding '\0')
