@@ -10,6 +10,7 @@
 // #define CONFIG_DIFFTEST
 #define CONFIG_DEVICE
 #define CONFIG_HAS_SERIAL
+#define CONFIG_HAS_TIMER
 
 // mem
 #define CONFIG_MSIZE 0x8000000
