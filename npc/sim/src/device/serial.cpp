@@ -16,7 +16,7 @@ static void serial_putc(char ch) {
 static void serial_io_handler(uint32_t offset, uint8_t mask, bool is_write) {
     /* We bind the serial port with the host stderr in NEMU. */
     assert(mask == 1);
-    assert(offset = 0);
+    assert(offset == 0);
     if (is_write) {
       serial_putc(serial_base[0]);
     }
