@@ -14,28 +14,27 @@ static uint64_t get_time_internal() {
 }
 
 static void timer_io_handler(uint32_t offset, uint8_t mask, bool is_write) {
+  assert(!is_write);
   assert(offset % 8 == 0);
   // cuttern time
-  time_t t; 
-  t = time(NULL);
-  struct tm *p = localtime(&t); 
   // update time
   assert(offset % 8 == 0);
   uint64_t uptime = get_time_internal() - boot_time;
-  if (!is_write) {
+  if (!is_write && offset == 0) {
     timer_base[0] = (uint32_t) uptime;
     timer_base[1] = uptime >> 32;
-    timer_base[2] = 1900 + p->tm_year;
-    timer_base[3] = 1 + p->tm_mon;
-    timer_base[4] = p->tm_mday;
-    timer_base[5] = p->tm_hour;
-    timer_base[6] = p->tm_min;
-    timer_base[7] = p->tm_sec;
   }
-  else {
-    log_write(true, ANSI_FMT("serial do not support write!\n", ANSI_FG_RED));
-    assert(0);
-  }
+
+  // update current time
+  // time_t t; 
+  // t = time(NULL);
+  // struct tm *p = localtime(&t); 
+  // timer_base[2] = 1900 + p->tm_year;
+  // timer_base[3] = 1 + p->tm_mon;
+  // timer_base[4] = p->tm_mday;
+  // timer_base[5] = p->tm_hour;
+  // timer_base[6] = p->tm_min;
+  // timer_base[7] = p->tm_sec;
 }
 
 void init_timer() {
