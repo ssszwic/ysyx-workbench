@@ -15,4 +15,13 @@
 #define MUXONE(macro, X, Y)  MUX_MACRO_PROPERTY(__P_ONE_, macro, X, Y)
 #define MUXZERO(macro, X, Y) MUX_MACRO_PROPERTY(__P_ZERO_,macro, X, Y)
 
+// test if a boolean macro is defined
+#define ISDEF(macro) MUXDEF(macro, 1, 0)
+// test if a boolean macro is undefined
+#define ISNDEF(macro) MUXNDEF(macro, 1, 0)
+// test if a boolean macro is defined to 1
+#define ISONE(macro) MUXONE(macro, 1, 0)
+// test if a boolean macro is defined to 0
+#define ISZERO(macro) MUXZERO(macro, 1, 0)
+
 #endif
