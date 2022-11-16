@@ -41,7 +41,7 @@ extern "C" void inst_pmem_read(long long raddr, long long *rdata) {
 
 extern "C" void pmem_read(long long raddr, long long *rdata) {
   // 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
-  if(true) {
+  if(flip) {
     *rdata = 0;
     return ;
   }
