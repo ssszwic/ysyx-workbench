@@ -9,14 +9,12 @@ void init_map();
 void init_timer();
 void init_i8042();
 void init_vga();
-bool ioe_init();
 
 
 void send_key(uint8_t, bool);
 void vga_update_screen();
 
 void init_device() {
-  ioe_init();
   init_map();
   #ifdef CONFIG_HAS_SERIAL
   init_serial();
