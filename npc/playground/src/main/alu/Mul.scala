@@ -35,7 +35,7 @@ class Mul extends Module {
   result := data1Tmp.asSInt * data2Tmp.asSInt
 
   when(io.wordSel) {
-    io.result := Cat(Fill(32, result(32)), result(31, 0))
+    io.result := Cat(Fill(32, result(31)), result(31, 0))
   }.elsewhen(io.mulOp === "b00".U) {
     io.result := result(63, 0)
   }.otherwise {
