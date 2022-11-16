@@ -50,7 +50,6 @@ uint64_t map_read(paddr_t addr, IOMap *map) {
 
 void map_write(paddr_t addr, uint64_t data, uint8_t mask, IOMap *map) {
   check_bound(map, addr);
-  printf("write\n");
   paddr_t offset = addr - map->low;
   assert(offset % 8 == 0);
   // write to map
