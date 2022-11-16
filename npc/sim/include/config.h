@@ -8,6 +8,8 @@
 // #define CONFIG_MEMORY_TRACE
 // #define CONFIG_FUNCTION_TRACE
 // #define CONFIG_DIFFTEST
+#define STATISTIC
+
 
 #define CONFIG_DEVICE
 #define CONFIG_HAS_SERIAL

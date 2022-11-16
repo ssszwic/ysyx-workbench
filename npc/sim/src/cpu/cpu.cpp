@@ -56,6 +56,11 @@ static VerilatedContext* contextp = NULL;
 RegWrite reg_write;
 #endif
 
+#ifdef STATISTIC
+static uint64_t g_timer = 0;
+uint64_t g_nr_guest_inst = 0;
+#endif
+
 // only for cmd si, print inst to screen
 bool screen_display_inst = false;
 NPCState npc_state = { .state = NPC_STOP };
@@ -64,8 +69,6 @@ static uint64_t *rtl_pc;
 static uint64_t *rtl_gpr;
 // Ensure cpu initialization is complete
 static bool cpu_state_init = false;
-static uint64_t g_timer = 0;
-uint64_t g_nr_guest_inst = 0;
 
 // current file function
 static void eval_and_wave();
@@ -105,25 +108,33 @@ void cpu_exec(uint64_t n) {
 
   npc_state.state = NPC_RUNNING;
 
+  #ifdef STATISTIC
   //start time
   uint64_t timer_start = get_time();
+  #endif
   for(int i = 0; i < n; i++) {
     exec_once();
+    #ifdef STATISTIC
     g_nr_guest_inst++;
+    #endif
     trace_and_difftest();
     device_update();
     if(npc_state.state == NPC_END || npc_state.state == NPC_STOP || npc_state.state == NPC_ABORT || npc_state.state == NPC_QUIT) {break;}
   }
   // end time
+  #ifdef STATISTIC
   uint64_t timer_end = get_time();
   g_timer += timer_end - timer_start;
+  #endif
 
   if(npc_state.state == NPC_END) {
     if (npc_state.halt_ret == 0) {
       log_write(true, ANSI_FMT("HIT GOOD TRAP at pc = 0x%016lx\n", ANSI_FG_GREEN), npc_cpu.pc);
       // for return successful, don't print to screen
       log_trace(false);
+      #ifdef STATISTIC
       statistic();
+      #endif
     }
     else {
       log_write(true, ANSI_FMT("HIT BAD TRAP at pc = 0x%016lx\n", ANSI_FG_RED), npc_cpu.pc);
@@ -139,7 +150,9 @@ void cpu_exec(uint64_t n) {
   }
   else if(npc_state.state == NPC_QUIT) {
     log_trace(true);
+    #ifdef STATISTIC
     statistic();
+    #endif
     cpu_exit();
   }
 }
