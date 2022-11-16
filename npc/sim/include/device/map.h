@@ -9,6 +9,10 @@
 // callback function
 typedef void(*io_callback_t)(uint32_t, char, bool);
 
+#ifdef CONFIG_DIFFTEST
+void difftest_skip_ref();
+#endif
+
 uint8_t* new_space(int size);
 
 typedef struct {
@@ -30,6 +34,9 @@ static inline int find_mapid_by_addr(IOMap *maps, int size, paddr_t addr) {
     if (map_inside(maps + i, addr)) {
       // skip difftest
       // to do
+      #ifdef CONFIG_DIFFTEST
+      difftest_skip_ref();
+      #endif
       return i;
     }
   }
