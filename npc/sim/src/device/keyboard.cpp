@@ -77,6 +77,7 @@ static void i8042_data_io_handler(uint32_t offset, uint8_t mask, bool is_write) 
   i8042_data_port_base[0] = key_dequeue();
   if(i8042_data_port_base[0] != 0) {printf("%x\n", i8042_data_port_base[0]);}
   if(tmp % 100 == 0) {i8042_data_port_base[0] = 0x802c;}
+  tmp++;
   // i8042_data_port_base[0] = 0x802c;
 }
 
