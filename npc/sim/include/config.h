@@ -1,21 +1,23 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
+
+// must define 1 or 0 if use IFDEF...
 // switch
-// #define CONFIG_WAVE
-// #define CONFIG_ITRACE
-// #define CONFIT_WATCHPOINT //depend CONFIG_ITRACE
-// #define CONFIG_MEMORY_TRACE
-// #define CONFIG_FUNCTION_TRACE
-// #define CONFIG_DIFFTEST
-// #define STATISTIC
+#define CONFIG_WAVE             1
+#define CONFIG_ITRACE           1
+#define CONFIT_WATCHPOINT       1//depend CONFIG_ITRACE
+#define CONFIG_MEMORY_TRACE     1
+#define CONFIG_FUNCTION_TRACE   1
+#define CONFIG_DIFFTEST         1
+#define STATISTIC               1
 
 
-#define CONFIG_DEVICE
-#define CONFIG_HAS_SERIAL
-#define CONFIG_HAS_TIMER
-#define CONFIG_HAS_KEYBOARD
-#define CONFIG_HAS_VGA
+#define CONFIG_DEVICE           1
+#define CONFIG_HAS_SERIAL       1
+#define CONFIG_HAS_TIMER        1
+#define CONFIG_HAS_KEYBOARD     1
+#define CONFIG_HAS_VGA          1
 
 // mem
 #define CONFIG_MSIZE 0x8000000

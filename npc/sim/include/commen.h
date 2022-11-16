@@ -17,7 +17,7 @@ typedef uint64_t word_t;
 
 // branch prediction optimization gor gcc: tell gcc the probability of cond is true is larger
 #define likely(cond)   __builtin_expect(cond, 1)
-#define uunlikely(cond)   __builtin_expect(cond, 0)
+#define unlikely(cond)   __builtin_expect(cond, 0)
 // calculate the length of an array
 #define ARRLEN(arr) (int)(sizeof(arr) / sizeof(arr[0]))
 
