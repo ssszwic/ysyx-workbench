@@ -334,13 +334,14 @@ void cpu_exit(){
   #endif
 }
 
+#ifdef STATISTIC
 static void statistic() {
   log_write(true, ANSI_FMT("statistic:\n", ANSI_FG_BLUE));
   log_write(true, ANSI_FMT("host time spent = %ld us\n", ANSI_FG_BLUE), g_timer);
   log_write(true, ANSI_FMT("total guest instructions = %ld\n", ANSI_FG_BLUE), g_nr_guest_inst);
   if (g_timer > 0) log_write(true, ANSI_FMT("simulation frequency = %ld inst/s\n", ANSI_FG_BLUE), g_nr_guest_inst * 1000000 / g_timer);
 }
-
+#endif
 
 #ifdef CONFIG_ITRACE
 void log_inst_ring(bool print_screen) {
