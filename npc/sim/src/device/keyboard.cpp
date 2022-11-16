@@ -38,6 +38,8 @@ static void init_keymap() {
   MAP(_KEYS, SDL_KEYMAP)
 }
 
+static uint32_t *i8042_data_port_base = NULL;
+
 #define KEY_QUEUE_LEN 1024
 static int key_queue[KEY_QUEUE_LEN] = {};
 static int key_f = 0, key_r = 0;
@@ -66,7 +68,7 @@ void send_key(uint8_t scancode, bool is_keydown) {
   }
 }
 
-static uint32_t *i8042_data_port_base = NULL;
+
 
 static void i8042_data_io_handler(uint32_t offset, uint8_t mask, bool is_write) {
   assert(!is_write);
