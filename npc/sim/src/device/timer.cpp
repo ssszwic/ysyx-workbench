@@ -3,15 +3,9 @@
 #include <sys/time.h>
 #include <time.h>
 
-static uint64_t boot_time;
-static uint32_t *timer_base = NULL;
+uint64_t get_time();
 
-static uint64_t get_time_internal() {
-  struct timeval now;
-  gettimeofday(&now, NULL);
-  uint64_t us = now.tv_sec * 1000000 + now.tv_usec;
-  return us;
-}
+static uint32_t *timer_base = NULL;
 
 static void timer_io_handler(uint32_t offset, uint8_t mask, bool is_write) {
   assert(!is_write);
@@ -19,7 +13,7 @@ static void timer_io_handler(uint32_t offset, uint8_t mask, bool is_write) {
   // cuttern time
   // update time
   assert(offset % 8 == 0);
-  uint64_t uptime = get_time_internal() - boot_time;
+  uint64_t uptime = get_time();
   if (!is_write && offset == 0) {
     timer_base[0] = (uint32_t) uptime;
     timer_base[1] = uptime >> 32;
@@ -38,7 +32,6 @@ static void timer_io_handler(uint32_t offset, uint8_t mask, bool is_write) {
 }
 
 void init_timer() {
-  boot_time = get_time_internal();
   timer_base = (uint32_t *) new_space(32);
   add_mmio_map("timer", CONFIG_TIMER_MMIO, timer_base, 32, (io_callback_t) timer_io_handler);
 }

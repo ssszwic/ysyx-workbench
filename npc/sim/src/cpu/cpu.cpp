@@ -64,6 +64,8 @@ static uint64_t *rtl_pc;
 static uint64_t *rtl_gpr;
 // Ensure cpu initialization is complete
 static bool cpu_state_init = false;
+static uint64_t g_timer = 0;
+uint64_t g_nr_guest_inst = 0;
 
 // current file function
 static void eval_and_wave();
@@ -71,8 +73,10 @@ static void isa_exec_once();
 static void exec_once();
 static void trace_and_difftest();
 static void log_trace(bool print_screen);
+static void statistic();
 void difftest_step();
 bool update_wp(char *log);
+uint64_t get_time();
 
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
@@ -99,11 +103,18 @@ void cpu_exec(uint64_t n) {
   }
 
   npc_state.state = NPC_RUNNING;
+
+  //start time
+  uint64_t timer_start = get_time();
   for(int i = 0; i < n; i++) {
     exec_once();
+    g_nr_guest_inst++;
     trace_and_difftest();
     if(npc_state.state == NPC_END || npc_state.state == NPC_STOP || npc_state.state == NPC_ABORT) {break;}
   }
+  // end time
+  uint64_t timer_end = get_time();
+  g_timer += timer_end - timer_start;
 
   if(npc_state.state == NPC_END) {
     if (npc_state.halt_ret == 0) {
@@ -114,6 +125,7 @@ void cpu_exec(uint64_t n) {
     else {
       log_write(true, ANSI_FMT("HIT BAD TRAP at pc = 0x%016\n", ANSI_FG_RED), npc_cpu.pc);
       log_trace(true);
+      statistic();
     }
     // stop sim and save wave
     cpu_exit();
@@ -301,6 +313,14 @@ void cpu_exit(){
     tfp->close();
   #endif
 }
+
+static void statistic() {
+  log_write(true, ANSI_FMT("statistic:\n", ANSI_FG_BLUE));
+  log_write(true, ANSI_FMT("host time spent = %ld us\n", ANSI_FG_BLUE), g_timer);
+  log_write(true, ANSI_FMT("total guest instructions = %ld\n", ANSI_FG_BLUE), g_nr_guest_inst);
+  if (g_timer > 0) log_write(true, ANSI_FMT("simulation frequency = %ld inst/s\n", ANSI_FG_BLUE), g_nr_guest_inst * 1000000 / g_timer);
+}
+
 
 #ifdef CONFIG_ITRACE
 void log_inst_ring(bool print_screen) {
