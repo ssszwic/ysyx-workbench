@@ -41,6 +41,7 @@ extern "C" void inst_pmem_read(long long raddr, long long *rdata) {
 
 extern "C" void pmem_read(long long raddr, long long *rdata) {
   // 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
+  // read second valid every cycle
   if(!flip) {
     *rdata = 0;
     flip = !flip;
@@ -50,13 +51,11 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
 
   // memory trace
 #ifdef CONFIG_MEMORY_TRACE
-  if(flip) {
-    char tmp[MAX_SINGLE_WIDTH] = {};
-    memset(mem_ring_buf[mem_ring_ref], ' ', 6);
-    if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
-    sprintf(tmp, "----> read \t0x%016llx\t0x%016llx", raddr, *rdata);
-    strcpy(mem_ring_buf[mem_ring_ref], tmp);
-  }
+  char tmp[MAX_SINGLE_WIDTH] = {};
+  memset(mem_ring_buf[mem_ring_ref], ' ', 6);
+  if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
+  sprintf(tmp, "----> read \t0x%016llx\t0x%016llx", raddr, *rdata);
+  strcpy(mem_ring_buf[mem_ring_ref], tmp);
 #endif
 
   uint64_t paddr = raddr & ~0x7;
@@ -79,16 +78,18 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   // 总是往地址为`waddr & ~0x7ull`的8字节按写掩码`wmask`写入`wdata`
   // `wmask`中每比特表示`wdata`中1个字节的掩码,
   // 如`wmask = 0x3`代表只写入最低2个字节, 内存中的其它字节保持不变
+  if(!flip) {
+    flip = !flip;
+    return ;
+  }
   flip = !flip;
   // memory trace
 #ifdef CONFIG_MEMORY_TRACE
-  if(flip) {
-    char tmp[MAX_SINGLE_WIDTH] = {};
-    memset(mem_ring_buf[mem_ring_ref], ' ', 6);
-    if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
-    sprintf(tmp, "----> write\t0x%016llx\t0x%016llx\t0x%02x", waddr, wdata, wmask);
-    strcpy(mem_ring_buf[mem_ring_ref], tmp);
-  }
+  char tmp[MAX_SINGLE_WIDTH] = {};
+  memset(mem_ring_buf[mem_ring_ref], ' ', 6);
+  if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
+  sprintf(tmp, "----> write\t0x%016llx\t0x%016llx\t0x%02x", waddr, wdata, wmask);
+  strcpy(mem_ring_buf[mem_ring_ref], tmp);
 #endif
 
   uint32_t paddr = waddr & ~0x7;
