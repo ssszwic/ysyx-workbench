@@ -50,6 +50,7 @@ static void key_enqueue(uint32_t am_scancode) {
 }
 
 static uint32_t key_dequeue() {
+  printf("out\n");
   uint32_t key = _KEY_NONE;
   if (key_f != key_r) {
     key = key_queue[key_f];
