@@ -44,7 +44,7 @@ uint64_t map_read(paddr_t addr, IOMap *map) {
   uint32_t offset = addr - map->low;
   invoke_callback(map->callback, offset, 0, false); // prepare data to read
   word_t ret = host_read((uint8_t *) map->space + offset, 8);
-  printf("%lx\n", ret);
+  if(ret != 0) {printf("%lx\n", ret);}
   return ret;
 }
 
