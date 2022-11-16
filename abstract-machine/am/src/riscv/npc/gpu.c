@@ -1,4 +1,5 @@
 #include <am.h>
+#include <klib-macros.h>
 #include "npc.h"
 #include "riscv/riscv.h"
 
