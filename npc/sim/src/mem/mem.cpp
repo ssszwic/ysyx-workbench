@@ -97,7 +97,8 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   // device
 #ifdef CONFIG_DEVICE
   // // write once every cycle
-  if(flip) {mmio_write(paddr, wdata, wmask);}
+  // if(flip) {mmio_write(paddr, wdata, wmask);}
+  if(flip && waddr == CONFIG_SERIAL_MMIO) {uint8_t ch = uint8_t (wdata); putc(ch, stderr);}
   return;
 #endif
 
