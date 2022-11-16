@@ -33,7 +33,6 @@ void init_device() {
 void device_update() {
 
 #ifdef CONFIG_HAS_VGA
-  printf("uodate\n");
   vga_update_screen();
 #endif
 
