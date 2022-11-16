@@ -21,15 +21,18 @@ static void timer_io_handler(uint32_t offset, uint8_t mask, bool is_write) {
   }
 
   // update current time
-  // time_t t; 
-  // t = time(NULL);
-  // struct tm *p = localtime(&t); 
-  // timer_base[2] = 1900 + p->tm_year;
-  // timer_base[3] = 1 + p->tm_mon;
-  // timer_base[4] = p->tm_mday;
-  // timer_base[5] = p->tm_hour;
-  // timer_base[6] = p->tm_min;
-  // timer_base[7] = p->tm_sec;
+  if(offset != 0) {
+    time_t t; 
+    t = time(NULL);
+    struct tm *p = localtime(&t); 
+    timer_base[2] = 1900 + p->tm_year;
+    timer_base[3] = 1 + p->tm_mon;
+    timer_base[4] = p->tm_mday;
+    timer_base[5] = p->tm_hour;
+    timer_base[6] = p->tm_min;
+    timer_base[7] = p->tm_sec;
+  }
+  
 }
 
 void init_timer() {
