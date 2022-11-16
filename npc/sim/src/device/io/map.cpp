@@ -41,7 +41,7 @@ static void invoke_callback(io_callback_t c, uint32_t offset, uint8_t mask, bool
 
 uint64_t map_read(paddr_t addr, IOMap *map) {
   check_bound(map, addr);
-  printf("reda\n", offset);
+  printf("reda\n");
   uint32_t offset = addr - map->low;
   printf("%d\n", offset);
   invoke_callback(map->callback, offset, 0, false); // prepare data to read
