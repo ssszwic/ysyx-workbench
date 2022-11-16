@@ -19,7 +19,7 @@ f(LCTRL) f(APPLICATION) f(LALT) f(SPACE) f(RALT) f(RCTRL) \
 f(UP) f(DOWN) f(LEFT) f(RIGHT) f(INSERT) f(DELETE) f(HOME) f(END) f(PAGEUP) f(PAGEDOWN)
 
 #define _KEY_NAME(k) _KEY_##k,
-int tmp = 0;
+int tmp = 1;
 
 enum {
   _KEY_NONE = 0,
@@ -76,7 +76,7 @@ static void i8042_data_io_handler(uint32_t offset, uint8_t mask, bool is_write) 
   assert(offset == 0);
   i8042_data_port_base[0] = key_dequeue();
   if(i8042_data_port_base[0] != 0) {printf("%x\n", i8042_data_port_base[0]);}
-  if(tmp % 10 == 0) {i8042_data_port_base[0] = 0x802c;}
+  if(tmp % 100 == 0) {i8042_data_port_base[0] = 0x802c;}
   // i8042_data_port_base[0] = 0x802c;
 }
 
