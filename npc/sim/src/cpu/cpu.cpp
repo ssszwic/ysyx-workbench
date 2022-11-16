@@ -270,18 +270,18 @@ static void isa_exec_once() {
   contextp->timeInc(1);
 
   // update reg and pc, gpr(regfiles) will not update until next cycle, so update by io_regWen
-  npc_cpu.pc = *rtl_pc;
-  npc_cpu.next_pc = top->io_nextPC;
-  for(int i = 0; i < 32; i++) {
-    if((top->io_regWen == 1) && (i == top->io_regAddr)) {
-      npc_cpu.gpr[i] = top->io_regWData;
-    }
-    else {
-      npc_cpu.gpr[i] = *(rtl_gpr + i);
-    }
-  }
-  // $0 always 0
-  npc_cpu.gpr[0] = 0;
+  // npc_cpu.pc = *rtl_pc;
+  // npc_cpu.next_pc = top->io_nextPC;
+  // for(int i = 0; i < 32; i++) {
+  //   if((top->io_regWen == 1) && (i == top->io_regAddr)) {
+  //     npc_cpu.gpr[i] = top->io_regWData;
+  //   }
+  //   else {
+  //     npc_cpu.gpr[i] = *(rtl_gpr + i);
+  //   }
+  // }
+  // // $0 always 0
+  // npc_cpu.gpr[0] = 0;
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
