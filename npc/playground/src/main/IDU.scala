@@ -197,7 +197,7 @@ class IDU extends Module {
   // BGE/BGEU
   io_alu.geSel := typeB && (funct3(2) === "b1".U && funct3(0) === "b1".U)
   // R:SLTU/DIVU/DIVUW/REMU/REMUW I:SLTIU B:BLTU/BGEU 
-  io_alu.unsignSel := (typeB && (funct3 === "b011".U)) || (typeII && (funct3 === "b011".U)) || (typeR && (funct3 === "b011".U) && (funct7 === "b0000000".U)) || 
+  io_alu.unsignSel := (typeB && (funct3(2) === 1.U)) || (typeII && (funct3 === "b011".U)) || (typeR && (funct3 === "b011".U) && (funct7 === "b0000000".U)) || 
                       (typeR && (funct3(2) === 1.U) && (funct3(0) === 1.U) && (funct7 === "b0000001".U))
   // BNE
   io_alu.neqSel := typeB && (funct3 === "b001".U)
