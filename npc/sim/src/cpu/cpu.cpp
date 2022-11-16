@@ -119,7 +119,7 @@ void cpu_exec(uint64_t n) {
     g_nr_guest_inst++;
     #endif
     trace_and_difftest();
-    device_update();
+    // device_update();
     if(npc_state.state == NPC_END || npc_state.state == NPC_STOP || npc_state.state == NPC_ABORT || npc_state.state == NPC_QUIT) {break;}
   }
   // end time
