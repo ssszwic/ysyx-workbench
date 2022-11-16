@@ -9,7 +9,7 @@
 // #define CONFIG_FUNCTION_TRACE
 // #define CONFIG_DIFFTEST
 
-// #define CONFIG_DEVICE
+#define CONFIG_DEVICE
 // #define CONFIG_HAS_SERIAL
 // #define CONFIG_HAS_TIMER
 // #define CONFIG_HAS_KEYBOARD
