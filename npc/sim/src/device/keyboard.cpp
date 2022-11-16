@@ -35,7 +35,7 @@ static uint32_t keymap[256] = {};
 static void init_keymap() {
   // keymap[SDL_SCANCODE_KEY_ESCAPE] = _KEY_ESCAPE,
   // keymap[SDL_SCANCODE_KEY_F1] = _KEY_F1
-  // ......
+  // ......#include <klib.h>
   MAP(_KEYS, SDL_KEYMAP)
 }
 
@@ -68,8 +68,6 @@ void send_key(uint8_t scancode, bool is_keydown) {
     key_enqueue(am_scancode);
   }
 }
-
-
 
 static void i8042_data_io_handler(uint32_t offset, uint8_t mask, bool is_write) {
   assert(!is_write);
