@@ -4,13 +4,13 @@
 
 // must define 1 or 0 if use IFDEF...
 // switch
-#define CONFIG_WAVE             1
-#define CONFIG_ITRACE           1
-#define CONFIT_WATCHPOINT       1//depend CONFIG_ITRACE
-#define CONFIG_MEMORY_TRACE     1
-#define CONFIG_FUNCTION_TRACE   1
-#define CONFIG_DIFFTEST         1
-#define STATISTIC               1
+// #define CONFIG_WAVE             1
+// #define CONFIG_ITRACE           1
+// #define CONFIT_WATCHPOINT       1//depend CONFIG_ITRACE
+// #define CONFIG_MEMORY_TRACE     1
+// #define CONFIG_FUNCTION_TRACE   1
+// #define CONFIG_DIFFTEST         1
+// #define STATISTIC               1
 
 
 #define CONFIG_DEVICE           1
