@@ -20,7 +20,7 @@ static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
 // erda or write twice every cycle, only trace once
 #endif
 
-static bool flip = false;
+static bool flip = true;
 
 static void out_of_bound(vaddr_t addr) {
   cpu_exit();
