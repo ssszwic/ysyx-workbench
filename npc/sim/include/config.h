@@ -8,7 +8,7 @@
 // #define CONFIG_MEMORY_TRACE
 // #define CONFIG_FUNCTION_TRACE
 // #define CONFIG_DIFFTEST
-#define STATISTIC
+// #define STATISTIC
 
 
 #define CONFIG_DEVICE
