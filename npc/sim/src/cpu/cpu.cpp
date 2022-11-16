@@ -59,6 +59,7 @@ RegWrite reg_write;
 #ifdef STATISTIC
 static uint64_t g_timer = 0;
 uint64_t g_nr_guest_inst = 0;
+static void statistic();
 #endif
 
 // only for cmd si, print inst to screen
@@ -76,7 +77,7 @@ static void isa_exec_once();
 static void exec_once();
 static void trace_and_difftest();
 static void log_trace(bool print_screen);
-static void statistic();
+
 void difftest_step();
 bool update_wp(char *log);
 uint64_t get_time();
