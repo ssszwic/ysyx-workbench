@@ -118,13 +118,13 @@ void cpu_exec(uint64_t n) {
 
   if(npc_state.state == NPC_END) {
     if (npc_state.halt_ret == 0) {
-      log_write(true, ANSI_FMT("HIT GOOD TRAP at pc = 0x%016\n", ANSI_FG_GREEN), npc_cpu.pc);
+      log_write(true, ANSI_FMT("HIT GOOD TRAP at pc = 0x%016lx\n", ANSI_FG_GREEN), npc_cpu.pc);
       // for return successful, don't print to screen
       log_trace(false);
       statistic();
     }
     else {
-      log_write(true, ANSI_FMT("HIT BAD TRAP at pc = 0x%016\n", ANSI_FG_RED), npc_cpu.pc);
+      log_write(true, ANSI_FMT("HIT BAD TRAP at pc = 0x%016lx\n", ANSI_FG_RED), npc_cpu.pc);
       log_trace(true);
     }
     // stop sim and save wave
