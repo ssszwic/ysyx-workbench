@@ -3,11 +3,11 @@
 
 // switch
 // #define CONFIG_WAVE
-// #define CONFIG_ITRACE
+#define CONFIG_ITRACE
 // #define CONFIT_WATCHPOINT //depend CONFIG_ITRACE
 // #define CONFIG_MEMORY_TRACE
 // #define CONFIG_FUNCTION_TRACE
-// #define CONFIG_DIFFTEST
+#define CONFIG_DIFFTEST
 
 #define CONFIG_DEVICE
 #define CONFIG_HAS_SERIAL
