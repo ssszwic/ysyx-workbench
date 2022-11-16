@@ -117,7 +117,6 @@ void cpu_exec(uint64_t n) {
     exec_once();
     IFDEF(STATISTIC, g_nr_guest_inst++);
     trace_and_difftest();
-    g_nr_guest_inst++;
     // device_update();
     if(npc_state.state != NPC_RUNNING) {break;}
   }
