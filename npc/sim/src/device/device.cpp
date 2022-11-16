@@ -22,7 +22,7 @@ void init_device() {
   #ifdef CONFIG_HAS_TIMER
   init_timer();
   #endif
-  #ifdef CONFIG_I8042_DATA_MMIO
+  #ifdef CONFIG_HAS_KEYBOARD
   init_i8042();
   #endif
   #ifdef CONFIG_HAS_VGA

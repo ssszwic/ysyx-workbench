@@ -54,10 +54,9 @@ void init_monitor(int argc, char *argv[]) {
   // 6. inittial sdb
   init_sdb();
   // 7. initial cpu
+  cpu_init();
   // 8. initial device
   init_device();
-  cpu_init();
-  
 
   // 8. init difftest must be after cpu_init();
 #ifdef CONFIG_DIFFTEST
