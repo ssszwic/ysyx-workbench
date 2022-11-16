@@ -118,13 +118,13 @@ void cpu_exec(uint64_t n) {
 
   if(npc_state.state == NPC_END) {
     if (npc_state.halt_ret == 0) {
-      log_write(true, ANSI_FMT("HIT GOOD TRAP at pc = 0x%'016lx\n", ANSI_FG_GREEN), npc_cpu.pc);
+      log_write(true, ANSI_FMT("HIT GOOD TRAP at pc = 0x%016lx\n", ANSI_FG_GREEN), npc_cpu.pc);
       // for return successful, don't print to screen
       log_trace(false);
       statistic();
     }
     else {
-      log_write(true, ANSI_FMT("HIT BAD TRAP at pc = 0x%'016lx\n", ANSI_FG_RED), npc_cpu.pc);
+      log_write(true, ANSI_FMT("HIT BAD TRAP at pc = 0x%016lx\n", ANSI_FG_RED), npc_cpu.pc);
       log_trace(true);
     }
     // stop sim and save wave
@@ -316,9 +316,9 @@ void cpu_exit(){
 
 static void statistic() {
   log_write(true, ANSI_FMT("statistic:\n", ANSI_FG_BLUE));
-  log_write(true, ANSI_FMT("host time spent = %ld us\n", ANSI_FG_BLUE), g_timer);
-  log_write(true, ANSI_FMT("total guest instructions = %ld\n", ANSI_FG_BLUE), g_nr_guest_inst);
-  if (g_timer > 0) log_write(true, ANSI_FMT("simulation frequency = %ld inst/s\n", ANSI_FG_BLUE), g_nr_guest_inst * 1000000 / g_timer);
+  log_write(true, ANSI_FMT("host time spent = %'ld us\n", ANSI_FG_BLUE), g_timer);
+  log_write(true, ANSI_FMT("total guest instructions = %'ld\n", ANSI_FG_BLUE), g_nr_guest_inst);
+  if (g_timer > 0) log_write(true, ANSI_FMT("simulation frequency = %'ld inst/s\n", ANSI_FG_BLUE), g_nr_guest_inst * 1000000 / g_timer);
 }
 
 
