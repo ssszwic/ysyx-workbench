@@ -5,9 +5,15 @@
 
 extern const char *regs[];
 
+static bool is_skip_ref = false;
 void isa_reg_display(bool *err_list);
 
+void difftest_skip_ref() {
+  is_skip_ref = true;
+}
+
 NEMUCPUState cpu_diff = {};
+
 static void checkregs(NEMUCPUState *ref) {
   bool same = true;
   bool err_list[34] = {};
@@ -73,14 +79,25 @@ void init_difftest(char *ref_so_file, long img_size) {
   // copy img instruction to ref
   ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);
   // copy reg to ref
-  memcpy(&cpu_diff, &npc_cpu.gpr, 32*sizeof(cpu_diff.gpr[0]));
-  cpu_diff.pc = npc_cpu.pc;
+  // memcpy(&cpu_diff, &npc_cpu.gpr, 32*sizeof(cpu_diff.gpr[0]));
+  // cpu_diff.pc = npc_cpu.pc;
 
-  ref_difftest_regcpy(&cpu_diff, DIFFTEST_TO_REF);
+
+  ref_difftest_regcpy(&npc_cpu, DIFFTEST_TO_REF);
 }
 
 void difftest_step() {
   NEMUCPUState ref_r;
+
+  if (is_skip_ref) {
+    // to skip the checking of an instruction, just copy the reg state to reference design
+    // next pc
+    memcpy(&cpu_diff, &npc_cpu.gpr, 32*sizeof(cpu_diff.gpr[0]));
+    cpu_diff.pc = npc_cpu.next_pc;
+    ref_difftest_regcpy(&cpu_diff, DIFFTEST_TO_REF);
+    is_skip_ref = false;
+    return;
+  }
 
   // ref execute once
   ref_difftest_exec(1);

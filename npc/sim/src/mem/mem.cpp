@@ -1,5 +1,6 @@
 #include "mem/mem.h"
 #include "commen.h"
+#include "device/mmio.h"
 
 
 // 128MB for npc
@@ -9,6 +10,7 @@ static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
 uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 uint32_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 void cpu_exit();
+uint64_t get_time();
 
 #ifdef CONFIG_MEMORY_TRACE
 #define MEM_RING_BUF_WIDTH 300
@@ -16,17 +18,9 @@ void cpu_exit();
 static char mem_ring_buf[MEM_RING_BUF_WIDTH][MAX_SINGLE_WIDTH] = {};
 static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
 // erda or write twice every cycle, only trace once
-static bool flip = true;
 #endif
 
-// static uint64_t pmem_read(paddr_t addr, int len) {
-//   uint64_t ret = host_read(guest_to_host(addr), len);
-//   return ret;
-// }
-
-// static void pmem_write(paddr_t addr, int len, uint64_t data) {
-//   host_write(guest_to_host(addr), len, data);
-// }
+static bool flip = false;
 
 static void out_of_bound(vaddr_t addr) {
   cpu_exit();
@@ -47,17 +41,21 @@ extern "C" void inst_pmem_read(long long raddr, long long *rdata) {
 
 extern "C" void pmem_read(long long raddr, long long *rdata) {
   // 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
+  // read second valid every cycle
+  if(!flip) {
+    *rdata = 0;
+    flip = !flip;
+    return ;
+  }
+  flip = !flip;
 
   // memory trace
 #ifdef CONFIG_MEMORY_TRACE
-  if(flip) {
-    char tmp[MAX_SINGLE_WIDTH] = {};
-    memset(mem_ring_buf[mem_ring_ref], ' ', 6);
-    if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
-    sprintf(tmp, "----> read \t0x%016llx\t0x%016llx", raddr, *rdata);
-    strcpy(mem_ring_buf[mem_ring_ref], tmp);
-  }
-  flip = !flip;
+  char tmp[MAX_SINGLE_WIDTH] = {};
+  memset(mem_ring_buf[mem_ring_ref], ' ', 6);
+  if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
+  sprintf(tmp, "----> read \t0x%016llx\t0x%016llx", raddr, *rdata);
+  strcpy(mem_ring_buf[mem_ring_ref], tmp);
 #endif
 
   uint64_t paddr = raddr & ~0x7;
@@ -65,6 +63,12 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
     *rdata = host_read(guest_to_host(paddr), 8);
     return;
   }
+  
+#ifdef CONFIG_DEVICE
+  *rdata = mmio_read(paddr);
+  return;
+#endif
+
   out_of_bound(paddr);
 }
 
@@ -72,17 +76,19 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   // 总是往地址为`waddr & ~0x7ull`的8字节按写掩码`wmask`写入`wdata`
   // `wmask`中每比特表示`wdata`中1个字节的掩码,
   // 如`wmask = 0x3`代表只写入最低2个字节, 内存中的其它字节保持不变
+  if(!flip) {
+    flip = !flip;
+    return ;
+  }
+  flip = !flip;
 
   // memory trace
 #ifdef CONFIG_MEMORY_TRACE
-  if(flip) {
-    char tmp[MAX_SINGLE_WIDTH] = {};
-    memset(mem_ring_buf[mem_ring_ref], ' ', 6);
-    if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
-    sprintf(tmp, "----> write\t0x%016llx\t0x%016llx\t0x%02x", waddr, wdata, wmask);
-    strcpy(mem_ring_buf[mem_ring_ref], tmp);
-  }
-  flip = !flip;
+  char tmp[MAX_SINGLE_WIDTH] = {};
+  memset(mem_ring_buf[mem_ring_ref], ' ', 6);
+  if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
+  sprintf(tmp, "----> write\t0x%016llx\t0x%016llx\t0x%02x", waddr, wdata, wmask);
+  strcpy(mem_ring_buf[mem_ring_ref], tmp);
 #endif
 
   uint32_t paddr = waddr & ~0x7;
@@ -96,6 +102,15 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
     }
     return;
   }
+
+  // device
+#ifdef CONFIG_DEVICE
+  // // write once every cycle
+  mmio_write(paddr, wdata, wmask);
+  // if(flip && waddr == CONFIG_SERIAL_MMIO) {uint8_t ch = uint8_t (wdata); putc(ch, stderr);}
+  return;
+#endif
+
   out_of_bound(paddr);
 }
 
@@ -108,6 +123,7 @@ uint32_t get_inst(vaddr_t paddr) {
   return 0;
 }
 
+// expr
 uint64_t extern_pmem_read(vaddr_t raddr, int len) {
   if (likely(in_pmem(raddr))) {
     return host_read(guest_to_host(raddr), len);
@@ -125,6 +141,7 @@ void log_mem_ring(bool print_screen) {
   }
   log_write(print_screen, ANSI_FMT("memory ring buff.", ANSI_FG_BLUE));
   log_write(print_screen, "\n");
+  log_write(print_screen, ANSI_FMT("      op\taddr\t\t\tdata\t\t\tmask\n", ANSI_FG_BLUE));
   for (int i = 0; i < MEM_RING_BUF_WIDTH; i++) {
     if(mem_ring_buf[i][0] == '\0') break;
     log_write(print_screen, "%s\n", mem_ring_buf[i]);

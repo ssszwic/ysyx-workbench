@@ -25,7 +25,7 @@ static inline uint64_t host_read(void *addr, int len) {
   return 0;
 }
 
-static inline void host_write(void *addr, int len, uint64_t data) {
+static inline void host_write(void *addr, char len, uint64_t data) {
   switch (len) {
     // default intercepting low bits
     case 1: *(uint8_t  *)addr = data; return;
