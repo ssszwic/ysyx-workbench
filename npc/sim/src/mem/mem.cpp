@@ -10,6 +10,7 @@ static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
 uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 uint32_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 void cpu_exit();
+uint64_t get_time();
 
 #ifdef CONFIG_MEMORY_TRACE
 #define MEM_RING_BUF_WIDTH 300
@@ -59,7 +60,8 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
   }
   
 #ifdef CONFIG_DEVICE
-  *rdata = mmio_read(paddr);
+  // *rdata = mmio_read(paddr);
+  if(raddr == CONFIG_TIMER_MMIO) {*rdata = get_time();}
   return;
 #endif
 
@@ -97,8 +99,8 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   // device
 #ifdef CONFIG_DEVICE
   // // write once every cycle
-  if(flip) {mmio_write(paddr, wdata, wmask);}
-  // if(flip && waddr == CONFIG_SERIAL_MMIO) {uint8_t ch = uint8_t (wdata); putc(ch, stderr);}
+  // if(flip) {mmio_write(paddr, wdata, wmask);}
+  if(flip && waddr == CONFIG_SERIAL_MMIO) {uint8_t ch = uint8_t (wdata); putc(ch, stderr);}
   return;
 #endif
 
