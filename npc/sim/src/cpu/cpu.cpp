@@ -77,6 +77,7 @@ static void statistic();
 void difftest_step();
 bool update_wp(char *log);
 uint64_t get_time();
+void device_update();
 
 extern "C" void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 
@@ -110,7 +111,8 @@ void cpu_exec(uint64_t n) {
     exec_once();
     g_nr_guest_inst++;
     trace_and_difftest();
-    if(npc_state.state == NPC_END || npc_state.state == NPC_STOP || npc_state.state == NPC_ABORT) {break;}
+    device_update();
+    if(npc_state.state == NPC_END || npc_state.state == NPC_STOP || npc_state.state == NPC_ABORT || npc_state.state == NPC_QUIT) {break;}
   }
   // end time
   uint64_t timer_end = get_time();
@@ -133,6 +135,11 @@ void cpu_exec(uint64_t n) {
   else if(npc_state.state == NPC_ABORT) {
     log_trace(true);
     // stop sim and save wave
+    cpu_exit();
+  }
+  else if(npc_state.state == NPC_QUIT) {
+    log_trace(true);
+    statistic();
     cpu_exit();
   }
 }
