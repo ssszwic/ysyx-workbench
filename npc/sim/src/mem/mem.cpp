@@ -20,7 +20,7 @@ static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
 // erda or write twice every cycle, only trace once
 #endif
 
-static bool flip = true;
+static bool flip = false;
 
 static void out_of_bound(vaddr_t addr) {
   cpu_exit();
@@ -41,8 +41,9 @@ extern "C" void inst_pmem_read(long long raddr, long long *rdata) {
 
 extern "C" void pmem_read(long long raddr, long long *rdata) {
   // 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
-  if(flip) {
+  if(!flip) {
     *rdata = 0;
+    flip = !flip;
     return ;
   }
   flip = !flip;
