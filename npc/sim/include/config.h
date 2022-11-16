@@ -11,11 +11,11 @@
 // #define STATISTIC
 
 
-// #define CONFIG_DEVICE
-// #define CONFIG_HAS_SERIAL
-// #define CONFIG_HAS_TIMER
-// #define CONFIG_HAS_KEYBOARD
-// #define CONFIG_HAS_VGA
+#define CONFIG_DEVICE
+#define CONFIG_HAS_SERIAL
+#define CONFIG_HAS_TIMER
+#define CONFIG_HAS_KEYBOARD
+#define CONFIG_HAS_VGA
 
 // mem
 #define CONFIG_MSIZE 0x8000000
