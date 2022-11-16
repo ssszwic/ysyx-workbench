@@ -83,6 +83,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
     return ;
   }
   flip = !flip;
+
   // memory trace
 #ifdef CONFIG_MEMORY_TRACE
   char tmp[MAX_SINGLE_WIDTH] = {};
