@@ -63,6 +63,7 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
   *rdata = mmio_read(paddr);
   // if(raddr == CONFIG_TIMER_MMIO) {*rdata = get_time();}
   if(*rdata != 0) {printf("my%llx\n", *rdata);}
+  printf("read once %llx\n", *rdata);
   return;
 #endif
 

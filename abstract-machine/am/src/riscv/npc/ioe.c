@@ -1,6 +1,5 @@
 #include <am.h>
 #include <klib-macros.h>
-#include <klib.h>
 
 void __am_timer_init();
 void __am_timer_rtc(AM_TIMER_RTC_T *);
@@ -34,7 +33,6 @@ bool ioe_init() {
   for (int i = 0; i < LENGTH(lut); i++) {
     if (!lut[i]) lut[i] = fail;
   }
-  printf("666\n");
   __am_timer_init();
   return true;
 }
