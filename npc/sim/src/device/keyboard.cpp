@@ -63,8 +63,8 @@ void send_key(uint8_t scancode, bool is_keydown) {
   if (npc_state.state == NPC_RUNNING && keymap[scancode] != _KEY_NONE) {
     uint32_t am_scancode = keymap[scancode] | (is_keydown ? KEYDOWN_MASK : 0);
     key_enqueue(am_scancode);
+    printf("recive\n");
   }
-  printf("recive\n");
 }
 
 static uint32_t *i8042_data_port_base = NULL;
