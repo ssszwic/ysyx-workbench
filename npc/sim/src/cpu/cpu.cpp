@@ -120,6 +120,7 @@ void cpu_exec(uint64_t n) {
     #endif
     trace_and_difftest();
     // device_update();
+    IFDEF(CONFIG_DEVICE, printf("666"));
     if(npc_state.state == NPC_END || npc_state.state == NPC_STOP || npc_state.state == NPC_ABORT || npc_state.state == NPC_QUIT) {break;}
   }
   // end time
