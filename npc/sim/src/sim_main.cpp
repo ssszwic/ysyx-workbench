@@ -5,6 +5,7 @@ void init_monitor(int, char *[]);
 void sdb_mainloop();
 
 int main(int argc, char *argv[]) {
+  IFDEF(CONFIG_DEVICE, printf("666\n"), printf("777\n"));
   init_monitor(argc, argv);
 
   sdb_mainloop();
