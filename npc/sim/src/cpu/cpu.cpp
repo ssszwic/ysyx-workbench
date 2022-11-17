@@ -119,7 +119,7 @@ void cpu_exec(uint64_t n) {
     gettimeofday(&start, NULL );
     exec_once();
     gettimeofday(&end, NULL );
-    timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec;
+    timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec + timeuse;
     IFDEF(STATISTIC, g_nr_guest_inst++);
     trace_and_difftest();
     IFDEF(CONFIG_DEVICE, device_update());
