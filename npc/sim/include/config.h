@@ -11,7 +11,7 @@
 // #define CONFIG_FUNCTION_TRACE   1
 // #define CONFIG_DIFFTEST         1
 #define STATISTIC               1
-#define PRINT_CPU_TIME          1
+// #define PRINT_CPU_TIME          1
 
 
 #define CONFIG_DEVICE           1
