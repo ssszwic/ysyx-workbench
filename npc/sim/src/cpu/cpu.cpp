@@ -289,8 +289,6 @@ static void isa_exec_once() {
   if(top->io_regWen == 1) {
     npc_cpu.gpr[top->io_regAddr] = top->io_regWData;
   }
-  // $0 always 0
-  npc_cpu.gpr[0] = 0;
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
@@ -301,18 +299,14 @@ static void isa_exec_once() {
 
 static void eval_and_wave(){
   top->eval();
-  #ifdef CONFIG_WAVE
-  tfp->dump(contextp->time());//
-  #endif
+  IFDEF(CONFIG_WAVE, tfp->dump(contextp->time()));
 }
 
 void cpu_exit(){
   #ifdef CONFIG_WAVE
   tfp->dump(contextp->time());//
-  #endif
-  #ifdef CONFIG_WAVE
-    log_write(true, "save wave successful!\n");
-    tfp->close();
+  log_write(true, "save wave successful!\n");
+  tfp->close();
   #endif
 }
 
