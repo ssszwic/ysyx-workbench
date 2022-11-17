@@ -75,7 +75,7 @@ static bool cpu_state_init = false;
 static void eval_and_wave();
 static void isa_exec_once();
 static void exec_once();
-static void trace_and_difftest();
+// static void trace_and_difftest();
 static void log_trace(bool print_screen);
 
 void difftest_step();
