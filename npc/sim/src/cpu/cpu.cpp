@@ -2,6 +2,8 @@
 #include <elf.h>
 #include <sys/time.h>
 
+extern long timeuse_mem;
+
 #define RESET_TIME 21
 #define SIM_TIME 100
 
@@ -63,8 +65,8 @@ uint64_t g_nr_guest_inst = 0;
 static void statistic();
 #endif
 
-struct timeval start,end;
-long timeuse = 0;
+static struct timeval start,end;
+static long timeuse = 0;
 
 // only for cmd si, print inst to screen
 bool screen_display_inst = false;
@@ -126,6 +128,7 @@ void cpu_exec(uint64_t n) {
     if(npc_state.state != NPC_RUNNING) {break;}
   }
   printf("time=%ld\n",timeuse);
+  printf("mem time=%ld\n",timeuse_mem);
   // end time
   #ifdef STATISTIC
   uint64_t timer_end = get_time();
