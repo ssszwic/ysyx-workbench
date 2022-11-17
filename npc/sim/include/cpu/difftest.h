@@ -3,6 +3,8 @@
 
 #include "commen.h"
 
+#ifdef DIFFTEST
+
 enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
 
 extern void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction);
@@ -17,5 +19,7 @@ typedef struct {
   word_t gpr[32];
   vaddr_t pc;
 } NEMUCPUState;
+
+#endif
 
 #endif
