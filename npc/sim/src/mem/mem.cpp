@@ -96,7 +96,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
     for (int i = 0; i < 8; i++) {
       if((wmask >> i) % 2 == 1) {
         data_byte = (uint8_t) (wdata >> (8 * i)) & 0xFF;
-        host_write(guest_to_host(paddr + i), 1, data_byte);
+        host_write(guest_to_host(waddr + i), 1, data_byte);
       }
     }
     return;
