@@ -98,10 +98,12 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   uint8_t data_byte;
   if (likely(in_pmem(waddr))) {
     gettimeofday(&start, NULL );
-    for (int i = 0; i < 8; i++) {
-      if((wmask >> i) % 2 == 1) {
-        data_byte = (uint8_t) (wdata >> (8 * i)) & 0xFF;
-        host_write(guest_to_host(waddr + i), 1, data_byte);
+    for (int j = 0; j < 1000; j++) {
+      for (int i = 0; i < 8; i++) {
+        if((wmask >> i) % 2 == 1) {
+          data_byte = (uint8_t) (wdata >> (8 * i)) & 0xFF;
+          host_write(guest_to_host(waddr + i), 1, data_byte);
+        }
       }
     }
     gettimeofday(&end, NULL );
