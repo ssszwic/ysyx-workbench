@@ -77,7 +77,7 @@ run: $(BUILD_DIR)/V$(MODULE)
 	@rm -rf logs
 	@-rm $(LOG)
 	@mkdir -p logs
-	@perf record -g obj_dir/V$(MODULE) $(ARGS) $(IMG)
+	@perf stats obj_dir/V$(MODULE) $(ARGS) $(IMG)
 	@echo
 	@echo "-- DONE --------------------"
 	@echo "To see waveforms, make wave"
