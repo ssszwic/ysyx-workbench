@@ -32,7 +32,7 @@ VERILATOR_FLAGS += --coverage
 # Add this trace to get a backtrace in gdb
 #VERILATOR_FLAGS += --gdbbt
 VERILATOR_FLAGS += --threads 2
-VERILATOR_FLAGS += -O3
+
 
 WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/obj_dir
