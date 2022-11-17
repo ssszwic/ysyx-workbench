@@ -241,26 +241,6 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu   , R, R(dest) = src1 % src2);
   // remainder unsigned word
   INSTPAT("0000001 ????? ????? 111 ????? 01110 11", remuw  , R, R(dest) = SEXT((uint32_t) BITS(src1, 31, 0) % (uint32_t) BITS(src2, 31, 0), 32));
-  
-  
-  
-  
-  
-  
-  
-  
-
-  
-  
-  
-
-  
-  
-  
-
-  
-
-  
 
   /*----------------------------------------- N -----------------------------------------*/
   // environment bread (I type)   $a0 is status?
