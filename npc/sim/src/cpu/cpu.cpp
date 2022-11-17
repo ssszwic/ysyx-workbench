@@ -1,5 +1,6 @@
 #include "cpu/cpu.h"
 #include <elf.h>
+#include <sys/time.h>
 
 #define RESET_TIME 21
 #define SIM_TIME 100
@@ -56,6 +57,17 @@ static VerilatedContext* contextp = NULL;
 RegWrite reg_write;
 #endif
 
+#ifdef STATISTIC
+static uint64_t g_timer = 0;
+uint64_t g_nr_guest_inst = 0;
+static void statistic();
+#endif
+
+#ifdef PRINT_CPU_TIME
+static struct timeval start,end;
+static long timeuse = 0;
+#endif
+
 // only for cmd si, print inst to screen
 bool screen_display_inst = false;
 NPCState npc_state = { .state = NPC_STOP };
@@ -64,8 +76,6 @@ static uint64_t *rtl_pc;
 static uint64_t *rtl_gpr;
 // Ensure cpu initialization is complete
 static bool cpu_state_init = false;
-static uint64_t g_timer = 0;
-uint64_t g_nr_guest_inst = 0;
 
 // current file function
 static void eval_and_wave();
@@ -73,7 +83,7 @@ static void isa_exec_once();
 static void exec_once();
 static void trace_and_difftest();
 static void log_trace(bool print_screen);
-static void statistic();
+
 void difftest_step();
 bool update_wp(char *log);
 uint64_t get_time();
@@ -105,25 +115,32 @@ void cpu_exec(uint64_t n) {
 
   npc_state.state = NPC_RUNNING;
 
-  //start time
-  uint64_t timer_start = get_time();
+  IFDEF(STATISTIC, uint64_t timer_start = get_time());
+
   for(int i = 0; i < n; i++) {
+
+    IFDEF(PRINT_CPU_TIME, gettimeofday(&start, NULL ));
     exec_once();
-    g_nr_guest_inst++;
+    IFDEF(PRINT_CPU_TIME, gettimeofday(&end, NULL ));
+    IFDEF(PRINT_CPU_TIME, timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec + timeuse);
+    IFDEF(STATISTIC, g_nr_guest_inst++);
     trace_and_difftest();
-    device_update();
-    if(npc_state.state == NPC_END || npc_state.state == NPC_STOP || npc_state.state == NPC_ABORT || npc_state.state == NPC_QUIT) {break;}
+    IFDEF(CONFIG_DEVICE, device_update());
+    if(npc_state.state != NPC_RUNNING) {break;}
   }
+  IFDEF(PRINT_CPU_TIME, printf("time=%ldus\n",timeuse));
   // end time
+  #ifdef STATISTIC
   uint64_t timer_end = get_time();
   g_timer += timer_end - timer_start;
+  #endif
 
   if(npc_state.state == NPC_END) {
     if (npc_state.halt_ret == 0) {
       log_write(true, ANSI_FMT("HIT GOOD TRAP at pc = 0x%016lx\n", ANSI_FG_GREEN), npc_cpu.pc);
       // for return successful, don't print to screen
       log_trace(false);
-      statistic();
+      IFDEF(STATISTIC, statistic());
     }
     else {
       log_write(true, ANSI_FMT("HIT BAD TRAP at pc = 0x%016lx\n", ANSI_FG_RED), npc_cpu.pc);
@@ -139,24 +156,15 @@ void cpu_exec(uint64_t n) {
   }
   else if(npc_state.state == NPC_QUIT) {
     log_trace(true);
-    statistic();
+    IFDEF(STATISTIC, statistic());
     cpu_exit();
   }
 }
 
 static void log_trace(bool print_screen) {
-  #ifdef CONFIG_ITRACE
-    // only print to log
-    log_inst_ring(print_screen);
-  #endif
-  #ifdef CONFIG_MEMORY_TRACE
-    // only print to log
-    log_mem_ring(print_screen);
-  #endif
-  #ifdef CONFIG_FUNCTION_TRACE
-    // only print to log
-    log_func_ring(print_screen);
-  #endif
+  IFDEF(CONFIG_ITRACE, log_inst_ring(print_screen));
+  IFDEF(CONFIG_MEMORY_TRACE, log_mem_ring(print_screen));
+  IFDEF(CONFIG_FUNCTION_TRACE, log_func_ring(print_screen));
 }
 
 void exec_once() {
@@ -226,9 +234,7 @@ void trace_and_difftest() {
   }
 #endif
 // difftest
-#ifdef CONFIG_DIFFTEST
-  difftest_step();
-#endif
+  IFDEF(CONFIG_DIFFTEST, difftest_step());
 }
 
 void cpu_init() {
@@ -294,8 +300,6 @@ static void isa_exec_once() {
   if(top->io_regWen == 1) {
     npc_cpu.gpr[top->io_regAddr] = top->io_regWData;
   }
-  // $0 always 0
-  npc_cpu.gpr[0] = 0;
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
@@ -306,28 +310,25 @@ static void isa_exec_once() {
 
 static void eval_and_wave(){
   top->eval();
-  #ifdef CONFIG_WAVE
-  tfp->dump(contextp->time());//
-  #endif
+  IFDEF(CONFIG_WAVE, tfp->dump(contextp->time()));
 }
 
 void cpu_exit(){
   #ifdef CONFIG_WAVE
   tfp->dump(contextp->time());//
-  #endif
-  #ifdef CONFIG_WAVE
-    log_write(true, "save wave successful!\n");
-    tfp->close();
+  log_write(true, "save wave successful!\n");
+  tfp->close();
   #endif
 }
 
+#ifdef STATISTIC
 static void statistic() {
   log_write(true, ANSI_FMT("statistic:\n", ANSI_FG_BLUE));
   log_write(true, ANSI_FMT("host time spent = %ld us\n", ANSI_FG_BLUE), g_timer);
   log_write(true, ANSI_FMT("total guest instructions = %ld\n", ANSI_FG_BLUE), g_nr_guest_inst);
   if (g_timer > 0) log_write(true, ANSI_FMT("simulation frequency = %ld inst/s\n", ANSI_FG_BLUE), g_nr_guest_inst * 1000000 / g_timer);
 }
-
+#endif
 
 #ifdef CONFIG_ITRACE
 void log_inst_ring(bool print_screen) {

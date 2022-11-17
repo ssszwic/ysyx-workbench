@@ -16,7 +16,7 @@ endif
 # Generate C++ in executable form
 VERILATOR_FLAGS += -cc --exe
 # Generate makefile dependencies (not shown as complicates the Makefile)
-#VERILATOR_FLAGS += -MMD
+VERILATOR_FLAGS += -MMD
 # Optimize
 VERILATOR_FLAGS += -Os -x-assign 0
 # Warn abount lint issues; may not want this on less solid designs
@@ -31,6 +31,7 @@ VERILATOR_FLAGS += --coverage
 #VERILATOR_FLAGS += --debugINPUT_VC
 # Add this trace to get a backtrace in gdb
 #VERILATOR_FLAGS += --gdbbt
+VERILATOR_FLAGS += --threads 2
 
 WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/obj_dir
@@ -46,7 +47,7 @@ VERILATOR_INPUT := $(DESIGN_SRC) $(SRCS)
 
 # NPCFLAGS
 LOG := $(WORK_DIR)/sim_log.txt
-DIFFSET_SO := /home/ssszw/Work/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so
+DIFFSET_SO := /home/ssszw/Work/ysyx-workbench/npc/sim/share/riscv64-nemu-interpreter-so
 override ARGS += --log=$(LOG)
 override ARGS += --diff=$(DIFFSET_SO)
 
@@ -60,7 +61,8 @@ CFLAGS += -Werror
 # config itrace llvm
 # CFLAGS += $(shell llvm-config --cxxflags) -fPIE
 CFLAGS += -O2 -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
-LDFLAGS += $(shell llvm-config --libs) -lreadline -ldl -pie $(DIFFSET_SO) -lSDL2
+LDFLAGS += $(shell llvm-config --libs) -lreadline -ldl -pie -lSDL2
+LDFLAGS += $(DIFFSET_SO)
 
 VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
 
@@ -97,7 +99,7 @@ gdb: $(BUILD_DIR)/V$(MODULE)
 	@echo
 
 # bulid
-$(BUILD_DIR)/V$(MODULE): $(VERILATOR_INPUT) $(INCLUDES)
+$(BUILD_DIR)/V$(MODULE): $(VERILATOR_INPUT) $(INCLUDES) $(WORK_DIR)/Makefile
 	@-rm -r $(BUILD_DIR)
 	@echo
 	@echo "-- VERILATE ----------------"

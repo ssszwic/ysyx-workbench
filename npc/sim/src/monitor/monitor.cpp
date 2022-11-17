@@ -10,12 +10,11 @@ static char *log_file = NULL;
 static char *diff_file = NULL;
 
 static const uint32_t img [] = {
-  // 0x00000297,  // auipc t0,0
-  // 0x0002b823,  // sd  zero,16(t0)
-  // 0x0102b503,  // ld  a0,16(t0)
-  // 0x00100073,  // ebreak (used as nemu_trap)
-  // 0xdeadbeef,  // some data
-  0xfe65f4e3, // bgeu a1, t1, 0x8002b2f0
+  0x00000297,  // auipc t0,0
+  0x0002b823,  // sd  zero,16(t0)
+  0x0102b503,  // ld  a0,16(t0)
+  0x00100073,  // ebreak (used as nemu_trap)
+  0xdeadbeef,  // some data
 };
 
 static int parse_args(int argc, char *argv[]);
@@ -54,15 +53,17 @@ void init_monitor(int argc, char *argv[]) {
 
   // 6. inittial sdb
   init_sdb();
+
   // 7. initial cpu
   cpu_init();
+
   // 8. initial device
-  init_device();
+  IFDEF(CONFIG_DEVICE, init_device());
 
   // 8. init difftest must be after cpu_init();
 #ifdef CONFIG_DIFFTEST
   if(diff_file == NULL) {
-    printf("there is no difftest file input!\n");
+    log_write(true, ANSI_FMT("the difftest is open but no so file.\n", ANSI_FG_YELLOW));
     assert(0);
   }
   init_difftest(diff_file, image_size);

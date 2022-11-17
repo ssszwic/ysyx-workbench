@@ -3,6 +3,8 @@
 #include "cpu/difftest.h"
 #include <dlfcn.h>
 
+#ifdef DIFFTEST
+
 extern const char *regs[];
 
 static bool is_skip_ref = false;
@@ -105,4 +107,6 @@ void difftest_step() {
 
   checkregs(&ref_r);
 }
+
+#endif
 

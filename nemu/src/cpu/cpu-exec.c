@@ -17,6 +17,7 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#include <sys/time.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -147,18 +148,9 @@ void cpu_exec(uint64_t n) {
 
     case NEMU_END: case NEMU_ABORT:
       if (nemu_state.halt_ret != 0) {
-#ifdef CONFIG_MEMORY_TRACE
-        memory_trace_print();
-#endif
-
-#ifdef CONFIG_FUNCTION_TRACE
-        // print ring buff
-        print_func_log();
-#endif
-
-#ifdef CONFIG_DEVICE_TRACE
-        device_trace_print();
-#endif
+        IFDEF(CONFIG_MEMORY_TRACE, memory_trace_print());
+        IFDEF(CONFIG_FUNCTION_TRACE, print_func_log());
+        IFDEF(CONFIG_DEVICE_TRACE, device_trace_print());
 
 #ifdef CONFIG_ITRACE_COND
         printf("\nring buff\n");

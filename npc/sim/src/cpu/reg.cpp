@@ -13,12 +13,14 @@ void isa_reg_display(bool *err_list) {
   // pc reg
   printf(ANSI_FMT("CPU register state: \n", ANSI_FG_BLUE));
   printf("pc:  0x%016lx\t  ", npc_cpu.pc);
+  #ifdef DIFFTEST
   if(err_list[33]) {
     printf(ANSI_FMT("npc: 0x%016lx\n", ANSI_FG_RED), npc_cpu.next_pc);
   }
   else {
     printf("npc: 0x%016lx\n", npc_cpu.next_pc);
   }
+  #endif
   
   // normal 32 reg
   for (int i = 0; i < 8; i++) {

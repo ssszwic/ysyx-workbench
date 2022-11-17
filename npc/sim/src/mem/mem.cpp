@@ -2,7 +2,6 @@
 #include "commen.h"
 #include "device/mmio.h"
 
-
 // 128MB for npc
 static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
 
@@ -60,7 +59,8 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
 
   uint64_t paddr = raddr & ~0x7;
   if (likely(in_pmem(paddr))) {
-    *rdata = host_read(guest_to_host(paddr), 8);
+    // *rdata = host_read(guest_to_host(paddr), 8);
+    *rdata = *(uint64_t *) guest_to_host(paddr);
     return;
   }
   
@@ -91,13 +91,12 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   strcpy(mem_ring_buf[mem_ring_ref], tmp);
 #endif
 
-  uint32_t paddr = waddr & ~0x7;
   uint8_t data_byte;
-  if (likely(in_pmem(paddr))) {
+  if (likely(in_pmem(waddr))) {
     for (int i = 0; i < 8; i++) {
       if((wmask >> i) % 2 == 1) {
         data_byte = (uint8_t) (wdata >> (8 * i)) & 0xFF;
-        host_write(guest_to_host(paddr + i), 1, data_byte);
+        host_write(guest_to_host(waddr + i), 1, data_byte);
       }
     }
     return;
@@ -106,12 +105,12 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   // device
 #ifdef CONFIG_DEVICE
   // // write once every cycle
-  mmio_write(paddr, wdata, wmask);
-  // if(flip && waddr == CONFIG_SERIAL_MMIO) {uint8_t ch = uint8_t (wdata); putc(ch, stderr);}
+  mmio_write(waddr, wdata, wmask);
+  // if(waddr == CONFIG_SERIAL_MMIO) {uint8_t ch = uint8_t (wdata); putc(ch, stderr);}
   return;
 #endif
 
-  out_of_bound(paddr);
+  out_of_bound(waddr);
 }
 
 uint32_t get_inst(vaddr_t paddr) {
