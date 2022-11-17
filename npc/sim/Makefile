@@ -46,7 +46,7 @@ VERILATOR_INPUT := $(DESIGN_SRC) $(SRCS)
 
 # NPCFLAGS
 LOG := $(WORK_DIR)/sim_log.txt
-DIFFSET_SO := /home/ssszw/Work/ysyx-workbench/npc/sim/share/riscv64-nemu-interpreter-so
+# DIFFSET_SO := /home/ssszw/Work/ysyx-workbench/npc/sim/share/riscv64-nemu-interpreter-so
 override ARGS += --log=$(LOG)
 override ARGS += --diff=$(DIFFSET_SO)
 
