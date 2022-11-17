@@ -22,7 +22,7 @@ VERILATOR_FLAGS += -Os -x-assign 0
 # Warn abount lint issues; may not want this on less solid designs
 # VERILATOR_FLAGS += -Wall
 # Make waveforms
-VERILATOR_FLAGS += --trace
+# VERILATOR_FLAGS += --trace
 # Check SystemVerilog assertions
 VERILATOR_FLAGS += --assert
 # Generate coverage analysis
@@ -59,7 +59,7 @@ CFLAGS += -Wall -g
 CFLAGS += -Werror
 # config itrace llvm
 # CFLAGS += $(shell llvm-config --cxxflags) -fPIE
-CFLAGS += -O2 -pg -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
+CFLAGS += -O2 -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
 LDFLAGS += $(shell llvm-config --libs) -lreadline -ldl -pie $(DIFFSET_SO) -lSDL2
 
 VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
