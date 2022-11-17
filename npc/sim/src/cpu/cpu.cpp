@@ -125,7 +125,7 @@ void cpu_exec(uint64_t n) {
     IFDEF(PRINT_CPU_TIME, timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec + timeuse);
     IFDEF(STATISTIC, g_nr_guest_inst++);
     trace_and_difftest();
-    IFDEF(CONFIG_DEVICE, device_update());
+    // IFDEF(CONFIG_DEVICE, device_update());
     if(npc_state.state != NPC_RUNNING) {break;}
   }
   IFDEF(PRINT_CPU_TIME, printf("time=%ldus\n",timeuse));
