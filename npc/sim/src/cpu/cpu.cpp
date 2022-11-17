@@ -289,7 +289,7 @@ static void isa_exec_once() {
 
   top->clock = !top->clock;
   eval_and_wave();
-  contextp->timeInc(1);
+  // contextp->timeInc(1);
 
   // update reg and pc, gpr(regfiles) will not update until next cycle, so update by io_regWen
   npc_cpu.pc = *rtl_pc;
