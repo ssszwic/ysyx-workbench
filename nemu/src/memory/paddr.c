@@ -17,6 +17,7 @@
 #include <memory/paddr.h>
 #include <device/mmio.h>
 #include <isa.h>
+#include <sys/time.h>
 
 #if   defined(CONFIG_PMEM_MALLOC)
 static uint8_t *pmem = NULL;
@@ -25,6 +26,8 @@ static uint8_t *pmem = NULL;
 // all 128MB
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 #endif
+
+struct timeval start,end;
 
 // memory trace
 #ifdef CONFIG_MEMORY_TRACE
@@ -90,7 +93,16 @@ void paddr_write(paddr_t addr, int len, word_t data) {
   sprintf(tmp, "----> write\t" FMT_PADDR "\t%02d", addr, len);
   strcpy(m_ring_buf[m_ring_ref], tmp);
 #endif
-  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
+  if (likely(in_pmem(addr))) { 
+    gettimeofday(&start, NULL );
+    for (int j = 0; j < 1000000; j++) {
+      pmem_write(addr, len, data); 
+    }
+    gettimeofday(&end, NULL );
+    long timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec;
+    printf("time=%f\n",timeuse /1000000.0);
+    return; 
+  }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
 }
