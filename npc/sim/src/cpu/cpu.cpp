@@ -276,19 +276,19 @@ static void isa_exec_once() {
     cpu_state_init = true;
   }
   // update inst
-  // eval_and_wave();
-  // contextp->timeInc(1);
+  eval_and_wave();
+  contextp->timeInc(1);
 
   top->clock = !top->clock;
   eval_and_wave();
   contextp->timeInc(1);
 
   // update reg and pc, gpr(regfiles) will not update until next cycle, so update by io_regWen
-  npc_cpu.pc = *rtl_pc;
-  npc_cpu.next_pc = top->io_nextPC;
-  if(top->io_regWen == 1) {
-    npc_cpu.gpr[top->io_regAddr] = top->io_regWData;
-  }
+  // npc_cpu.pc = *rtl_pc;
+  // npc_cpu.next_pc = top->io_nextPC;
+  // if(top->io_regWen == 1) {
+  //   npc_cpu.gpr[top->io_regAddr] = top->io_regWData;
+  // }
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
