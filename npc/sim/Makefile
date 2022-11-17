@@ -31,7 +31,6 @@ VERILATOR_FLAGS += --coverage
 #VERILATOR_FLAGS += --debugINPUT_VC
 # Add this trace to get a backtrace in gdb
 #VERILATOR_FLAGS += --gdbbt
-VERILATOR_FLAGS += --threads 4
 
 WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/obj_dir
@@ -49,7 +48,7 @@ VERILATOR_INPUT := $(DESIGN_SRC) $(SRCS)
 LOG := $(WORK_DIR)/sim_log.txt
 DIFFSET_SO := /home/ssszw/Work/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so
 override ARGS += --log=$(LOG)
-override ARGS += --diff=$(DIFFSET_SO)
+# override ARGS += --diff=$(DIFFSET_SO)
 
 
 # CXX FLAGS
