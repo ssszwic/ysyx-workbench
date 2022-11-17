@@ -284,11 +284,13 @@ static void isa_exec_once() {
     cpu_state_init = true;
   }
   // update inst
-  eval_and_wave();
+  // eval_and_wave();
+  top->eval();
+  IFDEF(CONFIG_WAVE, tfp->dump(contextp->time()));
   contextp->timeInc(1);
 
   top->clock = !top->clock;
-  // eval_and_wave();
+  eval_and_wave();
   contextp->timeInc(1);
 
   // update reg and pc, gpr(regfiles) will not update until next cycle, so update by io_regWen
