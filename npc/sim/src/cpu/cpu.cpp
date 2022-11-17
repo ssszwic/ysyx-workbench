@@ -285,7 +285,7 @@ static void isa_exec_once() {
   }
   // update inst
   eval_and_wave();
-  contextp->timeInc(1);
+  // contextp->timeInc(1);
 
   top->clock = !top->clock;
   eval_and_wave();
