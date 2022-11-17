@@ -109,15 +109,13 @@ void cpu_exec(uint64_t n) {
 
   npc_state.state = NPC_RUNNING;
 
-  #ifdef STATISTIC
-  //start time
-  uint64_t timer_start = get_time();
-  #endif
+  IFDEF(STATISTIC, uint64_t timer_start = get_time());
+
   for(int i = 0; i < n; i++) {
     exec_once();
     IFDEF(STATISTIC, g_nr_guest_inst++);
     trace_and_difftest();
-    // device_update();
+    IFDEF(CONFIG_DEVICE, device_update());
     if(npc_state.state != NPC_RUNNING) {break;}
   }
   // end time
@@ -131,9 +129,7 @@ void cpu_exec(uint64_t n) {
       log_write(true, ANSI_FMT("HIT GOOD TRAP at pc = 0x%016lx\n", ANSI_FG_GREEN), npc_cpu.pc);
       // for return successful, don't print to screen
       log_trace(false);
-      #ifdef STATISTIC
-      statistic();
-      #endif
+      IFDEF(STATISTIC, statistic());
     }
     else {
       log_write(true, ANSI_FMT("HIT BAD TRAP at pc = 0x%016lx\n", ANSI_FG_RED), npc_cpu.pc);
@@ -149,26 +145,15 @@ void cpu_exec(uint64_t n) {
   }
   else if(npc_state.state == NPC_QUIT) {
     log_trace(true);
-    #ifdef STATISTIC
-    statistic();
-    #endif
+    IFDEF(STATISTIC, statistic());
     cpu_exit();
   }
 }
 
 static void log_trace(bool print_screen) {
-  #ifdef CONFIG_ITRACE
-    // only print to log
-    log_inst_ring(print_screen);
-  #endif
-  #ifdef CONFIG_MEMORY_TRACE
-    // only print to log
-    log_mem_ring(print_screen);
-  #endif
-  #ifdef CONFIG_FUNCTION_TRACE
-    // only print to log
-    log_func_ring(print_screen);
-  #endif
+  IFDEF(CONFIG_ITRACE, log_inst_ring(print_screen));
+  IFDEF(CONFIG_MEMORY_TRACE, log_mem_ring(print_screen));
+  IFDEF(CONFIG_FUNCTION_TRACE, log_func_ring(print_screen));
 }
 
 void exec_once() {
@@ -238,9 +223,7 @@ void trace_and_difftest() {
   }
 #endif
 // difftest
-#ifdef CONFIG_DIFFTEST
-  difftest_step();
-#endif
+  IFDEF(CONFIG_DIFFTEST, difftest_step());
 }
 
 void cpu_init() {

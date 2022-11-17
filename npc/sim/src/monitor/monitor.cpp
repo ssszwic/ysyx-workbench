@@ -53,15 +53,17 @@ void init_monitor(int argc, char *argv[]) {
 
   // 6. inittial sdb
   init_sdb();
+
   // 7. initial cpu
   cpu_init();
+
   // 8. initial device
-  init_device();
+  IFDEF(CONFIG_DEVICE, init_device());
 
   // 8. init difftest must be after cpu_init();
 #ifdef CONFIG_DIFFTEST
   if(diff_file == NULL) {
-    printf("there is no difftest file input!\n");
+    log_write(true, ANSI_FMT("the difftest is open but no so file.\n", ANSI_FG_YELLOW));
     assert(0);
   }
   init_difftest(diff_file, image_size);
