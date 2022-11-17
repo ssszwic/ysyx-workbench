@@ -60,7 +60,8 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
 
   uint64_t paddr = raddr & ~0x7;
   if (likely(in_pmem(paddr))) {
-    *rdata = host_read(guest_to_host(paddr), 8);
+    // *rdata = host_read(guest_to_host(paddr), 8);
+    *rdata = *(uint64_t *) guest_to_host(paddr);
     return;
   }
   
