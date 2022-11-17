@@ -38,10 +38,6 @@ static char ring_buf[RING_BUF_WIDTH][100] = {};
 static int ring_ref = RING_BUF_WIDTH - 1;
 #endif
 
-
-struct timeval start,end;
-long timeuse = 0;
-
 void device_update();
 bool update_wp(char *log, bool log_flag);
 void memory_trace_print();
@@ -108,18 +104,12 @@ static void exec_once(Decode *s, vaddr_t pc) {
 static void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --) {
-    gettimeofday(&start, NULL );
     exec_once(&s, cpu.pc);
-    gettimeofday(&end, NULL );
-    timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec + timeuse;
-    
-
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
-  printf("time=%ld\n",timeuse);
 }
 
 static void statistic() {
