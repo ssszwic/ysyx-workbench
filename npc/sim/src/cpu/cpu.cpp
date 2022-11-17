@@ -1,5 +1,6 @@
 #include "cpu/cpu.h"
 #include <elf.h>
+#include <sys/time.h>
 
 #define RESET_TIME 21
 #define SIM_TIME 100
@@ -62,6 +63,8 @@ uint64_t g_nr_guest_inst = 0;
 static void statistic();
 #endif
 
+struct timeval start,end;
+
 // only for cmd si, print inst to screen
 bool screen_display_inst = false;
 NPCState npc_state = { .state = NPC_STOP };
@@ -112,7 +115,11 @@ void cpu_exec(uint64_t n) {
   IFDEF(STATISTIC, uint64_t timer_start = get_time());
 
   for(int i = 0; i < n; i++) {
+    gettimeofday(&start, NULL );
     exec_once();
+    gettimeofday(&end, NULL );
+    long timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec;
+    printf("time=%ld\n",timeuse);
     IFDEF(STATISTIC, g_nr_guest_inst++);
     trace_and_difftest();
     IFDEF(CONFIG_DEVICE, device_update());
