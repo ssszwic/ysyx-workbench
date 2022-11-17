@@ -64,6 +64,7 @@ static void statistic();
 #endif
 
 struct timeval start,end;
+long timeuse = 0;
 
 // only for cmd si, print inst to screen
 bool screen_display_inst = false;
@@ -118,13 +119,13 @@ void cpu_exec(uint64_t n) {
     gettimeofday(&start, NULL );
     exec_once();
     gettimeofday(&end, NULL );
-    long timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec;
-    printf("time=%ld\n",timeuse);
+    timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec;
     IFDEF(STATISTIC, g_nr_guest_inst++);
     trace_and_difftest();
     IFDEF(CONFIG_DEVICE, device_update());
     if(npc_state.state != NPC_RUNNING) {break;}
   }
+  printf("time=%ld\n",timeuse);
   // end time
   #ifdef STATISTIC
   uint64_t timer_end = get_time();
