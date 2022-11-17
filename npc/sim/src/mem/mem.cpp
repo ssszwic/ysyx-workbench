@@ -110,7 +110,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
   return;
 #endif
 
-  out_of_bound(paddr);
+  out_of_bound(waddr);
 }
 
 uint32_t get_inst(vaddr_t paddr) {
