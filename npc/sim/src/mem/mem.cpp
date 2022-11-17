@@ -1,7 +1,6 @@
 #include "mem/mem.h"
 #include "commen.h"
 #include "device/mmio.h"
-#include <sys/time.h>
 
 
 // 128MB for npc
@@ -20,8 +19,6 @@ static char mem_ring_buf[MEM_RING_BUF_WIDTH][MAX_SINGLE_WIDTH] = {};
 static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
 // erda or write twice every cycle, only trace once
 #endif
-
-struct timeval start,end;
 
 static bool flip = false;
 
@@ -97,18 +94,12 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
 
   uint8_t data_byte;
   if (likely(in_pmem(waddr))) {
-    gettimeofday(&start, NULL );
-    for (int j = 0; j < 1000000; j++) {
-      for (int i = 0; i < 8; i++) {
-        if((wmask >> i) % 2 == 1) {
-          data_byte = (uint8_t) (wdata >> (8 * i)) & 0xFF;
-          host_write(guest_to_host(waddr + i), 1, data_byte);
-        }
+    for (int i = 0; i < 8; i++) {
+      if((wmask >> i) % 2 == 1) {
+        data_byte = (uint8_t) (wdata >> (8 * i)) & 0xFF;
+        host_write(guest_to_host(waddr + i), 1, data_byte);
       }
     }
-    gettimeofday(&end, NULL );
-    long timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec;
-    printf("time=%f\n",timeuse /1000000.0);
     return;
   }
 
