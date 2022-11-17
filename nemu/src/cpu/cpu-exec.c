@@ -72,11 +72,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
-  
-  
   isa_exec_once(s);
-  
-
   cpu.pc = s->dnpc; // pc move after exec
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
@@ -152,18 +148,9 @@ void cpu_exec(uint64_t n) {
 
     case NEMU_END: case NEMU_ABORT:
       if (nemu_state.halt_ret != 0) {
-#ifdef CONFIG_MEMORY_TRACE
-        memory_trace_print();
-#endif
-
-#ifdef CONFIG_FUNCTION_TRACE
-        // print ring buff
-        print_func_log();
-#endif
-
-#ifdef CONFIG_DEVICE_TRACE
-        device_trace_print();
-#endif
+        IFDEF(CONFIG_MEMORY_TRACE, memory_trace_print());
+        IFDEF(CONFIG_FUNCTION_TRACE, print_func_log());
+        IFDEF(CONFIG_DEVICE_TRACE, device_trace_print());
 
 #ifdef CONFIG_ITRACE_COND
         printf("\nring buff\n");
