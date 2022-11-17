@@ -2,8 +2,6 @@
 #include <elf.h>
 #include <sys/time.h>
 
-extern long timeuse_mem;
-
 #define RESET_TIME 21
 #define SIM_TIME 100
 
@@ -128,7 +126,6 @@ void cpu_exec(uint64_t n) {
     if(npc_state.state != NPC_RUNNING) {break;}
   }
   printf("time=%ld\n",timeuse);
-  printf("mem time=%ld\n",timeuse_mem);
   // end time
   #ifdef STATISTIC
   uint64_t timer_end = get_time();

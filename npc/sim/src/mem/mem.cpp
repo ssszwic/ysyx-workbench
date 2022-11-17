@@ -1,11 +1,6 @@
 #include "mem/mem.h"
 #include "commen.h"
 #include "device/mmio.h"
-#include <sys/time.h>
-
-
-static struct timeval start,end;
-long timeuse_mem = 0;
 
 // 128MB for npc
 static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
@@ -98,15 +93,12 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
 
   uint8_t data_byte;
   if (likely(in_pmem(waddr))) {
-    gettimeofday(&start, NULL );
     for (int i = 0; i < 8; i++) {
       if((wmask >> i) % 2 == 1) {
         data_byte = (uint8_t) (wdata >> (8 * i)) & 0xFF;
         host_write(guest_to_host(waddr + i), 1, data_byte);
       }
     }
-    gettimeofday(&end, NULL );
-    timeuse_mem =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec + timeuse_mem;
     return;
   }
 
