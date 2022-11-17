@@ -31,7 +31,7 @@ VERILATOR_FLAGS += --coverage
 #VERILATOR_FLAGS += --debugINPUT_VC
 # Add this trace to get a backtrace in gdb
 #VERILATOR_FLAGS += --gdbbt
-# VERILATOR_FLAGS += --threads 2
+VERILATOR_FLAGS += --threads 2
 
 
 WORK_DIR := $(shell pwd)
