@@ -106,7 +106,7 @@ extern "C" void pmem_write(long long waddr, long long wdata, uint8_t wmask) {
       }
     }
     gettimeofday(&end, NULL );
-    timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec + timeuse;
+    timeuse_mem =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec + timeuse_mem;
     return;
   }
 
