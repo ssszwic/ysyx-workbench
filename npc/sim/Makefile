@@ -31,7 +31,7 @@ VERILATOR_FLAGS += --coverage
 #VERILATOR_FLAGS += --debugINPUT_VC
 # Add this trace to get a backtrace in gdb
 #VERILATOR_FLAGS += --gdbbt
-VERILATOR_FLAGS += --threads 1
+VERILATOR_FLAGS += --threads 2
 
 WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/obj_dir
@@ -60,7 +60,7 @@ CFLAGS += -Wall -g
 CFLAGS += -Werror
 # config itrace llvm
 # CFLAGS += $(shell llvm-config --cxxflags) -fPIE
-CFLAGS += -O2 -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
+CFLAGS += -O3 -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
 LDFLAGS += $(shell llvm-config --libs) -lreadline -ldl -pie -lSDL2
 LDFLAGS += $(DIFFSET_SO)
 
