@@ -283,7 +283,7 @@ static void isa_exec_once() {
   eval_and_wave();
   contextp->timeInc(1);
 
-  update reg and pc, gpr(regfiles) will not update until next cycle, so update by io_regWen
+  // update reg and pc, gpr(regfiles) will not update until next cycle, so update by io_regWen
   npc_cpu.pc = *rtl_pc;
   npc_cpu.next_pc = top->io_nextPC;
   if(top->io_regWen == 1) {
