@@ -18,7 +18,7 @@
 #define CONFIG_HAS_SERIAL       1
 #define CONFIG_HAS_TIMER        1
 #define CONFIG_HAS_KEYBOARD     1
-#define CONFIG_HAS_VGA          1
+// #define CONFIG_HAS_VGA          1
 
 // mem
 #define CONFIG_MSIZE 0x8000000
