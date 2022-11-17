@@ -115,7 +115,7 @@ void cpu_exec(uint64_t n) {
     exec_once();
     IFDEF(STATISTIC, g_nr_guest_inst++);
     trace_and_difftest();
-    // IFDEF(CONFIG_DEVICE, device_update());
+    IFDEF(CONFIG_DEVICE, device_update());
     if(npc_state.state != NPC_RUNNING) {break;}
   }
   // end time
@@ -276,8 +276,8 @@ static void isa_exec_once() {
     cpu_state_init = true;
   }
   // update inst
-  eval_and_wave();
-  contextp->timeInc(1);
+  // eval_and_wave();
+  // contextp->timeInc(1);
 
   top->clock = !top->clock;
   eval_and_wave();
