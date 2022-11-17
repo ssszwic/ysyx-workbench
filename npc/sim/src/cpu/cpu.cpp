@@ -114,7 +114,7 @@ void cpu_exec(uint64_t n) {
   for(int i = 0; i < n; i++) {
     exec_once();
     IFDEF(STATISTIC, g_nr_guest_inst++);
-    // trace_and_difftest();
+    trace_and_difftest();
     IFDEF(CONFIG_DEVICE, device_update());
     if(npc_state.state != NPC_RUNNING) {break;}
   }
@@ -160,71 +160,6 @@ void exec_once() {
   isa_exec_once();
 }
 
-void trace_and_difftest() {
-// itrace
-#ifdef CONFIG_ITRACE
-  char *p = npc_cpu.logbuf;
-  p += snprintf(p, sizeof(npc_cpu.logbuf), "0x%016lx:  ", npc_cpu.pc);
-  // print from MSB
-  uint32_t inst = get_inst(npc_cpu.pc);
-  uint8_t *inst_byte = (uint8_t *) &inst;
-  for(int i = 3; i >= 0; i--) {
-    p += snprintf(p, sizeof(npc_cpu.logbuf), "%02x ", *(inst_byte + i));
-  }
-  disassemble(p, npc_cpu.logbuf + sizeof(npc_cpu.logbuf) - p, npc_cpu.pc, inst_byte, 4);
-  log_write(screen_display_inst, "%s\n", npc_cpu.logbuf);
-  // instruction ring buff
-  memset(inst_ring_buf[inst_ring_ref], ' ', 6); // copy 5 'space' to cover '---->'
-  if (++inst_ring_ref == INST_RING_BUF_WIDTH) {inst_ring_ref = 0;}
-  strcpy(inst_ring_buf[inst_ring_ref], "----> "); 
-  strcpy(inst_ring_buf[inst_ring_ref] + 6, npc_cpu.logbuf);
-
-  #ifdef CONFIT_WATCHPOINT
-  if(update_wp(npc_cpu.logbuf)) { npc_state.state = NPC_STOP; }
-  #endif
-#endif
-
-// function trace
-#ifdef CONFIG_FUNCTION_TRACE
-  // detect jump inst: JAL or JALR
-  // JAL: enter function
-  // JALR: leave function
-  int id;
-  char tmp[SINGLE_BUF_WIDTH] = {};
-  if(func_state == -2) {
-    // no function in elf or no elf
-  }
-  else if(func_state == -1) {
-    // call initial function
-    id = func_pc(npc_cpu.pc);
-    memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
-    if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", npc_cpu.pc, func_list[id].name, func_list[id].start_addr);
-    strcpy(func_ring_buf[func_ring_ref], tmp);
-    func_state = id;
-  }
-  else if(jal) {
-    // call function
-    id = func_pc(npc_cpu.next_pc);
-    memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
-    if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", npc_cpu.pc, func_list[id].name, func_list[id].start_addr);
-    strcpy(func_ring_buf[func_ring_ref], tmp);
-    func_state = id;
-  }
-  else if(jalr) {
-    // ret function
-    id = func_pc(npc_cpu.next_pc);
-    memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
-    if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> ret  [%s@0x%08lx] ", npc_cpu.pc, func_list[id].name, func_list[id].start_addr);
-    strcpy(func_ring_buf[func_ring_ref], tmp);
-    func_state = id;
-  }
-#endif
-// difftest
-  IFDEF(CONFIG_DIFFTEST, difftest_step());
-}
 
 void cpu_init() {
   contextp = new VerilatedContext;
