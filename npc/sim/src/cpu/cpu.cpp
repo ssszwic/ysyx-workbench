@@ -270,7 +270,6 @@ static void isa_exec_once() {
   // posedge clk
   if(!cpu_state_init) {
     // update pc register
-    printf("66\n");
     top->eval();
     // enable cpu (avoid pc reg change)
     top->io_cpuEn = 1;

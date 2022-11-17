@@ -17,6 +17,7 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#include <sys/time.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -36,6 +37,9 @@ static bool g_print_step = false;
 static char ring_buf[RING_BUF_WIDTH][100] = {};
 static int ring_ref = RING_BUF_WIDTH - 1;
 #endif
+
+
+struct timeval start,end;
 
 void device_update();
 bool update_wp(char *log, bool log_flag);
@@ -71,7 +75,13 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
   s->snpc = pc;
+  
+  gettimeofday(&start, NULL );
   isa_exec_once(s);
+  gettimeofday(&end, NULL );
+  long timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec;
+  printf("time=%ld\n",timeuse);
+
   cpu.pc = s->dnpc; // pc move after exec
 #ifdef CONFIG_ITRACE
   char *p = s->logbuf;
