@@ -60,7 +60,7 @@ CFLAGS += -Wall -g
 CFLAGS += -Werror
 # config itrace llvm
 # CFLAGS += $(shell llvm-config --cxxflags) -fPIE
-CFLAGS += -O3 -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
+CFLAGS += -O2 -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
 LDFLAGS += $(shell llvm-config --libs) -lreadline -ldl -pie -lSDL2
 LDFLAGS += $(DIFFSET_SO)
 
