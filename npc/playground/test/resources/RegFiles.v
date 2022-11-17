@@ -14,8 +14,17 @@ module RegFiles(
 reg   [63:0]  regFiles [0:31];
 genvar i;
 
+always@(posedge clock) begin
+  if(reset) begin
+    regFiles[0] <= 64'b0;
+  end
+  else begin
+    regFiles[0] <= 64'b0;
+  end
+end
+
 generate
-  for(i = 0; i < 32; i = i + 1) begin
+  for(i = 1; i < 32; i = i + 1) begin
     always@(posedge clock) begin
       if(reset) begin
         regFiles[i] <= 64'b0;
@@ -30,8 +39,8 @@ generate
   end
 endgenerate
 
-assign rs1Data = (rs1Addr == 5'd0) ? 64'd0 : regFiles[rs1Addr];
-assign rs2Data = (rs2Addr == 5'd0) ? 64'd0 : regFiles[rs2Addr];
+assign rs1Data = regFiles[rs1Addr];
+assign rs2Data = regFiles[rs2Addr];
 
 import "DPI-C" function void set_gpr_ptr(input logic [63:0] a []);
 initial set_gpr_ptr(regFiles);
