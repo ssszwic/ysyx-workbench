@@ -11,7 +11,6 @@ Context* __am_irq_handle(Context *c) {
     }
     printf("\n");
   }
-  halt(1);
 
   // csr 4 reg
   printf("mcause: 0x%016lx\n", c->mcause);
