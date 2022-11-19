@@ -36,7 +36,7 @@ static inline int convert_csr_idx(int idx) {
 }
 
 #define gpr(idx) (cpu.gpr[check_reg_idx(idx)])
-#define csr(idx) (nemu_csr[convert_csr_idx(idx)])
+#define csr(idx) (cpu.csr[convert_csr_idx(idx)])
 
 static inline const char* reg_name(int idx, int width) {
   extern const char* regs[];

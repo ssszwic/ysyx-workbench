@@ -30,7 +30,6 @@ void init_isa();
 
 // reg
 extern CPU_state cpu;
-extern uint64_t nemu_csr[4];
 void isa_reg_display();
 word_t isa_reg_str2val(const char *name, bool *success);
 
