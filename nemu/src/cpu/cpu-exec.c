@@ -43,6 +43,7 @@ bool update_wp(char *log, bool log_flag);
 void memory_trace_print();
 void device_trace_print();
 void print_func_log();
+void print_exceptiopn_log();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE
@@ -151,6 +152,7 @@ void cpu_exec(uint64_t n) {
         IFDEF(CONFIG_MEMORY_TRACE, memory_trace_print());
         IFDEF(CONFIG_FUNCTION_TRACE, print_func_log());
         IFDEF(CONFIG_DEVICE_TRACE, device_trace_print());
+        IFDEF(CONFIG_EXCEPTION_TRACE, print_exceptiopn_log());
 
 #ifdef CONFIG_ITRACE
         printf("\nring buff\n");
