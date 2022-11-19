@@ -141,6 +141,11 @@ config DEVICE_TRACE
   bool "Enable device trace"
   default y
 
+config EXCEPTION_TRACE
+  depends on TRACE
+  bool "Enable exception trace"
+  default y
+
 config WATCHPOINT
   bool "Enable watchpoint"
   default y

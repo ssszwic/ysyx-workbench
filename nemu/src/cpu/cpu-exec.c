@@ -33,7 +33,7 @@ static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
 // ring buff
-#ifdef CONFIG_ITRACE_COND
+#ifdef CONFIG_ITRACE
 static char ring_buf[RING_BUF_WIDTH][100] = {};
 static int ring_ref = RING_BUF_WIDTH - 1;
 #endif
@@ -43,9 +43,10 @@ bool update_wp(char *log, bool log_flag);
 void memory_trace_print();
 void device_trace_print();
 void print_func_log();
+void print_exceptiopn_log();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
-#ifdef CONFIG_ITRACE_COND
+#ifdef CONFIG_ITRACE
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
   // add log to ring buf
   memset(ring_buf[ring_ref], ' ', 6); // copy 5 'space' to cover '---->'
@@ -147,12 +148,13 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
     case NEMU_END: case NEMU_ABORT:
-      if (nemu_state.halt_ret != 0) {
+      if (nemu_state.halt_ret != 0 || nemu_state.state == NEMU_ABORT) {
         IFDEF(CONFIG_MEMORY_TRACE, memory_trace_print());
         IFDEF(CONFIG_FUNCTION_TRACE, print_func_log());
         IFDEF(CONFIG_DEVICE_TRACE, device_trace_print());
+        IFDEF(CONFIG_EXCEPTION_TRACE, print_exceptiopn_log());
 
-#ifdef CONFIG_ITRACE_COND
+#ifdef CONFIG_ITRACE
         printf("\nring buff\n");
         for (int i = 0; i < RING_BUF_WIDTH; i++) {
           if(ring_buf[i][0] == '\0') break;
