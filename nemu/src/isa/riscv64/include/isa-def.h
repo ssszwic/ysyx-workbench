@@ -21,9 +21,10 @@
 typedef struct {
   // uint_64 for riscv64
   word_t gpr[32];
+  vaddr_t pc;
+  // must be after pc because need to ref for difftest
   // csr: mstatus, mtvec, mepc, mcause
   word_t csr[4]; 
-  vaddr_t pc;
 } riscv64_CPU_state;
 
 
