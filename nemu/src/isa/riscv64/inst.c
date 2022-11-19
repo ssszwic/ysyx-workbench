@@ -66,6 +66,15 @@ static struct func func_list[FUNC_LIST_NUM];
 static int func_pc(vaddr_t addr);
 #endif
 
+#ifdef CONFIG_EXCEPTION_TRACE
+#define EXCEPTION_RING_BUF_WIDTH 30
+#define MAX_SINGLE_EXCEPTION_WIDTH 100
+static char exception_ring_buf[EXCEPTION_RING_BUF_WIDTH][MAX_SINGLE_EXCEPTION_WIDTH] = {};
+static int exception_ring_ref = EXCEPTION_RING_BUF_WIDTH - 1;
+static bool exception = false;
+void print_exceptiopn_log();
+#endif
+
 static void decode_operand(Decode *s, int *dest, int *csr_index, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst.val;
   int rd  = BITS(i, 11, 7);
@@ -263,7 +272,7 @@ static int decode_exec(Decode *s) {
   // environment bread (I type)   $a0 is status
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
   // environment call (yield)
-  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(0, s->pc)); // jump to exception entry address
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall  , N, s->dnpc = isa_raise_intr(0, s->pc); IFDEF(CONFIG_EXCEPTION_TRACE, exception = true)); // jump to exception entry address
   // machine return
   INSTPAT("0011000 00010 00000 000 00000 11100 11", mret   , N, s->dnpc = csr(0x341)); // jump to mepic (has +4 in nanolist)
 
@@ -293,6 +302,17 @@ static int decode_exec(Decode *s) {
     if (++func_buf_ref == FUN_BUF_REF) {func_buf_ref = 0;}
     sprintf(tmp, "0x%08lx: ----> jump [%s\t@0x%08lx] ", s->snpc-4, func_list[func_state].name, func_list[func_state].start_addr);
     strcpy(func_buf[func_buf_ref], tmp);
+  }
+#endif
+
+#ifdef CONFIG_EXCEPTION_TRACE
+  if(exception) {
+    char tmp_exception[MAX_SINGLE_EXCEPTION_WIDTH] = {};
+    memset(exception_ring_buf[exception_ring_ref], ' ', 6);
+    if (++exception_ring_ref == EXCEPTION_RING_BUF_WIDTH) {exception_ring_ref = 0;}
+    sprintf(tmp_exception, "----> mcause: 0x%016lx    mstatus: 0x%016lx    mepc: 0x%016lx \n", csr(0x300), csr(0x342), csr(0x341));
+    strcpy(exception_ring_buf[exception_ring_ref], tmp_exception);
+    exception = false;
   }
 #endif
 
@@ -449,6 +469,22 @@ static int func_pc(vaddr_t addr) {
   printf("0x%08lx no funciton match!\n", addr);
   assert(0);
   return 0;
+}
+
+#endif
+
+#ifdef CONFIG_EXCEPTION_TRACE
+void print_exceptiopn_log() {
+  if(exception_ring_buf[0][0] == '\0') {
+    printf(ANSI_FMT("exception ring buff is empty.\n", ANSI_FG_YELLOW));
+    return;
+  }
+  printf(ANSI_FMT("exception ring buff.\n", ANSI_FG_BLUE));
+  for (int i = 0; i < EXCEPTION_RING_BUF_WIDTH; i++) {
+    if(exception_ring_buf[i][0] == '\0') break;
+    printf("%s\n", exception_ring_buf[i]);
+  }
+  printf("\n");
 }
 
 #endif
