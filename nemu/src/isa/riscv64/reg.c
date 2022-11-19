@@ -56,13 +56,13 @@ word_t isa_reg_str2val(const char *s, bool *success) {
       break;
     }
   }
-  if (i == 36) {
+  if (i == 32) {
     *success = false;
     return 0;
   }
   else {
     *success = true;
-    if(i > 31) { return csr(i-32); }
+    if(i > 31) { return cpu.csr[i-32]; }
     return gpr(i);
   }
 }
