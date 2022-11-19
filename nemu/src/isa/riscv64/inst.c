@@ -66,7 +66,7 @@ static struct func func_list[FUNC_LIST_NUM];
 static int func_pc(vaddr_t addr);
 #endif
 
-static void decode_operand(Decode *s, int *csr_index, int *dest, word_t *src1, word_t *src2, word_t *imm, int type) {
+static void decode_operand(Decode *s, int *dest, int *csr_index, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst.val;
   int rd  = BITS(i, 11, 7);
   int rs1 = BITS(i, 19, 15);
