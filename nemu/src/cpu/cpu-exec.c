@@ -33,7 +33,7 @@ static uint64_t g_timer = 0; // unit: us
 static bool g_print_step = false;
 
 // ring buff
-#ifdef CONFIG_ITRACE_COND
+#ifdef CONFIG_ITRACE
 static char ring_buf[RING_BUF_WIDTH][100] = {};
 static int ring_ref = RING_BUF_WIDTH - 1;
 #endif
@@ -45,7 +45,7 @@ void device_trace_print();
 void print_func_log();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
-#ifdef CONFIG_ITRACE_COND
+#ifdef CONFIG_ITRACE
   if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
   // add log to ring buf
   memset(ring_buf[ring_ref], ' ', 6); // copy 5 'space' to cover '---->'
@@ -152,7 +152,7 @@ void cpu_exec(uint64_t n) {
         IFDEF(CONFIG_FUNCTION_TRACE, print_func_log());
         IFDEF(CONFIG_DEVICE_TRACE, device_trace_print());
 
-#ifdef CONFIG_ITRACE_COND
+#ifdef CONFIG_ITRACE
         printf("\nring buff\n");
         for (int i = 0; i < RING_BUF_WIDTH; i++) {
           if(ring_buf[i][0] == '\0') break;
