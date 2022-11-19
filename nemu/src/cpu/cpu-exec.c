@@ -147,7 +147,7 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
     case NEMU_END: case NEMU_ABORT:
-      if (nemu_state.halt_ret != 0) {
+      if (nemu_state.halt_ret != 0 || nemu_state.state == NEMU_ABORT) {
         IFDEF(CONFIG_MEMORY_TRACE, memory_trace_print());
         IFDEF(CONFIG_FUNCTION_TRACE, print_func_log());
         IFDEF(CONFIG_DEVICE_TRACE, device_trace_print());
