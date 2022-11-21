@@ -251,6 +251,7 @@ void cpu_init() {
   top->io_cpuEn = 0;
   top->reset = 1;
   top->clock = 0;
+  top->io_cpuEn = 1;
 
   // reset
   while(contextp->time() < RESET_TIME) {
@@ -259,6 +260,7 @@ void cpu_init() {
     contextp->timeInc(1);
   }
   top->reset = 0;
+  
 
   // initial npc_cpu
   // npc_cpu.pc = *rtl_pc;
