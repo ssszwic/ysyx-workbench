@@ -7,6 +7,19 @@ static Context* (*user_handler)(Event, Context*) = NULL;
 Context* __am_irq_handle(Context *c) {
   if (user_handler) {
     Event ev = {0};
+    
+    for (int i = 0; i < 8; i++) {
+      for (int j = 0; j < 4; j++) {
+      // Vertical print
+        printf("0x%016lx   ", c->gpr[i + 8 * j]);
+      }
+      printf("\n");
+    }
+    printf("mcause: 0x%016lx", c->mcause);
+    printf("mstatus: 0x%016lx", c->mstatus);
+    printf("mepc: 0x%016lx", c->mepc);
+
+
     switch (c->mcause) {
       case 0xb: ev.event = EVENT_YIELD; break;
       default: ev.event = EVENT_ERROR; break;
