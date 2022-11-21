@@ -71,7 +71,7 @@ class CSR extends Module {
   when(io_csr.addr === MTVEC.U) {
     mtvec := dest
   }.otherwise {
-    mtvec := mstatus
+    mtvec := mtvec
   }
 
   when(io_csr.ecallSel) {
@@ -79,7 +79,7 @@ class CSR extends Module {
   }.elsewhen(io_csr.addr === MEPC.U) {
     mepc := dest
   }.otherwise {
-    mepc := mstatus
+    mepc := mepc
   }
 
   when(io_csr.ecallSel) {
@@ -88,7 +88,7 @@ class CSR extends Module {
   }.elsewhen(io_csr.addr === MCAUSE.U) {
     mcause := dest
   }.otherwise {
-    mcause := mstatus
+    mcause := mcause
   }
 
 }
