@@ -259,7 +259,7 @@ static int decode_exec(Decode *s) {
   // Atomic Read and write in CSR
   INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , CSR, if(dest != 0) {R(dest) = csr(csr_index);} csr(csr_index) = src1);
   // Atomic Read and Set Bits in CSR
-  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , CSR, R(dest) = csr(csr_index); printf("csr: %d\n", csr_index);if(dest != 0) {csr(csr_index) = csr(csr_index) | src1;});
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , CSR, R(dest) = csr(csr_index); printf("csr: %x", csr_index); printf("data: %lx\n", csr(csr_index)); if(dest != 0) {csr(csr_index) = csr(csr_index) | src1;});
   // Atomic Read and clear Bits in CSR
   INSTPAT("??????? ????? ????? 011 ????? 11100 11", csrrc  , CSR, R(dest) = csr(csr_index); if(dest != 0) {csr(csr_index) = csr(csr_index) & (~src1);});
   // Atomic Read and write in CSR immediate
