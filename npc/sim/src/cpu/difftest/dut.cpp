@@ -89,7 +89,6 @@ void init_difftest(char *ref_so_file, long img_size) {
 }
 
 void difftest_step() {
-  printf("dtff\n");
   NEMUCPUState ref_r;
 
   if (is_skip_ref) {
@@ -103,8 +102,11 @@ void difftest_step() {
   }
 
   // ref execute once
+  printf("dtff\n");
   ref_difftest_exec(1);
+  printf("dtff\n");
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
+  printf("dtff\n");
 
   checkregs(&ref_r);
 }
