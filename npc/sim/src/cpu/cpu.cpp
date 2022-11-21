@@ -265,7 +265,7 @@ void cpu_init() {
   // npc_cpu.next_pc = top->io_nextPC;
   // memcpy(npc_cpu.gpr, rtl_gpr, sizeof(npc_cpu.gpr));
 
-  if(!top->clock) {
+  if(top->clock) {
     return ;
   }
   else {
