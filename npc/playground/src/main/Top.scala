@@ -28,10 +28,6 @@ class Top extends Module {
   val nextpcDefault = Wire(UInt(64.W))
   nextpcDefault := IFUInst.io.pc + 4.U
 
-  val nextpc = Wire(UInt(64.W))
-  nextpc := Mux(CSRInst.io.excepSel, CSRInst.io.csrData,
-                Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault))
-
   val regWData = Wire(UInt(64.W))
   regWData := Mux(IDUInst.io.csrSel, CSRInst.io.csrData,
                       Mux(IDUInst.io.jumpSel, nextpcDefault, 
@@ -40,7 +36,7 @@ class Top extends Module {
   // IO
   io.jalSel   := IDUInst.io_alu.typeJSel
   io.jalrSel  := IDUInst.io_alu.jalrSel
-  io.nextPC   := nextpc
+  io.nextPC   := CSRInst.io.finalPC
   // difftest
   io.regWen   := IDUInst.io.wenReg
   io.regAddr  := IDUInst.io.rdAddr
@@ -57,7 +53,7 @@ class Top extends Module {
   // IFU
   IFUInst.io.clock    := clock
   IFUInst.io.reset    := reset
-  IFUInst.io.nextpc   := nextpc
+  IFUInst.io.nextpc   := CSRInst.io.finalPC
   IFUInst.io.pcEn     := io.cpuEn
 
   // IDU
@@ -80,8 +76,11 @@ class Top extends Module {
   ALUInst.io_alu  <> IDUInst.io_alu
 
   // CSR
-  CSRInst.io.rs1  := RegFilesInst.io.rs1Data
-  CSRInst.io.pc   := IFUInst.io.pc
-  CSRInst.io.imme := IDUInst.io.imme
-  CSRInst.io_csr  <> IDUInst.io_csr
+  CSRInst.io.rs1            := RegFilesInst.io.rs1Data
+  CSRInst.io.pc             := IFUInst.io.pc
+  CSRInst.io.nextpcNoExcep  := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
+  CSRInst.io.imme           := IDUInst.io.imme
+  CSRInst.io.time_cmp       := false.B
+  CSRInst.io_csr            <> IDUInst.io_csr
+  
 }

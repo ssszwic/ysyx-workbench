@@ -5,11 +5,15 @@ import chisel3.util._
 
 class CSR extends Module {
   val io = IO(new Bundle {
-    val pc        = Input(UInt(64.W))
-    val rs1       = Input(UInt(64.W))
-    val imme      = Input(UInt(64.W))
-    val csrData   = Output(UInt(64.W))
-    val excepSel  = Output(Bool())
+    // timer interrupt
+    val time_cmp      = Input(Bool())
+    val pc            = Input(UInt(64.W))
+    // the next pc without exception
+    val nextpcNoExcep = Input(UInt(64.W))
+    val rs1           = Input(UInt(64.W))
+    val imme          = Input(UInt(64.W))
+    val csrData       = Output(UInt(64.W))
+    val finalPC       = Output(UInt(64.W))
   })
   val io_csr = IO(Flipped(new CSRControl))
 
@@ -17,8 +21,10 @@ class CSR extends Module {
   val MTVEC   = 0x305
   val MEPC    = 0x341
   val MCAUSE  = 0x342
+  val MIE     = 0x304
+  val MIP     = 0x344
 
-  val mstatus = RegInit("xa0000_1800".U(64.W))
+  val mstatus = RegInit("xa0000_1808".U(64.W))
   val mtvec   = RegInit(0.U(64.W))
   val mepc    = RegInit(0.U(64.W))
   val mcause  = RegInit(0.U(64.W))
@@ -40,20 +46,16 @@ class CSR extends Module {
     csr := mepc
   }.elsewhen(io_csr.addr === MCAUSE.U) {
     csr := mcause
+  }.elsewhen(io_csr.addr === MIE.U) {
+    csr := mie
+  }.elsewhen(io_csr.addr === MIP.U) {
+    csr := mip
   }.otherwise{
     csr := 0.U
   }
 
-  // read csr
-  when(io_csr.ecallSel) {
-    io.csrData := mtvec
-  }.elsewhen(io_csr.mretSel) {
-    io.csrData := mepc
-  }.otherwise {
-    io.csrData := csr
-  }
-
-  io.excepSel := io_csr.ecallSel || io_csr.mretSel
+  // write wo generate reg
+  io.csrData := csr
 
   // calculate
   when(io_csr.op(1, 0) === "b01".U) {
@@ -66,35 +68,44 @@ class CSR extends Module {
     // clear
     dest := csr & (~src)
   }
-  
-  // write csr
-  when(io_csr.addr === MSTATUS.U) {
-    mstatus := dest
+
+  when(io_csr.addr === MIP.U) {
+    mip := dest
+  }.elsewhen(io.time_cmp) {
+    mip := "x_80".U
   }.otherwise {
-    mstatus := mstatus
+    mip := mip
   }
 
-  when(io_csr.addr === MTVEC.U) {
-    mtvec := dest
-  }.otherwise {
-    mtvec := mtvec
-  }
-
+  // intrrupt
   when(io_csr.ecallSel) {
-    mepc := io.pc
-  }.elsewhen(io_csr.addr === MEPC.U) {
-    mepc := dest
+    mstatus     := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 1.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
+    mepc        := io.pc
+    mcause      := "x_b".U
+    mtvec       := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
+    mie         := Mux(io_csr.addr === MIE.U, dest, mie)
+    io.finalPC  := mtvec
+  }.elsewhen(io_csr.mretSel) {
+    mstatus     := Seq(mstatus(63, 8), 0.U(1.W), mstatus(6, 4), mstatus(7), mstatus(2, 0)).reduceLeft(Cat(_, _))
+    mepc        := Mux(io_csr.addr === MEPC.U, dest, mepc)
+    mcause      := Mux(io_csr.addr === MCAUSE.U, dest, mcause)
+    mtvec       := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
+    mie         := Mux(io_csr.addr === MIE.U, dest, mie)
+    io.finalPC  := mepc
+  }.elsewhen((mstatus(3) === 1.U) && (mip(7) === 1.U)) {
+    mstatus     := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 1.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
+    mepc        := io.nextpcNoExcep
+    mcause      := "x_7".U
+    mtvec       := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
+    mie         := Mux(io_csr.addr === MIE.U, dest, mie)
+    io.finalPC  := mtvec
   }.otherwise {
-    mepc := mepc
-  }
-
-  when(io_csr.ecallSel) {
-    // enviroment call from M-mode
-    mcause := "xb".U
-  }.elsewhen(io_csr.addr === MCAUSE.U) {
-    mcause := dest
-  }.otherwise {
-    mcause := mcause
+    mstatus     := Mux(io_csr.addr === MSTATUS.U, dest, mstatus)
+    mepc        := Mux(io_csr.addr === MEPC.U, dest, mepc)
+    mcause      := Mux(io_csr.addr === MCAUSE.U, dest, mcause)
+    mtvec       := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
+    mie         := Mux(io_csr.addr === MIE.U, dest, mie)
+    io.finalPC  := io.nextpcNoExcep
   }
 
 }
