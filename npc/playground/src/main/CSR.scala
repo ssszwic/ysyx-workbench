@@ -13,9 +13,9 @@ class CSR extends Module {
   val io_csr = IO(Flipped(new CSRControl))
 
   val MSTATUS = 0x300
-  val MTVEC   = 0x300
-  val MEPC    = 0x300
-  val MCAUSE  = 0x300
+  val MTVEC   = 0x305
+  val MEPC    = 0x341
+  val MCAUSE  = 0x342
 
   val mstatus = RegInit("xa0000_1800".U(64.W))
   val mtvec   = RegInit(0.U(64.W))
