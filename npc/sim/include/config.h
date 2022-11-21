@@ -9,14 +9,14 @@
 #define CONFIT_WATCHPOINT       1//depend CONFIG_ITRACE
 // #define CONFIG_MEMORY_TRACE     1
 // #define CONFIG_FUNCTION_TRACE   1
-#define CONFIG_DIFFTEST         1
+// #define CONFIG_DIFFTEST         1
 // #define CONFIG_STATISTIC        1
 // #define PRINT_CPU_TIME          1
 
 
 #define CONFIG_DEVICE           1
 #define CONFIG_HAS_SERIAL       1
-#define CONFIG_HAS_TIMER        1
+// #define CONFIG_HAS_TIMER        1
 // #define CONFIG_HAS_KEYBOARD     1
 // #define CONFIG_HAS_VGA          1
 
