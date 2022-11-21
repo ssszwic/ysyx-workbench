@@ -32,6 +32,11 @@ class Top extends Module {
   nextpc := Mux(IDUInst.io_csr.ecallSel || IDUInst.io_csr.mretSel, CSRInst.io.csrData,
                 Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault))
 
+  val regWData = Wire(UInt(64.W))
+  regWData := Mux(IDUInst.io.csrSel, CSRInst.io.csrData,
+                      Mux(IDUInst.io.jumpSel, nextpcDefault, 
+                          Mux(IDUInst.io.renMem, MemCtrlInst.io.rData, ALUInst.io.result)))
+
   // IO
   io.jalSel   := IDUInst.io_alu.typeJSel
   io.jalrSel  := IDUInst.io_alu.jalrSel
@@ -39,9 +44,7 @@ class Top extends Module {
   // difftest
   io.regWen   := IDUInst.io.wenReg
   io.regAddr  := IDUInst.io.rdAddr
-  io.regWData := Mux(IDUInst.io.csrSel, CSRInst.io.csrData,
-                      Mux(IDUInst.io.jumpSel, nextpcDefault, 
-                          Mux(IDUInst.io.renMem, MemCtrlInst.io.rData, ALUInst.io.result)))
+  io.regWData := regWData
 
   // MemCtrlInst
   MemCtrlInst.io.wData  := RegFilesInst.io.rs2Data
@@ -67,8 +70,7 @@ class Top extends Module {
   RegFilesInst.io.rs2Addr := IDUInst.io.rs2Addr
   RegFilesInst.io.wen     := IDUInst.io.wenReg
   RegFilesInst.io.wAddr   := IDUInst.io.rdAddr
-  RegFilesInst.io.wData   := Mux(IDUInst.io.jumpSel, nextpcDefault, 
-                                  Mux(IDUInst.io.renMem, MemCtrlInst.io.rData, ALUInst.io.result))
+  RegFilesInst.io.wData   := regWData
 
   // ALU
   ALUInst.io.rs1  := RegFilesInst.io.rs1Data
