@@ -3,7 +3,7 @@
 
 #include "commen.h"
 
-#ifdef DIFFTEST
+#ifdef CONFIG_DIFFTEST
 
 enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
 

@@ -57,7 +57,7 @@ static VerilatedContext* contextp = NULL;
 RegWrite reg_write;
 #endif
 
-#ifdef STATISTIC
+#ifdef CONFIG_STATISTIC
 static uint64_t g_timer = 0;
 uint64_t g_nr_guest_inst = 0;
 static void statistic();
@@ -123,14 +123,14 @@ void cpu_exec(uint64_t n) {
     exec_once();
     IFDEF(PRINT_CPU_TIME, gettimeofday(&end, NULL ));
     IFDEF(PRINT_CPU_TIME, timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec + timeuse);
-    IFDEF(STATISTIC, g_nr_guest_inst++);
+    IFDEF(CONFIG_STATISTIC, g_nr_guest_inst++);
     trace_and_difftest();
     // IFDEF(CONFIG_DEVICE, device_update());
     if(npc_state.state != NPC_RUNNING) {break;}
   }
   IFDEF(PRINT_CPU_TIME, printf("time=%ldus\n",timeuse));
   // end time
-  #ifdef STATISTIC
+  #ifdef CONFIG_STATISTIC
   uint64_t timer_end = get_time();
   g_timer += timer_end - timer_start;
   #endif
@@ -140,7 +140,7 @@ void cpu_exec(uint64_t n) {
       log_write(true, ANSI_FMT("HIT GOOD TRAP at pc = 0x%016lx\n", ANSI_FG_GREEN), npc_cpu.pc);
       // for return successful, don't print to screen
       log_trace(false);
-      IFDEF(STATISTIC, statistic());
+      IFDEF(CONFIG_STATISTIC, statistic());
     }
     else {
       log_write(true, ANSI_FMT("HIT BAD TRAP at pc = 0x%016lx\n", ANSI_FG_RED), npc_cpu.pc);
@@ -156,7 +156,7 @@ void cpu_exec(uint64_t n) {
   }
   else if(npc_state.state == NPC_QUIT) {
     log_trace(true);
-    IFDEF(STATISTIC, statistic());
+    IFDEF(CONFIG_STATISTIC, statistic());
     cpu_exit();
   }
 }
@@ -321,7 +321,7 @@ void cpu_exit(){
   #endif
 }
 
-#ifdef STATISTIC
+#ifdef CONFIG_STATISTIC
 static void statistic() {
   log_write(true, ANSI_FMT("statistic:\n", ANSI_FG_BLUE));
   log_write(true, ANSI_FMT("host time spent = %ld us\n", ANSI_FG_BLUE), g_timer);

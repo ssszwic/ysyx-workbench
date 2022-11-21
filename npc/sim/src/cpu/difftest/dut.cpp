@@ -3,7 +3,7 @@
 #include "cpu/difftest.h"
 #include <dlfcn.h>
 
-#ifdef DIFFTEST
+#ifdef CONFIG_DIFFTEST
 
 extern const char *regs[];
 
