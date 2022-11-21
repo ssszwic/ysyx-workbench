@@ -31,7 +31,7 @@ VERILATOR_FLAGS += --coverage
 #VERILATOR_FLAGS += --debugINPUT_VC
 # Add this trace to get a backtrace in gdb
 #VERILATOR_FLAGS += --gdbbt
-VERILATOR_FLAGS += --threads 2
+# VERILATOR_FLAGS += --threads 2
 
 WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/obj_dir
@@ -66,7 +66,7 @@ LDFLAGS += $(DIFFSET_SO)
 
 VERILATOR_FLAGS += -CFLAGS "$(CFLAGS)" -f $(INPUT_VC) -LDFLAGS "$(LDFLAGS)"
 
-# --log=/home/ssszw/Work/ysyx-workbench/npc/sim/sim_log.txt --diff=/home/ssszw/Work/ysyx-workbench/nemu/build/riscv64-nemu-interpreter-so
+# --log=/home/ssszw/Work/ysyx-workbench/npc/sim/sim_log.txt --diff=/home/ssszw/Work/ysyx-workbench/npc/sim/share/riscv64-nemu-interpreter-so
 
 IMG ?=
 
