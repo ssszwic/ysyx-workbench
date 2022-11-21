@@ -79,21 +79,21 @@ class CSR extends Module {
 
   // intrrupt
   when(io_csr.ecallSel) {
-    mstatus     := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 1.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
+    mstatus     := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
     mepc        := io.pc
     mcause      := "x_b".U
     mtvec       := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
     mie         := Mux(io_csr.addr === MIE.U, dest, mie)
     io.finalPC  := mtvec
   }.elsewhen(io_csr.mretSel) {
-    mstatus     := Seq(mstatus(63, 8), 0.U(1.W), mstatus(6, 4), mstatus(7), mstatus(2, 0)).reduceLeft(Cat(_, _))
+    mstatus     := Seq(mstatus(63, 4), mstatus(7), mstatus(2, 0)).reduceLeft(Cat(_, _))
     mepc        := Mux(io_csr.addr === MEPC.U, dest, mepc)
     mcause      := Mux(io_csr.addr === MCAUSE.U, dest, mcause)
     mtvec       := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
     mie         := Mux(io_csr.addr === MIE.U, dest, mie)
     io.finalPC  := mepc
   }.elsewhen((mstatus(3) === 1.U) && (mip(7) === 1.U)) {
-    mstatus     := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 1.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
+    mstatus     := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
     mepc        := io.nextpcNoExcep
     mcause      := "x_7".U
     mtvec       := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
