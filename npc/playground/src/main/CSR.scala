@@ -9,6 +9,7 @@ class CSR extends Module {
     val rs1       = Input(UInt(64.W))
     val imme      = Input(UInt(64.W))
     val csrData   = Output(UInt(64.W))
+    val excepSel  = Output(Bool())
   })
   val io_csr = IO(Flipped(new CSRControl))
 
@@ -21,6 +22,9 @@ class CSR extends Module {
   val mtvec   = RegInit(0.U(64.W))
   val mepc    = RegInit(0.U(64.W))
   val mcause  = RegInit(0.U(64.W))
+  // default open MTIM
+  val mie     = RegInit("b0000_0000_1000_0000".U(64.W))
+  val mip     = RegInit("b0000_0000_0000_0000".U(64.W))
 
   val csr     = Wire(UInt(64.W))
   val src     = Wire(UInt(64.W))
@@ -48,6 +52,8 @@ class CSR extends Module {
   }.otherwise {
     io.csrData := csr
   }
+
+  io.excepSel := io_csr.ecallSel || io_csr.mretSel
 
   // calculate
   when(io_csr.op(1, 0) === "b01".U) {

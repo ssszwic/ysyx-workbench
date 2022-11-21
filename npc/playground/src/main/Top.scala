@@ -29,7 +29,7 @@ class Top extends Module {
   nextpcDefault := IFUInst.io.pc + 4.U
 
   val nextpc = Wire(UInt(64.W))
-  nextpc := Mux(IDUInst.io_csr.ecallSel || IDUInst.io_csr.mretSel, CSRInst.io.csrData,
+  nextpc := Mux(CSRInst.io.excepSel, CSRInst.io.csrData,
                 Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault))
 
   val regWData = Wire(UInt(64.W))
