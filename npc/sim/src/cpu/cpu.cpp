@@ -303,7 +303,7 @@ static void isa_exec_once() {
   }
 #ifdef CONFIG_DIFFTEST
   // difftest skip when read/write csr reg or interrupt
-  if(top->io_csrOrTimer) {
+  if(top->io_csrOrInter) {
     difftest_skip_ref();
   }
 #endif
