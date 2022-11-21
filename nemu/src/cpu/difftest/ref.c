@@ -33,11 +33,15 @@ void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
 }
 
 void difftest_regcpy(void *dut, bool direction) {
+  uint64_t tmp = cpu.csr[0];
   if(direction == DIFFTEST_TO_REF) {
     memcpy(&cpu, dut, REF_SIZE);
   }
   else {
     memcpy(dut, &cpu, REF_SIZE);
+  }
+  if(cpu.csr[0] != tmp) {
+    printf("ref change mstatu\n");
   }
 }
 
