@@ -108,6 +108,7 @@ static int decode_exec(Decode *s) {
   decode_operand(s, &dest, &csr_index, &src1, &src2, &imm, concat(TYPE_, type)); \
   __VA_ARGS__ ; \
 }
+  // uint64_t status_tmp = csr(0x300);
 
   INSTPAT_START();
 
@@ -258,7 +259,7 @@ static int decode_exec(Decode *s) {
   // Atomic Read and write in CSR
   INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , CSR, if(dest != 0) {R(dest) = csr(csr_index);} csr(csr_index) = src1);
   // Atomic Read and Set Bits in CSR
-  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , CSR, R(dest) = csr(csr_index); if(dest != 0) {csr(csr_index) = csr(csr_index) | src1;});
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , CSR, R(dest) = csr(csr_index); printf("csr: %d\n", csr_index);if(dest != 0) {csr(csr_index) = csr(csr_index) | src1;});
   // Atomic Read and clear Bits in CSR
   INSTPAT("??????? ????? ????? 011 ????? 11100 11", csrrc  , CSR, R(dest) = csr(csr_index); if(dest != 0) {csr(csr_index) = csr(csr_index) & (~src1);});
   // Atomic Read and write in CSR immediate
@@ -267,6 +268,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 110 ????? 11100 11", csrrsi , CSR, R(dest) = csr(csr_index); if(imm != 0) {csr(csr_index) = csr(csr_index) | imm;});
   // Atomic Read and clear Bits in CSR immediate
   INSTPAT("??????? ????? ????? 111 ????? 11100 11", csrrci , CSR, R(dest) = csr(csr_index); if(imm != 0) {csr(csr_index) = csr(csr_index) & (~imm);});
+  //          0011000 00000 00000 010 00110 11100 11
+  // 30 00 23 73                               0011
 
   /*----------------------------------------- N -----------------------------------------*/
   // environment bread (I type)   $a0 is status
