@@ -124,6 +124,7 @@ void cpu_exec(uint64_t n) {
     IFDEF(PRINT_CPU_TIME, gettimeofday(&end, NULL ));
     IFDEF(PRINT_CPU_TIME, timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec + timeuse);
     IFDEF(CONFIG_STATISTIC, g_nr_guest_inst++);
+    printf("sad\n");
     trace_and_difftest();
     printf("sad\n");
     // IFDEF(CONFIG_DEVICE, device_update());
