@@ -10,7 +10,7 @@ class Top extends Module {
     // verilator debug
     val jalSel      = Output(Bool()) // jal
     val jalrSel     = Output(Bool()) // jalr
-    val csrOrTimer = Output(Bool()) // csrSel and timer interrupt
+    val csrOrInter = Output(Bool()) // csrSel and interrupt
     val nextPC      = Output(UInt(64.W))
     val regWen      = Output(Bool())
     val regAddr     = Output(UInt(5.W))
@@ -42,7 +42,7 @@ class Top extends Module {
   io.regWen     := IDUInst.io.wenReg
   io.regAddr    := IDUInst.io.rdAddr
   io.regWData   := regWData
-  io.csrOrTimer := IDUInst.io.csrSel || CSRInst.io.timerInter
+  io.csrOrInter := IDUInst.io.csrSel || CSRInst.io.interrupt
 
   // MemCtrlInst
   MemCtrlInst.io.wData  := RegFilesInst.io.rs2Data

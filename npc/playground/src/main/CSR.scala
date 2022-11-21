@@ -15,7 +15,7 @@ class CSR extends Module {
     val csrData       = Output(UInt(64.W))
     val finalPC       = Output(UInt(64.W))
     // verilator debug for difftest
-    val timerInter    = Output(Bool())
+    val interrupt     = Output(Bool())
   })
   val io_csr = IO(Flipped(new CSRControl))
 
@@ -87,7 +87,7 @@ class CSR extends Module {
     mtvec         := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
     mie           := Mux(io_csr.addr === MIE.U, dest, mie)
     io.finalPC    := mtvec
-    io.timerInter := false.B
+    io.interrupt  := true.B
   }.elsewhen(io_csr.mretSel) {
     mstatus       := Seq(mstatus(63, 4), mstatus(7), mstatus(2, 0)).reduceLeft(Cat(_, _))
     mepc          := Mux(io_csr.addr === MEPC.U, dest, mepc)
@@ -95,7 +95,7 @@ class CSR extends Module {
     mtvec         := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
     mie           := Mux(io_csr.addr === MIE.U, dest, mie)
     io.finalPC    := mepc
-    io.timerInter := false.B
+    io.interrupt  := true.B
   }.elsewhen((mstatus(3) === 1.U) && (mip(7) === 1.U) && (mie(7) === 1.U)) {
     mstatus       := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
     mepc          := io.nextpcNoExcep
@@ -103,7 +103,7 @@ class CSR extends Module {
     mtvec         := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
     mie           := Mux(io_csr.addr === MIE.U, dest, mie)
     io.finalPC    := mtvec
-    io.timerInter := true.B
+    io.interrupt  := true.B
   }.otherwise {
     mstatus       := Mux(io_csr.addr === MSTATUS.U, dest, mstatus)
     mepc          := Mux(io_csr.addr === MEPC.U, dest, mepc)
@@ -111,6 +111,6 @@ class CSR extends Module {
     mtvec         := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
     mie           := Mux(io_csr.addr === MIE.U, dest, mie)
     io.finalPC    := io.nextpcNoExcep
-    io.timerInter := false.B
+    io.interrupt  := false.B
   }
 }
