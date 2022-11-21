@@ -6,14 +6,15 @@ import chisel3.util._
 class Top extends Module {
   val io = IO(new Bundle {
     // control 
-    val cpuEn     = Input(Bool())
+    val cpuEn       = Input(Bool())
     // verilator debug
-    val jalSel    = Output(Bool()) // jal
-    val jalrSel   = Output(Bool()) // jalr
-    val nextPC    = Output(UInt(64.W))
-    val regWen    = Output(Bool())
-    val regAddr   = Output(UInt(5.W))
-    val regWData  = Output(UInt(64.W))
+    val jalSel      = Output(Bool()) // jal
+    val jalrSel     = Output(Bool()) // jalr
+    val csrOrTimer = Output(Bool()) // csrSel and timer interrupt
+    val nextPC      = Output(UInt(64.W))
+    val regWen      = Output(Bool())
+    val regAddr     = Output(UInt(5.W))
+    val regWData    = Output(UInt(64.W))
   })
 
   // declare module
@@ -34,13 +35,14 @@ class Top extends Module {
                           Mux(IDUInst.io.renMem, MemCtrlInst.io.rData, ALUInst.io.result)))
 
   // IO
-  io.jalSel   := IDUInst.io_alu.typeJSel
-  io.jalrSel  := IDUInst.io_alu.jalrSel
-  io.nextPC   := CSRInst.io.finalPC
+  io.jalSel     := IDUInst.io_alu.typeJSel
+  io.jalrSel    := IDUInst.io_alu.jalrSel
+  io.nextPC     := CSRInst.io.finalPC
   // difftest
-  io.regWen   := IDUInst.io.wenReg
-  io.regAddr  := IDUInst.io.rdAddr
-  io.regWData := regWData
+  io.regWen     := IDUInst.io.wenReg
+  io.regAddr    := IDUInst.io.rdAddr
+  io.regWData   := regWData
+  io.csrOrTimer := IDUInst.io.csrSel || CSRInst.io.timerInter
 
   // MemCtrlInst
   MemCtrlInst.io.wData  := RegFilesInst.io.rs2Data

@@ -14,6 +14,8 @@ class CSR extends Module {
     val imme          = Input(UInt(64.W))
     val csrData       = Output(UInt(64.W))
     val finalPC       = Output(UInt(64.W))
+    // verilator debug for difftest
+    val timerInter    = Output(Bool())
   })
   val io_csr = IO(Flipped(new CSRControl))
 
@@ -79,33 +81,36 @@ class CSR extends Module {
 
   // intrrupt
   when(io_csr.ecallSel) {
-    mstatus     := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
-    mepc        := io.pc
-    mcause      := "x_b".U
-    mtvec       := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
-    mie         := Mux(io_csr.addr === MIE.U, dest, mie)
-    io.finalPC  := mtvec
+    mstatus       := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
+    mepc          := io.pc
+    mcause        := "x_b".U
+    mtvec         := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
+    mie           := Mux(io_csr.addr === MIE.U, dest, mie)
+    io.finalPC    := mtvec
+    io.timerInter := false.B
   }.elsewhen(io_csr.mretSel) {
-    mstatus     := Seq(mstatus(63, 4), mstatus(7), mstatus(2, 0)).reduceLeft(Cat(_, _))
-    mepc        := Mux(io_csr.addr === MEPC.U, dest, mepc)
-    mcause      := Mux(io_csr.addr === MCAUSE.U, dest, mcause)
-    mtvec       := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
-    mie         := Mux(io_csr.addr === MIE.U, dest, mie)
-    io.finalPC  := mepc
-  }.elsewhen((mstatus(3) === 1.U) && (mip(7) === 1.U)) {
-    mstatus     := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
-    mepc        := io.nextpcNoExcep
-    mcause      := "x_7".U
-    mtvec       := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
-    mie         := Mux(io_csr.addr === MIE.U, dest, mie)
-    io.finalPC  := mtvec
+    mstatus       := Seq(mstatus(63, 4), mstatus(7), mstatus(2, 0)).reduceLeft(Cat(_, _))
+    mepc          := Mux(io_csr.addr === MEPC.U, dest, mepc)
+    mcause        := Mux(io_csr.addr === MCAUSE.U, dest, mcause)
+    mtvec         := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
+    mie           := Mux(io_csr.addr === MIE.U, dest, mie)
+    io.finalPC    := mepc
+    io.timerInter := false.B
+  }.elsewhen((mstatus(3) === 1.U) && (mip(7) === 1.U) && (mie(7) === 1.U)) {
+    mstatus       := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
+    mepc          := io.nextpcNoExcep
+    mcause        := "x_7".U
+    mtvec         := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
+    mie           := Mux(io_csr.addr === MIE.U, dest, mie)
+    io.finalPC    := mtvec
+    io.timerInter := true.B
   }.otherwise {
-    mstatus     := Mux(io_csr.addr === MSTATUS.U, dest, mstatus)
-    mepc        := Mux(io_csr.addr === MEPC.U, dest, mepc)
-    mcause      := Mux(io_csr.addr === MCAUSE.U, dest, mcause)
-    mtvec       := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
-    mie         := Mux(io_csr.addr === MIE.U, dest, mie)
-    io.finalPC  := io.nextpcNoExcep
+    mstatus       := Mux(io_csr.addr === MSTATUS.U, dest, mstatus)
+    mepc          := Mux(io_csr.addr === MEPC.U, dest, mepc)
+    mcause        := Mux(io_csr.addr === MCAUSE.U, dest, mcause)
+    mtvec         := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
+    mie           := Mux(io_csr.addr === MIE.U, dest, mie)
+    io.finalPC    := io.nextpcNoExcep
+    io.timerInter := false.B
   }
-
 }
