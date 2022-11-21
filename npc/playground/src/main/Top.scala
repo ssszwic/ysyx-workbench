@@ -28,10 +28,14 @@ class Top extends Module {
   val nextpcDefault = Wire(UInt(64.W))
   nextpcDefault := IFUInst.io.pc + 4.U
 
+  val nextpc = Wire(UInt(64.W))
+  nextpc := Mux(IDUInst.io_csr.ecallSel || IDUInst.io_csr.mretSel, CSRInst.io.csrData,
+                Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault))
+
   // IO
   io.jalSel   := IDUInst.io_alu.typeJSel
   io.jalrSel  := IDUInst.io_alu.jalrSel
-  io.nextPC   := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
+  io.nextPC   := nextpc
   // difftest
   io.regWen   := IDUInst.io.wenReg
   io.regAddr  := IDUInst.io.rdAddr
@@ -50,8 +54,7 @@ class Top extends Module {
   // IFU
   IFUInst.io.clock    := clock
   IFUInst.io.reset    := reset
-  IFUInst.io.nextpc   := Mux(IDUInst.io_csr.ecallSel || IDUInst.io_csr.mretSel, CSRInst.io.csrData,
-                            Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault))
+  IFUInst.io.nextpc   := nextpc
   IFUInst.io.pcEn     := io.cpuEn
 
   // IDU
