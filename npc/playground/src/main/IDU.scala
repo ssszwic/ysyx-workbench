@@ -128,6 +128,15 @@ class IDU extends Module {
   val funct7  = Wire(UInt(7.W))
   val op5     = Wire(UInt(5.W))
 
+  
+  val ecall   = Wire(Bool())
+  val ebreak  = Wire(Bool())
+  val mret    = Wire(Bool())
+
+  ecall   := (io.inst === "b0000_0000_0000_0000_0000_0000_0111_0011".U)
+  ebreak  := (io.inst === "b0000_0000_0001_0000_0000_0000_0111_0011".U)
+  mret    := (io.inst === "b0011_0000_0010_0000_0000_0000_0111_0011".U)
+
   funct3 := io.inst(14, 12)
   funct7 := io.inst(31, 25)
   op5    := io.inst(6, 2)
@@ -223,7 +232,7 @@ class IDU extends Module {
 
   // tell sim break when inst is ebreak
   val EbreakInst = Module(new Ebreak)
-  EbreakInst.io.ebreak := (io.inst === "b0000_0000_0001_0000_0000_0000_0111_0011".U)
+  EbreakInst.io.ebreak := ebreak
 }
 
 class Ebreak extends BlackBox with HasBlackBoxResource {
