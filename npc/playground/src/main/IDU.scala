@@ -3,8 +3,8 @@ package main
 import chisel3._
 import chisel3.util._
 
-object MyTools {
-  def Immediate(inst: UInt, typeR: Bool, typeI: Bool, typeS: Bool, typeB: Bool, typeU: Bool, typeJ: Bool): UInt = {
+object IDUTools {
+  def Immediate(inst: UInt, typeR: Bool, typeI: Bool, typeS: Bool, typeB: Bool, typeU: Bool, typeJ: Bool, typeCSR: Bool): UInt = {
     require(inst.getWidth == 32)
     val imme0 = Wire(UInt(33.W))
     val imme1 = Wire(UInt(11.W))
@@ -14,21 +14,32 @@ object MyTools {
     val imme5 = Wire(UInt(4.W))
     val imme6 = Wire(UInt(1.W))
 
-    imme0 := Fill(33, inst(31))
+    
+    when(typeCSR) {
+      imme0 := 0.U
+    }.otherwise{
+      imme0 := Fill(33, inst(31))
+    }
 
-    when(typeU) {
+    when(typeCSR) {
+      imme1 := 0.U
+    }.elsewhen(typeU) {
       imme1 := inst(31, 20)
     }.otherwise{
       imme1 := Fill(11, inst(31))
     }
 
-    when(typeU || typeJ) {
+    when(typeCSR) {
+      imme2 := 0.U
+    }.elsewhen(typeU || typeJ) {
       imme2 := inst(19, 12)
     }.otherwise{
       imme2 := Fill(8, inst(31))
     }
 
-    when(typeJ) {
+    when(typeCSR) {
+      imme3 := 0.U
+    }.elsewhen(typeJ) {
       imme3 := inst(20)
     }.elsewhen(typeU) {
       imme3 := 0.U
@@ -38,13 +49,17 @@ object MyTools {
       imme3 := inst(31)
     }
 
-    when(typeU) {
+    when(typeCSR) {
+      imme4 := 0.U
+    }.elsewhen(typeU) {
       imme4 := Fill(6, 0.U)
     }.otherwise{
       imme4 := inst(30, 25)
     }
 
-    when(typeJ || typeI) {
+    when(typeCSR) {
+      imme5 := inst(19, 16)
+    }.elsewhen(typeJ || typeI) {
       imme5 := inst(24, 21)
     }.elsewhen(typeU) {
       imme5 := Fill(4, 0.U)
@@ -52,7 +67,9 @@ object MyTools {
       imme5 := inst(11, 8)
     }
 
-    when(typeI) {
+    when(typeCSR) {
+      imme6 := inst(15)
+    }.elsewhen(typeI) {
       imme6 := inst(20)
     }.elsewhen(typeS) {
       imme6 := inst(7)
@@ -91,6 +108,13 @@ class ALUControl extends Bundle {
   val mulOp       = Output(UInt(2.W))
 }
 
+class CSRControl extends Bundle {
+  val ecallSel  = Output(Bool())
+  val mretSel   = Output(Bool())
+  val addr      = Output(UInt(12.W))
+  val op        = Output(UInt(3.W))
+}
+
 class IDU extends Module {
   val io = IO(new Bundle {
     val inst      = Input(UInt(32.W))
@@ -103,14 +127,17 @@ class IDU extends Module {
     val imme      = Output(UInt(64.W))  // immediate with sign expandsion
     // Mem control
     val wenMem    = Output(Bool())
-    val renMem   = Output(Bool())
+    val renMem    = Output(Bool())
     val lengthMem = Output(UInt(2.W))
     val unsignMem = Output(Bool())
     // Unconditional Jump for jal or jarl
     val jumpSel   = Output(Bool())
+    // csr
+    val csrSel    = Output(Bool())
   })
   // ALU control bundle
   val io_alu = IO(new ALUControl)
+  val io_csr = IO(new CSRControl)
 
   // determine the type of instruction RISBUJ
   val typeR   = Wire(Bool())
@@ -119,6 +146,7 @@ class IDU extends Module {
   val typeB   = Wire(Bool())
   val typeU   = Wire(Bool())
   val typeJ   = Wire(Bool())
+  val typeCSR = Wire(Bool())
 
   val typeII  = Wire(Bool()) // imme
   val typeIL  = Wire(Bool()) // load
@@ -145,18 +173,19 @@ class IDU extends Module {
   typeIL := (op5 === "b00000".U) && (io.inst(1, 0) === "b11".U) // avoid empty inst
   typeIJ := (op5 === "b11001".U)
 
-  typeR := (op5(4, 2) === "b011".U) && (op5(0) === "b0".U)
-  typeI := typeII || typeIL || typeIJ
-  typeS := (op5 === "b01000".U)
-  typeB := (op5 === "b11000".U)
-  typeU := (op5(4) === "b0".U && op5(2, 0) === "b101".U)
-  typeJ := (op5 === "b11011".U)
+  typeR   := (op5(4, 2) === "b011".U) && (op5(0) === "b0".U)
+  typeI   := typeII || typeIL || typeIJ
+  typeS   := (op5 === "b01000".U)
+  typeB   := (op5 === "b11000".U)
+  typeU   := (op5(4) === "b0".U && op5(2, 0) === "b101".U)
+  typeJ   := (op5 === "b11011".U)
+  typeCSR := (op5 === "b11100".U && funct3(1, 0) =/= "b00".U )
 
   // immediate
-  io.imme := MyTools.Immediate(io.inst, typeR, typeI, typeS, typeB, typeU, typeJ)
+  io.imme := IDUTools.Immediate(io.inst, typeR, typeI, typeS, typeB, typeU, typeJ, typeCSR)
 
   // RegFiles
-  io.wenReg  := typeR || typeI || typeU || typeJ
+  io.wenReg  := typeR || typeI || typeU || typeJ || typeCSR
   io.rs1Addr := io.inst(19, 15)
   io.rs2Addr := io.inst(24, 20)
   io.rdAddr  := io.inst(11, 7)
@@ -219,6 +248,12 @@ class IDU extends Module {
   // mulOP
   io_alu.mulOp := funct3(1, 0);
 
+  // CSR control signal
+  io_csr.ecallSel := ecall
+  io_csr.mretSel  := mret
+  io_csr.addr     := io.inst(31, 10)
+  io_csr.op       := funct3(1, 0);
+
   // Mem control
   io.wenMem := typeS
   io.renMem := typeIL
@@ -229,6 +264,9 @@ class IDU extends Module {
 
   // other control
   io.jumpSel := typeJ || typeIJ
+
+  // csr control
+  io.csrSel  := typeCSR
 
   // tell sim break when inst is ebreak
   val EbreakInst = Module(new Ebreak)
