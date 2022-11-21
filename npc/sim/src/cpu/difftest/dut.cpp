@@ -109,6 +109,7 @@ void difftest_step() {
   printf("dtff\n");
 
   checkregs(&ref_r);
+  printf("dtff\n");
 }
 
 #endif
