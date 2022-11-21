@@ -297,7 +297,7 @@ static void isa_exec_once() {
   // update reg and pc, gpr(regfiles) will not update until next cycle, so update by io_regWen
   npc_cpu.pc = *rtl_pc;
   npc_cpu.next_pc = top->io_nextPC;
-  if(top->io_regWen == 1) {
+  if((top->io_regWen == 1) && (top->io_regAddr != 0)) {
     npc_cpu.gpr[top->io_regAddr] = top->io_regWData;
   }
 
