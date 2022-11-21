@@ -9,7 +9,7 @@
 #define CONFIT_WATCHPOINT       1//depend CONFIG_ITRACE
 // #define CONFIG_MEMORY_TRACE     1
 // #define CONFIG_FUNCTION_TRACE   1
-#define CONFIG_DIFFTEST         1
+// #define CONFIG_DIFFTEST         1
 // #define CONFIG_STATISTIC        1
 // #define PRINT_CPU_TIME          1
 
