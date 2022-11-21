@@ -235,7 +235,6 @@ void trace_and_difftest() {
 #endif
 // difftest
   IFDEF(CONFIG_DIFFTEST, difftest_step());
-  printf("sad\n");
 }
 
 void cpu_init() {

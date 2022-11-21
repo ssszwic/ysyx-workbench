@@ -106,6 +106,7 @@ void difftest_step() {
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
 
   checkregs(&ref_r);
+  printf("sad\n");
 }
 
 #endif
