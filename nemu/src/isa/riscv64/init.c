@@ -33,7 +33,7 @@ static void restart() {
   /* The zero register is always 0. */
   cpu.gpr[0] = 0;
 
-  /* The csr mstatus register is always 0. */
+  /* The csr mstatus register is always. */
   cpu.csr[0] = 0xa00001800;
 }
 

@@ -34,9 +34,7 @@ static inline int find_mapid_by_addr(IOMap *maps, int size, paddr_t addr) {
     if (map_inside(maps + i, addr)) {
       // skip difftest
       // to do
-      #ifdef CONFIG_DIFFTEST
-      difftest_skip_ref();
-      #endif
+      IFDEF(CONFIG_DIFFTEST, difftest_skip_ref());
       return i;
     }
   }

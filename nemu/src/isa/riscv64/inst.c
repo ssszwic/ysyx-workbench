@@ -267,6 +267,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 110 ????? 11100 11", csrrsi , CSR, R(dest) = csr(csr_index); if(imm != 0) {csr(csr_index) = csr(csr_index) | imm;});
   // Atomic Read and clear Bits in CSR immediate
   INSTPAT("??????? ????? ????? 111 ????? 11100 11", csrrci , CSR, R(dest) = csr(csr_index); if(imm != 0) {csr(csr_index) = csr(csr_index) & (~imm);});
+  //          0011000 00000 00000 010 00110 11100 11
+  // 30 00 23 73                               0011
 
   /*----------------------------------------- N -----------------------------------------*/
   // environment bread (I type)   $a0 is status
