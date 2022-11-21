@@ -54,7 +54,8 @@ static VerilatedContext* contextp = NULL;
 #endif
 
 #ifdef CONFIG_DIFFTEST
-RegWrite reg_write;
+void difftest_skip_ref();
+void difftest_step();
 #endif
 
 #ifdef CONFIG_STATISTIC
@@ -84,7 +85,7 @@ static void exec_once();
 static void trace_and_difftest();
 static void log_trace(bool print_screen);
 
-void difftest_step();
+
 bool update_wp(char *log);
 uint64_t get_time();
 void device_update();
@@ -300,6 +301,12 @@ static void isa_exec_once() {
   if((top->io_regWen == 1) && (top->io_regAddr != 0)) {
     npc_cpu.gpr[top->io_regAddr] = top->io_regWData;
   }
+#ifdef CONFIG_DIFFTEST
+  // difftest skip when read/write csr reg or timer interrupt
+  if(top->io_csrOrTimer) {
+    difftest_skip_ref();
+  }
+#endif
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
