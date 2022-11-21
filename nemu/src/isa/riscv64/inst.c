@@ -108,7 +108,6 @@ static int decode_exec(Decode *s) {
   decode_operand(s, &dest, &csr_index, &src1, &src2, &imm, concat(TYPE_, type)); \
   __VA_ARGS__ ; \
 }
-  uint64_t mstatus_tmp = csr(0x300);
 
   INSTPAT_START();
 
@@ -259,7 +258,7 @@ static int decode_exec(Decode *s) {
   // Atomic Read and write in CSR
   INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , CSR, if(dest != 0) {R(dest) = csr(csr_index);} csr(csr_index) = src1);
   // Atomic Read and Set Bits in CSR
-  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , CSR, R(dest) = csr(csr_index); printf("csr: %x", csr_index); printf("data: %lx\n", csr(csr_index)); if(dest != 0) {csr(csr_index) = csr(csr_index) | src1;});
+  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , CSR, R(dest) = csr(csr_index); if(dest != 0) {csr(csr_index) = csr(csr_index) | src1;});
   // Atomic Read and clear Bits in CSR
   INSTPAT("??????? ????? ????? 011 ????? 11100 11", csrrc  , CSR, R(dest) = csr(csr_index); if(dest != 0) {csr(csr_index) = csr(csr_index) & (~src1);});
   // Atomic Read and write in CSR immediate
@@ -282,11 +281,6 @@ static int decode_exec(Decode *s) {
   // error instruction
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
-
-  if(csr(0x300) != mstatus_tmp) {
-    printf("change mstatus: %lx\n", csr(0x300));
-  }
-  
 
   R(0) = 0; // reset $zero to 0
   // check function when first is or jal or jalr
