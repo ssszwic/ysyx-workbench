@@ -108,7 +108,7 @@ static int decode_exec(Decode *s) {
   decode_operand(s, &dest, &csr_index, &src1, &src2, &imm, concat(TYPE_, type)); \
   __VA_ARGS__ ; \
 }
-  // uint64_t status_tmp = csr(0x300);
+  uint64_t mstatus_tmp = csr(0x300);
 
   INSTPAT_START();
 
@@ -283,7 +283,10 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
 
-  printf("mstatus: %lx\n", csr(0x300));
+  if(csr(0x300) != mstatus_tmp) {
+    printf("change mstatus: %lx\n", csr(0x300));
+  }
+  
 
   R(0) = 0; // reset $zero to 0
   // check function when first is or jal or jalr
