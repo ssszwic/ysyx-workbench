@@ -34,7 +34,8 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
   // open time irq and set timecmp
   outd(0x200BFF8, 0);
   outd(0x2004000, timecmp);
-  asm volatile("csrw mie, 0x8");
+  uint64_t mie = 0x80;
+  asm volatile("csrw mie, %0" : : "r"(mie));
 
   // register event handler
   user_handler = handler;
