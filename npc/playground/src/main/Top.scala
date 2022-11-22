@@ -33,7 +33,7 @@ class Top extends Module {
   nextpcDefault := IFUInst.io.pc + 4.U
 
   val regWData = Wire(UInt(64.W))
-  regWData := Mux(IDUInst.io.csrSel, CSRInst.io.csrData,
+  regWData := Mux(IDUInst.io_csr.csrSel, CSRInst.io.csrData,
                       Mux(IDUInst.io.jumpSel, nextpcDefault, 
                           Mux(IDUInst.io.renMem, MemCtrlInst.io.rData, ALUInst.io.result)))
 
@@ -45,7 +45,7 @@ class Top extends Module {
   io.regWen     := IDUInst.io.wenReg
   io.regAddr    := IDUInst.io.rdAddr
   io.regWData   := regWData
-  io.csrOrInter := IDUInst.io.csrSel || CSRInst.io.interrupt
+  io.csrOrInter := IDUInst.io_csr.csrSel || CSRInst.io.interrupt
   io.clintWR    := CLINTInst.io.clintWR
 
   // MemCtrlInst

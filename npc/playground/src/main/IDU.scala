@@ -111,6 +111,7 @@ class ALUControl extends Bundle {
 class CSRControl extends Bundle {
   val ecallSel  = Output(Bool())
   val mretSel   = Output(Bool())
+  val csrSel    = Output(Bool())
   val addr      = Output(UInt(12.W))
   val op        = Output(UInt(3.W))
 }
@@ -133,7 +134,6 @@ class IDU extends Module {
     // Unconditional Jump for jal or jarl
     val jumpSel   = Output(Bool())
     // csr
-    val csrSel    = Output(Bool())
   })
   // ALU control bundle
   val io_alu = IO(new ALUControl)
@@ -253,6 +253,7 @@ class IDU extends Module {
   io_csr.mretSel  := mret
   io_csr.addr     := io.inst(31, 20)
   io_csr.op       := funct3;
+  io_csr.csrSel   := typeCSR
 
   // Mem control
   io.wenMem := typeS
@@ -264,9 +265,6 @@ class IDU extends Module {
 
   // other control
   io.jumpSel := typeJ || typeIJ
-
-  // csr control
-  io.csrSel  := typeCSR
 
   // tell sim break when inst is ebreak
   val EbreakInst = Module(new Ebreak)

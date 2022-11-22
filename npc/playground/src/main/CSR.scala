@@ -6,7 +6,7 @@ import chisel3.util._
 class CSR extends Module {
   val io = IO(new Bundle {
     // timer interrupt
-    val timeCmp      = Input(Bool())
+    val timeCmp       = Input(Bool())
     val pc            = Input(UInt(64.W))
     // the next pc without exception
     val nextpcNoExcep = Input(UInt(64.W))
@@ -84,7 +84,7 @@ class CSR extends Module {
     mstatus       := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
     mepc          := io.pc
     mcause        := "x_b".U
-    mtvec         := Mux(io_csr.addr === MTVEC.U, dest, mtvec)
+    mtvec         := Mux(io_csr.addr === MTVEC.U || , dest, mtvec)
     mie           := Mux(io_csr.addr === MIE.U, dest, mie)
     io.finalPC    := mtvec
     io.interrupt  := true.B
