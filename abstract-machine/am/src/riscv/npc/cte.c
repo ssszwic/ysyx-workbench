@@ -1,8 +1,10 @@
 #include <am.h>
+#include <riscv/riscv.h>
 #include <klib.h>
 
-
 static Context* (*user_handler)(Event, Context*) = NULL;
+
+static uint64_t timecmp = 0x1000;
 
 Context* __am_irq_handle(Context *c) {
   if (user_handler) {
@@ -10,8 +12,7 @@ Context* __am_irq_handle(Context *c) {
 
     switch (c->mcause) {
       case 0xb: ev.event = EVENT_YIELD; break;
-      case 
-      // case 0x
+      case 0x7: ev.event = EVENT_IRQ_TIMER; timecmp = timecmp + 0x1000; outd(0x2004000, timecmp);break;
       default: ev.event = EVENT_ERROR; break;
     }
 
@@ -29,6 +30,11 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
   // initialize exception entry
   // set exception entry address
   asm volatile("csrw mtvec, %0" : : "r"(__am_asm_trap));
+
+  // open time irq and set timecmp
+  outd(0x200BFF8, 0);
+  outd(0x2004000, timecmp);
+  asm volatile("csrw mtvec, 0x8");
 
   // register event handler
   user_handler = handler;

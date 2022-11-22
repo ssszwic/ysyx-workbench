@@ -29,6 +29,10 @@ int main() {
 
   Log("Finish initialization");
 
+  while(1) {
+    
+  }
+
 #ifdef HAS_CTE
   yield();
 #endif
