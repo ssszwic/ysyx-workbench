@@ -29,7 +29,7 @@ int main() {
 
   Log("Finish initialization");
   int i = 0;
-  while(1 < 1000) { 
+  while(1 < 100) { 
     i++;
   }
 
