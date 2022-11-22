@@ -76,7 +76,7 @@ class CSR extends Module {
   }.elsewhen(io.timeCmp) {
     mip := "x_80".U
   }.otherwise {
-    mip := mip
+    mip := 0.U
   }
 
   // intrrupt
