@@ -23,7 +23,9 @@ class Top extends Module {
   val RegFilesInst  = Module(new RegFiles)
   val ALUInst       = Module(new ALU)
   val MemCtrlInst   = Module(new MemCtrl)
+  val MemVirtual    = Module(new MemVirtual)
   val CSRInst       = Module(new CSR)
+  val CLINTInst     = Module(new CLINT)
 
   // default nextpc = pc + 4
   val nextpcDefault = Wire(UInt(64.W))
@@ -51,6 +53,14 @@ class Top extends Module {
   MemCtrlInst.io.ren    := IDUInst.io.renMem
   MemCtrlInst.io.length := IDUInst.io.lengthMem
   MemCtrlInst.io.unsign := IDUInst.io.unsignMem
+  MemCtrlInst.io_virtualMem.rData := MemVirtual.io.rData
+
+  // MemVirtual
+  MemVirtual.io.ren     := MemCtrlInst.io_virtualMem.ren
+  MemVirtual.io.addr    := MemCtrlInst.io_virtualMem.addr
+  MemVirtual.io.wen     := MemCtrlInst.io_virtualMem.wen
+  MemVirtual.io.wData   := MemCtrlInst.io_virtualMem.wData
+  MemVirtual.io.wMask   := MemCtrlInst.io_virtualMem.wMask
 
   // IFU
   IFUInst.io.clock    := clock
@@ -82,7 +92,9 @@ class Top extends Module {
   CSRInst.io.pc             := IFUInst.io.pc
   CSRInst.io.nextpcNoExcep  := Mux(ALUInst.io.nextpcSel || IDUInst.io.jumpSel, ALUInst.io.result, nextpcDefault)
   CSRInst.io.imme           := IDUInst.io.imme
-  CSRInst.io.time_cmp       := false.B
+  CSRInst.io.timeCmp        := CLINTInst.io.timeCmp
   CSRInst.io_csr            <> IDUInst.io_csr
-  
+
+  // CLINT
+  CLINTInst.io_mem <> MemCtrlInst.io_clint
 }

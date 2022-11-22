@@ -6,7 +6,7 @@ import chisel3.util._
 class CSR extends Module {
   val io = IO(new Bundle {
     // timer interrupt
-    val time_cmp      = Input(Bool())
+    val timeCmp      = Input(Bool())
     val pc            = Input(UInt(64.W))
     // the next pc without exception
     val nextpcNoExcep = Input(UInt(64.W))
@@ -30,8 +30,8 @@ class CSR extends Module {
   val mtvec   = RegInit(0.U(64.W))
   val mepc    = RegInit(0.U(64.W))
   val mcause  = RegInit(0.U(64.W))
-  // default open MTIM
-  val mie     = RegInit("b0000_0000_1000_0000".U(64.W))
+  // default close MTIM
+  val mie     = RegInit("b0000_0000_0000_0000".U(64.W))
   val mip     = RegInit("b0000_0000_0000_0000".U(64.W))
 
   val csr     = Wire(UInt(64.W))
