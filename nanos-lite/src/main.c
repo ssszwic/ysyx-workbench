@@ -28,9 +28,9 @@ int main() {
   init_proc();
 
   Log("Finish initialization");
-
-  while(1) {
-
+  int i = 0;
+  while(1 < 1000) { 
+    i++;
   }
 
 #ifdef HAS_CTE
