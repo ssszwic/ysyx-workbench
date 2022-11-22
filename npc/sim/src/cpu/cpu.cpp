@@ -84,6 +84,7 @@ static void isa_exec_once();
 static void exec_once();
 static void trace_and_difftest();
 static void log_trace(bool print_screen);
+void isa_reg_display(bool *err_list);
 
 
 bool update_wp(char *log);
@@ -332,6 +333,9 @@ void except_exit(char *cause) {
   log_write(true, "exception exit: %s\n", cause);
   cpu_exit();
   log_trace(true);
+  // printf regs
+  bool err_list[34] = {0};
+  isa_reg_display(err_list);
   assert(0);
 }
 
