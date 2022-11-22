@@ -41,7 +41,7 @@ class MemCtrl extends Module {
   val addrAlig = Wire(UInt(64.W))
   addrAlig := Cat(io.addr(63, 3), Fill(3, 0.U(1.W)))
 
-  virtualMemSel := (addrAlig === "x_200_4000".U) || (addrAlig === "x_200_BFF8".U)
+  virtualMemSel := (addrAlig =/= "x_200_4000".U) && (addrAlig =/= "x_200_BFF8".U)
 
   // In eight-byte units
   // Consider that there is no cross-unit reading and writing
