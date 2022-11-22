@@ -22,6 +22,7 @@ class CLINT extends Module {
   val io = IO(new Bundle {
     // timer interrupt
     val timeCmp = Output(Bool())
+    val clintWR = Output(Bool())
   })
   val io_mem = IO(Flipped(new MemInterface))
 
@@ -35,6 +36,7 @@ class CLINT extends Module {
   val tmpNew    = Wire(UInt(64.W))
 
   io.timeCmp := Mux(mtime >= mtimecmp, true.B, false.B)
+  io.clintWR := io_mem.ren || io_mem.wen
 
   // read reg
   when(io_mem.addr === MTIME.U) {

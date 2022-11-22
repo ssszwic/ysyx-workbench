@@ -15,6 +15,7 @@ class Top extends Module {
     val regWen      = Output(Bool())
     val regAddr     = Output(UInt(5.W))
     val regWData    = Output(UInt(64.W))
+    val clintWR     = Output(Bool())
   })
 
   // declare module
@@ -45,6 +46,7 @@ class Top extends Module {
   io.regAddr    := IDUInst.io.rdAddr
   io.regWData   := regWData
   io.csrOrInter := IDUInst.io.csrSel || CSRInst.io.interrupt
+  io.clintWR    := CLINTInst.io.clintWR
 
   // MemCtrlInst
   MemCtrlInst.io.wData  := RegFilesInst.io.rs2Data

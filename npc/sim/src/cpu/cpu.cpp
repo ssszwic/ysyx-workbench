@@ -303,8 +303,8 @@ static void isa_exec_once() {
     npc_cpu.gpr[top->io_regAddr] = top->io_regWData;
   }
 #ifdef CONFIG_DIFFTEST
-  // difftest skip when read/write csr reg or interrupt
-  if(top->io_csrOrInter) {
+  // difftest skip when read/write csr reg or interrupt or write/read clint
+  if(top->io_csrOrInter || top->io_clintWR) {
     difftest_skip_ref();
   }
 #endif
