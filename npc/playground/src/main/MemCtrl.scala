@@ -6,7 +6,7 @@ import chisel3.util._
 class MemInterface extends Bundle {
   // read
   val ren   = Output(Bool())
-  val addr  = Output(Bool())
+  val addr  = Output(UInt(64.W))
   val rData = Input(UInt(64.W))
   // write
   val wen   = Output(Bool())
