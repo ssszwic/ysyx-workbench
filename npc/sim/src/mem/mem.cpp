@@ -8,6 +8,7 @@ static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
 
 uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 uint32_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
+void except_exit(char *cause);
 void cpu_exit();
 uint64_t get_time();
 
@@ -22,7 +23,7 @@ static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
 static bool flip = false;
 
 static void out_of_bound(vaddr_t addr) {
-  cpu_exit();
+  except_exit((char *) "addr out of bound");
   log_write(true, "addr = 0x%016lx out of bound mem!\n", addr);
   assert(0);
 }

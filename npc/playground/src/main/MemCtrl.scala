@@ -3,6 +3,17 @@ package main
 import chisel3._
 import chisel3.util._
 
+class MemInterface extends Bundle {
+  // read
+  val ren   = Output(Bool())
+  val addr  = Output(UInt(64.W))
+  val rData = Input(UInt(64.W))
+  // write
+  val wen   = Output(Bool())
+  val wData = Output(UInt(64.W))
+  val wMask = Output(UInt(8.W))
+}
+
 class MemCtrl extends Module {
   val io = IO(new Bundle {
     // read
@@ -17,11 +28,20 @@ class MemCtrl extends Module {
     val unsign    = Input(Bool())
   })
 
+  val io_virtualMem = IO(new MemInterface)
+  val io_clint      = IO(new MemInterface)
+
   val mask = Wire(UInt(8.W))
+
+  // virtual mem or clint true: mem
+  val virtualMemSel = Wire(Bool())
+
   
   // addr
   val addrAlig = Wire(UInt(64.W))
   addrAlig := Cat(io.addr(63, 3), Fill(3, 0.U(1.W)))
+
+  virtualMemSel := (addrAlig =/= "x_200_4000".U) && (addrAlig =/= "x_200_BFF8".U)
 
   // In eight-byte units
   // Consider that there is no cross-unit reading and writing
@@ -39,19 +59,26 @@ class MemCtrl extends Module {
   val wData = Wire(UInt(64.W))
   wData := io.wData << Cat(io.addr(2, 0), "b000".U(3.W))
 
-  val MemVirtualInst_data = Module(new MemVirtual)
-  MemVirtualInst_data.io.ren     := io.ren
-  MemVirtualInst_data.io.addr    := addrAlig
-  MemVirtualInst_data.io.wen     := io.wen
-  MemVirtualInst_data.io.wData   := wData
-  MemVirtualInst_data.io.wMask   := mask
+  io_virtualMem.ren     := Mux(virtualMemSel, io.ren, false.B)
+  io_virtualMem.addr    := addrAlig
+  io_virtualMem.wen     := Mux(virtualMemSel, io.wen, false.B)
+  io_virtualMem.wData   := wData
+  io_virtualMem.wMask   := mask
+
+  io_clint.ren          := Mux(!virtualMemSel, io.ren, false.B)
+  io_clint.addr         := addrAlig
+  io_clint.wen          := Mux(!virtualMemSel, io.wen, false.B)
+  io_clint.wData        := wData
+  io_clint.wMask        := mask
 
   // read data
+  val dataRead = Wire(UInt(64.W))
   val dataByte = Wire(UInt(8.W))
   val dataHalf = Wire(UInt(16.W))
   val dataWord = Wire(UInt(32.W))
   val dataDoub = Wire(UInt(64.W))
 
+  dataRead := Mux(virtualMemSel, io_virtualMem.rData, io_clint.rData)
   dataByte := 0.U
   dataHalf := 0.U
   dataWord := 0.U
@@ -60,23 +87,23 @@ class MemCtrl extends Module {
   when (io.length === 0.U) {
     for (i <- 0 until 8) {
       when(mask(i) === 1.U) {
-        dataByte := MemVirtualInst_data.io.rData(8 * (i + 1) - 1, 8 * i)
+        dataByte := dataRead(8 * (i + 1) - 1, 8 * i)
       }
     }
   }.elsewhen(io.length === 1.U) {
     for (i <- 0 until 4) {
       when(mask(2 * (i + 1) - 1, 2 * i) === "b11".U) {
-        dataHalf := MemVirtualInst_data.io.rData(16 * (i + 1) - 1, 16 * i)
+        dataHalf := dataRead(16 * (i + 1) - 1, 16 * i)
       }
     }
   }.elsewhen(io.length === 2.U) {
     for (i <- 0 until 2) {
       when(mask(4 * (i + 1) - 1, 4 * i) === "b1111".U) {
-        dataWord := MemVirtualInst_data.io.rData(32 * (i + 1) - 1, 32 * i)
+        dataWord := dataRead(32 * (i + 1) - 1, 32 * i)
       }
     }
   }.otherwise{
-    dataDoub := MemVirtualInst_data.io.rData
+    dataDoub := dataRead
   }
 
   // expend
