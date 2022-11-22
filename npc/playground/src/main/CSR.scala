@@ -84,32 +84,32 @@ class CSR extends Module {
     mstatus       := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
     mepc          := io.pc
     mcause        := "x_b".U
-    mtvec         := Mux(io_csr.addr === MTVEC.U || io_csr.csrSel, dest, mtvec)
-    mie           := Mux(io_csr.addr === MIE.U || io_csr.csrSel, dest, mie)
+    mtvec         := Mux(io_csr.addr === MTVEC.U && io_csr.csrSel, dest, mtvec)
+    mie           := Mux(io_csr.addr === MIE.U && io_csr.csrSel, dest, mie)
     io.finalPC    := mtvec
     io.interrupt  := true.B
   }.elsewhen(io_csr.mretSel) {
     mstatus       := Seq(mstatus(63, 4), mstatus(7), mstatus(2, 0)).reduceLeft(Cat(_, _))
-    mepc          := Mux(io_csr.addr === MEPC.U || io_csr.csrSel, dest, mepc)
-    mcause        := Mux(io_csr.addr === MCAUSE.U || io_csr.csrSel, dest, mcause)
-    mtvec         := Mux(io_csr.addr === MTVEC.U || io_csr.csrSel, dest, mtvec)
-    mie           := Mux(io_csr.addr === MIE.U || io_csr.csrSel, dest, mie)
+    mepc          := Mux(io_csr.addr === MEPC.U && io_csr.csrSel, dest, mepc)
+    mcause        := Mux(io_csr.addr === MCAUSE.U && io_csr.csrSel, dest, mcause)
+    mtvec         := Mux(io_csr.addr === MTVEC.U && io_csr.csrSel, dest, mtvec)
+    mie           := Mux(io_csr.addr === MIE.U && io_csr.csrSel, dest, mie)
     io.finalPC    := mepc
     io.interrupt  := true.B
   }.elsewhen((mstatus(3) === 1.U) && (mip(7) === 1.U) && (mie(7) === 1.U)) {
     mstatus       := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
     mepc          := io.nextpcNoExcep
     mcause        := "x_7".U
-    mtvec         := Mux(io_csr.addr === MTVEC.U || io_csr.csrSel, dest, mtvec)
-    mie           := Mux(io_csr.addr === MIE.U || io_csr.csrSel, dest, mie)
+    mtvec         := Mux(io_csr.addr === MTVEC.U && io_csr.csrSel, dest, mtvec)
+    mie           := Mux(io_csr.addr === MIE.U && io_csr.csrSel, dest, mie)
     io.finalPC    := mtvec
     io.interrupt  := true.B
   }.otherwise {
-    mstatus       := Mux(io_csr.addr === MSTATUS.U || io_csr.csrSel, dest, mstatus)
-    mepc          := Mux(io_csr.addr === MEPC.U || io_csr.csrSel, dest, mepc)
-    mcause        := Mux(io_csr.addr === MCAUSE.U || io_csr.csrSel, dest, mcause)
-    mtvec         := Mux(io_csr.addr === MTVEC.U || io_csr.csrSel, dest, mtvec)
-    mie           := Mux(io_csr.addr === MIE.U || io_csr.csrSel, dest, mie)
+    mstatus       := Mux(io_csr.addr === MSTATUS.U && io_csr.csrSel, dest, mstatus)
+    mepc          := Mux(io_csr.addr === MEPC.U && io_csr.csrSel, dest, mepc)
+    mcause        := Mux(io_csr.addr === MCAUSE.U && io_csr.csrSel, dest, mcause)
+    mtvec         := Mux(io_csr.addr === MTVEC.U && io_csr.csrSel, dest, mtvec)
+    mie           := Mux(io_csr.addr === MIE.U && io_csr.csrSel, dest, mie)
     io.finalPC    := io.nextpcNoExcep
     io.interrupt  := false.B
   }
