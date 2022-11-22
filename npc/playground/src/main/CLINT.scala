@@ -11,7 +11,7 @@ object CLINTTools {
     val newBytes  = Wire(Vec(length, UInt(8.W)))
 
     for(i <- 0 until length) {
-      newBytes(i) := Mux(byteMask(i) === 1.U, wData(8 * i + 7, 8 * i), data(8 * i + 7, 8 * i))
+      newBytes(length - i - 1) := Mux(byteMask(i) === 1.U, wData(8 * i + 7, 8 * i), data(8 * i + 7, 8 * i))
     }
 
     newBytes.reduceLeft(Cat(_, _))
