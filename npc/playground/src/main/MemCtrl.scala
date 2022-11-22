@@ -11,7 +11,7 @@ class MemInterface extends Bundle {
   // write
   val wen   = Output(Bool())
   val wData = Output(UInt(64.W))
-  val wMask = Output(UInt(64.W))
+  val wMask = Output(UInt(8.W))
 }
 
 class MemCtrl extends Module {
