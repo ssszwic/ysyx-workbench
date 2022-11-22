@@ -28,10 +28,10 @@ int main() {
   init_proc();
 
   Log("Finish initialization");
-  int i = 0;
-  while(1 < 100) { 
-    i++;
-  }
+  // int i = 0;
+  // while(1 < 100) { 
+  //   i++;
+  // }
 
 #ifdef HAS_CTE
   yield();
