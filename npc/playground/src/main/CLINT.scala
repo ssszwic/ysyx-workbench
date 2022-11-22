@@ -44,7 +44,9 @@ class CLINT extends Module {
   }.otherwise {
     tmp := 0.U
   }
-
+  
+  io_mem.rData := tmp
+  // new data after write with mask
   tmpNew := CLINTTools.WriteMask(tmp, io_mem.wMask, io_mem.wData)
 
   // write mtimecmp
