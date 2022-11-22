@@ -328,6 +328,13 @@ void cpu_exit(){
   #endif
 }
 
+void except_exit(char *cause) {
+  log_write(true, "exception exit: %s\n", cause);
+  cpu_exit();
+  log_trace(true);
+  assert(0);
+}
+
 #ifdef CONFIG_STATISTIC
 static void statistic() {
   log_write(true, ANSI_FMT("statistic:\n", ANSI_FG_BLUE));
