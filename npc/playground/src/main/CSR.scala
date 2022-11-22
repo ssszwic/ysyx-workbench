@@ -73,7 +73,7 @@ class CSR extends Module {
 
   when(io_csr.addr === MIP.U) {
     mip := dest
-  }.elsewhen(io.time_cmp) {
+  }.elsewhen(io.timeCmp) {
     mip := "x_80".U
   }.otherwise {
     mip := mip
