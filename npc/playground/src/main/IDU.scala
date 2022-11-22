@@ -252,7 +252,7 @@ class IDU extends Module {
   io_csr.ecallSel := ecall
   io_csr.mretSel  := mret
   io_csr.addr     := io.inst(31, 20)
-  io_csr.op       := funct3(1, 0);
+  io_csr.op       := funct3;
 
   // Mem control
   io.wenMem := typeS
