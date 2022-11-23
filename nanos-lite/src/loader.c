@@ -35,12 +35,12 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 	}
 
   // print magic
-  // printf("magic: ");
-  // for(int i = 0; i < 16; i++) {
-  //   printf("%x ", elf_head.e_ident[i]);
-  // }
-  // printf("\n");
-  // assert(0);
+  printf("magic: ");
+  for(int i = 0; i < 16; i++) {
+    printf("%x ", elf_head.e_ident[i]);
+  }
+  printf("\n");
+  assert(0);
 
   // check ARCH
   assert(elf_head.e_machine == EXPECT_TYPE);
