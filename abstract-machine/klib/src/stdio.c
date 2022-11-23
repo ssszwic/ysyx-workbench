@@ -57,6 +57,8 @@ int printf(const char *fmt, ...) {
 
 int sprintf(char *buf, const char *fmt, ...)
 {
+  // the length of fmt muss less than BUF_SIZE
+  assert(strnlen(fmt, BUF_SIZE) < BUF_SIZE);
   va_list args;
   int n;
 
