@@ -30,6 +30,7 @@ static char *digits = "0123456789abcdefghijklmnopqrstuvwxyz";
 static char *upper_digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 int printf(const char *fmt, ...) {
+  assert(0);
   assert(fmt);
   buf[0] = '\0';
 
