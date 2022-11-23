@@ -42,6 +42,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // printf("\n");
 
   // check ARCH
+  printf("program table: num %lx\n", elf_head.e_machine);
   assert(elf_head.e_machine == EXPECT_TYPE);
 
   // read Program Headers
