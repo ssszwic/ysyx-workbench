@@ -67,8 +67,10 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
       memset((char *) pstart[i].p_vaddr + pstart[i].p_filesz, 0, pstart[i].p_memsz - pstart[i].p_filesz);
     }
   }
+  free(pstart);
+  pstart = NULL;
   
-  return 0;
+  return elf_head.e_entry;
 }
 
 void naive_uload(PCB *pcb, const char *filename) {
