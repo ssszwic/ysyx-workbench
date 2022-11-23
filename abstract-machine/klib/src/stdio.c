@@ -39,8 +39,7 @@ static size_t strnlen(const char *s, size_t count)
 
 int printf(const char *fmt, ...) {
   // the length of fmt muss less than BUF_SIZE
-  assert(strnlen(fmt, BUF_SIZE) < 1000);
-
+  assert(strnlen(fmt, BUF_SIZE) < BUF_SIZE);
   assert(fmt);
   buf[0] = '\0';
 
@@ -57,8 +56,6 @@ int printf(const char *fmt, ...) {
 
 int sprintf(char *buf, const char *fmt, ...)
 {
-  // the length of fmt muss less than BUF_SIZE
-  assert(strnlen(fmt, BUF_SIZE) < BUF_SIZE);
   va_list args;
   int n;
 
