@@ -46,6 +46,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   
   
   printf("ok\n");
+  assert(0);
   return 0;
 }
 
