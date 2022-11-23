@@ -35,20 +35,12 @@ void *malloc(size_t size) {
   // On native, malloc() will be called during initializaion of C runtime.
   // Therefore do not call panic() here, else it will yield a dead recursion:
   //   panic() -> putchar() -> (glibc) -> malloc() -> panic()
-  printf("hbrk: %lx\n", hbrk);
   if (hbrk == NULL) {
     hbrk = (void *)heap.start;
-    printf("------------------hbrk: %lx\n", hbrk);
   }
-  
   size  = (size_t)ROUNDUP(size, 8);
   char *old = hbrk;
   hbrk += size;
-  printf("size: %lx\n", size);
-  printf("statr: %lx\n", heap.start);
-  printf("end: %lx\n", heap.end);
-  printf("hbrk: %lx\n", hbrk);
-
   assert((uintptr_t)heap.start <= (uintptr_t)hbrk && (uintptr_t)hbrk < (uintptr_t)heap.end);
   // init
   for (uint64_t *p = (uint64_t *)old; p != (uint64_t *)hbrk; p ++) {
