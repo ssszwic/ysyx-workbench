@@ -34,6 +34,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 		assert(0);
 	}
 
+  // print magic
   // printf("magic: ");
   // for(int i = 0; i < 16; i++) {
   //   printf("%x ", elf_head.e_ident[i]);
@@ -45,9 +46,19 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   assert(elf_head.e_machine == EXPECT_TYPE);
 
   // read Program Headers
-  // Elf64_Phdr *pstart = (Elf64_Phdr*) malloc(sizeof(Elf64_Phdr) * elf_head.e_phnum);
-  printf("phdr size: %d\n", sizeof(Elf64_Phdr));
-  printf("phdr size in head: %d\n", elf_head.e_phentsize);
+  Elf_Phdr *pstart = (Elf_Phdr*) malloc(sizeof(Elf_Phdr) * elf_head.e_phnum);
+  assert(pstart != NULL);
+  ramdisk_read(&elf_head, elf_head.e_phoff, sizeof(Elf_Phdr) * elf_head.e_phnum);
+
+  // print program table type
+  printf("program table: \n");
+  for(int i = 0; i < elf_head.e_phnum; i++) {
+    printf("%lx ", pstart->p_type);
+    pstart++;
+  }
+
+  // load program segment og type LOAD
+  
 
   
   printf("ok\n");
