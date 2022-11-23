@@ -37,6 +37,7 @@ void *malloc(size_t size) {
   //   panic() -> putchar() -> (glibc) -> malloc() -> panic()
   if (hbrk == NULL) {
     hbrk = (void *)heap.start;
+    printf("hbrk: %lx\n", hbrk);
   }
   printf("hbrk: %lx\n", hbrk);
   size  = (size_t)ROUNDUP(size, 8);
