@@ -40,9 +40,11 @@ void *malloc(size_t size) {
     printf("------------------hbrk: %lx\n", hbrk);
   }
   printf("hbrk: %lx\n", hbrk);
+  printf("size: %lx\n", size);
   size  = (size_t)ROUNDUP(size, 8);
   char *old = hbrk;
   hbrk += size;
+  printf("size: %lx\n", size);
   printf("statr: %lx\n", heap.start);
   printf("end: %lx\n", heap.end);
   printf("hbrk: %lx\n", hbrk);
