@@ -46,7 +46,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   assert(elf_head.e_machine == EXPECT_TYPE);
 
   // read Program Headers
-  printf("num: %d\n", elf_head.e_phnum);
+  printf("num: %d\n", sizeof(Elf_Phdr));
   Elf_Phdr *pstart = (Elf_Phdr*) malloc(sizeof(Elf_Phdr) * elf_head.e_phnum);
   assert(pstart != NULL);
   ramdisk_read(&elf_head, elf_head.e_phoff, sizeof(Elf_Phdr) * elf_head.e_phnum);
