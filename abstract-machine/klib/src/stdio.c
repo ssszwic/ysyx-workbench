@@ -4,7 +4,7 @@
 #include <stdarg.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
-#define BUF_SIZE 1000
+#define BUF_SIZE 2000
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
 #define NOFLOAT
 
