@@ -50,13 +50,13 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   ramdisk_read(pstart, elf_head.e_phoff, sizeof(Elf_Phdr) * elf_head.e_phnum);
 
   // print program table type
-  printf("program table: num %lx\n", elf_head.e_phnum);
-  for(int i = 0; i < elf_head.e_phnum; i++) {
-    printf("type: %lx filesize: %lx, memsize: %lx\n", pstart->p_type, pstart->p_filesz, pstart->p_memsz);
-    printf("offset: %lx, virtaddr: %lx\n", pstart->p_offset, pstart->p_vaddr);
-    pstart++;
-  }
-  printf("\n");
+  // printf("program table: num %lx\n", elf_head.e_phnum);
+  // for(int i = 0; i < elf_head.e_phnum; i++) {
+  //   printf("type: %lx filesize: %lx, memsize: %lx\n", pstart->p_type, pstart->p_filesz, pstart->p_memsz);
+  //   printf("offset: %lx, virtaddr: %lx\n", pstart->p_offset, pstart->p_vaddr);
+  //   pstart++;
+  // }
+  // printf("\n");
 
   // load program segment og type LOAD
   for(int i = 0; i < elf_head.e_phnum; i++) {
@@ -68,8 +68,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     }
   }
   
-  printf("ok\n");
-  assert(0);
   return 0;
 }
 
