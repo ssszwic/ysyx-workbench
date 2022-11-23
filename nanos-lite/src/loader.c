@@ -18,7 +18,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   ramdisk_read(&elf_head, 0, sizeof(Elf_Ehdr));
   printf("magic: ");
   for(int i = 0; i < 16; i++) {
-    printf("%x \n", elf_head.e_ident[i]);
+    printf("%x ", elf_head.e_ident[i]);
   }
   printf("\n");
   assert(0);
