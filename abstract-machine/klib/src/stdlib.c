@@ -43,6 +43,7 @@ void *malloc(size_t size) {
   hbrk += size;
   printf("statr: %lx\n", heap.start);
   printf("end: %lx\n", heap.end);
+  printf("hbrk: %lx\n", hbrk);
 
   assert((uintptr_t)heap.start <= (uintptr_t)hbrk && (uintptr_t)hbrk < (uintptr_t)heap.end);
   // init
