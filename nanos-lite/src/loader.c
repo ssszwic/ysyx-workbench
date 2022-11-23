@@ -48,7 +48,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // read Program Headers
   Elf_Phdr *pstart = (Elf_Phdr*) malloc(sizeof(Elf_Phdr) * elf_head.e_phnum);
   assert(pstart != NULL);
-  ramdisk_read(&elf_head, elf_head.e_phoff, sizeof(Elf_Phdr) * elf_head.e_phnum);
+  ramdisk_read(&pstart, elf_head.e_phoff, sizeof(Elf_Phdr) * elf_head.e_phnum);
 
   // print program table type
   printf("program table: \n");
