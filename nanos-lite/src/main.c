@@ -12,13 +12,17 @@ int main() {
   *tmp1 = 10;
   printf("tmp1: %lx\n", *tmp1);
 
+  
+
+  
+
+  extern const char logo[];
+
   uint64_t *tmp2 = malloc(8);
   *tmp2 = 10;
   printf("tmp2: %lx\n", *tmp2);
 
   
-
-  extern const char logo[];
   printf("%s", logo);
   Log("'Hello World!' from Nanos-lite");
   Log("Build time: %s, %s", __TIME__, __DATE__);
