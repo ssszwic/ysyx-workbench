@@ -1,5 +1,6 @@
 #include <common.h>
 
+// from resource.S
 extern uint8_t ramdisk_start;
 extern uint8_t ramdisk_end;
 #define RAMDISK_SIZE ((&ramdisk_end) - (&ramdisk_start))
