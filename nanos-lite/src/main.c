@@ -8,9 +8,10 @@ void init_fs(void);
 void init_proc(void);
 
 int main() {
-  extern const char logo[];
+  // extern const char logo[];
 
-  printf("%s", logo);
+  // printf("%s", logo);
+  printf("6666666666666");
 
   uint64_t *tmp2 = malloc(8);
   *tmp2 = 10;
