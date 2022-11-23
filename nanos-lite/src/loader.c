@@ -42,7 +42,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // printf("\n");
 
   // check ARCH
-  printf("program table: num %lx\n", elf_head.e_machine);
   assert(elf_head.e_machine == EXPECT_TYPE);
 
   // read Program Headers
@@ -60,13 +59,14 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   printf("\n");
 
   // load program segment og type LOAD
-  // for(int i = 0; i < elf_head.e_phnum; i++) {
-  //   if(pstart[i].p_type == PT_LOAD) {
-
-  //   }
-  // }
-  
-
+  for(int i = 0; i < elf_head.e_phnum; i++) {
+    if(pstart[i].p_type == PT_LOAD) {
+      // read elf to virtual space
+      ramdisk_read((char *) pstart[i].p_vaddr, pstart[i].p_offset, pstart[i].p_filesz);
+      // clear for remaining space
+      memset((char *) pstart[i].p_vaddr + pstart[i].p_filesz, 0, pstart[i].p_memsz - pstart[i].p_filesz);
+    }
+  }
   
   printf("ok\n");
   assert(0);
