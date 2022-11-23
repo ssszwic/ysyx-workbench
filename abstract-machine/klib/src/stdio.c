@@ -4,7 +4,8 @@
 #include <stdarg.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
-#define BUF_SIZE 1000
+// the length of fmt muss less than BUF_SIZE
+#define BUF_SIZE 3000
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
 #define NOFLOAT
 
@@ -29,7 +30,15 @@ char *fcvtbuf(double arg, int ndigits, int *decpt, int *sign, char *buf);
 static char *digits = "0123456789abcdefghijklmnopqrstuvwxyz";
 static char *upper_digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+static size_t strnlen(const char *s, size_t count)
+{
+  const char *sc;
+  for (sc = s; *sc != '\0' && count--; ++sc);
+  return sc - s;
+}
+
 int printf(const char *fmt, ...) {
+  
   assert(fmt);
   buf[0] = '\0';
 
@@ -62,13 +71,6 @@ int snprintf(char *out, size_t n, const char *fmt, ...) {
 
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   panic("Not implemented");
-}
-
-static size_t strnlen(const char *s, size_t count)
-{
-  const char *sc;
-  for (sc = s; *sc != '\0' && count--; ++sc);
-  return sc - s;
 }
 
 static int skip_atoi(const char **s)
