@@ -56,6 +56,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
     printf("%lx ", pstart->p_type);
     pstart++;
   }
+  printf("\n");
 
   // load program segment og type LOAD
   
