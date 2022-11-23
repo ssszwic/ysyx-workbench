@@ -8,6 +8,9 @@ void init_fs(void);
 void init_proc(void);
 
 int main() {
+  uint64_t *tmp = malloc(8);
+  *tmp = 10;
+  printf("%lx\n", *tmp);
   extern const char logo[];
   printf("%s", logo);
   Log("'Hello World!' from Nanos-lite");
