@@ -31,7 +31,7 @@ void do_syscall(Context *c) {
   char tmp[MAX_SINGLE_SYSTEMCALL_WIDTH] = {};
   memset(systemcall_ring_buf[systemcall_ring_ref], ' ', 6);
   if (++systemcall_ring_ref == SYSTEMCALL_RING_BUF_WIDTH) {systemcall_ring_ref = 0;}
-  sprintf(tmp, "----> ID: %2d  para: 0x%d  0x%d  0x%d  return: 0x%016lx", a[0], a[1], a[2], a[3], c->GPRx);
+  sprintf(tmp, "----> ID: %2d  para: 0x%x  0x%x  0x%x  return: 0x%016lx", a[0], a[1], a[2], a[3], c->GPRx);
   strcpy(systemcall_ring_buf[systemcall_ring_ref], tmp);
 #endif
 }
