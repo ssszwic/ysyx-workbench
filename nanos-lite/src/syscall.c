@@ -14,6 +14,7 @@ void do_syscall(Context *c) {
 }
 
 void sys_yield(Context *c) {
-  yield(); 
+  c->GPR1 = -1;
+  c->mepc += 4;
   c->GPRx = 0;
 }
