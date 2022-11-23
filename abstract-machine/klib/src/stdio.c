@@ -4,8 +4,8 @@
 #include <stdarg.h>
 
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
-// the input 
-#define BUF_SIZE 100
+// the length of fmt muss less than BUF_SIZE
+#define BUF_SIZE 3000
 #define is_digit(c) ((c) >= '0' && (c) <= '9')
 #define NOFLOAT
 
@@ -38,8 +38,7 @@ static size_t strnlen(const char *s, size_t count)
 }
 
 int printf(const char *fmt, ...) {
-  // the length of fmt muss less than BUF_SIZE
-  assert(strnlen(fmt, BUF_SIZE) < BUF_SIZE);
+  
   assert(fmt);
   buf[0] = '\0';
 
