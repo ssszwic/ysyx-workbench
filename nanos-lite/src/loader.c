@@ -43,14 +43,12 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 
   // check ARCH
   printf("program table: num %lx\n", elf_head.e_machine);
-  printf("elfhead addr: %lx\n", (uint64_t) &elf_head);
   assert(elf_head.e_machine == EXPECT_TYPE);
 
   // read Program Headers
   Elf_Phdr *pstart = (Elf_Phdr*) malloc(sizeof(Elf_Phdr) * elf_head.e_phnum);
-  printf("pstart addr: %lx\n", (uint64_t) pstart);
   assert(pstart != NULL);
-  ramdisk_read(&pstart, elf_head.e_phoff, sizeof(Elf_Phdr) * elf_head.e_phnum);
+  // ramdisk_read(&pstart, elf_head.e_phoff, sizeof(Elf_Phdr) * elf_head.e_phnum);
 
   // print program table type
   printf("program table: num %lx\n", elf_head.e_machine);
