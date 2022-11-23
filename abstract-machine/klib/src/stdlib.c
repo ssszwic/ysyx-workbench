@@ -38,11 +38,11 @@ void *malloc(size_t size) {
   if (hbrk == NULL) {
     hbrk = (void *)heap.start;
   }
-  printf("size %d\n", size);
   size  = (size_t)ROUNDUP(size, 8);
-  printf("size %d\n", size);
   char *old = hbrk;
   hbrk += size;
+  printf("statr: %lx\n", heap.start);
+  printf("end: %lx\n", heap.end);
 
   assert((uintptr_t)heap.start <= (uintptr_t)hbrk && (uintptr_t)hbrk < (uintptr_t)heap.end);
   // init
