@@ -38,6 +38,7 @@ void *malloc(size_t size) {
   if (hbrk == NULL) {
     hbrk = (void *)heap.start;
   }
+  printf("hbrk: %lx\n", hbrk);
   size  = (size_t)ROUNDUP(size, 8);
   char *old = hbrk;
   hbrk += size;
