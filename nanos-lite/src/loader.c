@@ -51,7 +51,7 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   ramdisk_read(pstart, elf_head.e_phoff, sizeof(Elf_Phdr) * elf_head.e_phnum);
 
   // print program table type
-  printf("program table: num %lx\n", elf_head.e_machine);
+  printf("program table: num %lx\n", elf_head.e_phnum);
   for(int i = 0; i < elf_head.e_phnum; i++) {
     printf("%lx ", pstart->p_type);
     pstart++;
