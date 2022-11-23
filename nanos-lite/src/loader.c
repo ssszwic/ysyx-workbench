@@ -43,7 +43,12 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
 
   // check ARCH
   assert(elf_head.e_machine == EXPECT_TYPE);
-  
+
+  // read Program Headers
+  // Elf64_Phdr *pstart = (Elf64_Phdr*) malloc(sizeof(Elf64_Phdr) * elf_head.e_phnum);
+  printf("phdr size: %d\n", sizeof(Elf64_Phdr));
+  printf("phdr size in head: %d\n", elf_head.e_phentsize);
+
   
   printf("ok\n");
   assert(0);
