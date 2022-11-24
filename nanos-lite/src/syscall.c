@@ -61,11 +61,10 @@ void sys_write(Context *c) {
   char *str = (char *) c->GPR3;
   int i;
   for(i = 0; i < c->GPR4; i++) {
-    if(*str == '\0') {
+    if(str[i] == '\0') {
       break;
     }
-    putch(*str);
-    str++;
+    putch(str[i]);
   }
   c->GPRx = i;
   return;
