@@ -71,7 +71,6 @@ size_t fs_read(int fd, void *buf, size_t len) {
   }
   ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].cfo, ret);
   file_table[fd].cfo += ret;
-  printf("cfo: %x\n", file_table[fd].cfo);
   return ret;
 }
 
@@ -88,7 +87,6 @@ size_t fs_write(int fd, const void *buf, size_t len) {
   assert(file_table[fd].cfo + len <= file_table[fd].size);
   int ret = ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].cfo, len);
   file_table[fd].cfo += ret;
-  printf("cfo: %x\n", file_table[fd].cfo);
   return ret;
 }
 
@@ -107,7 +105,6 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
   else {
     panic("invalid arguement!\n");
   }
-  printf("cfo: %x\n", file_table[fd].cfo);
   return file_table[fd].cfo;
 }
 
