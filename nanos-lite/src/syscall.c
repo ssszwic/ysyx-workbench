@@ -53,6 +53,7 @@ void sys_exit(Context *c) {
 }
 
 void sys_write(Context *c) {
+  printf("sys write\n");
   if(c->GPR2 != 0 && c->GPR2 != 1) {
     printf("write only support fd: 0, 1\n");
     c->GPRx = -1;
