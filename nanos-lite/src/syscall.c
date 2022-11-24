@@ -1,5 +1,6 @@
 #include <common.h>
 #include "syscall.h"
+#include <fs.h>
 
 // #define CONFIG_SYSTEMCALL_TRACE
 
@@ -13,8 +14,11 @@ void print_systemcall_log();
 
 void sys_yield(Context *c);
 void sys_exit(Context *c);
-void sys_write(Context *c);
 void sys_brk(Context *c);
+void sys_open(Context *c);
+void sys_read(Context *c);
+void sys_write(Context *c);
+void sys_close(Context *c);
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
@@ -26,8 +30,11 @@ void do_syscall(Context *c) {
   switch (a[0]) {
     case SYS_yield: sys_yield(c); break;
     case SYS_exit: sys_exit(c); break;
-    case SYS_write: sys_write(c); break;
     case SYS_brk: sys_brk(c); break;
+    case SYS_open: sys_open(c); break;
+    case SYS_read: sys_read(c); break;
+    case SYS_write: sys_write(c); break;
+    case SYS_close: sys_close(c); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
@@ -53,23 +60,26 @@ void sys_exit(Context *c) {
   halt(c->GPR2);
 }
 
-void sys_write(Context *c) {
-  if(c->GPR2 != 0 && c->GPR2 != 1) {
-    printf("write only support fd: 0, 1\n");
-    c->GPRx = -1;
-    return;
-  }
-  char *str = (char *) c->GPR3;
-  int i;
-  for(i = 0; i < c->GPR4; i++) {
-    if(str[i] == '\0') {
-      break;
-    }
-    putch(str[i]);
-  }
-  c->GPRx = i;
+void sys_open(Context *c) {
+  c->GPRx = fs_open((char *) c->GPR2, c->GPR3, c->GPR4);
   return;
 }
+
+void sys_read(Context *c) {
+  c->GPRx = fs_read(c->GPR2, (void *) c->GPR3, c->GPR4);
+  return;
+}
+
+void sys_write(Context *c) {
+  c->GPRx = fs_write(c->GPR2, (void *) c->GPR3, c->GPR4);
+  return;
+}
+
+void sys_close(Context *c) {
+  c->GPRx = fs_close(c->GPR2);
+  return;
+}
+
 
 void sys_brk(Context *c) {
   // default successful
