@@ -40,6 +40,10 @@
 #error _syscall_ is not implemented
 #endif
 
+
+extern char _end;
+static char *program_break = NULL;
+
 intptr_t _syscall_(intptr_t type, intptr_t a0, intptr_t a1, intptr_t a2) {
   // Macro expansion for riscv64
   // register intptr_t _gpr1 asm ("a7") = type;
@@ -71,12 +75,25 @@ int _open(const char *path, int flags, mode_t mode) {
 }
 
 int _write(int fd, void *buf, size_t count) {
-  _exit(SYS_write);
-  return 0;
+  return _syscall_(SYS_write, fd, (intptr_t) buf, count);
 }
 
 void *_sbrk(intptr_t increment) {
-  return (void *)-1;
+  if(program_break == NULL) {
+    program_break = &_end;
+  }
+  char *tmp = program_break;
+
+  if(_syscall_(SYS_brk, increment, 0, 0) == 0) {
+    program_break += increment;
+    if(program_break < &_end) {
+      return (void *) -1;
+    }
+    else {
+      return (void *) tmp;
+    }
+  }
+  return (void *) -1;
 }
 
 int _read(int fd, void *buf, size_t count) {

@@ -6,7 +6,7 @@ static Context* do_event(Event e, Context* c) {
   switch (e.event) {
     case EVENT_YIELD: printf("nothing in yield\n"); c->mepc += 4; break;
     case EVENT_IRQ_TIMER: printf("timer irq\n"); break;
-    case EVENT_SYSCALL: printf("system call\n"); do_syscall(c); break;
+    case EVENT_SYSCALL: do_syscall(c); c->mepc += 4; break;
 
     default: panic("Unhandled event ID = %d", e.event);
   }
