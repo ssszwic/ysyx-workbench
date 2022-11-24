@@ -77,7 +77,6 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   }
   free(pstart);
   pstart = NULL;
-
   fs_close(fd);
   
   return elf_head.e_entry;
