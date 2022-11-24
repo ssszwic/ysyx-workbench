@@ -3,7 +3,7 @@
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
 
-#define CONFIG_FILE_TRACE
+// #define CONFIG_FILE_TRACE
 
 #ifdef CONFIG_FILE_TRACE
 #define FILE_RING_BUF_WIDTH 30
