@@ -1,5 +1,6 @@
 #include <proc.h>
 #include <elf.h>
+#include <fs.h>
 
 #ifdef __LP64__
 # define Elf_Ehdr Elf64_Ehdr
@@ -23,8 +24,11 @@ size_t ramdisk_write(const void *buf, size_t offset, size_t len);
 size_t get_ramdisk_size();
 
 static uintptr_t loader(PCB *pcb, const char *filename) {
+  int fd = fs_open(filename, 0, 0);
+
   Elf_Ehdr elf_head;
-  ramdisk_read(&elf_head, 0, sizeof(Elf_Ehdr));
+  // ramdisk_read(&elf_head, 0, sizeof(Elf_Ehdr));
+  fs_read(fd, &elf_head, sizeof(Elf_Ehdr));
 
   // check majic
   if (elf_head.e_ident[0] != 0x7F || elf_head.e_ident[1] != 'E' || 
@@ -47,7 +51,10 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   // read Program Headers
   Elf_Phdr *pstart = (Elf_Phdr*) malloc(sizeof(Elf_Phdr) * elf_head.e_phnum);
   assert(pstart != NULL);
-  ramdisk_read(pstart, elf_head.e_phoff, sizeof(Elf_Phdr) * elf_head.e_phnum);
+
+  // ramdisk_read(pstart, elf_head.e_phoff, sizeof(Elf_Phdr) * elf_head.e_phnum);
+  fs_lseek(fd, elf_head.e_phoff, SEEK_SET);
+  fs_read(fd, pstart, sizeof(Elf_Phdr) * elf_head.e_phnum);
 
   // print program table type
   // printf("program table: num %lx\n", elf_head.e_phnum);
@@ -61,13 +68,16 @@ static uintptr_t loader(PCB *pcb, const char *filename) {
   for(int i = 0; i < elf_head.e_phnum; i++) {
     if(pstart[i].p_type == PT_LOAD) {
       // read elf to virtual space
-      ramdisk_read((char *) pstart[i].p_vaddr, pstart[i].p_offset, pstart[i].p_filesz);
+      // ramdisk_read((char *) pstart[i].p_vaddr, pstart[i].p_offset, pstart[i].p_filesz);
+      fs_lseek(fd, pstart[i].p_offset, SEEK_SET);
+      fs_read(fd, (void *) pstart[i].p_vaddr, pstart[i].p_filesz);
       // clear for remaining space
       memset((char *) pstart[i].p_vaddr + pstart[i].p_filesz, 0, pstart[i].p_memsz - pstart[i].p_filesz);
     }
   }
   free(pstart);
   pstart = NULL;
+  fs_close(fd);
   
   return elf_head.e_entry;
 }
