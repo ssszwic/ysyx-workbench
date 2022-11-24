@@ -19,6 +19,7 @@ void sys_open(Context *c);
 void sys_read(Context *c);
 void sys_write(Context *c);
 void sys_close(Context *c);
+void sys_lseek(Context *c);
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
@@ -35,6 +36,7 @@ void do_syscall(Context *c) {
     case SYS_read: sys_read(c); break;
     case SYS_write: sys_write(c); break;
     case SYS_close: sys_close(c); break;
+    case SYS_lseek: sys_lseek(c); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
@@ -77,6 +79,11 @@ void sys_write(Context *c) {
 
 void sys_close(Context *c) {
   c->GPRx = fs_close(c->GPR2);
+  return;
+}
+
+void sys_lseek(Context *c) {
+  c->GPRx = fs_lseek(c->GPR2, c->GPR3, c->GPR4);
   return;
 }
 
