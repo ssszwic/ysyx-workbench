@@ -57,7 +57,7 @@ int fs_open(const char *pathname, int flags, int mode) {
   char tmp[MAX_SINGLE_FILE_WIDTH] = {};
   memset(file_ring_buf[file_ring_ref], ' ', 6);
   if (++file_ring_ref == FILE_RING_BUF_WIDTH) {file_ring_ref = 0;}
-  sprintf(tmp, "----> open   %s", pathname);
+  sprintf(tmp, "----> open  %s", pathname);
   strcpy(file_ring_buf[file_ring_ref], tmp);
   #endif
 
