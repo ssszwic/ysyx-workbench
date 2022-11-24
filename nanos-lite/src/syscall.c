@@ -21,7 +21,6 @@ void do_syscall(Context *c) {
   a[1] = c->GPR2;
   a[2] = c->GPR3;
   a[3] = c->GPR4;
-  printf("sys: %d\n", a[1]);
 
   switch (a[0]) {
     case SYS_yield: sys_yield(c); break;
@@ -55,7 +54,6 @@ void sys_exit(Context *c) {
 
 void sys_write(Context *c) {
   c->mepc += 4;
-  printf("sys write\n");
   if(c->GPR2 != 0 && c->GPR2 != 1) {
     printf("write only support fd: 0, 1\n");
     c->GPRx = -1;
