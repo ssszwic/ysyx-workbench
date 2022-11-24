@@ -60,7 +60,7 @@ int fs_open(const char *pathname, int flags, int mode) {
 
 size_t fs_read(int fd, void *buf, size_t len) {
   assert(fd > 2 && fd < file_num);
-  assert(file_table[fd].cfo <= file_table[fd].disk_offset);
+  assert(file_table[fd].cfo <= file_table[fd].size);
   int ret;
   if(file_table[fd].cfo + len > file_table[fd].size) {
     // The remaining bytes are smaller than len, read to eng of file
