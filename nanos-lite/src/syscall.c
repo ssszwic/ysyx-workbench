@@ -2,7 +2,7 @@
 #include "syscall.h"
 #include <fs.h>
 
-#define CONFIG_SYSTEMCALL_TRACE
+// #define CONFIG_SYSTEMCALL_TRACE
 
 #ifdef CONFIG_SYSTEMCALL_TRACE
 #define SYSTEMCALL_RING_BUF_WIDTH 30
@@ -28,6 +28,8 @@ void do_syscall(Context *c) {
   a[2] = c->GPR3;
   a[3] = c->GPR4;
 
+  printf("ID: %2d  para: 0x%lx  0x%lx  0x%lx\n", a[0], a[1], a[2], a[3]);
+
   switch (a[0]) {
     case SYS_yield: sys_yield(c); break;
     case SYS_exit: sys_exit(c); break;
@@ -46,7 +48,6 @@ void do_syscall(Context *c) {
   if (++systemcall_ring_ref == SYSTEMCALL_RING_BUF_WIDTH) {systemcall_ring_ref = 0;}
   sprintf(tmp, "----> ID: %2d  para: 0x%lx  0x%lx  0x%lx  return: 0x%lx", a[0], a[1], a[2], a[3], c->GPRx);
   strcpy(systemcall_ring_buf[systemcall_ring_ref], tmp);
-  printf("%s\n", tmp);
 #endif
 }
 
