@@ -65,6 +65,7 @@ size_t fs_read(int fd, void *buf, size_t len) {
   int ret = ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].cfo, len);
   
   file_table[fd].cfo += ret;
+  printf("cfo: %x\n", file_table[fd].cfo);
   return ret;
 }
 
