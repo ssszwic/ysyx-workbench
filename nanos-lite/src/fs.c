@@ -95,7 +95,7 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
     file_table[fd].cfo += offset;
   }
   else if(whence == SEEK_END) {
-    file_table[fd].cfo = file_table[fd].size;
+    file_table[fd].cfo = file_table[fd].size + offset;
   }
   else {
     panic("invalid arguement!\n");
