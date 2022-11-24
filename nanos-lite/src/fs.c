@@ -3,7 +3,7 @@
 typedef size_t (*ReadFn) (void *buf, size_t offset, size_t len);
 typedef size_t (*WriteFn) (const void *buf, size_t offset, size_t len);
 
-// #define CONFIG_FILE_TRACE
+#define CONFIG_FILE_TRACE
 
 #ifdef CONFIG_FILE_TRACE
 #define FILE_RING_BUF_WIDTH 30
@@ -55,7 +55,7 @@ void init_fs() {
 int fs_open(const char *pathname, int flags, int mode) {
   #ifdef CONFIG_FILE_TRACE
   char tmp[MAX_SINGLE_FILE_WIDTH] = {};
-  memset(file_ring_buf[systemcall_ring_ref], ' ', 6);
+  memset(file_ring_buf[file_ring_ref], ' ', 6);
   if (++file_ring_ref == FILE_RING_BUF_WIDTH) {file_ring_ref = 0;}
   sprintf(tmp, "----> open: %s", pathname);
   strcpy(file_ring_buf[file_ring_ref], tmp);
@@ -77,7 +77,7 @@ int fs_open(const char *pathname, int flags, int mode) {
 size_t fs_read(int fd, void *buf, size_t len) {
   #ifdef CONFIG_FILE_TRACE
   char tmp[MAX_SINGLE_FILE_WIDTH] = {};
-  memset(file_ring_buf[systemcall_ring_ref], ' ', 6);
+  memset(file_ring_buf[file_ring_ref], ' ', 6);
   if (++file_ring_ref == FILE_RING_BUF_WIDTH) {file_ring_ref = 0;}
   sprintf(tmp, "----> read %s cfo: 0x%x  len: 0x%x", file_table[fd].name, file_table[fd].cfo, len);
   strcpy(file_ring_buf[file_ring_ref], tmp);
@@ -101,7 +101,7 @@ size_t fs_read(int fd, void *buf, size_t len) {
 size_t fs_write(int fd, const void *buf, size_t len) {
   #ifdef CONFIG_FILE_TRACE
   char tmp[MAX_SINGLE_FILE_WIDTH] = {};
-  memset(file_ring_buf[systemcall_ring_ref], ' ', 6);
+  memset(file_ring_buf[file_ring_ref], ' ', 6);
   if (++file_ring_ref == FILE_RING_BUF_WIDTH) {file_ring_ref = 0;}
   sprintf(tmp, "----> write %s cfo: 0x%x  len: 0x%x", file_table[fd].name, file_table[fd].cfo, len);
   strcpy(file_ring_buf[file_ring_ref], tmp);
@@ -123,6 +123,14 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 }
 
 size_t fs_lseek(int fd, size_t offset, int whence) {
+  #ifdef CONFIG_FILE_TRACE
+  char tmp[MAX_SINGLE_FILE_WIDTH] = {};
+  memset(file_ring_buf[file_ring_ref], ' ', 6);
+  if (++file_ring_ref == FILE_RING_BUF_WIDTH) {file_ring_ref = 0;}
+  sprintf(tmp, "----> lseek %s  offset: 0x%x  whence: %d", file_table[fd].name, offset, whence);
+  strcpy(file_ring_buf[file_ring_ref], tmp);
+  #endif
+
   assert(fd > 2 && fd < file_num);
 
   if(whence == SEEK_SET) {
@@ -143,10 +151,14 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
 int fs_close(int fd) {
   #ifdef CONFIG_FILE_TRACE
   char tmp[MAX_SINGLE_FILE_WIDTH] = {};
-  memset(file_ring_buf[systemcall_ring_ref], ' ', 6);
+  memset(file_ring_buf[file_ring_ref], ' ', 6);
   if (++file_ring_ref == FILE_RING_BUF_WIDTH) {file_ring_ref = 0;}
   sprintf(tmp, "----> close %s", file_table[fd].name);
   strcpy(file_ring_buf[file_ring_ref], tmp);
+  #endif
+
+  #ifdef CONFIG_FILE_TRACE
+  print_file_log();
   #endif
 
   return 0;
