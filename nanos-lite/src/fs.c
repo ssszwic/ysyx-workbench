@@ -88,6 +88,7 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 
 size_t fs_lseek(int fd, size_t offset, int whence) {
   assert(fd > 2 && fd < file_num);
+
   if(whence == SEEK_SET) {
     file_table[fd].cfo = offset;
   }
@@ -100,6 +101,7 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
   else {
     panic("invalid arguement!\n");
   }
+  printf("cfo: %x\n", file_table[fd].cfo);
   return file_table[fd].cfo;
 }
 
