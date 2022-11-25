@@ -106,6 +106,7 @@ void sys_gettimeofday(Context *c) {
   printf("3\n");
   c->GPRx = 0;
   printf("%ld\n", *(uint64_t *) c->GPR2);
+  printf("4\n");
   return;
 }
 
