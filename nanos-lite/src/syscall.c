@@ -20,6 +20,7 @@ void sys_read(Context *c);
 void sys_write(Context *c);
 void sys_close(Context *c);
 void sys_lseek(Context *c);
+void sys_gettimeofday(Context *c);
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
@@ -31,14 +32,15 @@ void do_syscall(Context *c) {
   // printf("ID: %2d  para: 0x%lx  0x%lx  0x%lx\n", a[0], a[1], a[2], a[3]);
 
   switch (a[0]) {
-    case SYS_yield: sys_yield(c); break;
     case SYS_exit: sys_exit(c); break;
-    case SYS_brk: sys_brk(c); break;
+    case SYS_yield: sys_yield(c); break;
     case SYS_open: sys_open(c); break;
     case SYS_read: sys_read(c); break;
     case SYS_write: sys_write(c); break;
     case SYS_close: sys_close(c); break;
     case SYS_lseek: sys_lseek(c); break;
+    case SYS_brk: sys_brk(c); break;
+    case SYS_gettimeofday: sys_gettimeofday(c); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
@@ -89,13 +91,18 @@ void sys_lseek(Context *c) {
   return;
 }
 
-
 void sys_brk(Context *c) {
   // default successful
   c->GPRx = 0;
   return;
 }
 
+void sys_gettimeofday(Context *c) {
+  *(((uint64_t *) c->GPR2) + 1) = io_read(AM_TIMER_UPTIME).us;
+  *(uint64_t *) c->GPR2 = *(((uint64_t *) c->GPR2) + 1) / 1000000;
+  c->GPRx = 0;
+  return;
+}
 
 #ifdef CONFIG_SYSTEMCALL_TRACE
 void print_systemcall_log() {

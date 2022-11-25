@@ -28,6 +28,10 @@ enum {FD_STDIN, FD_STDOUT, FD_STDERR, FD_FB};
 
 size_t ramdisk_read(void *buf, size_t offset, size_t len);
 size_t ramdisk_write(const void *buf, size_t offset, size_t len);
+size_t serial_write(const void *buf, size_t offset, size_t len);
+size_t events_read(void *buf, size_t offset, size_t len);
+size_t dispinfo_read(void *buf, size_t offset, size_t len);
+size_t fb_write(const void *buf, size_t offset, size_t len);
 
 size_t invalid_read(void *buf, size_t offset, size_t len) {
   panic("should not reach here");
@@ -42,14 +46,20 @@ size_t invalid_write(const void *buf, size_t offset, size_t len) {
 /* This is the information about all files in disk. */
 static Finfo file_table[] __attribute__((used)) = {
   [FD_STDIN]  = {"stdin", 0, 0, invalid_read, invalid_write},
-  [FD_STDOUT] = {"stdout", 0, 0, invalid_read, invalid_write},
-  [FD_STDERR] = {"stderr", 0, 0, invalid_read, invalid_write},
+  [FD_STDOUT] = {"stdout", 0, 0, invalid_read, serial_write},
+  [FD_STDERR] = {"stderr", 0, 0, invalid_read, serial_write},
+  [FD_FB]     = {"/dev/fb", 0, 0, invalid_read, fb_write},
+  {"/proc/dispinfo", 0, 0, dispinfo_read, invalid_write},
+  {"/dev/events", 0, 0, events_read, invalid_write},
 #include "files.h"
 };
 
 void init_fs() {
   file_num = sizeof(file_table) / sizeof(Finfo);
-  // TODO: initialize the size of /dev/fb
+  // initialize the size of /dev/fb
+  AM_GPU_CONFIG_T ev = io_read(AM_GPU_CONFIG);
+  // 00RRGGBB
+  file_table[FD_FB].size = ev.width * ev.height * 4;
 }
 
 int fs_open(const char *pathname, int flags, int mode) {
@@ -83,19 +93,24 @@ size_t fs_read(int fd, void *buf, size_t len) {
   strcpy(file_ring_buf[file_ring_ref], tmp);
   #endif
 
-  assert(fd > 2 && fd < file_num);
-  assert(file_table[fd].cfo <= file_table[fd].size);
-  int ret;
-  if(file_table[fd].cfo + len > file_table[fd].size) {
-    // The remaining bytes are smaller than len, read to eng of file
-    ret = file_table[fd].size - file_table[fd].cfo;
+  assert(fd > 0 && fd < file_num);
+  if(file_table[fd].read != NULL) {
+    return file_table[fd].read(buf, 0, len);
   }
   else {
-    ret = len;
+    assert(file_table[fd].cfo <= file_table[fd].size);
+    int ret;
+    if(file_table[fd].cfo + len > file_table[fd].size) {
+      // The remaining bytes are smaller than len, read to eng of file
+      ret = file_table[fd].size - file_table[fd].cfo;
+    }
+    else {
+      ret = len;
+    }
+    ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].cfo, ret);
+    file_table[fd].cfo += ret;
+    return ret;
   }
-  ramdisk_read(buf, file_table[fd].disk_offset + file_table[fd].cfo, ret);
-  file_table[fd].cfo += ret;
-  return ret;
 }
 
 size_t fs_write(int fd, const void *buf, size_t len) {
@@ -108,18 +123,16 @@ size_t fs_write(int fd, const void *buf, size_t len) {
   #endif
 
   assert(fd > 0 && fd < file_num);
-  if(fd < 3) {
-    // print to stdout
-    char *str = (char *) buf;
-    for(int i = 0; i < len; i++) {
-      putch(str[i]);
-    }
-    return len;
+  if(file_table[fd].write != NULL) {
+    return file_table[fd].write(buf, 0, len);
   }
-  assert(file_table[fd].cfo + len <= file_table[fd].size);
-  int ret = ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].cfo, len);
-  file_table[fd].cfo += ret;
-  return ret;
+  else {
+    // normal file
+    assert(file_table[fd].cfo + len <= file_table[fd].size);
+    int ret = ramdisk_write(buf, file_table[fd].disk_offset + file_table[fd].cfo, len);
+    file_table[fd].cfo += ret;
+    return ret;
+  }
 }
 
 size_t fs_lseek(int fd, size_t offset, int whence) {
@@ -145,6 +158,7 @@ size_t fs_lseek(int fd, size_t offset, int whence) {
   else {
     panic("invalid arguement!\n");
   }
+  assert(file_table[fd].cfo <= file_table[fd].size);
   return file_table[fd].cfo;
 }
 
@@ -157,9 +171,9 @@ int fs_close(int fd) {
   strcpy(file_ring_buf[file_ring_ref], tmp);
   #endif
 
-  #ifdef CONFIG_FILE_TRACE
-  print_file_log();
-  #endif
+  // #ifdef CONFIG_FILE_TRACE
+  // print_file_log();
+  // #endif
 
   return 0;
 }
