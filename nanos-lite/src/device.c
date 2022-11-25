@@ -23,14 +23,6 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
   return len;
 }
 
-#ifdef CONFIG_SYSTEMCALL_TRACE
-  char tmp[MAX_SINGLE_SYSTEMCALL_WIDTH] = {};
-  memset(systemcall_ring_buf[systemcall_ring_ref], ' ', 6);
-  if (++systemcall_ring_ref == SYSTEMCALL_RING_BUF_WIDTH) {systemcall_ring_ref = 0;}
-  sprintf(tmp, "----> ID: %2d  para: 0x%lx  0x%lx  0x%lx  return: 0x%lx", a[0], a[1], a[2], a[3], c->GPRx);
-  strcpy(systemcall_ring_buf[systemcall_ring_ref], tmp);
-#endif
-
 size_t events_read(void *buf, size_t offset, size_t len) {
   int i = 0;
   char tmp[10] = {};
@@ -52,7 +44,12 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
-  return 0;
+  char tmp[50] = {};
+  AM_GPU_CONFIG_T ev = io_read(AM_GPU_CONFIG);
+  sprintf(tmp, "WIDTH: %d\nHEIGHT: %d", ev.width, ev.height);
+  assert(len > strlen(tmp));
+  strcpy((char *)buf, tmp);
+  return strlen(tmp);
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {

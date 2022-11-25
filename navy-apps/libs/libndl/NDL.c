@@ -43,6 +43,16 @@ void NDL_OpenCanvas(int *w, int *h) {
     }
     close(fbctl);
   }
+  
+  char dispinfo[30] = {};
+  int fd = open("/proc/dispinfo", 0, 0);
+  read(fd, dispinfo, 30);
+  char *tmp = strtok(dispinfo, "\n= ");
+  while(tmp) {
+    tmp = strtok(NULL, "\n= ");
+    printf("%s\n", tmp);
+  }
+
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {

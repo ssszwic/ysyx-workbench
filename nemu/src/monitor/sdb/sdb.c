@@ -285,11 +285,11 @@ void sdb_mainloop() {
     cmd_c(NULL);
     return;
   }
-  char expr_str[3000] = {};
+  char expr_str[200] = {};
   for (char *str; (str = rl_gets()) != NULL; ) {
     // copy str to expr_str for expression
     expr_str[0] = '\0';
-    if (strlen(str) > 3000) {
+    if (strlen(str) > 200) {
       printf("the string type is too long.\n");
       assert(0);
     }
