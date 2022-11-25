@@ -48,7 +48,7 @@ void NDL_OpenCanvas(int *w, int *h) {
   int fd = open("/proc/dispinfo", 0, 0);
   read(fd, dispinfo, 30);
   char *tmp = strtok(dispinfo, "\n= ");
-  *tmp = strtok(dispinfo, "\n= ");
+  *tmp = strtok(NULL, "\n= ");
   printf("%s\n", tmp);
 
 }
