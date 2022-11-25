@@ -2,6 +2,7 @@
 #include <NDL.h>
 
 int main() {
+  NDL_Init(0);
   uint32_t begin, end;
   begin = NDL_GetTicks();
   while(1) {
@@ -11,4 +12,5 @@ int main() {
       printf("0.5s have gone\n");
     }
   }
+  NDL_Quit();
 }
