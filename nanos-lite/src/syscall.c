@@ -98,7 +98,7 @@ void sys_brk(Context *c) {
 }
 
 void sys_gettimeofday(Context *c) {
-  printf("666\n");
+  printf("us: %d\n", *(((uint64_t *) c->GPR2) + 1));
   *(((uint64_t *) c->GPR2) + 1) = io_read(AM_TIMER_UPTIME).us;
   *(uint64_t *) c->GPR2 = *(((uint64_t *) c->GPR2) + 1) / 1000000;
   c->GPRx = 0;
