@@ -50,6 +50,10 @@ void NDL_OpenCanvas(int *w, int *h) {
   char *tmp = strtok(dispinfo, "\n= ");
   tmp = strtok(NULL, "\n= ");
   printf("%s\n", tmp);
+  //
+  tmp = strtok(NULL, "\n= ");
+  tmp = strtok(NULL, "\n= ");
+  printf("%s\n", tmp);
 
 }
 
