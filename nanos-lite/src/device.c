@@ -14,6 +14,15 @@ static const char *keyname[256] __attribute__((used)) = {
   AM_KEYS(NAME)
 };
 
+typedef struct {
+  int x; 
+  int y;
+  uint32_t *pixels;
+  int w;
+  int h;
+  bool sync;
+} ndl_dr;
+
 size_t serial_write(const void *buf, size_t offset, size_t len) {
   // print to stdout
   char *str = (char *) buf;
@@ -51,8 +60,10 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   strcpy((char *)buf, tmp);
   return strlen(tmp);
 }
-
+// int x, y; void *pixels; int w, h; bool sync);
 size_t fb_write(const void *buf, size_t offset, size_t len) {
+  AM_GPU_FBDRAW_T tmp = *(AM_GPU_FBDRAW_T *) buf;
+  io_write(AM_GPU_FBDRAW, tmp.x, tmp.y, tmp.pixels, tmp.w, tmp.h, tmp.sync);
   return 0;
 }
 
