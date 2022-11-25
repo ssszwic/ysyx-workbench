@@ -49,11 +49,11 @@ void NDL_OpenCanvas(int *w, int *h) {
   read(fd, dispinfo, 30);
   char *tmp = strtok(dispinfo, "\n= ");
   tmp = strtok(NULL, "\n= ");
-  printf("%s\n", tmp);
-  //
+  int width_sys = atoi(tmp);
   tmp = strtok(NULL, "\n= ");
   tmp = strtok(NULL, "\n= ");
-  printf("%s\n", tmp);
+  int height_sys = atoi(tmp);
+  printf("%d  %d\n", width_sys, height_sys);
 
 }
 
