@@ -44,14 +44,14 @@ static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
   // }
   // printf("\n");
 
-  // printf("%d, %d\n", s->w, s->h);
-  // for(int j = 0; j < s->h; j++) {
-  //   for (int i = 0; i < s->w; i++) {
-  //     printf("%x ", * tmp + screen->w * (j + y) + x + i);
-  //   }
-  //   printf("\n");
-  // }
-  // printf("\n");
+  printf("%d, %d\n", s->w, s->h);
+  for(int j = 0; j < s->h; j++) {
+    for (int i = 0; i < s->w; i++) {
+      printf("%x ", * tmp + screen->w * (j + y) + x + i);
+    }
+    printf("\n");
+  }
+  printf("\n");
 
   SDL_FreeSurface(s);
 
@@ -71,7 +71,7 @@ void refresh_terminal() {
   static int flip = 0;
   int tmp = 0;
   uint32_t now = SDL_GetTicks();
-  if (now - last > 500 || needsync) {
+  if (now - last > 500) {
     printf("update\n");
     int x = term->cursor.x, y = term->cursor.y;
     uint32_t color = (flip ? term->foreground(x, y) : term->background(x, y));
