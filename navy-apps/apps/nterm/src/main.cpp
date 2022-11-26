@@ -44,21 +44,37 @@ static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
   }
   printf("\n");
 
-  SDL_BlitSurface(s, NULL, screen, &dstrect);
-
   uint32_t *tmp2 = (uint32_t *) screen->pixels;
+
+  SDL_BlitSurface(s, NULL, screen, &dstrect);
+  // printf("write\n");
+  // for(int j = 0; j < s->h; j++) {
+  //   for(int i = 0; i < s->w; i++) {
+  //     // *dst_pixels++ = *src_pixels++;
+  //     * (tmp2 + screen->w * (y + j) + i + x) = * (tmp1 + s->w * (0 + j) + i + 0);
+  //     printf("%x ", * (tmp2 + screen->w * (y + j) + i + x));
+  //   }
+  //   printf("\n");
+  //   // src_pixels += src->w - rect_w;
+  //   // dst_pixels += dst->w - rect_w;
+  // }
+  // printf("\n");
+
+  
+
+
   printf("draw\n");
+  printf("posi: %d %d\n", dstrect.x, dstrect.y);
   printf("%d, %d\n", s->w, s->h);
   for(int j = 0; j < s->h; j++) {
     for (int i = 0; i < s->w; i++) {
-      printf("%x ", * tmp2 + screen->w * (j + y) + x + i);
+      printf("%x ", * (tmp2 + screen->w * (y + j) + i + x));
     }
     printf("\n");
   }
   printf("\n");
 
   SDL_FreeSurface(s);
-
 }
 
 void refresh_terminal() {
