@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
@@ -45,8 +46,13 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   
   uint32_t *src_pixels = (uint32_t *) src->pixels;
   uint32_t *dst_pixels = (uint32_t *) dst->pixels;
+  
+
   src_pixels += src_y * src->w + src_x;
   dst_pixels += dst_y * dst->w + dst_x;
+
+  printf("%d, %d, %d\n", dst_y, dst->w, dst_x);
+  printf("%lx\n", (uint64_t) dst_pixels);
   for(int j = 0; j < rect_h; j++) {
     for(int i = 0; i < rect_w; i++) {
       *dst_pixels++ = *src_pixels++;
@@ -56,7 +62,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
     src_pixels += src->w - rect_w;
     dst_pixels += dst->w - rect_w;
   }
-  printf("\n");
+  // printf("\n");
 
   // The final blit rectangle is saved in dstrect after all clipping is performed (srcrect is not modified).
   dstrect->x = dst_x;
