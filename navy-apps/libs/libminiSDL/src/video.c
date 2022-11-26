@@ -36,6 +36,9 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   // printf("dst y: %d\n", dst_y);
   // printf("rect w: %d\n", rect_w);
   // printf("rect h: %d\n", rect_h);
+  // printf("\n");
+
+  uint32_t tmp;
 
   assert(src_x + rect_w <= src->w && src_y + rect_h <= src->h);
   assert(dst_x + rect_w <= dst->w && dst_y + rect_h <= dst->h);

@@ -20,6 +20,7 @@ static int system_w = 0, system_h = 0;
 uint32_t NDL_GetTicks() {
   struct timeval tv;
   gettimeofday(&tv, NULL);
+  printf("s:%d", tv.tv_usec / 1000000);
   return tv.tv_usec / 1000;
 }
 
@@ -104,6 +105,15 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   // printf("y: %d\n", y);
   // printf("h: %d\n", h);
   // printf("w: %d\n", w);
+
+  static uint32_t tmp = 0;
+  if(tmp != *pixels + 26 * w + 32) {
+    printf("data: %x\n", tmp);
+    tmp = *pixels + 26 * w + 32;
+  }
+  
+
+
 
   int fd = open("/dev/fb", 0, 0);
   for(int i = 0; i < h; i++) {
