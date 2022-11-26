@@ -55,8 +55,8 @@ void refresh_terminal() {
     uint32_t color = (flip ? term->foreground(x, y) : term->background(x, y));
     draw_ch(x * font->w, y * font->h, ' ', 0, color);
 
-    if(tmp % 3 == 0) SDL_FillRect(screen, NULL, 0x00ffffff);
-    tmp++;
+    // if(tmp % 3 == 0) SDL_FillRect(screen, NULL, 0x00ffffff);
+    // tmp++;
 
     
     SDL_UpdateRect(screen, 0, 0, 0, 0);
