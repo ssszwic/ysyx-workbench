@@ -32,12 +32,22 @@ static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
   SDL_Surface *s = BDF_CreateSurface(font, ch, fg, bg);
   SDL_Rect dstrect = { .x = x, .y = y };
   SDL_BlitSurface(s, NULL, screen, &dstrect);
-  uint32_t *tmp = (uint32_t *) s->pixels;
+
+  uint32_t *tmp = (uint32_t *) screen->pixels;
   
+  // printf("%d, %d\n", s->w, s->h);
+  // for(int j = 0; j < s->h; j++) {
+  //   for (int i = 0; i < s->w; i++) {
+  //     printf("%x ", * tmp + j * s->w + i);
+  //   }
+  //   printf("\n");
+  // }
+  // printf("\n");
+
   printf("%d, %d\n", s->w, s->h);
   for(int j = 0; j < s->h; j++) {
     for (int i = 0; i < s->w; i++) {
-      printf("%x ", * tmp + j * s->w + i);
+      printf("%x ", * tmp + screen->w * (j + y) + x + i);
     }
     printf("\n");
   }
