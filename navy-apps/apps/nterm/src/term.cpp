@@ -233,6 +233,7 @@ size_t Terminal::write_escape(const char *str, size_t count) {
 }
 
 void Terminal::write(const char *str, size_t count) {
+  printf("write\n");
   for (size_t i = 0; i != count && str[i]; ) {
     char ch = str[i];
     if (ch == '\033') {
@@ -295,7 +296,6 @@ const char *Terminal::keypress(char ch) {
         }
     }
     input[inp_len] = '\0';
-    printf("%d\n", ret);
     return ret;
   }
   return nullptr;
