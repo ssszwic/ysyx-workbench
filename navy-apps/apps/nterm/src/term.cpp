@@ -267,7 +267,6 @@ void Terminal::write(const char *str, size_t count) {
 const char *Terminal::keypress(char ch) {
   if (ch == '\0') return nullptr;
   if (mode == Mode::raw) {
-    printf("raw\n");
     input[0] = ch;
     input[1] = '\0';
     return input;
@@ -296,6 +295,7 @@ const char *Terminal::keypress(char ch) {
         }
     }
     input[inp_len] = '\0';
+    printf("%d\n", ret);
     return ret;
   }
   return nullptr;
