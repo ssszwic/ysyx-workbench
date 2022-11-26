@@ -23,10 +23,11 @@ int SDL_PollEvent(SDL_Event *ev) {
 }
 
 int SDL_WaitEvent(SDL_Event *event) {
-  char buf[10] = {};
+  // once read a key event
+  char buf[20] = {};
   char *p;
   // wait until event
-  while(NDL_PollEvent(buf, 10)) {
+  while(NDL_PollEvent(buf, 20)) {
     p = strtok(buf, " ");
     if(strcmp(buf, "kd") == 0) {
       event->type = SDL_KEYDOWN;
