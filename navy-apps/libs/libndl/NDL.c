@@ -40,6 +40,7 @@ typedef struct {
 } ndl_dr;
 
 void NDL_OpenCanvas(int *w, int *h) {
+  printf("open canves\n");
   if (getenv("NWM_APP")) {
     int fbctl = 4;
     fbdev = 5;
