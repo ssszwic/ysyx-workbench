@@ -40,7 +40,6 @@ typedef struct {
 } ndl_dr;
 
 void NDL_OpenCanvas(int *w, int *h) {
-  printf("open canves\n");
   if (getenv("NWM_APP")) {
     int fbctl = 4;
     fbdev = 5;
@@ -82,7 +81,7 @@ void NDL_OpenCanvas(int *w, int *h) {
     screen_h = system_h;
   }
   else {
-    screen_h = *w;
+    screen_h = *h;
   }
 
   // centering the canvas
@@ -91,14 +90,18 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+  printf("sys w: %d\n", system_w);
+  printf("sys h: %d\n", system_h);
+  printf("sys x: %d\n", screen_x);
+  printf("sys y: %d\n", screen_y);
   ndl_dr nld = { .sync = true };
   nld.pixels = pixels;
   nld.x = screen_x + x;
   nld.y = screen_y + y;
   nld.w = w;
   nld.h = w;
-  assert(nld.x > 0 && nld.x + w < system_w);
-  assert(nld.y > 0 && nld.y + h < system_h);
+  assert(nld.x >= 0 && nld.x + w < system_w);
+  assert(nld.y >= 0 && nld.y + h < system_h);
 
   int fd = open("/dev/fb", 0, 0);
   write(fd, &nld, sizeof(nld));
