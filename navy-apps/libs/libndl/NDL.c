@@ -20,7 +20,7 @@ static int system_w = 0, system_h = 0;
 uint32_t NDL_GetTicks() {
   struct timeval tv;
   gettimeofday(&tv, NULL);
-  printf("s:%d", tv.tv_usec / 1000000);
+  printf("s: %d\n", tv.tv_usec / 1000000);
   return tv.tv_usec / 1000;
 }
 
