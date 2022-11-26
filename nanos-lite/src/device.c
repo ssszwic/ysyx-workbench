@@ -14,14 +14,7 @@ static const char *keyname[256] __attribute__((used)) = {
   AM_KEYS(NAME)
 };
 
-typedef struct {
-  int x; 
-  int y;
-  uint32_t *pixels;
-  int w;
-  int h;
-  bool sync;
-} ndl_dr;
+static int system_w, system_h;
 
 size_t serial_write(const void *buf, size_t offset, size_t len) {
   // print to stdout
@@ -55,6 +48,8 @@ size_t events_read(void *buf, size_t offset, size_t len) {
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   char tmp[50] = {};
   AM_GPU_CONFIG_T ev = io_read(AM_GPU_CONFIG);
+  system_w = ev.width;
+  system_h = ev.height;
   sprintf(tmp, "WIDTH: %d\nHEIGHT: %d", ev.width, ev.height);
   assert(len > strlen(tmp));
   strcpy((char *)buf, tmp);
@@ -62,8 +57,11 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
 }
 
 size_t fb_write(const void *buf, size_t offset, size_t len) {
-  AM_GPU_FBDRAW_T tmp = *(AM_GPU_FBDRAW_T *) buf;
-  io_write(AM_GPU_FBDRAW, tmp.x, tmp.y, tmp.pixels, tmp.w, tmp.h, tmp.sync);
+  int y = offset / system_w;
+  int x = offset - system_w * y;
+  char *pixels = (char *) buf;
+  // only write one raw once
+  io_write(AM_GPU_FBDRAW, x, y, pixels, len, 1, true);
   return 0;
 }
 

@@ -30,14 +30,14 @@ int NDL_PollEvent(char *buf, int len) {
   return ret != 0;
 }
 
-typedef struct {
-  int x; 
-  int y;
-  uint32_t *pixels;
-  int w;
-  int h;
-  bool sync;
-} ndl_dr;
+// typedef struct {
+//   int x; 
+//   int y;
+//   uint32_t *pixels;
+//   int w;
+//   int h;
+//   bool sync;
+// } ndl_dr;
 
 void NDL_OpenCanvas(int *w, int *h) {
   if (getenv("NWM_APP")) {
@@ -90,30 +90,27 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
-  ndl_dr nld = {  .sync = true,
-                  .x = screen_x,
-                  .y = screen_y,
-                  .w = screen_w,
-                  .h = screen_h};
-
-  if(x != 0 || y != 0 || w != 0 || h != 0) {
-    nld.pixels = pixels;
-    nld.x = screen_x + x;
-    nld.y = screen_y + y;
-    nld.w = w;
-    nld.h = w;
+  if(x == 0 && y == 0 && w == 0 && h == 0) {
+    x = screen_x;
+    y = screen_y;
+    w = screen_w;
+    h = screen_h;
   }
-
-  printf("x: %d\n", nld.x);
-  printf("y: %d\n", nld.y);
-  printf("w: %d\n", nld.w);
-  printf("h: %d\n", nld.h);
-
-  assert(nld.x >= 0 && nld.x + w <= system_w);
-  assert(nld.y >= 0 && nld.y + h <= system_h);
+  else {
+    x = screen_x + x;
+    y = screen_y + y;
+    w = w;
+    h = h;
+  }
+  assert(x >= 0 && x + w <= system_w);
+  assert(y >= 0 && y + h <= system_h);
 
   int fd = open("/dev/fb", 0, 0);
-  write(fd, &nld, sizeof(nld));
+  for(int i = 0; i < h; i++) {
+    lseek(fd, (y + i) * system_w + x, SEEK_SET);
+    write(fd, pixels + i * w, w * 4);
+  }
+  close(fd);
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
