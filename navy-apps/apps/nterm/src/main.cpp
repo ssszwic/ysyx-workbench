@@ -49,7 +49,7 @@ void refresh_terminal() {
   static int flip = 0;
   uint32_t now = SDL_GetTicks();
   printf("%d\n", needsync);
-  if (now - last > 500 || needsync) {
+  if (now - last > 500) {
     // printf("update\n");
     int x = term->cursor.x, y = term->cursor.y;
     uint32_t color = (flip ? term->foreground(x, y) : term->background(x, y));
