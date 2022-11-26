@@ -34,15 +34,15 @@ static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
   SDL_Rect dstrect = { .x = x, .y = y };
   
 
-  // uint32_t *tmp1 = (uint32_t *) s->pixels;
-  // printf("%d, %d\n", s->w, s->h);
-  // for(int j = 0; j < s->h; j++) {
-  //   for (int i = 0; i < s->w; i++) {
-  //     printf("%x ", * tmp1 + j * s->w + i);
-  //   }
-  //   printf("\n");
-  // }
-  // printf("\n");
+  uint32_t *tmp1 = (uint32_t *) s->pixels;
+  printf("%d, %d\n", s->w, s->h);
+  for(int j = 0; j < s->h; j++) {
+    for (int i = 0; i < s->w; i++) {
+      printf("%x ", * tmp1 + j * s->w + i);
+    }
+    printf("\n");
+  }
+  printf("\n");
 
 
   
