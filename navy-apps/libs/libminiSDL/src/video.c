@@ -31,15 +31,13 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
     dst_y = dstrect->y;
   }
 
-  printf("xy: %d %d\n", dst_x, dst_y);
-
-  // printf("src x: %d\n", src_x);
-  // printf("src y: %d\n", src_y);
-  // printf("dst x: %d\n", dst_x);
-  // printf("dst y: %d\n", dst_y);
-  // printf("rect w: %d\n", rect_w);
-  // printf("rect h: %d\n", rect_h);
-  // printf("\n");
+  printf("src x: %d\n", src_x);
+  printf("src y: %d\n", src_y);
+  printf("dst x: %d\n", dst_x);
+  printf("dst y: %d\n", dst_y);
+  printf("rect w: %d\n", rect_w);
+  printf("rect h: %d\n", rect_h);
+  printf("\n");
 
   printf("receive\n");
   uint32_t *tmp = (uint32_t *) src->pixels;
