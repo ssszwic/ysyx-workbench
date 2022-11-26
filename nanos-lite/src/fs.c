@@ -124,7 +124,7 @@ size_t fs_write(int fd, const void *buf, size_t len) {
 
   assert(fd > 0 && fd < file_num);
   if(file_table[fd].write != NULL) {
-    return file_table[fd].write(buf, 0, len);
+    return file_table[fd].write(buf, file_table[fd].cfo, len);
   }
   else {
     // normal file

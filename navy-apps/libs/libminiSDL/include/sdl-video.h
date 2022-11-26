@@ -32,9 +32,9 @@ typedef struct {
 } SDL_Palette;
 
 typedef struct {
-	SDL_Palette *palette;
-	uint8_t BitsPerPixel;
-	uint8_t BytesPerPixel;
+	SDL_Palette *palette;	// an SDL_Palette structure associated with this pixel format, or NULL if the format doesn't have a palette
+	uint8_t BitsPerPixel; // the number of significant bits in a pixel value, eg: 8, 15, 16, 24, 32
+	uint8_t BytesPerPixel; // the number of bytes required to hold a pixel value, eg: 1, 2, 3, 4;
 	uint8_t Rloss, Gloss, Bloss, Aloss;
 	uint8_t Rshift, Gshift, Bshift, Ashift;
 	uint32_t Rmask, Gmask, Bmask, Amask;
@@ -43,9 +43,9 @@ typedef struct {
 typedef struct {
 	uint32_t flags;
 	SDL_PixelFormat *format;
-	int w, h;
-	uint16_t pitch;
-	uint8_t *pixels;
+	int w, h;	// the width and height in pixels (read-only)
+	uint16_t pitch; // the length of a row of pixels in bytes (read-only)
+	uint8_t *pixels; // the pointer to the actual pixel data
 } SDL_Surface;
 
 SDL_Surface* SDL_CreateRGBSurfaceFrom(void *pixels, int width, int height, int depth,

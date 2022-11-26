@@ -30,15 +30,6 @@ int NDL_PollEvent(char *buf, int len) {
   return ret != 0;
 }
 
-typedef struct {
-  int x; 
-  int y;
-  uint32_t *pixels;
-  int w;
-  int h;
-  bool sync;
-} ndl_dr;
-
 void NDL_OpenCanvas(int *w, int *h) {
   if (getenv("NWM_APP")) {
     int fbctl = 4;
@@ -81,7 +72,7 @@ void NDL_OpenCanvas(int *w, int *h) {
     screen_h = system_h;
   }
   else {
-    screen_h = *w;
+    screen_h = *h;
   }
 
   // centering the canvas
@@ -90,30 +81,57 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
-  ndl_dr nld = { .sync = true };
-  nld.pixels = pixels;
-  nld.x = screen_x + x;
-  nld.y = screen_x + y;
-  nld.w = w;
-  nld.h = w;
-  assert(nld.x > 0 && nld.x + w < system_w);
-  assert(nld.y > 0 && nld.y + h < system_h);
+  // printf("system w: %d\n", system_w);
+  // printf("system h: %d\n", system_h);
+  // printf("screen x: %d\n", screen_x);
+  // printf("screen y: %d\n", screen_y);
+  if(x == 0 && y == 0 && w == 0 && h == 0) {
+    x = screen_x;
+    y = screen_y;
+    w = screen_w;
+    h = screen_h;
+  }
+  else {
+    x = screen_x + x;
+    y = screen_y + y;
+    w = w;
+    h = h;
+  }
+  assert(x >= 0 && x + w <= system_w);
+  assert(y >= 0 && y + h <= system_h);
+
+  // printf("x: %d\n", x);
+  // printf("y: %d\n", y);
+  // printf("h: %d\n", h);
+  // printf("w: %d\n", w);
 
   int fd = open("/dev/fb", 0, 0);
-  write(fd, &nld, sizeof(nld));
+  for(int i = 0; i < h; i++) {
+    lseek(fd, ((y + i) * system_w + x) * 4, SEEK_SET);
+    write(fd, pixels + i * w, w * 4);
+  }
+  close(fd);
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
+  printf("have no implement!\n");
+  assert(0);
 }
 
 void NDL_CloseAudio() {
+  printf("have no implement!\n");
+  assert(0);
 }
 
 int NDL_PlayAudio(void *buf, int len) {
+  printf("have no implement!\n");
+  assert(0);
   return 0;
 }
 
 int NDL_QueryAudio() {
+  printf("have no implement!\n");
+  assert(0);
   return 0;
 }
 
@@ -125,4 +143,5 @@ int NDL_Init(uint32_t flags) {
 }
 
 void NDL_Quit() {
+
 }
