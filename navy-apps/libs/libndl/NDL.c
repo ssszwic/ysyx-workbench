@@ -114,16 +114,24 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
+  printf("have no implement!\n");
+  assert(0);
 }
 
 void NDL_CloseAudio() {
+  printf("have no implement!\n");
+  assert(0);
 }
 
 int NDL_PlayAudio(void *buf, int len) {
+  printf("have no implement!\n");
+  assert(0);
   return 0;
 }
 
 int NDL_QueryAudio() {
+  printf("have no implement!\n");
+  assert(0);
   return 0;
 }
 
@@ -135,4 +143,5 @@ int NDL_Init(uint32_t flags) {
 }
 
 void NDL_Quit() {
+
 }
