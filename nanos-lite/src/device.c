@@ -61,6 +61,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
   int x = offset - system_w * y;
   char *pixels = (char *) buf;
   // only write one raw once
+  printf("offset: %d\n", offset);
   printf("x: %d\n", x);
   printf("y: %d\n", y);
   printf("w: %d\n", len / 4);
