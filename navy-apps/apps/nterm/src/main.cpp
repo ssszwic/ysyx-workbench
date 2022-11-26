@@ -44,14 +44,14 @@ static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
   // }
   // printf("\n");
 
-  printf("%d, %d\n", s->w, s->h);
-  for(int j = 0; j < s->h; j++) {
-    for (int i = 0; i < s->w; i++) {
-      printf("%x ", * tmp + screen->w * (j + y) + x + i);
-    }
-    printf("\n");
-  }
-  printf("\n");
+  // printf("%d, %d\n", s->w, s->h);
+  // for(int j = 0; j < s->h; j++) {
+  //   for (int i = 0; i < s->w; i++) {
+  //     printf("%x ", * tmp + screen->w * (j + y) + x + i);
+  //   }
+  //   printf("\n");
+  // }
+  // printf("\n");
 
   SDL_FreeSurface(s);
 

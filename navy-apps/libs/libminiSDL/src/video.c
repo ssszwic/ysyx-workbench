@@ -30,13 +30,13 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
     dst_y = dstrect->y;
   }
 
-  printf("src x: %d\n", src_x);
-  printf("src y: %d\n", src_y);
-  printf("dst x: %d\n", dst_x);
-  printf("dst y: %d\n", dst_y);
-  printf("rect w: %d\n", rect_w);
-  printf("rect h: %d\n", rect_h);
-  printf("\n");
+  // printf("src x: %d\n", src_x);
+  // printf("src y: %d\n", src_y);
+  // printf("dst x: %d\n", dst_x);
+  // printf("dst y: %d\n", dst_y);
+  // printf("rect w: %d\n", rect_w);
+  // printf("rect h: %d\n", rect_h);
+  // printf("\n");
 
   uint32_t tmp;
 
@@ -50,10 +50,13 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   for(int j = 0; j < rect_h; j++) {
     for(int i = 0; i < rect_w; i++) {
       *dst_pixels++ = *src_pixels++;
+      printf("%x ", *dst_pixels);
     }
+    printf("\n");
     src_pixels += src->w - rect_w;
     dst_pixels += dst->w - rect_w;
   }
+  printf("\n");
 
   // The final blit rectangle is saved in dstrect after all clipping is performed (srcrect is not modified).
   dstrect->x = dst_x;
