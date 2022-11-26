@@ -43,6 +43,7 @@ static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
   //   printf("\n");
   // }
   // printf("\n");
+  printf("draw\n");
   uint32_t *tmp2 = (uint32_t *) screen->pixels;
   printf("%lx\n", (uint64_t) tmp2);
   printf("%d, %d, %d\n", screen->w, y, x);
@@ -80,7 +81,7 @@ void refresh_terminal() {
     printf("update\n");
     int x = term->cursor.x, y = term->cursor.y;
     uint32_t color = (flip ? term->foreground(x, y) : term->background(x, y));
-    printf("color: %x\n", color);
+    // printf("color: %x\n", color);
     draw_ch(x * font->w, y * font->h, ' ', 0, color);
     
     // if(tmp % 3 == 0) SDL_FillRect(screen, NULL, 0x00ffffff);
