@@ -7,9 +7,79 @@
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
+
+  int16_t src_x = 0;
+  int16_t src_y = 0;
+  int16_t dst_x = 0;
+  int16_t dst_y = 0;
+  uint16_t rect_w = src->w;
+  uint16_t rect_h = src->h;
+
+  // If srcrect is NULL, the entire surface is copied. If dstrect is NULL, 
+  // then the destination position (upper left corner) is (0, 0).
+  if(srcrect) {
+    src_x = srcrect->x;
+    src_y = srcrect->y;
+    rect_w = srcrect->w;
+    rect_h = srcrect->h;
+  }
+  // If dstrect is NULL, then the destination position (upper left corner) is (0, 0).
+  if(dstrect) {
+    // Only the position is used in the dstrect (the width and height are ignored).
+    dst_x = dstrect->x;
+    dst_y = dstrect->y;
+  }
+
+  // printf("src x: %d\n", src_x);
+  // printf("src y: %d\n", src_y);
+  // printf("dst x: %d\n", dst_x);
+  // printf("dst y: %d\n", dst_y);
+  // printf("rect w: %d\n", rect_w);
+  // printf("rect h: %d\n", rect_h);
+
+  assert(src_x + rect_w <= src->w && src_y + rect_h <= src->h);
+  assert(dst_x + rect_w <= dst->w && dst_y + rect_h <= dst->h);
+  
+  uint32_t *src_pixels = (uint32_t *) src->pixels;
+  uint32_t *dst_pixels = (uint32_t *) dst->pixels;
+  src_pixels += src_y * src->w + src_x;
+  dst_pixels += dst_y * dst->w + dst_x;
+  for(int j = 0; j < rect_h; j++) {
+    for(int i = 0; i < rect_w; i++) {
+      *dst_pixels++ = *src_pixels++;
+    }
+    src_pixels += src->w - rect_w;
+    dst_pixels += dst->w - rect_w;
+  }
+
+  // The final blit rectangle is saved in dstrect after all clipping is performed (srcrect is not modified).
+  dstrect->x = dst_x;
+  dstrect->y = dst_y;
+  dstrect->w = rect_w;
+  dstrect->h = rect_h;
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
+  int16_t rect_x = 0;
+  int16_t rect_y = 0;
+  uint16_t rect_w = dst->w;
+  uint16_t rect_h = dst->h;
+  if(dstrect) {
+    rect_x = dstrect->x;
+    rect_y = dstrect->y;
+    rect_h = dstrect->h;
+    rect_w = dstrect->w;
+  }
+  assert(rect_x + rect_w <= dst->w && rect_y + rect_h <= dst->h);
+  
+  uint32_t *dst_pixels = (uint32_t *) dst->pixels;
+  dst_pixels += rect_y * dst->w + rect_x;
+  for(int j = 0; j < rect_h; j++) {
+    for(int i = 0; i < rect_w; i++) {
+      *dst_pixels++ = color;
+    }
+    dst_pixels += dst->w - rect_w;
+  }
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
