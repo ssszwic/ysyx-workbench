@@ -90,6 +90,10 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
+  printf("system w: %d\n", system_w);
+  printf("system h: %d\n", system_h);
+  printf("screen x: %d\n", screen_x);
+  printf("screen y: %d\n", screen_y);
   if(x == 0 && y == 0 && w == 0 && h == 0) {
     x = screen_x;
     y = screen_y;
