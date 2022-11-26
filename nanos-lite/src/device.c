@@ -60,7 +60,7 @@ size_t dispinfo_read(void *buf, size_t offset, size_t len) {
   strcpy((char *)buf, tmp);
   return strlen(tmp);
 }
-// int x, y; void *pixels; int w, h; bool sync);
+
 size_t fb_write(const void *buf, size_t offset, size_t len) {
   AM_GPU_FBDRAW_T tmp = *(AM_GPU_FBDRAW_T *) buf;
   io_write(AM_GPU_FBDRAW, tmp.x, tmp.y, tmp.pixels, tmp.w, tmp.h, tmp.sync);
