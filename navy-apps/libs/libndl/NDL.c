@@ -90,18 +90,27 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
-  printf("sys w: %d\n", system_w);
-  printf("sys h: %d\n", system_h);
-  printf("sys x: %d\n", screen_x);
-  printf("sys y: %d\n", screen_y);
-  ndl_dr nld = { .sync = true };
-  nld.pixels = pixels;
-  nld.x = screen_x + x;
-  nld.y = screen_y + y;
-  nld.w = w;
-  nld.h = w;
-  assert(nld.x >= 0 && nld.x + w < system_w);
-  assert(nld.y >= 0 && nld.y + h < system_h);
+  ndl_dr nld = {  .sync = true,
+                  .x = screen_x,
+                  .y = screen_y,
+                  .w = screen_w,
+                  .h = screen_h};
+
+  if(x != 0 || y != 0 || w != 0 || h != 0) {
+    nld.pixels = pixels;
+    nld.x = screen_x + x;
+    nld.y = screen_y + y;
+    nld.w = w;
+    nld.h = w;
+  }
+
+  printf("x: %d\n", nld.x);
+  printf("y: %d\n", nld.y);
+  printf("w: %d\n", nld.w);
+  printf("h: %d\n", nld.h);
+
+  assert(nld.x >= 0 && nld.x + w <= system_w);
+  assert(nld.y >= 0 && nld.y + h <= system_h);
 
   int fd = open("/dev/fb", 0, 0);
   write(fd, &nld, sizeof(nld));
