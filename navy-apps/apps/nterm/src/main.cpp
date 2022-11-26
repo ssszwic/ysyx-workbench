@@ -47,15 +47,26 @@ void refresh_terminal() {
 
   static uint32_t last = 0;
   static int flip = 0;
+  int tmp = 0;
   uint32_t now = SDL_GetTicks();
-  printf("%d\n", needsync);
   if (now - last > 500) {
-    // printf("update\n");
+    printf("update\n");
     int x = term->cursor.x, y = term->cursor.y;
     uint32_t color = (flip ? term->foreground(x, y) : term->background(x, y));
     draw_ch(x * font->w, y * font->h, ' ', 0, color);
-    int tmp = 0;
+
+    if(tmp % 3 == 0) SDL_FillRect(screen, NULL, 0);
+    tmp++;
+
+    
     SDL_UpdateRect(screen, 0, 0, 0, 0);
+    //   for(int i = 0; i < 50; i++) {
+    //     printf("%x ", *screen->pixels + 29 * screen->w + i);
+    //   }
+    // printf("\n");
+
+
+
     if (now - last > 500) {
       flip = !flip;
       last = now;
