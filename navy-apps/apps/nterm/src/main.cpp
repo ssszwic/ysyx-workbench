@@ -69,7 +69,6 @@ void refresh_terminal() {
 
   static uint32_t last = 0;
   static int flip = 0;
-  int tmp = 0;
   uint32_t now = SDL_GetTicks();
   if (now - last > 500) {
     printf("update\n");
@@ -77,10 +76,8 @@ void refresh_terminal() {
     uint32_t color = (flip ? term->foreground(x, y) : term->background(x, y));
     draw_ch(x * font->w, y * font->h, ' ', 0, color);
     
-    
     // if(tmp % 3 == 0) SDL_FillRect(screen, NULL, 0x00ffffff);
     // tmp++;
-
     
     SDL_UpdateRect(screen, 0, 0, 0, 0);
     //   for(int i = 0; i < 50; i++) {
