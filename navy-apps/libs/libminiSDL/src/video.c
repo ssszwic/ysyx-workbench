@@ -74,10 +74,10 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   printf("\n");
 
   // The final blit rectangle is saved in dstrect after all clipping is performed (srcrect is not modified).
-  dstrect->x = dst_x;
-  dstrect->y = dst_y;
-  dstrect->w = rect_w;
-  dstrect->h = rect_h;
+  // dstrect->x = dst_x;
+  // dstrect->y = dst_y;
+  // dstrect->w = rect_w;
+  // dstrect->h = rect_h;
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
