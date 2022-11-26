@@ -145,7 +145,8 @@ static inline fixedpt fixedpt_div(fixedpt A, fixedpt B) {
 	printf("A: %x\n", A);
 	printf("B: %x\n", B);
 	printf("one: %x\n", FIXEDPT_ONE);
-	return (fixedpt) A / B * FIXEDPT_ONE;
+	// Division at the end
+	return (fixedpt) A * FIXEDPT_ONE / B ;
 }
 
 static inline fixedpt fixedpt_abs(fixedpt A) {
