@@ -93,7 +93,7 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   ndl_dr nld = { .sync = true };
   nld.pixels = pixels;
   nld.x = screen_x + x;
-  nld.y = screen_x + y;
+  nld.y = screen_y + y;
   nld.w = w;
   nld.h = w;
   assert(nld.x > 0 && nld.x + w < system_w);
