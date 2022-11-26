@@ -43,23 +43,20 @@ static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
   //   printf("\n");
   // }
   // printf("\n");
-  printf("draw\n");
-  uint32_t *tmp2 = (uint32_t *) screen->pixels;
-  printf("%lx\n", (uint64_t) tmp2);
-  printf("%d, %d, %d\n", screen->w, y, x);
-  printf("%lx\n", (uint64_t) tmp2 + screen->w * y + x);
-  printf("\n");
 
 
-  // printf("%d, %d\n", s->w, s->h);
-  // for(int j = 0; j < s->h; j++) {
-  //   for (int i = 0; i < s->w; i++) {
-  //     printf("%x ", * tmp2 + screen->w * (j + y) + x + i);
-  //   }
-  //   printf("\n");
-  // }
-  // printf("\n");
+  
   SDL_BlitSurface(s, NULL, screen, &dstrect);
+
+  uint32_t *tmp2 = (uint32_t *) screen->pixels;
+  printf("%d, %d\n", s->w, s->h);
+  for(int j = 0; j < s->h; j++) {
+    for (int i = 0; i < s->w; i++) {
+      printf("%x ", * tmp2 + screen->w * (j + y) + x + i);
+    }
+    printf("\n");
+  }
+  printf("\n");
 
   SDL_FreeSurface(s);
 
