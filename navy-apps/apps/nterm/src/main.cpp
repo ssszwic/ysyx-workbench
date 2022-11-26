@@ -32,6 +32,7 @@ int main(int argc, char *argv[]) {
 static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
   SDL_Surface *s = BDF_CreateSurface(font, ch, fg, bg);
   SDL_Rect dstrect = { .x = x, .y = y };
+  printf("xy: %d %d\n", x, y);
   
   printf("send\n");
   uint32_t *tmp1 = (uint32_t *) s->pixels;
