@@ -33,8 +33,9 @@ void builtin_sh_run() {
     SDL_Event ev;
     if (SDL_PollEvent(&ev)) {
       if (ev.type == SDL_KEYUP || ev.type == SDL_KEYDOWN) {
-        printf("%d\n", ev.key.keysym.sym);
+        printf("%d\n", handle_key(&ev));
         const char *res = term->keypress(handle_key(&ev));
+
         if (res) {
           sh_handle_cmd(res);
           sh_prompt();
