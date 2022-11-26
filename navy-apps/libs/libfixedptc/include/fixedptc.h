@@ -142,9 +142,6 @@ static inline fixedpt fixedpt_mul(fixedpt A, fixedpt B) {
 
 /* Divides two fixedpt numbers, returns the result. */
 static inline fixedpt fixedpt_div(fixedpt A, fixedpt B) {
-	printf("A: %x\n", A);
-	printf("B: %x\n", B);
-	printf("one: %x\n", FIXEDPT_ONE);
 	// Division at the end
 	return (fixedpt) A * FIXEDPT_ONE / B ;
 }
