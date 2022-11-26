@@ -109,6 +109,11 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   assert(x >= 0 && x + w <= system_w);
   assert(y >= 0 && y + h <= system_h);
 
+  printf("x: %d\n", x);
+  printf("y: %d\n", y);
+  printf("h: %d\n", h);
+  printf("w: %d\n", w);
+
   int fd = open("/dev/fb", 0, 0);
   for(int i = 0; i < h; i++) {
     lseek(fd, ((y + i) * system_w + x) * 4, SEEK_SET);
