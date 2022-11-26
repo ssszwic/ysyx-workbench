@@ -1,6 +1,7 @@
 #include <nterm.h>
 #include <SDL.h>
 #include <SDL_bdf.h>
+#include <stdio.h>
 
 static const char *font_fname = "/share/fonts/Courier-7.bdf";
 static BDF_Font *font = NULL;
@@ -42,10 +43,11 @@ static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
   //   printf("\n");
   // }
   // printf("\n");
-
   uint32_t *tmp2 = (uint32_t *) screen->pixels;
+  printf("%lx\n", (uint64_t) tmp2);
   printf("%d, %d, %d\n", screen->w, y, x);
   printf("%lx\n", (uint64_t) tmp2 + screen->w * y + x);
+  printf("\n");
 
 
   // printf("%d, %d\n", s->w, s->h);

@@ -44,10 +44,11 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   assert(src_x + rect_w <= src->w && src_y + rect_h <= src->h);
   assert(dst_x + rect_w <= dst->w && dst_y + rect_h <= dst->h);
   
+
   uint32_t *src_pixels = (uint32_t *) src->pixels;
   uint32_t *dst_pixels = (uint32_t *) dst->pixels;
   
-
+  printf("%lx\n", (uint64_t) dst_pixels);
   src_pixels += src_y * src->w + src_x;
   dst_pixels += dst_y * dst->w + dst_x;
 
