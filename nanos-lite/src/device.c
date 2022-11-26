@@ -61,7 +61,7 @@ size_t fb_write(const void *buf, size_t offset, size_t len) {
   int x = offset - system_w * y;
   char *pixels = (char *) buf;
   // only write one raw once
-  io_write(AM_GPU_FBDRAW, x, y, pixels, len, 1, true);
+  io_write(AM_GPU_FBDRAW, x, y, pixels, len / 4, 1, true);
   return 0;
 }
 
