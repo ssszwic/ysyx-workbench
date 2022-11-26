@@ -66,8 +66,8 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   for(int j = 0; j < rect_h; j++) {
     for(int i = 0; i < rect_w; i++) {
       // *dst_pixels++ = *src_pixels++;
-      * (dst_pixels + src->w * (src_y + j) + i + src_x) = * src_pixels + src->w * (src_y + j) + i + src_x;
-      printf("%x ", * (dst_pixels + src->w * (src_y + j) + i + src_x));
+      * (dst_pixels + dst->w * (dst_y + j) + i + dst_x) = * src_pixels + src->w * (src_y + j) + i + src_x;
+      printf("%x ", * (dst_pixels + dst->w * (dst_y + j) + i + dst_x));
     }
     printf("\n");
     // src_pixels += src->w - rect_w;
