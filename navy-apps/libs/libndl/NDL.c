@@ -110,14 +110,12 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   // printf("h: %d\n", h);
   // printf("w: %d\n", w);
 
-  static uint32_t tmp = 0;
-  if(tmp != *pixels + 26 * w + 32) {
-    printf("data: %x\n", tmp);
-    tmp = *pixels + 26 * w + 32;
-  }
+  // static uint32_t tmp = 0;
+  // if(tmp != *pixels + 26 * w + 32) {
+  //   printf("data: %x\n", tmp);
+  //   tmp = *pixels + 26 * w + 32;
+  // }
   
-
-
 
   int fd = open("/dev/fb", 0, 0);
   for(int i = 0; i < h; i++) {
