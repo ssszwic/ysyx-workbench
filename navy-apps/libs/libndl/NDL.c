@@ -17,11 +17,15 @@ static int screen_x = 0, screen_y = 0;
 static int screen_w = 0, screen_h = 0;
 static int system_w = 0, system_h = 0;
 
+static uint64_t begin_time_ms;
+
 uint32_t NDL_GetTicks() {
+  uint64_t now;
   struct timeval tv;
   gettimeofday(&tv, NULL);
-  printf("s: %d\n", tv.tv_usec / 1000000);
-  return tv.tv_usec / 1000;
+  // printf("s: %ld\n", tv.tv_sec * 1000 + tv.tv_usec/1000);
+  now = tv.tv_sec * 1000 + tv.tv_usec/1000 - begin_time_ms;
+  return now;
 }
 
 int NDL_PollEvent(char *buf, int len) {
@@ -146,6 +150,10 @@ int NDL_QueryAudio() {
 }
 
 int NDL_Init(uint32_t flags) {
+  // init time ms
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  begin_time_ms = tv.tv_sec * 1000 + tv.tv_usec / 1000;
   if (getenv("NWM_APP")) {
     evtdev = 3;
   }
