@@ -100,7 +100,6 @@ void difftest_step() {
     is_skip_ref = false;
     return;
   }
-  printf("test\n");
   // ref execute once
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
