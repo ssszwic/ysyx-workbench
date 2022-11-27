@@ -18,14 +18,14 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 
   // If srcrect is NULL, the entire surface is copied. If dstrect is NULL, 
   // then the destination position (upper left corner) is (0, 0).
-  if(srcrect) {
+  if(srcrect != NULL) {
     src_x = srcrect->x;
     src_y = srcrect->y;
     rect_w = srcrect->w;
     rect_h = srcrect->h;
   }
   // If dstrect is NULL, then the destination position (upper left corner) is (0, 0).
-  if(dstrect) {
+  if(dstrect != NULL) {
     // Only the position is used in the dstrect (the width and height are ignored).
     dst_x = dstrect->x;
     dst_y = dstrect->y;
