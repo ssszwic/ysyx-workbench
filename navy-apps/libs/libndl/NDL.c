@@ -31,7 +31,6 @@ uint32_t NDL_GetTicks() {
 int NDL_PollEvent(char *buf, int len) {
   int fd = open("/dev/events", 0, 0);
   int ret = read(fd, buf, len);
-  close(fd);
   return ret != 0;
 }
 
@@ -110,19 +109,21 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   // printf("h: %d\n", h);
   // printf("w: %d\n", w);
 
-  // static uint32_t tmp = 0;
-  // if(tmp != *pixels + 26 * w + 32) {
-  //   printf("data: %x\n", tmp);
-  //   tmp = *pixels + 26 * w + 32;
+  // for(int j = 0; j < 13; j++) {
+  //   for (int i = 0; i < 7; i++) {
+  //     printf("%x ", * (pixels + screen_w * (26 + j) + i + 28));
+  //   }
+  //   printf("\n");
   // }
-  
-
+  // printf("\n");
   int fd = open("/dev/fb", 0, 0);
-  for(int i = 0; i < h; i++) {
+
+  for(int i = 0; i < h; i++) {  
     lseek(fd, ((y + i) * system_w + x) * 4, SEEK_SET);
     write(fd, pixels + i * w, w * 4);
   }
-  close(fd);
+  // don't close device for native
+  // close(fd);
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {

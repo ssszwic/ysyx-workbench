@@ -32,48 +32,7 @@ int main(int argc, char *argv[]) {
 static void draw_ch(int x, int y, char ch, uint32_t fg, uint32_t bg) {
   SDL_Surface *s = BDF_CreateSurface(font, ch, fg, bg);
   SDL_Rect dstrect = { .x = x, .y = y };
-  printf("xy: %d %d\n", x, y);
-  
-  printf("send\n");
-  uint32_t *tmp1 = (uint32_t *) s->pixels;
-  for(int j = 0; j < s->h; j++) {
-    for (int i = 0; i < s->w; i++) {
-      printf("%x ", * tmp1 + j * s->w + i);
-    }
-    printf("\n");
-  }
-  printf("\n");
-
-  uint32_t *tmp2 = (uint32_t *) screen->pixels;
-
   SDL_BlitSurface(s, NULL, screen, &dstrect);
-  // printf("write\n");
-  // for(int j = 0; j < s->h; j++) {
-  //   for(int i = 0; i < s->w; i++) {
-  //     // *dst_pixels++ = *src_pixels++;
-  //     * (tmp2 + screen->w * (y + j) + i + x) = * (tmp1 + s->w * (0 + j) + i + 0);
-  //     printf("%x ", * (tmp2 + screen->w * (y + j) + i + x));
-  //   }
-  //   printf("\n");
-  //   // src_pixels += src->w - rect_w;
-  //   // dst_pixels += dst->w - rect_w;
-  // }
-  // printf("\n");
-
-  
-
-
-  printf("draw\n");
-  printf("posi: %d %d\n", dstrect.x, dstrect.y);
-  printf("%d, %d\n", s->w, s->h);
-  for(int j = 0; j < s->h; j++) {
-    for (int i = 0; i < s->w; i++) {
-      printf("%x ", * (tmp2 + screen->w * (y + j) + i + x));
-    }
-    printf("\n");
-  }
-  printf("\n");
-
   SDL_FreeSurface(s);
 }
 
@@ -82,32 +41,19 @@ void refresh_terminal() {
   for (int i = 0; i < W; i ++)
     for (int j = 0; j < H; j ++)
       if (term->is_dirty(i, j)) {
-        // draw_ch(i * font->w, j * font->h, term->getch(i, j), term->foreground(i, j), term->background(i, j));
-        // needsync = 1;
+        draw_ch(i * font->w, j * font->h, term->getch(i, j), term->foreground(i, j), term->background(i, j));
+        needsync = 1;
       }
   term->clear();
 
   static uint32_t last = 0;
   static int flip = 0;
   uint32_t now = SDL_GetTicks();
-  if (now - last > 500) {
-    printf("update\n");
+  if (now - last > 500 || needsync) {
     int x = term->cursor.x, y = term->cursor.y;
     uint32_t color = (flip ? term->foreground(x, y) : term->background(x, y));
-    // printf("color: %x\n", color);
     draw_ch(x * font->w, y * font->h, ' ', 0, color);
-    
-    // if(tmp % 3 == 0) SDL_FillRect(screen, NULL, 0x00ffffff);
-    // tmp++;
-    
     SDL_UpdateRect(screen, 0, 0, 0, 0);
-    //   for(int i = 0; i < 50; i++) {
-    //     printf("%x ", *screen->pixels + 29 * screen->w + i);
-    //   }
-    // printf("\n");
-
-
-
     if (now - last > 500) {
       flip = !flip;
       last = now;
