@@ -3,8 +3,7 @@
 #include <assert.h>
 
 int SDL_OpenAudio(SDL_AudioSpec *desired, SDL_AudioSpec *obtained) {
-  printf("have no implement!\n");
-  assert(0);
+  // aviod return
   return 0;
 }
 
