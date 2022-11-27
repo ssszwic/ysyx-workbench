@@ -46,13 +46,13 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   uint32_t *dst_pixels = (uint32_t *) dst->pixels;
   src_pixels += src_y * src->w + src_x;
   dst_pixels += dst_y * dst->w + dst_x;
-  for(int j = 0; j < rect_h; j++) {
-    for(int i = 0; i < rect_w; i++) {
-      *dst_pixels++ = *src_pixels++;
-    }
-    src_pixels += src->w - rect_w;
-    dst_pixels += dst->w - rect_w;
-  }
+  // for(int j = 0; j < rect_h; j++) {
+  //   for(int i = 0; i < rect_w; i++) {
+  //     *dst_pixels++ = *src_pixels++;
+  //   }
+  //   src_pixels += src->w - rect_w;
+  //   dst_pixels += dst->w - rect_w;
+  // }
 
   // The final blit rectangle is saved in dstrect after all clipping is performed (srcrect is not modified).
   dstrect->x = dst_x;
