@@ -25,7 +25,7 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
-#define RING_BUF_WIDTH 30
+#define RING_BUF_WIDTH 100
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
