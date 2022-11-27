@@ -15,17 +15,16 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   int16_t dst_y = 0;
   uint16_t rect_w = src->w;
   uint16_t rect_h = src->h;
-
   // If srcrect is NULL, the entire surface is copied. If dstrect is NULL, 
   // then the destination position (upper left corner) is (0, 0).
-  if(srcrect) {
+  if(srcrect != NULL) {
     src_x = srcrect->x;
     src_y = srcrect->y;
     rect_w = srcrect->w;
     rect_h = srcrect->h;
   }
   // If dstrect is NULL, then the destination position (upper left corner) is (0, 0).
-  if(dstrect) {
+  if(dstrect != NULL) {
     // Only the position is used in the dstrect (the width and height are ignored).
     dst_x = dstrect->x;
     dst_y = dstrect->y;
@@ -53,12 +52,13 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
     src_pixels += src->w - rect_w;
     dst_pixels += dst->w - rect_w;
   }
-
   // The final blit rectangle is saved in dstrect after all clipping is performed (srcrect is not modified).
-  dstrect->x = dst_x;
-  dstrect->y = dst_y;
-  dstrect->w = rect_w;
-  dstrect->h = rect_h;
+  if(dstrect != NULL) {
+    dstrect->x = dst_x;
+    dstrect->y = dst_y;
+    dstrect->w = rect_w;
+    dstrect->h = rect_h;
+  }
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
@@ -85,6 +85,17 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
+  if(s->format->palette != NULL) {
+    // palette data type
+    uint8_t *palette_data = (uint8_t *) s->pixels;
+    uint32_t *RGBdata = malloc(s->h * s->w * 4);
+    assert(RGBdata);
+    for(int i = 0; i < s->h * s->w; i++) {
+      *(RGBdata++) = s->format->palette->colors[*(palette_data++)].val;
+    }
+    NDL_DrawRect((uint32_t *) RGBdata, x, y, w, h);
+    return;
+  }
   NDL_DrawRect((uint32_t *) s->pixels, x, y, w, h);
 }
 

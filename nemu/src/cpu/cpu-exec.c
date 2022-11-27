@@ -25,7 +25,7 @@
  * You can modify this value as you want.
  */
 #define MAX_INST_TO_PRINT 10
-#define RING_BUF_WIDTH 30
+#define RING_BUF_WIDTH 100
 
 CPU_state cpu = {};
 uint64_t g_nr_guest_inst = 0;
@@ -44,10 +44,12 @@ void memory_trace_print();
 void device_trace_print();
 void print_func_log();
 void print_exceptiopn_log();
+void log_trace();
+void print_instruction_log();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE
-  if (ITRACE_COND) { log_write("%s\n", _this->logbuf); }
+  if (ITRACE_COND) { log_write("%s\n", _this->logbuf);}
   // add log to ring buf
   memset(ring_buf[ring_ref], ' ', 6); // copy 5 'space' to cover '---->'
   if (++ring_ref == RING_BUF_WIDTH) {ring_ref = 0;}
@@ -149,19 +151,7 @@ void cpu_exec(uint64_t n) {
 
     case NEMU_END: case NEMU_ABORT:
       if (nemu_state.halt_ret != 0 || nemu_state.state == NEMU_ABORT) {
-        IFDEF(CONFIG_MEMORY_TRACE, memory_trace_print());
-        IFDEF(CONFIG_FUNCTION_TRACE, print_func_log());
-        IFDEF(CONFIG_DEVICE_TRACE, device_trace_print());
-        IFDEF(CONFIG_EXCEPTION_TRACE, print_exceptiopn_log());
-
-#ifdef CONFIG_ITRACE
-        printf("\nring buff\n");
-        for (int i = 0; i < RING_BUF_WIDTH; i++) {
-          if(ring_buf[i][0] == '\0') break;
-          printf("%s\n", ring_buf[i]);
-        }
-        printf("\n");
-#endif
+        log_trace();
       }
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
@@ -171,4 +161,21 @@ void cpu_exec(uint64_t n) {
       // fall through
     case NEMU_QUIT: statistic();
   }
+}
+
+void print_instruction_log() {
+  printf("\nring buff\n");
+  for (int i = 0; i < RING_BUF_WIDTH; i++) {
+    if(ring_buf[i][0] == '\0') break;
+    printf("%s\n", ring_buf[i]);
+  }
+  printf("\n");
+}
+
+void log_trace() {
+  IFDEF(CONFIG_MEMORY_TRACE, memory_trace_print());
+  IFDEF(CONFIG_FUNCTION_TRACE, print_func_log());
+  IFDEF(CONFIG_DEVICE_TRACE, device_trace_print());
+  IFDEF(CONFIG_EXCEPTION_TRACE, print_exceptiopn_log());
+  IFDEF(CONFIG_ITRACE, print_instruction_log());
 }
