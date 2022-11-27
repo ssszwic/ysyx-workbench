@@ -31,6 +31,7 @@ static int d_ring_ref = D_RING_BUF_WIDTH - 1;
 #endif
 
 void log_trace();
+void close_log();
 
 uint8_t* new_space(int size) {
   uint8_t *p = p_space;
@@ -45,6 +46,8 @@ static void check_bound(IOMap *map, paddr_t addr) {
   if (map == NULL) {
     // printf log
     log_trace();
+    // sace log before exit
+    close_log();
     Assert(map != NULL, "address (" FMT_PADDR ") is out of bound at pc = " FMT_WORD, addr, cpu.pc);
   } else {
     Assert(addr <= map->high && addr >= map->low,
