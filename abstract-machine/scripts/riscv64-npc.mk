@@ -20,6 +20,7 @@ NPCFLAGS := --elf=$(IMAGE).elf
 .PHONY: $(AM_HOME)/am/src/riscv/npc/trm.c
 
 image: $(IMAGE).elf
+	echo 666666666666666666666666666666666
 	$(OBJDUMP) -d $(IMAGE).elf > $(IMAGE).txt
 	@echo + OBJCOPY "->" $(IMAGE_REL).bin
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
