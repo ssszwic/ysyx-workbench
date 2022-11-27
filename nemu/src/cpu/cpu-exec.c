@@ -50,7 +50,7 @@ void close_log();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE
-  if (ITRACE_COND) { log_write("%s\n", _this->logbuf); printf("666\n");}
+  if (ITRACE_COND) { log_write("%s\n", _this->logbuf);}
   // add log to ring buf
   memset(ring_buf[ring_ref], ' ', 6); // copy 5 'space' to cover '---->'
   if (++ring_ref == RING_BUF_WIDTH) {ring_ref = 0;}
