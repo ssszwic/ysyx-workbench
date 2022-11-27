@@ -20,6 +20,8 @@ uint32_t SDL_GetTicks() {
 }
 
 void SDL_Delay(uint32_t ms) {
-  printf("have no implement!\n");
-  assert(0);
+  uint32_t begin = SDL_GetTicks();
+  while(1) {
+    if(SDL_GetTicks() - begin > ms) break;
+  }
 }
