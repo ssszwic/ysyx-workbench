@@ -17,16 +17,20 @@ static int screen_x = 0, screen_y = 0;
 static int screen_w = 0, screen_h = 0;
 static int system_w = 0, system_h = 0;
 
+static uint64_t begin_time_ms;
+
 uint32_t NDL_GetTicks() {
+  uint64_t now;
   struct timeval tv;
   gettimeofday(&tv, NULL);
-  return tv.tv_usec / 1000;
+  // printf("s: %ld\n", tv.tv_sec * 1000 + tv.tv_usec/1000);
+  now = tv.tv_sec * 1000 + tv.tv_usec/1000 - begin_time_ms;
+  return now;
 }
 
 int NDL_PollEvent(char *buf, int len) {
   int fd = open("/dev/events", 0, 0);
   int ret = read(fd, buf, len);
-  close(fd);
   return ret != 0;
 }
 
@@ -105,12 +109,21 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   // printf("h: %d\n", h);
   // printf("w: %d\n", w);
 
+  // for(int j = 0; j < 13; j++) {
+  //   for (int i = 0; i < 7; i++) {
+  //     printf("%x ", * (pixels + screen_w * (26 + j) + i + 28));
+  //   }
+  //   printf("\n");
+  // }
+  // printf("\n");
   int fd = open("/dev/fb", 0, 0);
-  for(int i = 0; i < h; i++) {
+
+  for(int i = 0; i < h; i++) {  
     lseek(fd, ((y + i) * system_w + x) * 4, SEEK_SET);
     write(fd, pixels + i * w, w * 4);
   }
-  close(fd);
+  // don't close device for native
+  // close(fd);
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
@@ -136,6 +149,10 @@ int NDL_QueryAudio() {
 }
 
 int NDL_Init(uint32_t flags) {
+  // init time ms
+  struct timeval tv;
+  gettimeofday(&tv, NULL);
+  begin_time_ms = tv.tv_sec * 1000 + tv.tv_usec / 1000;
   if (getenv("NWM_APP")) {
     evtdev = 3;
   }

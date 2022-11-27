@@ -27,8 +27,11 @@ size_t serial_write(const void *buf, size_t offset, size_t len) {
 
 size_t events_read(void *buf, size_t offset, size_t len) {
   int i = 0;
-  char tmp[10] = {};
-  while(1) {
+  int index = 0;
+  // max read num
+  int num = len / 20;
+  char tmp[20] = {};
+  while(i < num) {
     AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
     if (ev.keycode == AM_KEY_NONE) break;
     if(ev.keydown) {
@@ -38,11 +41,11 @@ size_t events_read(void *buf, size_t offset, size_t len) {
       sprintf(tmp, "ku %s\n", keyname[ev.keycode]);
     }
     // the event beyond the buf will be discarded
-    if(i + strlen(tmp) > len) break;
-    strcpy((char *)buf + i, tmp);
-    i += strlen(tmp);
+    strcpy((char *)buf + index, tmp);
+    index += strlen(tmp);
+    i++;
   }
-  return i;
+  return index;
 }
 
 size_t dispinfo_read(void *buf, size_t offset, size_t len) {
