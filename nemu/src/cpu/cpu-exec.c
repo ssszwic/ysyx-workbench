@@ -46,7 +46,6 @@ void print_func_log();
 void print_exceptiopn_log();
 void log_trace();
 void print_instruction_log();
-void close_log();
 
 static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #ifdef CONFIG_ITRACE
