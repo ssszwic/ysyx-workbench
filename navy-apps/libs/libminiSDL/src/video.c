@@ -85,17 +85,17 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
-  if(s->format->palette != NULL) {
-    // palette data type
-    uint8_t *palette_data = (uint8_t *) s->pixels;
-    uint32_t *RGBdata = malloc(s->h * s->w * 4);
-    assert(RGBdata);
-    for(int i = 0; i < s->h * s->w; i++) {
-      *(RGBdata++) = s->format->palette->colors[*(palette_data++)].val;
-    }
-    NDL_DrawRect((uint32_t *) RGBdata, x, y, w, h);
-    return;
-  }
+  // if(s->format->palette != NULL) {
+  //   // palette data type
+  //   uint8_t *palette_data = (uint8_t *) s->pixels;
+  //   uint32_t *RGBdata = malloc(s->h * s->w * 4);
+  //   assert(RGBdata);
+  //   for(int i = 0; i < s->h * s->w; i++) {
+  //     *(RGBdata++) = s->format->palette->colors[*(palette_data++)].val;
+  //   }
+  //   NDL_DrawRect((uint32_t *) RGBdata, x, y, w, h);
+  //   return;
+  // }
   NDL_DrawRect((uint32_t *) s->pixels, x, y, w, h);
 }
 
