@@ -23,6 +23,7 @@ uint32_t NDL_GetTicks() {
   uint64_t now;
   struct timeval tv;
   gettimeofday(&tv, NULL);
+  
   // printf("s: %ld\n", tv.tv_sec * 1000 + tv.tv_usec/1000);
   now = tv.tv_sec * 1000 + tv.tv_usec/1000 - begin_time_ms;
   return now;
@@ -127,23 +128,23 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
 }
 
 void NDL_OpenAudio(int freq, int channels, int samples) {
-  printf("have no implement!\n");
+  printf("NDL_OpenAudio have no implement!\n");
   assert(0);
 }
 
 void NDL_CloseAudio() {
-  printf("have no implement!\n");
+  printf("NDL_CloseAudio have no implement!\n");
   assert(0);
 }
 
 int NDL_PlayAudio(void *buf, int len) {
-  printf("have no implement!\n");
+  printf("NDL_PlayAudio have no implement!\n");
   assert(0);
   return 0;
 }
 
 int NDL_QueryAudio() {
-  printf("have no implement!\n");
+  printf("NDL_QueryAudio have no implement!\n");
   assert(0);
   return 0;
 }
