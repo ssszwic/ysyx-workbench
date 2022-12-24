@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+static void ConvertPixelsARGB_ABGR(void *dst, void *src, int len);
+
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
@@ -80,7 +82,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
     for(int i = 0; i < rect_w; i++) {
       *dst_pixels++ = color;
     }
-    dst_pixels += dst->w - rect_w;
+    dst_pixels += dst->w - rect_w; 
   }
 }
 
@@ -94,9 +96,13 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     for(int i = 0; i < s->h * s->w; i++) {
       *(temp++) = s->format->palette->colors[*(palette_data++)].val;
     }
-    NDL_DrawRect((uint32_t *) RGBdata, x, y, w, h);
+    uint32_t *BGRdata = malloc(s->h * s->w * 4);
+    ConvertPixelsARGB_ABGR(BGRdata, RGBdata, s->h * s->w);
+    NDL_DrawRect((uint32_t *) BGRdata, x, y, w, h);
     free(RGBdata);
+    free(BGRdata);
     RGBdata = NULL;
+    BGRdata = NULL;
     return;
   }
   NDL_DrawRect((uint32_t *) s->pixels, x, y, w, h);
@@ -117,12 +123,18 @@ static inline int maskToShift(uint32_t mask) {
 
 SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int depth,
     uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask) {
+  printf("----------1\n");
   assert(depth == 8 || depth == 32);
+  printf("----------1.5 malloc start %d\n", sizeof(SDL_Surface));
   SDL_Surface *s = malloc(sizeof(SDL_Surface));
+  printf("----------1.5 malloc end\n");
   assert(s);
   s->flags = flags;
+  printf("----------1.6 malloc start %d\n", sizeof(SDL_PixelFormat));
   s->format = malloc(sizeof(SDL_PixelFormat));
+  printf("----------1.6 malloc end\n");
   assert(s->format);
+  printf("----------2\n");
   if (depth == 8) {
     s->format->palette = malloc(sizeof(SDL_Palette));
     assert(s->format->palette);
@@ -137,6 +149,7 @@ SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int dep
     s->format->Bmask = Bmask; s->format->Bshift = maskToShift(Bmask); s->format->Bloss = 0;
     s->format->Amask = Amask; s->format->Ashift = maskToShift(Amask); s->format->Aloss = 0;
   }
+  printf("----------3\n");
 
   s->format->BitsPerPixel = depth;
   s->format->BytesPerPixel = depth / 8;
@@ -145,11 +158,12 @@ SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int dep
   s->h = height;
   s->pitch = width * depth / 8;
   assert(s->pitch == width * s->format->BytesPerPixel);
-
+  printf("----------4\n");
   if (!(flags & SDL_PREALLOC)) {
     s->pixels = malloc(s->pitch * height);
     assert(s->pixels);
   }
+  printf("----------5\n");
 
   return s;
 }
