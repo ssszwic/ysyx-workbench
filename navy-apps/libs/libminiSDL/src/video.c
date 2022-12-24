@@ -94,7 +94,9 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     assert(RGBdata);
     uint32_t *temp = RGBdata;
     for(int i = 0; i < s->h * s->w; i++) {
-      *(temp++) = s->format->palette->colors[*(palette_data++)].val;
+      // *(temp++) = s->format->palette->colors[*(palette_data++)].val;
+      *(temp+i) = s->format->palette->colors[*(palette_data+i)].val;
+
     }
     uint32_t *BGRdata = malloc(s->h * s->w * 4);
     ConvertPixelsARGB_ABGR(BGRdata, RGBdata, s->h * s->w);
