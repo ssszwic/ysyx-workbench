@@ -123,8 +123,8 @@ libs:
 $(APP): $(OBJS) libs
 	@echo + LD "->" $(shell realpath $@ --relative-to .)
 	# Generate assembly files
-	@$(LD) $(LDFLAGS) -o $@.elf --start-group $(LINKAGE) --end-group
-	@$(CROSS_COMPILE)objdump -d $@.elf > $@.txt
+	# @$(LD) $(LDFLAGS) -o $@.elf --start-group $(LINKAGE) --end-group
+	# @$(CROSS_COMPILE)objdump -d $@.elf > $@.txt
 	@$(LD) $(LDFLAGS) -o $@ $(WL)--start-group $(LINKAGE) $(WL)--end-group
 
 ### Rule (archive): objects (`*.o`) -> `ARCHIVE.a` (ar)
@@ -169,7 +169,7 @@ $(CLEAN_ALL):
 .PHONY: clean-all $(CLEAN_ALL)
 
 ### Build fsimg and ramdisk for Nanos-lite
-APPS = pal # bird nterm nslider menu
+APPS = pal # pal # bird nterm nslider menu
 TESTS = timer-test # bmp-test dummy hello file-test timer-test event-test  fixedpt-test
 
 fsimg: $(addprefix apps/, $(APPS)) $(addprefix tests/, $(TESTS))

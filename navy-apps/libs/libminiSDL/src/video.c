@@ -90,10 +90,13 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     uint8_t *palette_data = (uint8_t *) s->pixels;
     uint32_t *RGBdata = malloc(s->h * s->w * 4);
     assert(RGBdata);
+    uint32_t *temp = RGBdata;
     for(int i = 0; i < s->h * s->w; i++) {
-      *(RGBdata++) = s->format->palette->colors[*(palette_data++)].val;
+      *(temp++) = s->format->palette->colors[*(palette_data++)].val;
     }
     NDL_DrawRect((uint32_t *) RGBdata, x, y, w, h);
+    free(RGBdata);
+    RGBdata = NULL;
     return;
   }
   NDL_DrawRect((uint32_t *) s->pixels, x, y, w, h);
