@@ -123,8 +123,8 @@ libs:
 $(APP): $(OBJS) libs
 	@echo + LD "->" $(shell realpath $@ --relative-to .)
 	# Generate assembly files
-	# @$(LD) $(LDFLAGS) -o $@.elf --start-group $(LINKAGE) --end-group
-	# @$(CROSS_COMPILE)objdump -d $@.elf > $@.txt
+	@$(LD) $(LDFLAGS) -o $@.elf --start-group $(LINKAGE) --end-group
+	@$(CROSS_COMPILE)objdump -d $@.elf > $@.txt
 	@$(LD) $(LDFLAGS) -o $@ $(WL)--start-group $(LINKAGE) $(WL)--end-group
 
 ### Rule (archive): objects (`*.o`) -> `ARCHIVE.a` (ar)
