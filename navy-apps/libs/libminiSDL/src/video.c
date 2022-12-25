@@ -42,18 +42,33 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 
   assert(src_x + rect_w <= src->w && src_y + rect_h <= src->h);
   assert(dst_x + rect_w <= dst->w && dst_y + rect_h <= dst->h);
-  
-  uint32_t *src_pixels = (uint32_t *) src->pixels;
-  uint32_t *dst_pixels = (uint32_t *) dst->pixels;
-  src_pixels += src_y * src->w + src_x;
-  dst_pixels += dst_y * dst->w + dst_x;
-  for(int j = 0; j < rect_h; j++) {
-    for(int i = 0; i < rect_w; i++) {
-      *dst_pixels++ = *src_pixels++;
+  if(src->format->palette != NULL) {
+    uint8_t *src_pixels = (uint8_t *) src->pixels;
+    uint8_t *dst_pixels = (uint8_t *) dst->pixels;
+    src_pixels += src_y * src->w + src_x;
+    dst_pixels += dst_y * dst->w + dst_x;
+    for(int j = 0; j < rect_h; j++) {
+      for(int i = 0; i < rect_w; i++) {
+        *dst_pixels++ = *src_pixels++;
+      }
+      src_pixels += src->w - rect_w;
+      dst_pixels += dst->w - rect_w;
     }
-    src_pixels += src->w - rect_w;
-    dst_pixels += dst->w - rect_w;
   }
+  else {
+    uint32_t *src_pixels = (uint32_t *) src->pixels;
+    uint32_t *dst_pixels = (uint32_t *) dst->pixels;
+    src_pixels += src_y * src->w + src_x;
+    dst_pixels += dst_y * dst->w + dst_x;
+    for(int j = 0; j < rect_h; j++) {
+      for(int i = 0; i < rect_w; i++) {
+        *dst_pixels++ = *src_pixels++;
+      }
+      src_pixels += src->w - rect_w;
+      dst_pixels += dst->w - rect_w;
+    }
+  }
+  
   // The final blit rectangle is saved in dstrect after all clipping is performed (srcrect is not modified).
   if(dstrect != NULL) {
     dstrect->x = dst_x;
@@ -123,18 +138,12 @@ static inline int maskToShift(uint32_t mask) {
 
 SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int depth,
     uint32_t Rmask, uint32_t Gmask, uint32_t Bmask, uint32_t Amask) {
-  printf("----------1\n");
   assert(depth == 8 || depth == 32);
-  printf("----------1.5 malloc start %d\n", sizeof(SDL_Surface));
   SDL_Surface *s = malloc(sizeof(SDL_Surface));
-  printf("----------1.5 malloc end\n");
   assert(s);
   s->flags = flags;
-  printf("----------1.6 malloc start %d\n", sizeof(SDL_PixelFormat));
   s->format = malloc(sizeof(SDL_PixelFormat));
-  printf("----------1.6 malloc end\n");
   assert(s->format);
-  printf("----------2\n");
   if (depth == 8) {
     s->format->palette = malloc(sizeof(SDL_Palette));
     assert(s->format->palette);
@@ -149,7 +158,6 @@ SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int dep
     s->format->Bmask = Bmask; s->format->Bshift = maskToShift(Bmask); s->format->Bloss = 0;
     s->format->Amask = Amask; s->format->Ashift = maskToShift(Amask); s->format->Aloss = 0;
   }
-  printf("----------3\n");
 
   s->format->BitsPerPixel = depth;
   s->format->BytesPerPixel = depth / 8;
@@ -158,12 +166,10 @@ SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int dep
   s->h = height;
   s->pitch = width * depth / 8;
   assert(s->pitch == width * s->format->BytesPerPixel);
-  printf("----------4\n");
   if (!(flags & SDL_PREALLOC)) {
     s->pixels = malloc(s->pitch * height);
     assert(s->pixels);
   }
-  printf("----------5\n");
 
   return s;
 }
