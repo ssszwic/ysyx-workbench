@@ -31,9 +31,7 @@ size_t events_read(void *buf, size_t offset, size_t len) {
   // max read num
   int num = len / 20;
   char tmp[20] = {};
-  printf("\n");
   while(i < num) {
-    printf("read\n");
     AM_INPUT_KEYBRD_T ev = io_read(AM_INPUT_KEYBRD);
     if (ev.keycode == AM_KEY_NONE) break;
     if(ev.keydown) {
@@ -47,7 +45,6 @@ size_t events_read(void *buf, size_t offset, size_t len) {
     index += strlen(tmp);
     i++;
   }
-  printf("\n");
   return index;
 }
 
