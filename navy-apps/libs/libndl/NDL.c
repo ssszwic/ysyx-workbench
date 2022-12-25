@@ -80,6 +80,9 @@ void NDL_OpenCanvas(int *w, int *h) {
     screen_h = *h;
   }
 
+  *w = screen_w;
+  *h = screen_h;
+
   // centering the canvas
   screen_x = system_w / 2 - screen_w / 2;
   screen_y = system_h / 2 - screen_h / 2;
