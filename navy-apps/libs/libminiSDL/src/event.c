@@ -41,6 +41,13 @@ int SDL_PollEvent(SDL_Event *ev) {
   assert(i != 83);
   ev->key.keysym.sym = i;
 
+  if(ev->type == SDL_KEYDOWN) {
+    key_state[i] = 1;
+  }
+  else {
+    key_state[i] = 0;
+  }
+
   return 1;
 }
 
@@ -77,21 +84,21 @@ int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
 }
 
 uint8_t* SDL_GetKeyState(int *numkeys) {
-  char buf[20] = {};
-  char *p;
-  memset(key_state, 0, 83);
-  if(NDL_PollEvent(buf, 20)) {
-    p = strtok(buf, " ");
-    if(strcmp(buf, "kd") == 0) {
-      p = strtok(NULL, " \n");
-      int i;
-      for(i = 0; i < 83; i++) {
-        // printf("%s\n", keyname[i]);
-        if(strcmp(p, keyname[i]) == 0) break;
-      }
-      assert(i != 83);
-      key_state[i] = 1;
-    }
-  }
+  // char buf[20] = {};
+  // char *p;
+  // memset(key_state, 0, 83);
+  // if(NDL_PollEvent(buf, 20)) {
+  //   p = strtok(buf, " ");
+  //   if(strcmp(buf, "kd") == 0) {
+  //     p = strtok(NULL, " \n");
+  //     int i;
+  //     for(i = 0; i < 83; i++) {
+  //       // printf("%s\n", keyname[i]);
+  //       if(strcmp(p, keyname[i]) == 0) break;
+  //     }
+  //     assert(i != 83);
+  //     key_state[i] = 1;
+  //   }
+  // }
   return key_state;
 }
