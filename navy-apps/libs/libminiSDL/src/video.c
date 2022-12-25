@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+static void ConvertPixelsARGB_ABGR(void *dst, void *src, int len);
+
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
@@ -40,18 +42,33 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 
   assert(src_x + rect_w <= src->w && src_y + rect_h <= src->h);
   assert(dst_x + rect_w <= dst->w && dst_y + rect_h <= dst->h);
-  
-  uint32_t *src_pixels = (uint32_t *) src->pixels;
-  uint32_t *dst_pixels = (uint32_t *) dst->pixels;
-  src_pixels += src_y * src->w + src_x;
-  dst_pixels += dst_y * dst->w + dst_x;
-  for(int j = 0; j < rect_h; j++) {
-    for(int i = 0; i < rect_w; i++) {
-      *dst_pixels++ = *src_pixels++;
+  if(src->format->palette != NULL) {
+    uint8_t *src_pixels = (uint8_t *) src->pixels;
+    uint8_t *dst_pixels = (uint8_t *) dst->pixels;
+    src_pixels += src_y * src->w + src_x;
+    dst_pixels += dst_y * dst->w + dst_x;
+    for(int j = 0; j < rect_h; j++) {
+      for(int i = 0; i < rect_w; i++) {
+        *dst_pixels++ = *src_pixels++;
+      }
+      src_pixels += src->w - rect_w;
+      dst_pixels += dst->w - rect_w;
     }
-    src_pixels += src->w - rect_w;
-    dst_pixels += dst->w - rect_w;
   }
+  else {
+    uint32_t *src_pixels = (uint32_t *) src->pixels;
+    uint32_t *dst_pixels = (uint32_t *) dst->pixels;
+    src_pixels += src_y * src->w + src_x;
+    dst_pixels += dst_y * dst->w + dst_x;
+    for(int j = 0; j < rect_h; j++) {
+      for(int i = 0; i < rect_w; i++) {
+        *dst_pixels++ = *src_pixels++;
+      }
+      src_pixels += src->w - rect_w;
+      dst_pixels += dst->w - rect_w;
+    }
+  }
+  
   // The final blit rectangle is saved in dstrect after all clipping is performed (srcrect is not modified).
   if(dstrect != NULL) {
     dstrect->x = dst_x;
@@ -80,7 +97,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
     for(int i = 0; i < rect_w; i++) {
       *dst_pixels++ = color;
     }
-    dst_pixels += dst->w - rect_w;
+    dst_pixels += dst->w - rect_w; 
   }
 }
 
@@ -90,10 +107,17 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     uint8_t *palette_data = (uint8_t *) s->pixels;
     uint32_t *RGBdata = malloc(s->h * s->w * 4);
     assert(RGBdata);
+    uint32_t *temp = RGBdata;
     for(int i = 0; i < s->h * s->w; i++) {
-      *(RGBdata++) = s->format->palette->colors[*(palette_data++)].val;
+      *(temp++) = s->format->palette->colors[*(palette_data++)].val;
     }
-    NDL_DrawRect((uint32_t *) RGBdata, x, y, w, h);
+    uint32_t *BGRdata = malloc(s->h * s->w * 4);
+    ConvertPixelsARGB_ABGR(BGRdata, RGBdata, s->h * s->w);
+    NDL_DrawRect((uint32_t *) BGRdata, x, y, w, h);
+    free(RGBdata);
+    free(BGRdata);
+    RGBdata = NULL;
+    BGRdata = NULL;
     return;
   }
   NDL_DrawRect((uint32_t *) s->pixels, x, y, w, h);
@@ -142,7 +166,6 @@ SDL_Surface* SDL_CreateRGBSurface(uint32_t flags, int width, int height, int dep
   s->h = height;
   s->pitch = width * depth / 8;
   assert(s->pitch == width * s->format->BytesPerPixel);
-
   if (!(flags & SDL_PREALLOC)) {
     s->pixels = malloc(s->pitch * height);
     assert(s->pixels);

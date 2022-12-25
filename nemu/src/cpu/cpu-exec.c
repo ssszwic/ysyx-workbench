@@ -163,6 +163,7 @@ void cpu_exec(uint64_t n) {
   }
 }
 
+#ifdef CONFIG_ITRACE
 void print_instruction_log() {
   printf("\nring buff\n");
   for (int i = 0; i < RING_BUF_WIDTH; i++) {
@@ -171,6 +172,7 @@ void print_instruction_log() {
   }
   printf("\n");
 }
+#endif
 
 void log_trace() {
   IFDEF(CONFIG_MEMORY_TRACE, memory_trace_print());

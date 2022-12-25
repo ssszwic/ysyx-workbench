@@ -5,13 +5,15 @@
 
 #define keyname(k) #k,
 
+static uint8_t key_state[83];
+
 static const char *keyname[] = {
   "NONE",
   _KEYS(keyname)
 };
 
 int SDL_PushEvent(SDL_Event *ev) {
-  printf("have no implement!\n");
+  printf("SDL_PushEvent have no implement!\n");
   assert(0);
   return 0;
 }
@@ -69,13 +71,27 @@ int SDL_WaitEvent(SDL_Event *event) {
 }
 
 int SDL_PeepEvents(SDL_Event *ev, int numevents, int action, uint32_t mask) {
-  printf("have no implement!\n");
+  printf("SDL_PeepEvents have no implement!\n");
   assert(0);
   return 0;
 }
 
 uint8_t* SDL_GetKeyState(int *numkeys) {
-  printf("have no implement!\n");
-  assert(0);
-  return NULL;
+  char buf[20] = {};
+  char *p;
+  memset(key_state, 0, 83);
+  if(NDL_PollEvent(buf, 20)) {
+    p = strtok(buf, " ");
+    if(strcmp(buf, "kd") == 0) {
+      p = strtok(NULL, " \n");
+      int i;
+      for(i = 0; i < 83; i++) {
+        // printf("%s\n", keyname[i]);
+        if(strcmp(p, keyname[i]) == 0) break;
+      }
+      assert(i != 83);
+      key_state[i] = 1;
+    }
+  }
+  return key_state;
 }
