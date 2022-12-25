@@ -17,8 +17,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   int16_t dst_y = 0;
   uint16_t rect_w = src->w;
   uint16_t rect_h = src->h;
-  // If srcrect is NULL, the entire surface is copied. If dstrect is NULL, 
-  // then the destination position (upper left corner) is (0, 0).
+  // If srcrect is NULL, the entire surface is copied.
   if(srcrect != NULL) {
     src_x = srcrect->x;
     src_y = srcrect->y;
@@ -42,7 +41,7 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 
   assert(src_x + rect_w <= src->w && src_y + rect_h <= src->h);
   assert(dst_x + rect_w <= dst->w && dst_y + rect_h <= dst->h);
-  if(src->format->palette != NULL) {
+  if(src->format->BytesPerPixel == 1) {
     uint8_t *src_pixels = (uint8_t *) src->pixels;
     uint8_t *dst_pixels = (uint8_t *) dst->pixels;
     src_pixels += src_y * src->w + src_x;
@@ -91,18 +90,30 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
   }
   assert(rect_x + rect_w <= dst->w && rect_y + rect_h <= dst->h);
   
-  uint32_t *dst_pixels = (uint32_t *) dst->pixels;
-  dst_pixels += rect_y * dst->w + rect_x;
-  for(int j = 0; j < rect_h; j++) {
-    for(int i = 0; i < rect_w; i++) {
-      *dst_pixels++ = color;
+  if(dst->format->BytesPerPixel == 1) {
+    uint8_t *dst_pixels = (uint8_t *) dst->pixels;
+    dst_pixels += rect_y * dst->w + rect_x;
+    for(int j = 0; j < rect_h; j++) {
+      for(int i = 0; i < rect_w; i++) {
+        *(dst_pixels++) = color;
+      }
+      dst_pixels += dst->w - rect_w; 
     }
-    dst_pixels += dst->w - rect_w; 
+  }
+  else {
+    uint32_t *dst_pixels = (uint32_t *) dst->pixels;
+    dst_pixels += rect_y * dst->w + rect_x;
+    for(int j = 0; j < rect_h; j++) {
+      for(int i = 0; i < rect_w; i++) {
+        *dst_pixels++ = color;
+      }
+      dst_pixels += dst->w - rect_w; 
+    }
   }
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
-  if(s->format->palette != NULL) {
+  if(s->format->BytesPerPixel == 1) {
     // palette data type
     uint8_t *palette_data = (uint8_t *) s->pixels;
     uint32_t *RGBdata = malloc(s->h * s->w * 4);
