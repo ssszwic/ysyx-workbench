@@ -10,26 +10,14 @@ static void ConvertPixelsARGB_ABGR(void *dst, void *src, int len);
 void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_Rect *dstrect) {
   assert(dst && src);
   assert(dst->format->BitsPerPixel == src->format->BitsPerPixel);
-
-  int16_t src_x = 0;
-  int16_t src_y = 0;
-  int16_t dst_x = 0;
-  int16_t dst_y = 0;
-  uint16_t rect_w = src->w;
-  uint16_t rect_h = src->h;
   // If srcrect is NULL, the entire surface is copied.
-  if(srcrect != NULL) {
-    src_x = srcrect->x;
-    src_y = srcrect->y;
-    rect_w = srcrect->w;
-    rect_h = srcrect->h;
-  }
+  int16_t src_x = (srcrect == NULL ? 0 : srcrect->x);
+  int16_t src_y = (srcrect == NULL ? 0 : srcrect->y);
   // If dstrect is NULL, then the destination position (upper left corner) is (0, 0).
-  if(dstrect != NULL) {
-    // Only the position is used in the dstrect (the width and height are ignored).
-    dst_x = dstrect->x;
-    dst_y = dstrect->y;
-  }
+  int16_t dst_x = (dstrect == NULL ? 0 : dstrect->x);
+  int16_t dst_y = (dstrect == NULL ? 0 : dstrect->y);
+  uint16_t rect_w = (srcrect == NULL ? src->w : srcrect->w);
+  uint16_t rect_h = (srcrect == NULL ? src->h : srcrect->h);
 
   // printf("src x: %d\n", src_x);
   // printf("src y: %d\n", src_y);
@@ -83,16 +71,21 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-  int16_t rect_x = 0;
-  int16_t rect_y = 0;
-  uint16_t rect_w = dst->w;
-  uint16_t rect_h = dst->h;
-  if(dstrect) {
-    rect_x = dstrect->x;
-    rect_y = dstrect->y;
-    rect_h = dstrect->h;
-    rect_w = dstrect->w;
-  }
+  // int16_t rect_x = 0;
+  // int16_t rect_y = 0;
+  // uint16_t rect_w = dst->w;
+  // uint16_t rect_h = dst->h;
+  // if(dstrect) {
+  //   rect_x = dstrect->x;
+  //   rect_y = dstrect->y;
+  //   rect_h = dstrect->h;
+  //   rect_w = dstrect->w;
+  // }
+
+  int16_t rect_x = (dstrect == NULL ? 0 : dstrect->x);
+  int16_t rect_y = (dstrect == NULL ? 0 : dstrect->y);
+  uint16_t rect_w = (dstrect == NULL ? dst->w : dstrect->w);
+  uint16_t rect_h = (dstrect == NULL ? dst->h : dstrect->h);
   assert(rect_x + rect_w <= dst->w && rect_y + rect_h <= dst->h);
   
   if(dst->format->BytesPerPixel == 1) {
@@ -110,7 +103,7 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
     dst_pixels += rect_y * dst->w + rect_x;
     for(int j = 0; j < rect_h; j++) {
       for(int i = 0; i < rect_w; i++) {
-        *dst_pixels++ = color;
+        *(dst_pixels++) = color;
       }
       dst_pixels += dst->w - rect_w; 
     }
@@ -277,7 +270,7 @@ void SDL_SetPalette(SDL_Surface *s, int flags, SDL_Color *colors, int firstcolor
     assert(ncolors == 256);
     for (int i = 0; i < ncolors; i ++) {
       uint8_t r = colors[i].r;
-      uint8_t g = colors[i].g;
+      uint8_t g = colors[i].g; 
       uint8_t b = colors[i].b;
     }
     SDL_UpdateRect(s, 0, 0, 0, 0);
