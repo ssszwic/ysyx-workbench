@@ -19,16 +19,9 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
   uint16_t rect_w = (srcrect == NULL ? src->w : srcrect->w);
   uint16_t rect_h = (srcrect == NULL ? src->h : srcrect->h);
 
-  // printf("src x: %d\n", src_x);
-  // printf("src y: %d\n", src_y);
-  // printf("dst x: %d\n", dst_x);
-  // printf("dst y: %d\n", dst_y);
-  // printf("rect w: %d\n", rect_w);
-  // printf("rect h: %d\n", rect_h);
-  // printf("\n");
-
   assert(src_x + rect_w <= src->w && src_y + rect_h <= src->h);
   assert(dst_x + rect_w <= dst->w && dst_y + rect_h <= dst->h);
+  
   if(src->format->BytesPerPixel == 1) {
     uint8_t *src_pixels = (uint8_t *) src->pixels;
     uint8_t *dst_pixels = (uint8_t *) dst->pixels;  
@@ -41,11 +34,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
       src_pixels += src->w - rect_w;
       dst_pixels += dst->w - rect_w;
     }
-    // for(int j = 0; j < rect_h; j++) {
-    //   for(int i = 0; i < rect_w; i++) {
-    //     dst_pixels[(dst_y + j) * dst->w + dst_x + i] = src_pixels[(src_y + j) * src->w + src_x + i];
-    //   }
-    // }
   }
   else {
     uint32_t *src_pixels = (uint32_t *) src->pixels;
@@ -71,17 +59,6 @@ void SDL_BlitSurface(SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst, SDL_
 }
 
 void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
-  // int16_t rect_x = 0;
-  // int16_t rect_y = 0;
-  // uint16_t rect_w = dst->w;
-  // uint16_t rect_h = dst->h;
-  // if(dstrect) {
-  //   rect_x = dstrect->x;
-  //   rect_y = dstrect->y;
-  //   rect_h = dstrect->h;
-  //   rect_w = dstrect->w;
-  // }
-
   int16_t rect_x = (dstrect == NULL ? 0 : dstrect->x);
   int16_t rect_y = (dstrect == NULL ? 0 : dstrect->y);
   uint16_t rect_w = (dstrect == NULL ? dst->w : dstrect->w);
@@ -111,40 +88,23 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 }
 
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
-  // if(w!=0) assert(w == s->w);
-  // if(h!=0) assert(h == s->h);
-  // if(x == 0 && y == 0 && w == 0 && h == 0) {
-  //   x = 0;
-  //   y = 0;
-  //   w = s->w;
-  //   h = s->h;
-  // }
-
   if(s->format->BytesPerPixel == 1) {
     // palette data type
     uint8_t *palette_data = (uint8_t *) s->pixels;
-    uint32_t *RGBdata = malloc(s->h * s->w * 4);
-    assert(RGBdata);
-    uint32_t *temp = RGBdata;
+    uint32_t *ABGRdata = malloc(s->h * s->w * 4);
+    assert(ABGRdata);
+    uint32_t *temp = ABGRdata;
     for(int i = 0; i < s->h * s->w; i++) {
       *(temp++) = s->format->palette->colors[*(palette_data++)].val;
     }
-
-    // assert(s->w >= w);
-    // assert(s->h >= h);
-    // for(int i = 0; i < h; i++) {
-    //   for(int j = 0; j < w; j++) {
-    //     *(temp++) = s->format->palette->colors[palette_data[i * s->w + j]].val;
-    //   }
-    // }
     
-    uint32_t *BGRdata = malloc(s->h * s->w * 4);
-    ConvertPixelsARGB_ABGR(BGRdata, RGBdata, s->h * s->w);
-    NDL_DrawRect((uint32_t *) BGRdata, x, y, w, h);
-    free(RGBdata);
-    free(BGRdata);
-    RGBdata = NULL;
-    BGRdata = NULL;
+    uint32_t *ARGBdata = malloc(s->h * s->w * 4);
+    ConvertPixelsARGB_ABGR(ARGBdata, ABGRdata, s->h * s->w);
+    NDL_DrawRect((uint32_t *) ARGBdata, x, y, w, h);
+    free(ABGRdata);
+    free(ARGBdata);
+    ABGRdata = NULL;
+    ARGBdata = NULL;
     return;
   }
   NDL_DrawRect((uint32_t *) s->pixels, x, y, w, h);
