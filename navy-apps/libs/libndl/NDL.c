@@ -89,42 +89,22 @@ void NDL_OpenCanvas(int *w, int *h) {
 }
 
 void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
-  // printf("system w: %d\n", system_w);
-  // printf("system h: %d\n", system_h);
-  // printf("screen x: %d\n", screen_x);
-  // printf("screen y: %d\n", screen_y);
   if(x == 0 && y == 0 && w == 0 && h == 0) {
-    x = screen_x;
-    y = screen_y;
     w = screen_w;
     h = screen_h;
   }
   else {
-    x = screen_x + x;
-    y = screen_y + y;
     w = w;
     h = h;
   }
-  assert(x >= 0 && x + w <= system_w);
-  assert(y >= 0 && y + h <= system_h);
 
-  // printf("x: %d\n", x);
-  // printf("y: %d\n", y);
-  // printf("h: %d\n", h);
-  // printf("w: %d\n", w);
+  assert(x + screen_x >= 0 && x + screen_x + w <= system_w);
+  assert(y + screen_y >= 0 && y + screen_y + h <= system_h);
 
-  // for(int j = 0; j < 13; j++) {
-  //   for (int i = 0; i < 7; i++) {
-  //     printf("%x ", * (pixels + screen_w * (26 + j) + i + 28));
-  //   }
-  //   printf("\n");
-  // }
-  // printf("\n");
   int fd = open("/dev/fb", 0, 0);
-
   for(int i = 0; i < h; i++) {  
-    lseek(fd, ((y + i) * system_w + x) * 4, SEEK_SET);
-    write(fd, pixels + i * w, w * 4);
+    lseek(fd, ((y + screen_y + i) * system_w + x + screen_x) * 4, SEEK_SET);
+    write(fd, pixels + (y + i) * screen_w + x, w * 4);
   }
   // don't close device for native
   // close(fd);
