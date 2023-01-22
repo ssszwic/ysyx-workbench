@@ -126,6 +126,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
     }
 
     uint32_t *ARGBdata = malloc(h * w * 4);
+    assert(ARGBdata);
     ConvertPixelsARGB_ABGR(ARGBdata, ABGRdata, h * w);
     NDL_DrawRect((uint32_t *) ARGBdata, x, y, w, h);
     free(ABGRdata);
