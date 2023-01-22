@@ -122,7 +122,7 @@ void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
       for (int i = 0; i < w; i++) {
         *(temp++) = s->format->palette->colors[*(palette_data++)].val;
       }
-      palette_data += s->w - x;
+      palette_data += s->w - w;
     }
 
     uint32_t *ARGBdata = malloc(h * w * 4);
