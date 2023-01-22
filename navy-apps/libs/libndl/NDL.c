@@ -102,9 +102,14 @@ void NDL_DrawRect(uint32_t *pixels, int x, int y, int w, int h) {
   assert(y + screen_y >= 0 && y + screen_y + h <= system_h);
 
   int fd = open("/dev/fb", 0, 0);
+  // for(int i = 0; i < h; i++) {  
+  //   lseek(fd, ((y + screen_y + i) * system_w + x + screen_x) * 4, SEEK_SET);
+  //   write(fd, pixels + (y + i) * screen_w + x, w * 4);
+  // }
+
   for(int i = 0; i < h; i++) {  
     lseek(fd, ((y + screen_y + i) * system_w + x + screen_x) * 4, SEEK_SET);
-    write(fd, pixels + (y + i) * screen_w + x, w * 4);
+    write(fd, pixels + i * w, w * 4);
   }
   // don't close device for native
   // close(fd);

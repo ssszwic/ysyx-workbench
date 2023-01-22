@@ -90,16 +90,44 @@ void SDL_FillRect(SDL_Surface *dst, SDL_Rect *dstrect, uint32_t color) {
 void SDL_UpdateRect(SDL_Surface *s, int x, int y, int w, int h) {
   if(s->format->BytesPerPixel == 1) {
     // palette data type
-    uint8_t *palette_data = (uint8_t *) s->pixels;
-    uint32_t *ABGRdata = malloc(s->h * s->w * 4);
+    // uint8_t *palette_data = (uint8_t *) s->pixels;
+    // uint32_t *ABGRdata = malloc(s->h * s->w * 4);
+    // assert(ABGRdata);
+    // uint32_t *temp = ABGRdata;
+    // for(int i = 0; i < s->h * s->w; i++) {
+    //   *(temp++) = s->format->palette->colors[*(palette_data++)].val;
+    // }
+    
+    // uint32_t *ARGBdata = malloc(s->h * s->w * 4);
+    // ConvertPixelsARGB_ABGR(ARGBdata, ABGRdata, s->h * s->w);
+    // NDL_DrawRect((uint32_t *) ARGBdata, x, y, w, h);
+    // free(ABGRdata);
+    // free(ARGBdata);
+    // ABGRdata = NULL;
+    // ARGBdata = NULL;
+    // return;
+
+    // palette data type
+    if(x == 0 && y == 0 && w == 0 && h == 0) {
+      w = s->w;
+      h = s->h;
+    }
+
+    uint32_t *ABGRdata = malloc(h * w * 4);
     assert(ABGRdata);
     uint32_t *temp = ABGRdata;
-    for(int i = 0; i < s->h * s->w; i++) {
-      *(temp++) = s->format->palette->colors[*(palette_data++)].val;
+
+    uint8_t *palette_data = (uint8_t *) s->pixels + y * s->w + x;
+    for (int j = 0; j < h; j++) {
+      for (int i = 0; i < w; i++) {
+        *(temp++) = s->format->palette->colors[*(palette_data++)].val;
+      }
+      palette_data += s->w - w;
     }
-    
-    uint32_t *ARGBdata = malloc(s->h * s->w * 4);
-    ConvertPixelsARGB_ABGR(ARGBdata, ABGRdata, s->h * s->w);
+
+    uint32_t *ARGBdata = malloc(h * w * 4);
+    assert(ARGBdata);
+    ConvertPixelsARGB_ABGR(ARGBdata, ABGRdata, h * w);
     NDL_DrawRect((uint32_t *) ARGBdata, x, y, w, h);
     free(ABGRdata);
     free(ARGBdata);
