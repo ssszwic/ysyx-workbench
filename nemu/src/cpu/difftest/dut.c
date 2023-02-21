@@ -39,7 +39,6 @@ void detach() {
 
 void attach() {
   stop_diff = false;
-  // copy memory and reg
   // copy memory to ref
   ref_difftest_memcpy(0x100000, guest_to_host(0x100000), CONFIG_MSIZE - 0x100000, DIFFTEST_TO_REF);
   // copy reg to ref
@@ -119,6 +118,7 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {
 
 void difftest_step(vaddr_t pc, vaddr_t npc) {
   if(stop_diff) return;
+  printf("diff\n");
   CPU_state ref_r;
 
   // for QEMU, let dut catch up ref
