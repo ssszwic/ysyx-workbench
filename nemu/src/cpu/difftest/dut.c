@@ -40,7 +40,7 @@ void detach() {
 void attach() {
   stop_diff = false;
   // copy memory to ref
-  ref_difftest_memcpy(PMEM_LEFT + 0x100000, guest_to_host(PMEM_LEFT + 0x100000), 1, DIFFTEST_TO_REF);
+  ref_difftest_memcpy(PMEM_LEFT + 0x100000, guest_to_host(PMEM_LEFT + 0x100000), CONFIG_MSIZE - 0x100000, DIFFTEST_TO_REF);
   // copy reg to ref
   ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 }
