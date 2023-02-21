@@ -53,7 +53,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   // add log to ring buf
   memset(ring_buf[ring_ref], ' ', 6); // copy 5 'space' to cover '---->'
   if (++ring_ref == RING_BUF_WIDTH) {ring_ref = 0;}
-  strcpy(ring_buf[ring_ref], "----> "); 
+  strcpy(ring_buf[ring_ref], "----> ");
   strcpy(ring_buf[ring_ref] + 6, _this->logbuf);
 #endif
   // Print the next instruction will be executed
