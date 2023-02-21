@@ -26,18 +26,8 @@ void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
 void (*ref_difftest_exec)(uint64_t n) = NULL;
 void (*ref_difftest_raise_intr)(uint64_t NO) = NULL;
 
-#ifdef CONFIG_DIFFTEST
-
 static bool is_skip_ref = false;
 static int skip_dut_nr_inst = 0; // for QEMU
-
-void detach() {
-  printf("detach\n");
-}
-
-void attach() {
-  printf("attach\n");
-}
 
 // this is used to let ref skip instructions which
 // can not produce consistent behavior with NEMU
@@ -61,7 +51,6 @@ void difftest_skip_ref() {
 //   We expect that DUT will catch up with REF within `nr_dut` instructions.
 void difftest_skip_dut(int nr_ref, int nr_dut) {
   skip_dut_nr_inst += nr_dut;
-
   while (nr_ref -- > 0) {
     ref_difftest_exec(1);
   }
@@ -139,6 +128,3 @@ void difftest_step(vaddr_t pc, vaddr_t npc) {
 
   checkregs(&ref_r, pc);
 }
-#else
-void init_difftest(char *ref_so_file, long img_size, int port) { }
-#endif
