@@ -29,8 +29,10 @@ void print_wb();
 void new_wp(char *expr, word_t result);
 void free_wp(int id);
 void print_func_log();
+#ifdef CONFIG_DIFFTEST
 void detach();
 void attach();
+#endif
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
@@ -80,12 +82,12 @@ static int info_reg();
 static int info_watch();
 
 static int cmd_detach() {
-  detach();
+  IFDEF(CONFIG_DIFFTEST, detach());
   return 0;
 }
 
 static int cmd_attach() {
-  attach();
+  IFDEF(CONFIG_DIFFTEST, attach());
   return 0;
 }
 
