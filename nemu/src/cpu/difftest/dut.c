@@ -117,7 +117,7 @@ static void checkregs(CPU_state *ref, vaddr_t pc) {
 }
 
 void difftest_step(vaddr_t pc, vaddr_t npc) {
-  if(stop_diff) return;si
+  if(stop_diff) return;
   CPU_state ref_r;
 
   // for QEMU, let dut catch up ref
