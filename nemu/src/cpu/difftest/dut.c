@@ -21,6 +21,7 @@
 #include <utils.h>
 #include <difftest-def.h>
 
+
 void (*ref_difftest_memcpy)(paddr_t addr, void *buf, size_t n, bool direction) = NULL;
 void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
 void (*ref_difftest_exec)(uint64_t n) = NULL;
@@ -40,7 +41,7 @@ void attach() {
   stop_diff = false;
   // copy memory and reg
   // copy memory to ref
-  ref_difftest_memcpy(0x100000, guest_to_host(0x100000), PMEM_SIZE - 0x100000, DIFFTEST_TO_REF);
+  ref_difftest_memcpy(0x100000, guest_to_host(0x100000), CONFIG_MSIZE - 0x100000, DIFFTEST_TO_REF);
   // copy reg to ref
   ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 }
