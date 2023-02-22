@@ -20,7 +20,7 @@ verilog: $(DESIGN_SRC)
 
 $(DESIGN_SRC): $(SCALA_SRC)
 	$(call git_commit, "generate verilog")
-	-rm -r $(BUILD_DIR)
+	# -rm -r $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)
 	mill -i Top.test.runMain main.Elaborate -td $(BUILD_DIR) --emit-modules verilog
 
