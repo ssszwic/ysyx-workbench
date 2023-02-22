@@ -1,6 +1,7 @@
 #include <common.h>
 #include "syscall.h"
 #include <fs.h>
+#include <proc.h>
 
 // #define CONFIG_SYSTEMCALL_TRACE
 
@@ -12,6 +13,8 @@ static int systemcall_ring_ref = SYSTEMCALL_RING_BUF_WIDTH - 1;
 void print_systemcall_log();
 #endif
 
+void naive_uload(PCB *pcb, const char *filename);
+
 void sys_yield(Context *c);
 void sys_exit(Context *c);
 void sys_brk(Context *c);
@@ -21,6 +24,7 @@ void sys_write(Context *c);
 void sys_close(Context *c);
 void sys_lseek(Context *c);
 void sys_gettimeofday(Context *c);
+void sys_execve(Context *c);
 
 void do_syscall(Context *c) {
   uintptr_t a[4];
@@ -41,6 +45,7 @@ void do_syscall(Context *c) {
     case SYS_lseek: sys_lseek(c); break;
     case SYS_brk: sys_brk(c); break;
     case SYS_gettimeofday: sys_gettimeofday(c); break;
+    case SYS_execve: sys_execve(c); break;
     default: panic("Unhandled syscall ID = %d", a[0]);
   }
 
@@ -104,6 +109,10 @@ void sys_gettimeofday(Context *c) {
   *(((uint64_t *) c->GPR2) + 1) = time_us - time_s * 1000000;
   c->GPRx = 0;
   return;
+}
+
+void sys_execve(Context *c) {
+  naive_uload(NULL, (char *) c->GPR2);
 }
 
 #ifdef CONFIG_SYSTEMCALL_TRACE

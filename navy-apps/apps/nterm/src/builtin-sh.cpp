@@ -23,6 +23,14 @@ static void sh_prompt() {
 }
 
 static void sh_handle_cmd(const char *cmd) {
+  // limit length of cmd
+  assert(strlen(cmd) < 100);
+  char cmd_new[100];
+  // delate '\n'
+  strcpy(cmd_new, cmd);
+  cmd_new[strlen(cmd)-1] = 0;
+
+  execve(cmd_new, NULL, NULL);
 }
 
 void builtin_sh_run() {
