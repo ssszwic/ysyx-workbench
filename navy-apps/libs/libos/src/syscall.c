@@ -66,7 +66,7 @@ intptr_t _syscall_(intptr_t type, intptr_t a0, intptr_t a1, intptr_t a2) {
 
 void _exit(int status) {
   // execute "bin/menu" when current program exit
-  _execve("/bin/menu", NULL, NULL);
+  _execve("/bin/nterm", NULL, NULL);
   while (1);
 }
 
