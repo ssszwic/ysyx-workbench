@@ -20,8 +20,9 @@ verilog: $(DESIGN_SRC)
 
 $(DESIGN_SRC): $(SCALA_SRC)
 	$(call git_commit, "generate verilog")
+	-rm -r $(BUILD_DIR)
 	mkdir -p $(BUILD_DIR)
-	mill -i __.test.runMain main.Elaborate -td $(BUILD_DIR) --emit-modules verilog
+	mill -i Top.test.runMain main.Elaborate -td $(BUILD_DIR) --emit-modules verilog
 
 run: $(DESIGN_SRC)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
