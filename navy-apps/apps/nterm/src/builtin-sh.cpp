@@ -27,7 +27,8 @@ static void sh_handle_cmd(const char *cmd) {
   assert(strlen(cmd) < 100);
   char cmd_new[100];
   // delate '\n'
-  strncpy(cmd_new, cmd, strlen(cmd)-1);
+  strcpy(cmd_new, cmd);
+  cmd_new[strlen(cmd)-1] = 0;
 
   execve(cmd_new, NULL, NULL);
 }
