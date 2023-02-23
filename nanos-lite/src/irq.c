@@ -9,7 +9,7 @@ void do_syscall(Context *c);
 
 static Context* do_event(Event e, Context* c) {
   switch (e.event) {
-    case EVENT_YIELD: 
+    case EVENT_YIELD:
       printf("nothing in yield\n"); 
       #ifdef MY_IRQ_RSICV
       c->mepc += 4; 

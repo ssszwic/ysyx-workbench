@@ -27,6 +27,7 @@ VERILATOR_FLAGS += --trace
 VERILATOR_FLAGS += --assert
 # Generate coverage analysis
 VERILATOR_FLAGS += --coverage
+VERILATOR_FLAGS += --top Top
 # Run Verilator in debug mode
 #VERILATOR_FLAGS += --debugINPUT_VC
 # Add this trace to get a backtrace in gdb
@@ -50,7 +51,6 @@ LOG := $(WORK_DIR)/sim_log.txt
 DIFFSET_SO := /home/ssszw/Work/ysyx-workbench/npc/sim/share/riscv64-nemu-interpreter-so
 override ARGS += --log=$(LOG)
 override ARGS += --diff=$(DIFFSET_SO)
-
 
 # CXX FLAGS
 INC_PATH := $(WORK_DIR)/include
