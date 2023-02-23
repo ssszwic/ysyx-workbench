@@ -28,6 +28,7 @@ VERILATOR_FLAGS += --assert
 # Generate coverage analysis
 VERILATOR_FLAGS += --coverage
 VERILATOR_FLAGS += --top Top
+VERILATOR_FLAGS += -O3
 # Run Verilator in debug mode
 #VERILATOR_FLAGS += --debugINPUT_VC
 # Add this trace to get a backtrace in gdb
@@ -58,7 +59,6 @@ INCLUDES := $(shell find $(INC_PATH) -name "*.h")
 CFLAGS += $(addprefix -I ,$(INC_PATH))
 CFLAGS += -Wall -g
 CFLAGS += -Werror
-CFLAGS += -O3 -j 0
 # config itrace llvm
 # CFLAGS += $(shell llvm-config --cxxflags) -fPIE
 CFLAGS += -O3 -I/usr/lib/llvm-14/include -std=c++14 -fno-exceptions -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_LIMIT_MACROS
