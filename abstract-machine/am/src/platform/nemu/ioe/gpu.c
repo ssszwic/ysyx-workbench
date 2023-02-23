@@ -42,7 +42,6 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   }
   // update
   if (ctl->sync) {
-    printf("up\n");
     outl(SYNC_ADDR, 1);
   }
 }
