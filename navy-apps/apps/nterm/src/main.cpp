@@ -12,9 +12,7 @@ void builtin_sh_run();
 void extern_app_run(const char *app_path);
 
 int main(int argc, char *argv[]) {
-  printf("init start\n");
   SDL_Init(0);
-  printf("init end\n");
   font = new BDF_Font(font_fname);
 
   // setup display
