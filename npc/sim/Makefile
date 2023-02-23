@@ -51,7 +51,6 @@ DIFFSET_SO := /home/ssszw/Work/ysyx-workbench/npc/sim/share/riscv64-nemu-interpr
 override ARGS += --log=$(LOG)
 override ARGS += --diff=$(DIFFSET_SO)
 
-
 # CXX FLAGS
 INC_PATH := $(WORK_DIR)/include
 INCLUDES := $(shell find $(INC_PATH) -name "*.h")
