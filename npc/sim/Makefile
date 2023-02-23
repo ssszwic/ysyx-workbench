@@ -27,7 +27,8 @@ VERILATOR_FLAGS += --trace
 VERILATOR_FLAGS += --assert
 # Generate coverage analysis
 VERILATOR_FLAGS += --coverage
-VERILATOR_FLAGS += --top Top -j 4
+VERILATOR_FLAGS += --top top
+VERILATOR_FLAGS += -j 4
 VERILATOR_FLAGS += -O3
 # Run Verilator in debug mode
 #VERILATOR_FLAGS += --debugINPUT_VC
