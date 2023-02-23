@@ -1,7 +1,6 @@
 #ifndef __CONFIG_H__
 #define __CONFIG_H__
 
-
 // must define 1 or 0 if use IFDEF...
 // switch
 // #define CONFIG_WAVE             1
