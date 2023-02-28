@@ -31,10 +31,10 @@ VERILATOR_FLAGS += --top Top
 VERILATOR_FLAGS += -j 4
 VERILATOR_FLAGS += -O3
 # Run Verilator in debug mode
-#VERILATOR_FLAGS += --debugINPUT_VC
+# VERILATOR_FLAGS += --debugINPUT_VC
 # Add this trace to get a backtrace in gdb
-#VERILATOR_FLAGS += --gdbbt
-VERILATOR_FLAGS += --threads 1
+# VERILATOR_FLAGS += --gdbbt
+# VERILATOR_FLAGS += --threads 1
 
 WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/obj_dir
