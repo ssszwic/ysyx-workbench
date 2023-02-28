@@ -81,7 +81,7 @@ run: $(BUILD_DIR)/V$(MODULE)
 	@rm -rf logs
 	@-rm $(LOG)
 	@mkdir -p logs
-	@sudo perf stat obj_dir/V$(MODULE) $(ARGS) $(IMG)
+	@sudo perf record -F 999 obj_dir/V$(MODULE) $(ARGS) $(IMG)
 	@echo
 	@echo "-- DONE --------------------"
 	@echo "To see waveforms, make wave"
