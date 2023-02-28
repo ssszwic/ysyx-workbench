@@ -28,7 +28,7 @@ void device_update() {
   SDL_Event event;
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
-      case SDL_QUIT:
+      case SDL_QUIT: 
         npc_state.state = NPC_QUIT;
         break;
 #ifdef CONFIG_HAS_KEYBOARD

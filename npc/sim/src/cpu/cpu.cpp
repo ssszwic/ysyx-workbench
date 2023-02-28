@@ -86,7 +86,6 @@ static void trace_and_difftest();
 static void log_trace(bool print_screen);
 void isa_reg_display(bool *err_list);
 
-
 bool update_wp(char *log);
 uint64_t get_time();
 void device_update();
@@ -120,11 +119,10 @@ void cpu_exec(uint64_t n) {
   IFDEF(STATISTIC, uint64_t timer_start = get_time());
 
   for(int i = 0; i < n; i++) {
-
     IFDEF(PRINT_CPU_TIME, gettimeofday(&start, NULL ));
     exec_once();
     IFDEF(PRINT_CPU_TIME, gettimeofday(&end, NULL ));
-    IFDEF(PRINT_CPU_TIME, timeuse =1000000 * ( end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec + timeuse);
+    IFDEF(PRINT_CPU_TIME, timeuse =1000000 * (end.tv_sec - start.tv_sec ) + end.tv_usec - start.tv_usec + timeuse);
     IFDEF(CONFIG_STATISTIC, g_nr_guest_inst++);
     trace_and_difftest();
     IFDEF(CONFIG_DEVICE, device_update());
