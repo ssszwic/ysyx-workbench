@@ -26,7 +26,7 @@ VERILATOR_FLAGS += --trace
 # Check SystemVerilog assertions
 VERILATOR_FLAGS += --assert
 # Generate coverage analysis
-VERILATOR_FLAGS += --coverage
+# VERILATOR_FLAGS += --coverage
 VERILATOR_FLAGS += --top Top
 VERILATOR_FLAGS += -j 4
 VERILATOR_FLAGS += -O3
