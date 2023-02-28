@@ -26,7 +26,7 @@ VERILATOR_FLAGS += --trace
 # Check SystemVerilog assertions
 VERILATOR_FLAGS += --assert
 # Generate coverage analysis
-# VERILATOR_FLAGS += --coverage
+# VERILATOR_FLAGS += --coverage # very slowly
 VERILATOR_FLAGS += --top Top
 VERILATOR_FLAGS += -j 4
 VERILATOR_FLAGS += -O3
@@ -34,7 +34,7 @@ VERILATOR_FLAGS += -O3
 #VERILATOR_FLAGS += --debugINPUT_VC
 # Add this trace to get a backtrace in gdb
 #VERILATOR_FLAGS += --gdbbt
-VERILATOR_FLAGS += --threads 2
+VERILATOR_FLAGS += --threads 
 
 WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/obj_dir
