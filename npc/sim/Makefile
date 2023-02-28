@@ -18,7 +18,7 @@ VERILATOR_FLAGS += -cc --exe
 # Generate makefile dependencies (not shown as complicates the Makefile)
 VERILATOR_FLAGS += -MMD
 # Optimize
-VERILATOR_FLAGS += -Os -x-assign 0
+VERILATOR_FLAGS += -O3 -x-assign 0
 # Warn abount lint issues; may not want this on less solid designs
 # VERILATOR_FLAGS += -Wall
 # Make waveforms
@@ -29,7 +29,7 @@ VERILATOR_FLAGS += --assert
 # VERILATOR_FLAGS += --coverage # very slowly
 VERILATOR_FLAGS += --top Top
 VERILATOR_FLAGS += -j 4
-VERILATOR_FLAGS += -O3
+# VERILATOR_FLAGS += -O3
 # Run Verilator in debug mode
 # VERILATOR_FLAGS += --debugINPUT_VC
 # Add this trace to get a backtrace in gdb
