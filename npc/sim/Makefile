@@ -18,7 +18,7 @@ VERILATOR_FLAGS += -cc --exe
 # Generate makefile dependencies (not shown as complicates the Makefile)
 VERILATOR_FLAGS += -MMD
 # Optimize
-VERILATOR_FLAGS += -Os -x-assign 0
+VERILATOR_FLAGS += -O3 -x-assign 0
 # Warn abount lint issues; may not want this on less solid designs
 # VERILATOR_FLAGS += -Wall
 # Make waveforms
@@ -26,13 +26,15 @@ VERILATOR_FLAGS += --trace
 # Check SystemVerilog assertions
 VERILATOR_FLAGS += --assert
 # Generate coverage analysis
-VERILATOR_FLAGS += --coverage
+# VERILATOR_FLAGS += --coverage # very slowly
 VERILATOR_FLAGS += --top Top
+VERILATOR_FLAGS += -j 4
+# VERILATOR_FLAGS += -O3
 # Run Verilator in debug mode
-#VERILATOR_FLAGS += --debugINPUT_VC
+# VERILATOR_FLAGS += --debugINPUT_VC
 # Add this trace to get a backtrace in gdb
-#VERILATOR_FLAGS += --gdbbt
-# VERILATOR_FLAGS += --threads 2
+# VERILATOR_FLAGS += --gdbbt
+# VERILATOR_FLAGS += --threads 1
 
 WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/obj_dir
@@ -79,7 +81,7 @@ run: $(BUILD_DIR)/V$(MODULE)
 	@rm -rf logs
 	@-rm $(LOG)
 	@mkdir -p logs
-	@obj_dir/V$(MODULE) $(ARGS) $(IMG)
+	@sudo perf record -F 999 obj_dir/V$(MODULE) $(ARGS) $(IMG)
 	@echo
 	@echo "-- DONE --------------------"
 	@echo "To see waveforms, make wave"

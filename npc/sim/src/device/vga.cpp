@@ -18,7 +18,6 @@ static SDL_Renderer *renderer = NULL;
 static SDL_Texture *texture = NULL;
 
 static void init_screen() {
-  printf("vga init\n");
   SDL_Window *window = NULL;
   char title[128];
   sprintf(title, "riscv64-NPC");
