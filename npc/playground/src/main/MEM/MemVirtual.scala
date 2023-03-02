@@ -17,7 +17,7 @@ class MemInterface extends Bundle {
 class Raw extends Module {
   val io = IO(new MemInterface)
   val MemVirtualInst = Module(new MemVirtual)
-  io <> MemVirtualInst.io
+  io <> MemVirtualInst.ios
 }
 
 class MemVirtual extends BlackBox with HasBlackBoxResource {
