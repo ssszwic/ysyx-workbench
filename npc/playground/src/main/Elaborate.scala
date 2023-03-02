@@ -10,7 +10,7 @@ import main.MEM
 import main.WBU
 
 object Elaborate extends App {
-  def top = new IFU.IFU
+  def top = new MEM.MemVirtual
   val useMFC = true // use MLIR-based firrtl compiler
   val generator = Seq(chisel3.stage.ChiselGeneratorAnnotation(() => top))
   if (useMFC) {
