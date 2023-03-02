@@ -17,8 +17,21 @@ class MemInterface extends Bundle {
 class Raw extends Module {
   val io = IO(new MemInterface)
   val MemVirtualInst = Module(new MemVirtual)
-  io <> MemVirtualInst.ios
+  io <> MemVirtualInst.io
 }
+
+class WriteInterface extends Bundle {
+  val wen   = Input(Bool())
+  val wData = Input(UInt(64.W))
+  val wMask = Input(UInt(8.W))
+}
+
+class ReadInterface extends Bundle {
+  val ren   = Input(Bool())
+  val addr  = Input(UInt(64.W))
+  val rData = Output(UInt(64.W))
+}
+
 
 class MemVirtual extends BlackBox with HasBlackBoxResource {
   // val io = IO(new Bundle {
@@ -32,6 +45,9 @@ class MemVirtual extends BlackBox with HasBlackBoxResource {
   //   // control
   //   val wMask     = Input(UInt(8.W))
   // })
-  val ios = IO(new MemInterface)
+  val io = IO(new Bundle {
+    val w = new WriteInterface
+    val r = new ReadInterface
+  })
   addResource("/MemVirtual.v")
 }
