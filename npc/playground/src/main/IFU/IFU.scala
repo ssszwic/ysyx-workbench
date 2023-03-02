@@ -14,7 +14,7 @@ class IFUInterface extends Bundle {
 }
 
 class IFU extends Module {
-  val ioWBU = IO(new WBU.WBUInterface)
+  val ioWBU = IO(Flipped(new WBU.WBUInterface))
   val ioIFU = IO(new IFUInterface)
   val ioMem = IO(Flipped(new MEM.MemInterface))
 }
