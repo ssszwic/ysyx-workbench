@@ -24,13 +24,13 @@ class Raw extends Module {
 }
 
 class WriteInterface extends Bundle {
-  val wen   = Input(Bool())
+  val en   = Input(Bool())
   val wData = Input(UInt(64.W))
   val wMask = Input(UInt(8.W))
 }
 
 class ReadInterface extends Bundle {
-  val ren   = Input(Bool())
+  val en   = Input(Bool())
   val addr  = Input(UInt(64.W))
   val rData = Output(UInt(64.W))
 }
