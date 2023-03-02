@@ -5,8 +5,8 @@ module MemVirtual(
   output reg  [63:0]    rData,
   // write
   input                 wen,
-  input       [7:0]     wMask,
-  input       [63:0]    wData
+  input       [63:0]    wData,
+  input       [7:0]     wMask
 );
 
 import "DPI-C" function void pmem_read(input longint raddr, output longint rdata);
