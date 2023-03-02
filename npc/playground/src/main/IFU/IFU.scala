@@ -17,5 +17,17 @@ class IFU extends Module {
   val ioWBU = IO(Flipped(new WBU.WBUInterface))
   val ioIFU = IO(new IFUInterface)
   val ioMem = IO(Flipped(new MEM.MemInterface))
+
+  ioIFU.inst := 0.U
+  ioIFU.pc := 0.U
+  ioIFU.pc4 := 0.U
+  ioIFU.valid := 0.B
+
+  ioMem.ren   := 0.B
+  ioMem.addr  := 0.U
+  ioMem.wen   := 0.B
+  ioMem.wData := 0.U
+  ioMem.wMask:= 0.U
+
 }
 
