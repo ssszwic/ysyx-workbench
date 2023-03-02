@@ -15,7 +15,10 @@ class MemInterface extends Bundle {
 }
 
 class Raw extends Module {
-  val io = IO(new MemInterface)
+  val io = IO(new Bundle {
+    val w = new WriteInterface
+    val r = new ReadInterface
+  })
   val MemVirtualInst = Module(new MemVirtual)
   io <> MemVirtualInst.io
 }
