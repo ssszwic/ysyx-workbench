@@ -7,6 +7,7 @@ import chisel3.experimental.BundleLiterals._
 
 import utest._
 
+import main.ALU.Less
 object LessSpec extends ChiselUtestTester {
   val tests = Tests {
     test("Less") {

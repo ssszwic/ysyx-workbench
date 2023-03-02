@@ -6,6 +6,7 @@ import chisel3.experimental.BundleLiterals._
 
 import utest._
 
+import main.ALU.Mul
 object MulSpec extends ChiselUtestTester {
   val tests = Tests {
     test("Mul") {

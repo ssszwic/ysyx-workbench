@@ -6,6 +6,7 @@ import chisel3.experimental.BundleLiterals._
 
 import utest._
 
+import main.IDU.IDU
 object IDUSpec extends ChiselUtestTester {
   val tests = Tests {
     test("IDU") {
