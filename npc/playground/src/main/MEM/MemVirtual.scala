@@ -32,6 +32,6 @@ class MemVirtual extends BlackBox with HasBlackBoxResource {
   //   // control
   //   val wMask     = Input(UInt(8.W))
   // })
-  val io = IO(new MemInterface)
+  val ios = IO(new MemInterface)
   addResource("/MemVirtual.v")
 }
