@@ -26,6 +26,7 @@ object IDUTools {
   }
 }
 
+
 class IDUInterface extends Bundle {
   val ready = Input(Bool())
   val valid = Output(Bool())
@@ -50,15 +51,14 @@ class IDU extends Module{
     val valid   = Input(Bool())
   })
 
-  ioIDU.valid := RegInit(false.B)
-  ioIFU.ready := RegInit(true.B)
-
   val InstDecode_u  = Module(new InstDecode)
   val RegFiles_u    = Module(new RegFiles)
 
   // FSM
   val sIDLE :: sFINISH :: Nil = Enum(2)
   val state = RegInit(sIDLE)
+  val ioIDU_valid_reg = RegInit(false.B)
+  val ioIFU_ready_reg = RegInit(true.B)
 
   // instruction decode
   InstDecode_u.io.inst := ioIFU.inst
@@ -84,27 +84,30 @@ class IDU extends Module{
   IDUTools.myRegEnable(ioIDU.csrCtrl, InstDecode_u.csrCtrl, regEn)
 
   // FSM
+  ioIDU.valid := ioIDU_valid_reg
+  ioIFU.ready := ioIFU_ready_reg
+
   switch(state) {
     is(sIDLE) {
       when(ioIFU.valid) {
         state := sFINISH
-        ioIFU.ready := false.B
-        ioIDU.valid := true.B
+        ioIFU_ready_reg := false.B
+        ioIDU_valid_reg := true.B
       }.otherwise {
         state := sIDLE
-        ioIFU.ready := true.B
-        ioIDU.valid := false.B
+        ioIFU_ready_reg := true.B
+        ioIDU_valid_reg := false.B
       }
     }
     is(sFINISH) {
       when(ioIDU.ready){
         state := sIDLE
-        ioIFU.ready := true.B
-        ioIDU.valid := false.B
+        ioIFU_ready_reg := true.B
+        ioIDU_valid_reg := false.B
       }.otherwise {
         state := sFINISH
-        ioIFU.ready := false.B
-        ioIDU.valid := true.B
+        ioIFU_ready_reg := false.B
+        ioIDU_valid_reg := true.B
       }
     }
   }
