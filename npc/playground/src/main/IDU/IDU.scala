@@ -7,25 +7,7 @@ import main.EXU
 import main.IDU
 import main.LSU
 import main.IFU
-
-object IDUTools {
-  def myRegEnable(dst: Bundle, src: Bundle, en: Bool): Unit = {
-    require(src.elements.toList.length == dst.elements.toList.length)
-    for (i <- 0 until src.elements.toList.length) {
-      val dataType = src.getElements(i).getClass()
-      if(dataType == classOf[chisel3.UInt]) {
-        dst.getElements(i) := RegEnable(src.getElements(i), 0.U, en)
-      }else if(dataType == classOf[chisel3.SInt]){
-        dst.getElements(i) := RegEnable(src.getElements(i), 0.S, en)
-      }else if(dataType == classOf[chisel3.Bool]){
-        dst.getElements(i) := RegEnable(src.getElements(i), false.B, en)
-      }else {
-        print("only support UInt, SInt, Bool")
-      }
-    }
-  }
-}
-
+import main.Tools
 
 class IDUInterface extends Bundle {
   val ready = Input(Bool())
@@ -78,10 +60,10 @@ class IDU extends Module{
   ioIDU.pc        := RegEnable(ioIFU.pc, 0.U, regEn)
   ioIDU.pc4       := RegEnable(ioIFU.pc4, 0.U, regEn)
   ioIDU.imme      := RegEnable(InstDecode_u.io.imme, 0.U, regEn)
-  IDUTools.myRegEnable(ioIDU.aluCtrl, InstDecode_u.aluCtrl, regEn)
-  IDUTools.myRegEnable(ioIDU.regCtrl, InstDecode_u.regCtrl, regEn)
-  IDUTools.myRegEnable(ioIDU.memCtrl, InstDecode_u.memCtrl, regEn)
-  IDUTools.myRegEnable(ioIDU.csrCtrl, InstDecode_u.csrCtrl, regEn)
+  Tools.myRegEnable(ioIDU.aluCtrl, InstDecode_u.aluCtrl, regEn)
+  Tools.myRegEnable(ioIDU.regCtrl, InstDecode_u.regCtrl, regEn)
+  Tools.myRegEnable(ioIDU.memCtrl, InstDecode_u.memCtrl, regEn)
+  Tools.myRegEnable(ioIDU.csrCtrl, InstDecode_u.csrCtrl, regEn)
 
   // FSM
   ioIDU.valid := ioIDU_valid_reg
