@@ -8,13 +8,33 @@ import main.IDU
 import main.LSU
 import main.IFU
 
-// object InstDecodeTools {
-//   def myRegEnable(dst: UInt, src: Bool): None = {
-//     require(inst.getWidth == 32)
-//     val imme0 = Wire(UInt(33.W))
-    
-//   }
-// }
+object InstDecodeTools {
+  def myRegEnable(dst: Bundle, src: Bundle, en: Bool): Unit = {
+    require(src.elements.toList.length == dst.elements.toList.length)
+    for (i <- 0 until regCtrl_src.elements.toList.length) {
+      dataType = regCtrl_src.getElements(i).getClass()
+      if(dataType == classOf[chisel3.UInt]) {
+        dst.getElements(i) := RegEnable(src.getElements(i), 0.U, en)
+      }else if(dataType == classOf[chisel3.SInt]){
+        dst.getElements(i) := RegEnable(src.getElements(i), 0.S, en)
+      }else if(dataType == classOf[chisel3.Bool]){
+        dst.getElements(i) := RegEnable(src.getElements(i), false.B, en)
+      }else {
+        print("only support UInt, SInt, Bool")
+      }
+    }
+  }
+}
+
+object a extends App {
+  val regCtrl_src = new RegCtrlInterface
+  val regCtrl_dest = new RegCtrlInterface
+
+  for (i <- 0 until regCtrl_src.elements.toList.length) {
+    print(regCtrl_src.getElements(i).getClass() == classOf[chisel3.UInt])
+  }
+
+}
 
 class IDUInterface extends Bundle {
   val ready = Input(Bool())
@@ -69,10 +89,10 @@ class IDU extends Module{
   ioIDU.imme      := RegEnable(InstDecode_u.io.imme, 0.U, regEn)
   print(ioIDU.aluCtrl)
   // myRegEnable()
-  ioIDU.aluCtrl   := RegEnable(InstDecode_u.aluCtrl, 0.U, regEn)
-  ioIDU.regCtrl   := RegEnable(InstDecode_u.regCtrl, 0.U, regEn)
-  ioIDU.memCtrl   := RegEnable(InstDecode_u.memCtrl, 0.U, regEn)
-  ioIDU.csrCtrl   := RegEnable(InstDecode_u.csrCtrl, 0.U, regEn)
+  myRegEnable(ioIDU.aluCtrl, InstDecode_u.aluCtrl, regEn)
+  myRegEnable(ioIDU.regCtrl, InstDecode_u.regCtrl, regEn)
+  myRegEnable(ioIDU.memCtrl, InstDecode_u.memCtrl, regEn)
+  myRegEnable(ioIDU.csrCtrl, InstDecode_u.csrCtrl, regEn)
 
   // FSM
   ioIDU.valid := ioIDU_valid_reg
