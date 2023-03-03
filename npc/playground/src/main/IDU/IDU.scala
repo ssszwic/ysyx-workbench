@@ -39,27 +39,33 @@ class IDU extends Module{
   val sIDLE :: sFINISH :: Nil = Enum(2)
   val state = RegInit(sIDLE)
 
+  val ioIDU_valid_reg = RegInit(false.B)
+  val ioIFU_ready_reg = RegInit(true.B)
+
+  ioIDU.valid := ioIDU_valid_reg
+  ioIFU.ready := ioIFU_ready_reg
+
   switch(state) {
     is(sIDLE) {
       when(ioIFU.valid) {
         state := sFINISH
-        ioIFU.ready := false.B
-        ioIDU.valid := true.B
+        ioIFU_ready_reg := false.B
+        ioIDU_valid_reg := true.B
       }.otherwise {
         state := sIDLE
-        ioIFU.ready := true.B
-        ioIDU.valid := false.B
+        ioIFU_ready_reg := true.B
+        ioIDU_valid_reg := false.B
       }
     }
     is(sFINISH) {
       when(ioIDU.ready) {
         state := sIDLE
-        ioIFU.ready := true.B
-        ioIDU.valid := false.B
+        ioIFU_ready_reg := true.B
+        ioIDU_valid_reg := false.B
       }.otherwise {
         state := sFINISH
-        ioIFU.ready := false.B
-        ioIDU.valid := true.B
+        ioIFU_ready_reg := false.B
+        ioIDU_valid_reg := true.B
       }
     }
   }
