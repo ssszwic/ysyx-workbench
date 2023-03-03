@@ -27,7 +27,7 @@ class IDU extends Module{
   val ioIDU       = IO(new IDUInterface)
   // from LSU
   val ioLSU = new Bundle {
-    val regCtrl = Input(new IDU.RegCtrlInterface)
+    val regCtrl = IO(new IDU.RegCtrlInterface)
     val rdData  = Input(UInt(64.W))
     val valid   = Input(Bool())
   }
