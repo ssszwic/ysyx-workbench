@@ -52,7 +52,7 @@ class IDU extends Module{
   RegFiles_u.io.rs2Addr  := InstDecode_u.io.rs2Addr
 
   // io
-  val regEn = Bool()
+  val regEn = Wire(Bool())
   regEn           := ((state === sIDLE) && ioIFU.valid)
   ioIDU.rs1Data   := RegEnable(RegFiles_u.io.rs1Data, 0.U, regEn)
   ioIDU.rs2Data   := RegEnable(RegFiles_u.io.rs2Data, 0.U, regEn)
