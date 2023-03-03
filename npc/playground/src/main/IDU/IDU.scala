@@ -31,7 +31,7 @@ class IDU extends Module{
   //   val rdData  = Input(UInt(64.W))
   // }
   val io = IO(new Bundle {
-    val out = UInt(4.W)
+    val out = Output(UInt(4.W))
   })
 
   // FSM
