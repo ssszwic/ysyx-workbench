@@ -8,6 +8,8 @@ import main.IDU
 import main.LSU
 
 class EXUInterface extends Bundle {
+  val ready = Input(Bool())
+  val valid = Output(Bool())
   val result    = Output(UInt(64.W))
   val pc4       = Output(UInt(64.W))
   val csrpc     = Output(UInt(64.W))
@@ -16,7 +18,6 @@ class EXUInterface extends Bundle {
   // control
   val npcSel    = Output(Bool())
   val interrupt = Output(Bool())
-  val valid     = Output(Bool())
 }
 
 class EXU extends Module{

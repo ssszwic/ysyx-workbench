@@ -9,9 +9,10 @@ import main.LSU
 
 class LSU extends Module {
   val io = new Bundle {
+    val ready   = Input(Bool())
+    val valid   = Output(Bool())
     val npc     = Output(UInt(64.W))
     val rdData  = Output(UInt(64.W))
     val regCtrl = Flipped(new IDU.RegCtrlInterface)
-    val valid   = Output(Bool())
   }
 }
