@@ -152,7 +152,7 @@ class InstDecode extends Module {
   regCtrl.wen  := typeR || typeI || typeU || typeJ || typeCSR
   io.rs1Addr := io.inst(19, 15)
   io.rs2Addr := io.inst(24, 20)
-  regCtrl.wAddr  := io.inst(11, 7)
+  regCtrl.rdAddr  := io.inst(11, 7)
 
   // ALU control signal
   when((typeII && (funct3(2, 1) === "b01".U)) || (typeR && (funct3(2, 1) === "b01".U) && (funct7 === "b0000000".U))) {
