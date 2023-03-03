@@ -8,7 +8,7 @@ import main.IDU
 import main.LSU
 import main.IFU
 
-object InstDecodeTools {
+object IDUTools {
   def myRegEnable(dst: Bundle, src: Bundle, en: Bool): Unit = {
     require(src.elements.toList.length == dst.elements.toList.length)
     for (i <- 0 until src.elements.toList.length) {
@@ -87,12 +87,10 @@ class IDU extends Module{
   ioIDU.pc        := RegEnable(ioIFU.pc, 0.U, regEn)
   ioIDU.pc4       := RegEnable(ioIFU.pc4, 0.U, regEn)
   ioIDU.imme      := RegEnable(InstDecode_u.io.imme, 0.U, regEn)
-  print(ioIDU.aluCtrl)
-  // myRegEnable()
-  myRegEnable(ioIDU.aluCtrl, InstDecode_u.aluCtrl, regEn)
-  myRegEnable(ioIDU.regCtrl, InstDecode_u.regCtrl, regEn)
-  myRegEnable(ioIDU.memCtrl, InstDecode_u.memCtrl, regEn)
-  myRegEnable(ioIDU.csrCtrl, InstDecode_u.csrCtrl, regEn)
+  IDUTools.myRegEnable(ioIDU.aluCtrl, InstDecode_u.aluCtrl, regEn)
+  IDUTools.myRegEnable(ioIDU.regCtrl, InstDecode_u.regCtrl, regEn)
+  IDUTools.myRegEnable(ioIDU.memCtrl, InstDecode_u.memCtrl, regEn)
+  IDUTools.myRegEnable(ioIDU.csrCtrl, InstDecode_u.csrCtrl, regEn)
 
   // FSM
   ioIDU.valid := ioIDU_valid_reg
