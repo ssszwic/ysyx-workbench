@@ -2,6 +2,9 @@ package main
 import circt.stage._
 import chisel3.stage.ChiselStage
 
+import chisel3._
+import chisel3.util._
+
 import main.IFU
 import main.IDU
 import main.EXU
