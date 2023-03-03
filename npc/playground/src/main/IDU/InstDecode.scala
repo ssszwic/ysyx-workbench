@@ -8,6 +8,7 @@ import main.IDU
 import main.LSU
 import main.IFU
 
+import main.IDU.RegCtrlInterface
 object IDUTools {
   def Immediate(inst: UInt, typeR: Bool, typeI: Bool, typeS: Bool, typeB: Bool, typeU: Bool, typeJ: Bool, typeCSR: Bool): UInt = {
     require(inst.getWidth == 32)

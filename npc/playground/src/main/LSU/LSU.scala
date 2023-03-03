@@ -7,6 +7,7 @@ import main.EXU
 import main.IDU
 import main.LSU
 
+import main.IDU.RegCtrlInterface
 class LSU extends Module {
   val io = new Bundle {
     val ready   = Input(Bool())

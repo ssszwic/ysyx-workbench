@@ -3,12 +3,14 @@ module RegFiles(
   input             reset,
   input     [4:0]   rs1Addr,
   input     [4:0]   rs2Addr,
-  input             wen,
-  input     [4:0]   wAddr,
   // data
-  input     [63:0]  wData,
+  input     [63:0]  rdData,
   output    [63:0]  rs1Data,
   output    [63:0]  rs2Data
+  // control
+  input             regCtrl_wen,
+  input     [4:0]   regCtrl_rdAddr,
+  input             valid
 );
 
 reg   [63:0]  regFiles [0:31];
@@ -29,8 +31,8 @@ generate
       if(reset) begin
         regFiles[i] <= 64'b0;
       end
-      else if(wen & (wAddr == i)) begin
-        regFiles[i] <= wData;
+      else if(valid & regCtrl_wen & (regCtrl_rdAddr == i)) begin
+        regFiles[i] <= rdData;
       end
       else begin
         regFiles[i] <= regFiles[i];

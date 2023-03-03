@@ -7,6 +7,7 @@ import main.EXU
 import main.IDU
 import main.LSU
 
+import main.IDU.RegCtrlInterface
 class EXUInterface extends Bundle {
   val ready = Input(Bool())
   val valid = Output(Bool())
