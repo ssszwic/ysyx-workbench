@@ -55,6 +55,6 @@ class IDU extends Module{
   //     }
   //   }
   // }
-  io.out := io.in
+  io.out := RegNext(io.in)
 }
 
