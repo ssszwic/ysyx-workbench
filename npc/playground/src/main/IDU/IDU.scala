@@ -11,8 +11,8 @@ import main.IFU
 object InstDecodeTools {
   def myRegEnable(dst: Bundle, src: Bundle, en: Bool): Unit = {
     require(src.elements.toList.length == dst.elements.toList.length)
-    for (i <- 0 until regCtrl_src.elements.toList.length) {
-      val dataType = regCtrl_src.getElements(i).getClass()
+    for (i <- 0 until src.elements.toList.length) {
+      val dataType = src.getElements(i).getClass()
       if(dataType == classOf[chisel3.UInt]) {
         dst.getElements(i) := RegEnable(src.getElements(i), 0.U, en)
       }else if(dataType == classOf[chisel3.SInt]){
