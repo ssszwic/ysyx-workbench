@@ -31,6 +31,7 @@ class IDU extends Module{
   //   val rdData  = Input(UInt(64.W))
   // }
   val io = IO(new Bundle {
+    val in = Input(UInt(4.W))
     val out = Output(UInt(4.W))
   })
 
@@ -54,6 +55,6 @@ class IDU extends Module{
   //     }
   //   }
   // }
-  io.out := 4.U
+  io.out := io.in
 }
 
