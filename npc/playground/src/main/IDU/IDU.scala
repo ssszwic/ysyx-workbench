@@ -8,6 +8,14 @@ import main.IDU
 import main.LSU
 import main.IFU
 
+// object InstDecodeTools {
+//   def myRegEnable(dst: UInt, src: Bool): None = {
+//     require(inst.getWidth == 32)
+//     val imme0 = Wire(UInt(33.W))
+    
+//   }
+// }
+
 class IDUInterface extends Bundle {
   val ready = Input(Bool())
   val valid = Output(Bool())
@@ -59,6 +67,8 @@ class IDU extends Module{
   ioIDU.pc        := RegEnable(ioIFU.pc, 0.U, regEn)
   ioIDU.pc4       := RegEnable(ioIFU.pc4, 0.U, regEn)
   ioIDU.imme      := RegEnable(InstDecode_u.io.imme, 0.U, regEn)
+  print(ioIDU.aluCtrl)
+  // myRegEnable()
   ioIDU.aluCtrl   := RegEnable(InstDecode_u.aluCtrl, 0.U, regEn)
   ioIDU.regCtrl   := RegEnable(InstDecode_u.regCtrl, 0.U, regEn)
   ioIDU.memCtrl   := RegEnable(InstDecode_u.memCtrl, 0.U, regEn)

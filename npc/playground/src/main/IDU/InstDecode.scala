@@ -9,7 +9,7 @@ import main.LSU
 import main.IFU
 
 import main.IDU.RegCtrlInterface
-object IDUTools {
+object InstDecodeTools {
   def Immediate(inst: UInt, typeR: Bool, typeI: Bool, typeS: Bool, typeB: Bool, typeU: Bool, typeJ: Bool, typeCSR: Bool): UInt = {
     require(inst.getWidth == 32)
     val imme0 = Wire(UInt(33.W))
@@ -146,7 +146,7 @@ class InstDecode extends Module {
   typeCSR := (op5 === "b11100".U && funct3(1, 0) =/= "b00".U )
 
   // immediate
-  io.imme := IDUTools.Immediate(io.inst, typeR, typeI, typeS, typeB, typeU, typeJ, typeCSR)
+  io.imme := InstDecodeTools.Immediate(io.inst, typeR, typeI, typeS, typeB, typeU, typeJ, typeCSR)
 
   // RegFiles
   regCtrl.wen  := typeR || typeI || typeU || typeJ || typeCSR
