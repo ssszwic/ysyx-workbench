@@ -26,11 +26,11 @@ class IDU extends Module{
   val ioIFU       = IO(Flipped(new IFU.IFUInterface))
   val ioIDU       = IO(new IDUInterface)
   // from LSU
-  val ioLSU = new Bundle {
-    val regCtrl = IO(new IDU.RegCtrlInterface)
+  val ioLSU = IO(new Bundle {
+    val regCtrl = new IDU.RegCtrlInterface
     val rdData  = Input(UInt(64.W))
     val valid   = Input(Bool())
-  }
+  })
 
   val InstDecode_u  = Module(new InstDecode)
   val RegFiles_u    = Module(new RegFiles)
