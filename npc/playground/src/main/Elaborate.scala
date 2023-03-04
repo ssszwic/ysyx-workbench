@@ -10,7 +10,7 @@ import main.MEM
 import main.WBU
 
 object Elaborate extends App {
-  def top = new IDU.IDU
+  def top = new EXU.EXU
   val useMFC = true // use MLIR-based firrtl compiler
   val generator = Seq(chisel3.stage.ChiselGeneratorAnnotation(() => top))
   if (useMFC) {

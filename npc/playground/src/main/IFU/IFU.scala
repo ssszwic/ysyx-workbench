@@ -27,13 +27,20 @@ class IFU extends BlackBox with HasBlackBoxResource {
 // waveDrom
 // {signal: [
 //   {name: 'clk', wave: 'p.......'},
-//   {name: 'state', wave: '3.453...', data: ['IDLE', 'WORK', 'FINISH', 'IDLE']},
+//   {name: 'state', wave: '3.4.56..', data: ['IDLE', 'WORK', 'FINISH', 'IDLE']},
 //   {name: 'ioWBU_valid', wave: '010.....'},
-//   {name: 'ioWBU_ready', wave: '1.01....'},
-//   {name: 'ren/finish', wave: '0.10....'},
+//   {name: 'ioWBU_ready', wave: '1.0..1..'},
+//   {name: 'npc', wave: 'x3x.....'},
+//   {name: 'pc', wave: 'x.3.....'},
+//   {name: 'pc4', wave: 'x.3.....'},
+//   {name: 'ren', wave: '010.....'},
+//   {name: 'ioMem', wave: 'x3x.....'},
+//   {name: 'hit', wave: '0.......'},
+//   {name: 'finish', wave: '0..10...'},
+  
 //   {name: 'inst', wave: 'x..3....'},
-//   {name: 'ioIFU_valid', wave: '0..10...'},
-//   {name: 'ioIFU_ready', wave: '1...0...'},
+//   {name: 'ioIFU_valid', wave: '0...10..'},
+//   {name: 'ioIFU_ready', wave: '1....0..'},
 // ]}
 
 
