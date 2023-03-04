@@ -9,6 +9,7 @@ import main.LSU
 import main.IFU
 import main.Tools
 
+import main.LSU.CSRCtrlInterface
 
 class InstDecode extends Module {
   val io = IO(new Bundle {

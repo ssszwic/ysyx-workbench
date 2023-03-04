@@ -8,16 +8,16 @@ import main.IDU
 import main.LSU
 import main.Tools
 
-import main.IDU.RegCtrlInterface
 class EXUInterface extends Bundle {
   val ready     = Input(Bool())
   val valid     = Output(Bool())
   val result    = Output(UInt(64.W))
   val npc       = Output(UInt(64.W))
   val pc        = Output(UInt(64.W))
+  val rs2Data   = Output(UInt(64.W))
   val regCtrl   = Flipped(new IDU.RegCtrlInterface)
   val memCtrl   = Flipped(new LSU.MemCtrlInterface)
-  val csrCtrl   = Flipped(new EXU.CSRCtrlInterface)
+  val csrCtrl   = Flipped(new LSU.CSRCtrlInterface)
 }
 
 class EXU extends Module{
@@ -45,11 +45,10 @@ class EXU extends Module{
   ioEXU.result  := RegEnable(Mux(jumpSel, ioIDU.pc4, ALU_u.io.result), 0.U, regEn)
   ioEXU.npc     := RegEnable(Mux(jumpSel || ALU_u.io.npcSel, ALU_u.io.result, ioIDU.pc4), 0.U, regEn)
   ioEXU.pc      := RegEnable(ioIDU.pc, 0.U, regEn)
+  ioEXU.rs2Data := RegEnable(ioIDU.rs2Data, 0.U, regEn)
   Tools.myRegEnable(ioEXU.regCtrl, ioIDU.regCtrl, regEn)
   Tools.myRegEnable(ioEXU.memCtrl, ioIDU.memCtrl, regEn)
   Tools.myRegEnable(ioEXU.csrCtrl, ioIDU.csrCtrl, regEn)
-
-  
 
   // FSM
   ioEXU.valid := ioEXU_valid_reg

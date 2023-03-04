@@ -9,6 +9,7 @@ import main.LSU
 import main.IFU
 import main.Tools
 
+import main.LSU.CSRCtrlInterface
 class IDUInterface extends Bundle {
   val ready = Input(Bool())
   val valid = Output(Bool())

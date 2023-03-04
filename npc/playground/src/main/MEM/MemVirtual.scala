@@ -16,9 +16,6 @@ class MemInterface extends Bundle {
   val wMask = Input(UInt(8.W))
 }
 
-
-
-
 class MemVirtual extends BlackBox with HasBlackBoxResource {
   // val io = IO(new Bundle {
   //   // read
