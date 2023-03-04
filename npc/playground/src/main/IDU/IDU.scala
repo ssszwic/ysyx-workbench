@@ -21,7 +21,7 @@ class IDUInterface extends Bundle {
   val aluCtrl = Flipped(new EXU.AluCtrlInterface)
   val regCtrl = Flipped(new IDU.RegCtrlInterface)
   val memCtrl = Flipped(new LSU.MemCtrlInterface)
-  val csrCtrl = Flipped(new EXU.CSRCtrlInterface)
+  val csrCtrl = Flipped(new LSU.CSRCtrlInterface)
 }
 
 class IDU extends Module{
