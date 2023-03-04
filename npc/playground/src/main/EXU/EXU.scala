@@ -31,6 +31,12 @@ class EXU extends Module{
   ALU_u.io.pc   := ioIDU.pc
   ALU_u.aluCtrl <> ioIDU.aluCtrl
 
+  // FSM
+  val sIDLE :: sFINISH :: Nil = Enum(2)
+  val state = RegInit(sIDLE)
+  val ioEXU_valid_reg = RegInit(false.B)
+  val ioIDU_ready_reg = RegInit(true.B)
+
   val jumpSel = Wire(Bool())
   val regEn   = Wire(Bool())
   jumpSel     := ioIDU.aluCtrl.jalrSel || ioIDU.aluCtrl.typeJSel
@@ -43,11 +49,7 @@ class EXU extends Module{
   Tools.myRegEnable(ioEXU.memCtrl, ioIDU.memCtrl, regEn)
   Tools.myRegEnable(ioEXU.csrCtrl, ioIDU.csrCtrl, regEn)
 
-  // FSM
-  val sIDLE :: sFINISH :: Nil = Enum(2)
-  val state = RegInit(sIDLE)
-  val ioEXU_valid_reg = RegInit(false.B)
-  val ioIDU_ready_reg = RegInit(true.B)
+  
 
   // FSM
   ioEXU.valid := ioEXU_valid_reg
