@@ -22,7 +22,7 @@ class InstDecode extends Module {
   })
   // ALU control bundle
   val regCtrl = IO(Flipped(new RegCtrlInterface))
-  val csrCtrl = IO(Flipped(new EXU.CSRCtrlInterface))
+  val csrCtrl = IO(Flipped(new IDU.CSRCtrlInterface))
   val aluCtrl = IO(Flipped(new EXU.AluCtrlInterface))
   val memCtrl = IO(Flipped(new LSU.MemCtrlInterface))
 

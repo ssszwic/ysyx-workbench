@@ -25,7 +25,7 @@ class CSR extends Module {
     // verilator debug for difftest
     // val interrupt     = Output(Bool())
   })
-  val io_csr = IO(Flipped(new CSRControl))
+  val io_csr = IO(new CSRCtrlInterface)
 
   val MSTATUS = 0x300
   val MTVEC   = 0x305
