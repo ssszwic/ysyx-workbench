@@ -16,9 +16,9 @@ class IFUInterface extends Bundle {
 
 class IFU extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle {
-    val ioWBU = IO(Flipped(new WBU.WBUInterface))
-    val ioIFU = IO(new IFUInterface)
-    val ioMem = IO(Flipped(new MEM.MemInterface))
+    val ioWBU = Flipped(new WBU.WBUInterface)
+    val ioIFU = new IFUInterface
+    val ioMem = Flipped(new MEM.MemInterface)
   })
   
   addResource("/IFU.v")
