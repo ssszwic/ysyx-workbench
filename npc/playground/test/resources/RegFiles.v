@@ -10,7 +10,6 @@ module RegFiles(
   // control
   input             regCtrl_wen,
   input     [4:0]   regCtrl_rdAddr,
-  input             valid
 );
 
 reg   [63:0]  regFiles [0:31];
@@ -31,7 +30,7 @@ generate
       if(reset) begin
         regFiles[i] <= 64'b0;
       end
-      else if(valid & regCtrl_wen & (regCtrl_rdAddr == i)) begin
+      else if(regCtrl_wen & (regCtrl_rdAddr == i)) begin
         regFiles[i] <= rdData;
       end
       else begin

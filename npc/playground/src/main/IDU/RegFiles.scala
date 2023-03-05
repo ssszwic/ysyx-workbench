@@ -20,7 +20,6 @@ class RegFiles extends BlackBox with HasBlackBoxResource {
     val rs2Data = Output(UInt(64.W))
     // control
     val regCtrl = new RegCtrlInterface
-    val valid   = Input(Bool())
   })
 
   addResource("/RegFiles.v")

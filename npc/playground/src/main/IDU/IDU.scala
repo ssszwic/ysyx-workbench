@@ -24,15 +24,15 @@ class IDUInterface extends Bundle {
   val csrCtrl = Flipped(new LSU.CSRCtrlInterface)
 }
 
+class RegInterface extends Bundle {
+  val regCtrl = new IDU.RegCtrlInterface
+  val rdData  = Input(UInt(64.W))
+}
+
 class IDU extends Module{
-  val ioIFU       = IO(Flipped(new IFU.IFUInterface))
-  val ioIDU       = IO(new IDUInterface)
-  // from LSU
-  val ioLSU = IO(new Bundle {
-    val regCtrl = new IDU.RegCtrlInterface
-    val rdData  = Input(UInt(64.W))
-    val valid   = Input(Bool())
-  })
+  val ioIFU   = IO(Flipped(new IFU.IFUInterface))
+  val ioIDU   = IO(new IDUInterface)
+  val ioReg   = IO(new RegInterface) // from WBU
 
   val InstDecode_u  = Module(new InstDecode)
   val RegFiles_u    = Module(new RegFiles)
@@ -47,9 +47,8 @@ class IDU extends Module{
   InstDecode_u.io.inst := ioIFU.inst
 
   // regfiles
-  RegFiles_u.io.regCtrl  <> ioLSU.regCtrl
-  RegFiles_u.io.rdData   := ioLSU.rdData
-  RegFiles_u.io.valid    := ioLSU.valid
+  RegFiles_u.io.regCtrl  <> ioReg.regCtrl
+  RegFiles_u.io.rdData   := ioReg.rdData
   RegFiles_u.io.rs1Addr  := InstDecode_u.io.rs1Addr
   RegFiles_u.io.rs2Addr  := InstDecode_u.io.rs2Addr
 
