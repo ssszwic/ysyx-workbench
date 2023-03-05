@@ -10,12 +10,12 @@ class WBUInterface extends Bundle {
   val ready   = Input(Bool())
   val valid   = Output(Bool())
   val npc     = Output(UInt(64.W))
-  val ioReg   = Flipped(new IDU.RegInterface)
 }
 
 class WBU extends Module {
   val ioWBU = IO(new WBUInterface)
   val ioLSU = IO(Flipped(new LSU.LSUInterface))
+  val ioReg = IO(Flipped(new IDU.RegInterface))
   
   // FSM
   val sIDLE :: sFINISH :: Nil = Enum(2)
@@ -26,14 +26,14 @@ class WBU extends Module {
   val regEn = Wire(Bool())
   regEn := (state === sIDLE) && ioLSU.valid
   ioWBU.npc := RegEnable(ioLSU.npc, "h80000000".U, regEn) // 0x80000000 is wrong that as int
-  ioWBU.ioReg.regCtrl.wen   := Mux(regEn, ioLSU.regCtrl.wen, false.B)
-  ioWBU.ioReg.regCtrl.rdAddr := ioLSU.regCtrl.rdAddr
+  ioReg.regCtrl.wen   := Mux(regEn, ioLSU.regCtrl.wen, false.B)
+  ioReg.regCtrl.rdAddr := ioLSU.regCtrl.rdAddr
   when(ioLSU.csrSel) {
-    ioWBU.ioReg.rdData := ioLSU.csrData
+    ioReg.rdData := ioLSU.csrData
   }.elsewhen(ioLSU.memSel) {
-    ioWBU.ioReg.rdData := ioLSU.rData
+    ioReg.rdData := ioLSU.rData
   }.otherwise {
-    ioWBU.ioReg.rdData := ioLSU.result
+    ioReg.rdData := ioLSU.result
   }
 
   ioLSU.ready := ioLSU_ready_reg
