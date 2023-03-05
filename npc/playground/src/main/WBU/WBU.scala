@@ -25,7 +25,7 @@ class WBU extends Module {
 
   val regEn = Wire(Bool())
   regEn := (state === sIDLE) && ioLSU.valid
-  ioWBU.npc := RegEnable(ioLSU.npc, 0x80000000.U(64.W), regEn)
+  ioWBU.npc := RegEnable(ioLSU.npc, "0x80000000".U, regEn)
   ioWBU.ioReg.regCtrl.wen   := Mux(regEn, ioLSU.regCtrl.wen, false.B)
   ioWBU.ioReg.regCtrl.rdAddr := ioLSU.regCtrl.rdAddr
   when(ioLSU.csrSel) {
