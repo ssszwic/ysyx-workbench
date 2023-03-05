@@ -33,7 +33,7 @@ class LSU extends Module {
   val CLINT_u = Module(new CLINT)
 
   // FSM
-  val sIDLE :: sWORK :: sFINISH :: Nil = Enum(2)
+  val sIDLE :: sWORK :: sFINISH :: Nil = Enum(3)
   val state = RegInit(sIDLE)
   val ioLSU_valid_reg = RegInit(false.B)
   val ioEXU_ready_reg = RegInit(true.B)
