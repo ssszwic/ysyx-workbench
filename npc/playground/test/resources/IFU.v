@@ -13,12 +13,12 @@ module IFU(
   output  reg   [63:0]  ioIFU_pc,
   output  reg   [63:0]  ioIFU_pc4,
   // ioMem
-  output  reg           ioMem_ren,
-  output  reg   [31:0]  ioMem_addr,
+  output                ioMem_ren,
+  output        [31:0]  ioMem_addr,
   input         [63:0]  ioMem_rData,
-  output  reg           ioMem_wen,
-  output  reg   [7:0]   ioMem_wMask,
-  output  reg   [63:0]  ioMem_wData,
+  output                ioMem_wen,
+  output        [7:0]   ioMem_wMask,
+  output        [63:0]  ioMem_wData,
   input                 ioMem_hit,
   input                 ioMem_rvalid
 );
@@ -131,24 +131,14 @@ always@(posedge clock) begin
 end
 
 // read mem
-assign ren = (state == IDLE) && (ioWBU_valid || start);
-assign ioMem_addr = {npc[31:3], 3'b0};
+assign ioMem_ren    = (state == IDLE) && (ioWBU_valid || start);
+assign ioMem_addr   = {ioWBU_npc[31:3], 3'b0};
+// don't write
+assign ioMem_wen    = 1'b0;
+assign ioMem_wMask  = 8'b0;
+assign ioMem_wData  = 64'b0;
 
-// don't write mem
-always@(posedge clock) begin
-  if(reset) begin
-    ioMem_wen   <= 1'b0;
-    ioMem_wMask <= 8'b0;
-    ioMem_wData <= 64'b0;
-  end
-  else begin
-    ioMem_wen   <= 1'b0;
-    ioMem_wMask <= 8'b0;
-    ioMem_wData <= 64'b0;
-  end
-end
-
-assign ioIFU_inst = (npc[2:0] == 3'b100) ? ioMem_rData[63:32] : ioMem_rData[31:0];
+assign ioIFU_inst = (ioIFU_pc[2:0] == 3'b100) ? ioMem_rData[63:32] : ioMem_rData[31:0];
 assign finish = ioMem_rvalid;
 
 endmodule
