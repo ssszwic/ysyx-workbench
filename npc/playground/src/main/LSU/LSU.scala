@@ -113,9 +113,35 @@ class LSU extends Module {
       }
     }
   }
-
-
-
 }
 
+// waveDrom
+// {signal: [
+//   {name: 'clk', wave: 'p.......'},
+//   {name: 'state', wave: '3.4.56..', data: ['IDLE', 'WORK', 'FINISH', 'IDLE']},
+//   {name: 'ioEXU_valid', wave: '010.....'},
+//   {name: 'ioEXU_ready', wave: '1.0..1..'},
+//   {name: 'finalpc', wave: 'x.3.....'},
+//   {name: 'result', wave: 'x.3.....'},
+//   {name: 'csrData', wave: 'x.3.....'},
+//   {name: 'memSel', wave: 'x.3.....'},
+//   {name: 'csrSel', wave: 'x.3.....'},
 
+//   {name: 'ren', wave: '010.....'},
+//   {name: 'wen', wave: '010.....'},
+//   {name: 'ioMem', wave: 'x3x.....'},
+//   {name: 'clintCtrl', wave: 'x3x.....'},
+//   {name: 'clintSel', wave: 'x3x.....'},
+//   {name: 'mask', wave: 'x3x.....'},
+//   {name: 'hit_and_clint', wave: 'x3x.....'},
+  
+//   {name: 'mask', wave: 'x.3.....'},
+//   {name: 'clintSel', wave: 'x.3.....'},
+//   {name: 'length', wave: 'x.3.....'},
+//   {name: 'unsign', wave: 'x.3.....'},
+  
+//   {name: 'finish', wave: '0..10...'},
+//   {name: 'rData', wave: 'x..3....'},
+//   {name: 'ioLUS_valid', wave: '0...10..'},
+//   {name: 'ioLUS_ready', wave: '1....0..'},
+// ]}
