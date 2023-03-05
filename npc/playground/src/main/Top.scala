@@ -13,6 +13,8 @@ class Top extends Module {
   val MemVirtual_data = Module(new MEM.MemVirtual)
 
   IFU_u.io.ioWBU  <> WBU_u.ioWBU
+  IFU_u.io.ioIFU <> IDU_u.ioIFU
+  IFU_u.io.ioMem <> MemVirtual_inst.io
   IDU_u.ioIFU     <> IFU_u.io.ioIFU
   IDU_u.ioReg     <> WBU_u.ioReg
   EXU_u.ioIDU     <> IDU_u.ioIDU
