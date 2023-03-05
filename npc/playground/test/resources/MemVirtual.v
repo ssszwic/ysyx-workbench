@@ -1,4 +1,7 @@
 module MemVirtual(
+  // system
+  input                 clock,
+  input                 reset,
   // read
   input                 ren,
   input       [32:0]    addr,

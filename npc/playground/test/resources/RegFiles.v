@@ -6,10 +6,10 @@ module RegFiles(
   // data
   input     [63:0]  rdData,
   output    [63:0]  rs1Data,
-  output    [63:0]  rs2Data
+  output    [63:0]  rs2Data,
   // control
   input             regCtrl_wen,
-  input     [4:0]   regCtrl_rdAddr,
+  input     [4:0]   regCtrl_rdAddr
 );
 
 reg   [63:0]  regFiles [0:31];
