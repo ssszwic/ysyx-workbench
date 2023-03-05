@@ -27,7 +27,7 @@ class WBU extends Module {
   regEn := (state === sIDLE) && ioLSU.valid
   ioWBU.npc := RegEnable(ioLSU.npc, 0x80000000.U, regEn)
   ioWBU.ioReg.regCtrl.wen   := Mux(regEn, ioLSU.regCtrl.wen, false.B)
-  ioWBU.ioReg.regCtrl.wAddr := regCtrl.wAddr
+  ioWBU.ioReg.regCtrl.rdAddr := ioLSU.regCtrl.rdAddr
   when(ioLSU.csrSel) {
     ioWBU.ioReg.rdData := ioLSU.csrData
   }.elsewhen(ioLSU.memSel) {
