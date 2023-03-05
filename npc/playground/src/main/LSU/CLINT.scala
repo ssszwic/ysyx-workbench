@@ -1,4 +1,4 @@
-package main
+package main.LSU
 
 import chisel3._
 import chisel3.util._
@@ -18,13 +18,24 @@ object CLINTTools {
   }
 }
 
+class ClintCtrlInterface extends Bundle {
+  // read
+  val ren     = Input(Bool())
+  val addr    = Input(UInt(32.W))
+  val rData   = Output(UInt(64.W))
+  // write
+  val wen     = Input(Bool())
+  val wData   = Input(UInt(64.W))
+  val wMask   = Input(UInt(8.W))
+}
+
 class CLINT extends Module {
   val io = IO(new Bundle {
     // timer interrupt
     val timeCmp = Output(Bool())
-    val clintWR = Output(Bool())
+    // val clintWR = Output(Bool())
   })
-  val io_mem = IO(Flipped(new MemInterface))
+  val clintCtrl = IO(new ClintCtrlInterface)
 
   val MTIME     = 0x200BFF8
   val MTIMECMP  = 0x2004000
@@ -36,30 +47,30 @@ class CLINT extends Module {
   val tmpNew    = Wire(UInt(64.W))
 
   io.timeCmp := Mux(mtime >= mtimecmp, true.B, false.B)
-  io.clintWR := io_mem.ren || io_mem.wen
+//   io.clintWR := io_mem.ren || io_mem.wen
 
   // read reg
-  when(io_mem.addr === MTIME.U) {
+  when(clintCtrl.addr === MTIME.U) {
     tmp := mtime
-  }.elsewhen(io_mem.addr === MTIMECMP.U) {
+  }.elsewhen(clintCtrl.addr === MTIMECMP.U) {
     tmp := mtimecmp
   }.otherwise {
     tmp := 0.U
   }
   
-  io_mem.rData := tmp
+  clintCtrl.rData := RegEnable(tmp, 0.U, clintCtrl.ren)
   // new data after write with mask
-  tmpNew := CLINTTools.WriteMask(tmp, io_mem.wMask, io_mem.wData)
+  tmpNew := CLINTTools.WriteMask(tmp, clintCtrl.wMask, clintCtrl.wData)
 
   // write mtimecmp
-  when(io_mem.wen && (io_mem.addr === MTIMECMP.U)) {
+  when(clintCtrl.wen && (clintCtrl.addr === MTIMECMP.U)) {
     mtimecmp := tmpNew
   }.otherwise {
     mtimecmp := mtimecmp
   }
 
   // write mtime
-  when(io_mem.wen && (io_mem.addr === MTIME.U)) {
+  when(clintCtrl.wen && (clintCtrl.addr === MTIME.U)) {
     mtime := tmpNew
   }.otherwise {
     mtime := mtime + 1.U

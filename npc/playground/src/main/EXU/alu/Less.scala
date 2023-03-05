@@ -1,4 +1,4 @@
-package main.alu
+package main.EXU.alu
 
 import chisel3._
 import chisel3.util._

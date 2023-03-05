@@ -1,44 +1,144 @@
 module IFU(
-  input             clock,
-  input             reset,
-  input     [63:0]  nextpc,
-  input             pcEn,
-  output    [31:0]  inst,
-  output    [63:0]  pc
+  // system
+  input                 clock,
+  input                 reset,
+  // ioWBU
+  output                ioWBU_ready,
+  input                 ioWBU_valid,
+  input         [63:0]  ioWBU_npc,
+  // ioIFU
+  input                 ioIFU_ready,
+  output  reg           ioIFU_valid,
+  output        [31:0]  ioIFU_inst,
+  output  reg   [63:0]  ioIFU_pc,
+  output  reg   [63:0]  ioIFU_pc4,
+  // ioMem
+  output                ioMem_ren,
+  output        [31:0]  ioMem_addr,
+  input         [63:0]  ioMem_rData,
+  output                ioMem_wen,
+  output        [7:0]   ioMem_wMask,
+  output        [63:0]  ioMem_wData,
+  input                 ioMem_hit,
+  input                 ioMem_rvalid
 );
 
-reg         [63:0]  pcReg;
-wire        [63:0]  addrAlig;
-reg         [63:0]  rData;
+localparam  IDLE    = 3'b001,
+            WORK    = 3'b010,
+            FINISH  = 3'b100;
+        
+reg     [2:0]   state;
+reg     [2:0]   next_state;
+reg             next_ioIFU_valid;
+reg             next_ioWBU_ready;
 
-import "DPI-C" function void inst_pmem_read(input longint raddr, output longint rdata);
+reg     [3:0]   cnt;
+wire            start;
+wire            finish;
+
 import "DPI-C" function void set_pc_ptr(input logic [63:0] a []);
-initial set_pc_ptr(pcReg);
+initial set_pc_ptr(ioIFU_pc);
+
+// start signal: only generate once after reset
+always@(posedge clock) begin
+  if(reset) begin
+    cnt <= 4'b0;
+  end
+  else if(cnt == 4'd15) begin
+    cnt <= 4'd15;
+  end
+end
+
+assign start = (cnt == 4'd10);
+
+// state
+always@(posedge clock) begin
+  if(reset) begin
+    state <= IDLE;
+    ioWBU_ready <= 1'b1;
+    ioIFU_valid <= 1'b0;
+  end
+  else begin
+    state <= next_state;
+    ioWBU_ready <= next_ioWBU_ready;
+    ioIFU_valid <= next_ioIFU_valid;
+  end
+end
+
+always@(*) begin
+  case(state)
+    IDLE: begin
+      if((ioWBU_valid || start) && (!ioMem_hit)) begin
+        next_state = WORK;
+        next_ioWBU_ready = 1'b0;
+        next_ioIFU_valid = 1'b0;
+      end
+      else if((ioWBU_valid || start) && ioMem_hit) begin
+        next_state = FINISH;
+        next_ioWBU_ready = 1'b0;
+        next_ioIFU_valid = 1'b1;
+      end
+      else begin
+        next_state = IDLE;
+        next_ioWBU_ready = 1'b1;
+        next_ioIFU_valid = 1'b0;
+      end
+    end
+    WORK: begin
+      next_ioWBU_ready = 1'b0;
+      if(finish) begin
+        next_state = FINISH;
+        next_ioIFU_valid = 1'b1;
+      end
+      else begin
+        next_state = WORK;
+        next_ioIFU_valid = 1'b0;
+      end
+    end
+    FINISH: begin
+      if(ioIFU_ready) begin
+        next_state = IDLE;
+        next_ioWBU_ready = 1'b1;
+        next_ioIFU_valid = 1'b0;
+      end
+      else begin
+        next_state = FINISH;
+        next_ioWBU_ready = 1'b0;
+        next_ioIFU_valid = 1'b1;
+      end
+    end
+    default: begin
+      next_state = IDLE;
+      next_ioWBU_ready = 1'b1;
+      next_ioIFU_valid = 1'b0;
+    end
+  endcase
+end
 
 always@(posedge clock) begin
   if(reset) begin
-    pcReg <= 64'h80000000;
+    ioIFU_pc <= 64'h80000000;
+    ioIFU_pc4 <= 64'b0;
   end
-  else if(pcEn) begin
-    pcReg <= nextpc;
+  else if((state == IDLE) && (ioWBU_valid || start)) begin
+    ioIFU_pc <= npc;
+    ioIFU_pc4 <= npc + 64'd4;
   end
   else begin
-    pcReg <= pcReg;
+    ioIFU_pc <= ioIFU_pc;
+    ioIFU_pc4 <= ioIFU_pc4;
   end
 end
 
-assign addrAlig = {pcReg[63:3], 3'b0};
+// read mem
+assign ioMem_ren    = (state == IDLE) && (ioWBU_valid || start);
+assign ioMem_addr   = {ioWBU_npc[31:3], 3'b0};
+// don't write
+assign ioMem_wen    = 1'b0;
+assign ioMem_wMask  = 8'b0;
+assign ioMem_wData  = 64'b0;
 
-always@(pcEn) begin
-  if(pcEn) begin
-    inst_pmem_read(addrAlig, rData);
-  end
-  else begin
-    rData = 64'd0;
-  end
-end
-
-assign inst = (pcReg[2:0] == 3'b100) ? rData[63:32] : rData[31:0];
-assign pc = pcReg;
+assign ioIFU_inst = (ioIFU_pc[2:0] == 3'b100) ? ioMem_rData[63:32] : ioMem_rData[31:0];
+assign finish = ioMem_rvalid;
 
 endmodule
