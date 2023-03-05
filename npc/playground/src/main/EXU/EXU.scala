@@ -37,7 +37,7 @@ class EXU extends Module{
   // FSM
   val sIDLE :: sFINISH :: Nil = Enum(2)
   val state = RegInit(sIDLE)
-  val ioEXU_valid_reg = RegInit(false. B)
+  val ioEXU_valid_reg = RegInit(false.B)
   val ioIDU_ready_reg = RegInit(true.B)
 
   val jumpSel = Wire(Bool())
