@@ -10,7 +10,7 @@ class WBUInterface extends Bundle {
   val ready   = Input(Bool())
   val valid   = Output(Bool())
   val npc     = Output(UInt(64.W))
-  val ioReg   = Flippen(new IDU.RegInterface)
+  val ioReg   = Flipped(new IDU.RegInterface)
 }
 
 class WBU extends Module {
