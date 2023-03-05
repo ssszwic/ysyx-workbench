@@ -19,7 +19,7 @@ class LSUInterface extends Bundle {
   val csrData   = Output(UInt(64.W))
   val memSel    = Output(Bool())
   val csrSel    = Output(Bool())
-  val npc       = Input(UInt(64.W))
+  val npc       = Output(UInt(64.W))
   val regCtrl   = Flipped(new IDU.RegCtrlInterface)
 }
 
