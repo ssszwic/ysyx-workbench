@@ -26,7 +26,7 @@ class MemLS extends Module {
     val valid         = Output(Bool())
   })
   val memCtrl       = IO(new MemLSCtrlInterface)
-  val clintCtrl     = IO(new ClintCtrlInterface)
+  val clintCtrl     = IO(Flipped(new ClintCtrlInterface))
   val ioMem         = IO(Flipped(new MEM.MemInterface))
 
   val mask        = Wire(UInt(8.W))
