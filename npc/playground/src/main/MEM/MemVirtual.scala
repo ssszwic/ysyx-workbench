@@ -4,8 +4,6 @@ import chisel3._
 import chisel3.util._
 
 class MemInterface extends Bundle {
-  val clock   = Input(Clock())
-  val reset   = Input(Bool())
   // read
   val ren     = Input(Bool())
   val addr    = Input(UInt(32.W))
