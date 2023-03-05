@@ -4,6 +4,9 @@ import chisel3._
 import chisel3.util._
 
 class Top extends Module {
+  val io = IO(new Bundle {
+    val wbu_valid = Output(Bool())
+  })
   val IFU_u = Module(new IFU.IFU)
   val IDU_u = Module(new IDU.IDU)
   val EXU_u = Module(new EXU.EXU)
@@ -21,4 +24,7 @@ class Top extends Module {
 
   MemVirtual_inst.io.ioMem <> IFU_u.ioMem
   MemVirtual_data.io.ioMem <> LSU_u.ioMem
+
+  // debug
+  io.wbu_valid := WBU_u.ioWBU.valid
 }

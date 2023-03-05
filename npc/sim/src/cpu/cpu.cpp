@@ -40,7 +40,11 @@ static VerilatedContext* contextp = NULL;
   #define SINGLE_BUF_WIDTH (FUNC_LIST_NUM + 50)
   // ring buf
   static char func_ring_buf[FUNC_RING_BUF_WIDTH][SINGLE_BUF_WIDTH] = {};
-  // ring buf ref
+  // ring buf ref#endif
+
+#ifdef CONFIG_MEMORY_TRACE
+  void log_mem_ring(bool print_screen);
+#endif
   static int func_ring_ref = FUNC_RING_BUF_WIDTH - 1;
   static int func_pc(vaddr_t addr);
   // num of function
@@ -248,7 +252,6 @@ void cpu_init() {
   #endif
 
   // initial signal
-  top->io_cpuEn = 0;
   top->reset = 1;
   top->clock = 0;
 
@@ -262,7 +265,6 @@ void cpu_init() {
 
   // initial npc_cpu
   npc_cpu.pc = *rtl_pc;
-  npc_cpu.next_pc = top->io_nextPC;
   memcpy(npc_cpu.gpr, rtl_gpr, sizeof(npc_cpu.gpr));
 
   if(!top->clock) {
@@ -279,13 +281,13 @@ void cpu_init() {
 static void isa_exec_once() {
   top->clock = !top->clock;
   // posedge clk
-  if(!cpu_state_init) {
-    // update pc register
-    top->eval();
-    // enable cpu (avoid pc reg change)
-    top->io_cpuEn = 1;
-    cpu_state_init = true;
-  }
+  // if(!cpu_state_init) {
+  //   // update pc register
+  //   top->eval();
+  //   // enable cpu (avoid pc reg change)
+  //   top->io_cpuEn = 1;
+  //   cpu_state_init = true;
+  // }
   // update inst
   eval_and_wave();
   contextp->timeInc(1);
@@ -294,6 +296,9 @@ static void isa_exec_once() {
   eval_and_wave();
   contextp->timeInc(1);
 
+  // when wbu_valid is true, one inst excute finished
+
+  top->
   // update reg and pc, gpr(regfiles) will not update until next cycle, so update by io_regWen
   npc_cpu.pc = *rtl_pc;
   npc_cpu.next_pc = top->io_nextPC;
