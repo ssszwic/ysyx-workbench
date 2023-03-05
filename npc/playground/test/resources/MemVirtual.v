@@ -4,7 +4,7 @@ module MemVirtual(
   input                 reset,
   // read
   input                 ioMem_ren,
-  input       [32:0]    ioMem_addr,
+  input       [31:0]    ioMem_addr,
   output reg  [63:0]    ioMem_rData,
   // control
   output                ioMem_rvalid,
@@ -15,8 +15,8 @@ module MemVirtual(
   input       [7:0]     ioMem_wMask
 );
 
-import "DPI-C" function void pmem_read(input longint raddr, output longint rdata);
-import "DPI-C" function void pmem_write(input longint waddr, input longint wdata, input byte wmask);
+import "DPI-C" function void pmem_read(input int raddr, output longint rdata);
+import "DPI-C" function void pmem_write(input int waddr, input longint wdata, input byte wmask);
 
 assign ioMem_hit = 1'b1;
 
@@ -31,7 +31,7 @@ always@(posedge clock) begin
     ioMem_rvalid  <= 1'b1;
   end
   else begin
-    ioMem_rData   <= rData;
+    ioMem_rData   <= ioMem_rData;
     ioMem_rvalid  <= 1'b0;
   end
 end

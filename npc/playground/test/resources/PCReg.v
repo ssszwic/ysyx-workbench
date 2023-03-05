@@ -9,7 +9,7 @@ module PCReg (
 import "DPI-C" function void set_pc_ptr(input logic [63:0] a []);
 initial set_pc_ptr(value);
 
-always@(clock) begin
+always@(posedge clock) begin
     if(reset) begin
         value <= 64'h80000000;
     end
