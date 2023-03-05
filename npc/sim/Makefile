@@ -75,6 +75,8 @@ IMG ?=
 ######################################################################
 default: run
 
+build: $(BUILD_DIR)/V$(MODULE)
+
 run: $(BUILD_DIR)/V$(MODULE)
 	@echo
 	@echo "-- RUN ---------------------"
