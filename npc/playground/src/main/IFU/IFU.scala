@@ -14,14 +14,100 @@ class IFUInterface extends Bundle {
   val pc4   = Output(UInt(64.W))
 }
 
-class IFU extends BlackBox with HasBlackBoxResource {
+class IFU extends Module {
+  val ioWBU = IO(Flipped(new WBU.WBUInterface))
+  val ioIFU = IO(new IFUInterface)
+  val ioMem = IO(Flipped(new MEM.MemInterface))
+
+  val PCReg_u = Module(new PCReg)
+
+  // start signal: only generate once after reset
+  val cntReg = RegInit(0.U(4.W))
+  val start  = Wire(Bool())
+  cntReg  := Mux(cntReg =/= (15.U), cntReg + 1.U, cntReg)
+  start   := (cntReg === 10.U)
+
+  // FSM
+  val sIDLE :: sWORK :: sFINISH :: Nil = Enum(3)
+  val state           = RegInit(sIDLE)
+  val ioWBU_ready_reg = RegInit(true.B)
+  val ioIFU_valid_reg = RegInit(false.B)
+
+  val finish = Wire(Bool())
+  val regEn  = Wire(Bool())
+
+  PCReg_u.io.wen    := regEn
+  PCReg_u.io.wData  := ioWBU.npc
+
+  finish      := ioMem.rvalid
+  regEn       := (state === sIDLE) && (ioWBU.valid || start)
+  ioIFU.pc    := PCReg_u.io.value
+  ioIFU.pc4   := RegEnable((ioWBU.npc + 4.U), 0.U, regEn) 
+  ioIFU.inst  := Mux((ioIFU.pc(2, 0) === "b100".U), ioMem.rData(63, 32), ioMem.rData(31, 0))
+
+  ioMem.ren   := regEn
+  ioMem.addr  := Cat(ioIFU.pc(31, 3), "b000".U)
+  // don't write
+  ioMem.wen   := false.B
+  ioMem.wMask := 0.U
+  ioMem.wData := 0.U
+
+  // FSM
+  ioWBU.ready := ioWBU_ready_reg
+  ioIFU.valid := ioIFU_valid_reg
+
+  switch(state) {
+    is(sIDLE) {
+      when(ioWBU.valid || start) {
+        when(ioMem.hit) {
+          state := sFINISH
+          ioWBU_ready_reg := false.B
+          ioIFU_valid_reg := true.B
+        }.otherwise {
+          state := sWORK
+          ioWBU_ready_reg := false.B
+          ioIFU_valid_reg := false.B
+        }
+      }.otherwise {
+        state := sIDLE
+        ioWBU_ready_reg := true.B
+        ioIFU_valid_reg := false.B
+      }
+    }
+    is(sWORK) {
+      when(finish) {
+        state := sFINISH
+        ioWBU_ready_reg := false.B
+        ioIFU_valid_reg := true.B
+      }.otherwise {
+        state := sWORK
+        ioWBU_ready_reg := false.B
+        ioIFU_valid_reg := false.B
+      }
+    }
+    is(sFINISH) {
+      when(ioIFU.ready) {
+        state := sIDLE
+        ioWBU_ready_reg := true.B
+        ioIFU_valid_reg := false.B
+      }.otherwise {
+        state := sFINISH
+        ioWBU_ready_reg := false.B
+        ioIFU_valid_reg := true.B
+      }
+    }
+  }
+}
+
+// dugbu pc value by DPI-C
+class PCReg extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle {
-    val ioWBU = Flipped(new WBU.WBUInterface)
-    val ioIFU = new IFUInterface
-    val ioMem = Flipped(new MEM.MemInterface)
+    val wen   = Input(Bool())
+    val wData = Input(UInt(64.W))
+    val value = Output(UInt(64.W))
   })
-  
-  addResource("/IFU.v")
+
+  addResource("/PCReg.v")
 }
 
 // waveDrom
