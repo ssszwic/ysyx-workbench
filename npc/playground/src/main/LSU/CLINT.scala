@@ -35,7 +35,7 @@ class CLINT extends Module {
     val timeCmp = Output(Bool())
     // val clintWR = Output(Bool())
   })
-  val clintCtrl = IO(Flipped(new ClintCtrlInterface))
+  val clintCtrl = IO(new ClintCtrlInterface)
 
   val MTIME     = 0x200BFF8
   val MTIMECMP  = 0x2004000
