@@ -122,7 +122,8 @@ always@(posedge clock) begin
   end
   else if((state == IDLE) && (ioWBU_valid || start)) begin
     ioIFU_pc <= npc;
-    ioIFU_pc4 <= npc + 64'd4;
+    ioIFU_pc4 <= npc + 64'd  val io_virtualMem = IO(new MEM.MemInterface)
+  val io_clint      = IO(new MEM.MemInterface)4;
   end
   else begin
     ioIFU_pc <= ioIFU_pc;

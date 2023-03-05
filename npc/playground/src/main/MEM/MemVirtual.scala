@@ -11,9 +11,9 @@ class MemInterface extends Bundle {
   val rvalid  = Output(Bool())
   val hit     = Output(Bool())
   // write
-  val wen   = Input(Bool())
-  val wData = Input(UInt(64.W))
-  val wMask = Input(UInt(8.W))
+  val wen     = Input(Bool())
+  val wData   = Input(UInt(64.W))
+  val wMask   = Input(UInt(8.W))
 }
 
 class MemVirtual extends BlackBox with HasBlackBoxResource {

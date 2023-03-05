@@ -11,6 +11,7 @@ import main.Tools
 
 import main.LSU.CSRCtrlInterface
 
+import main.LSU.MemLSCtrlInterface
 class InstDecode extends Module {
   val io = IO(new Bundle {
     val inst      = Input(UInt(32.W))
@@ -22,9 +23,9 @@ class InstDecode extends Module {
   })
   // ALU control bundle
   val regCtrl = IO(Flipped(new RegCtrlInterface))
-  val csrCtrl = IO(Flipped(new IDU.CSRCtrlInterface))
+  val csrCtrl = IO(Flipped(new LSU.CSRCtrlInterface))
   val aluCtrl = IO(Flipped(new EXU.AluCtrlInterface))
-  val memCtrl = IO(Flipped(new LSU.MemCtrlInterface))
+  val memCtrl = IO(Flipped(new LSU.MemLSCtrlInterface))
 
   // determine the type of instruction RISBUJ
   val typeR   = Wire(Bool())

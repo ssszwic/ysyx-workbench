@@ -9,7 +9,7 @@ import main.LSU
 import main.IFU
 import main.Tools
 
-import main.LSU.CSRCtrlInterface
+
 class IDUInterface extends Bundle {
   val ready = Input(Bool())
   val valid = Output(Bool())
@@ -20,7 +20,7 @@ class IDUInterface extends Bundle {
   val pc4     = Output(UInt(64.W))
   val aluCtrl = Flipped(new EXU.AluCtrlInterface)
   val regCtrl = Flipped(new IDU.RegCtrlInterface)
-  val memCtrl = Flipped(new LSU.MemCtrlInterface)
+  val memCtrl = Flipped(new LSU.MemLSCtrlInterface)
   val csrCtrl = Flipped(new LSU.CSRCtrlInterface)
 }
 

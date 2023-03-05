@@ -25,7 +25,7 @@ class CSR extends Module {
     // verilator debug for difftest
     // val interrupt     = Output(Bool())
   })
-  val io_csr = IO(new CSRCtrlInterface)
+  val csrCtrl = IO(new CSRCtrlInterface)
 
   val MSTATUS = 0x300
   val MTVEC   = 0x305
@@ -46,19 +46,19 @@ class CSR extends Module {
   val src     = Wire(UInt(64.W))
   val dest    = Wire(UInt(64.W))
 
-  src := Mux(io_csr.op(2) === 1.U, io.imme, io.rs1)
+  src := Mux(csrCtrl.op(2) === 1.U, io.imme, io.rs1)
 
-  when(io_csr.addr === MSTATUS.U) {
+  when(csrCtrl.addr === MSTATUS.U) {
     csr := mstatus
-  }.elsewhen(io_csr.addr === MTVEC.U) {
+  }.elsewhen(csrCtrl.addr === MTVEC.U) {
     csr := mtvec
-  }.elsewhen(io_csr.addr === MEPC.U) {
+  }.elsewhen(csrCtrl.addr === MEPC.U) {
     csr := mepc
-  }.elsewhen(io_csr.addr === MCAUSE.U) {
+  }.elsewhen(csrCtrl.addr === MCAUSE.U) {
     csr := mcause
-  }.elsewhen(io_csr.addr === MIE.U) {
+  }.elsewhen(csrCtrl.addr === MIE.U) {
     csr := mie
-  }.elsewhen(io_csr.addr === MIP.U) {
+  }.elsewhen(csrCtrl.addr === MIP.U) {
     csr := mip
   }.otherwise{
     csr := 0.U
@@ -68,10 +68,10 @@ class CSR extends Module {
   io.csrData := csr
 
   // calculate
-  when(io_csr.op(1, 0) === "b01".U) {
+  when(csrCtrl.op(1, 0) === "b01".U) {
     // write
     dest := src
-  }.elsewhen(io_csr.op(1, 0)  === "b10".U) {
+  }.elsewhen(csrCtrl.op(1, 0)  === "b10".U) {
     // set
     dest := csr | src
   }.otherwise{
@@ -79,7 +79,7 @@ class CSR extends Module {
     dest := csr & (~src)
   }
 
-  when(io_csr.addr === MIP.U) {
+  when(csrCtrl.addr === MIP.U) {
     mip := dest
   }.elsewhen(io.timeCmp) {
     mip := "x_80".U
@@ -88,36 +88,36 @@ class CSR extends Module {
   }
 
   // intrrupt
-  when(io_csr.ecallSel) {
+  when(csrCtrl.ecallSel) {
     mstatus       := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
     mepc          := io.pc
     mcause        := "x_b".U
-    mtvec         := Mux(io_csr.addr === MTVEC.U && io_csr.csrSel, dest, mtvec)
-    mie           := Mux(io_csr.addr === MIE.U && io_csr.csrSel, dest, mie)
+    mtvec         := Mux(csrCtrl.addr === MTVEC.U && csrCtrl.csrSel, dest, mtvec)
+    mie           := Mux(csrCtrl.addr === MIE.U && csrCtrl.csrSel, dest, mie)
     io.finalPC    := mtvec
     // io.interrupt  := true.B
-  }.elsewhen(io_csr.mretSel) {
+  }.elsewhen(csrCtrl.mretSel) {
     mstatus       := Seq(mstatus(63, 4), mstatus(7), mstatus(2, 0)).reduceLeft(Cat(_, _))
-    mepc          := Mux(io_csr.addr === MEPC.U && io_csr.csrSel, dest, mepc)
-    mcause        := Mux(io_csr.addr === MCAUSE.U && io_csr.csrSel, dest, mcause)
-    mtvec         := Mux(io_csr.addr === MTVEC.U && io_csr.csrSel, dest, mtvec)
-    mie           := Mux(io_csr.addr === MIE.U && io_csr.csrSel, dest, mie)
+    mepc          := Mux(csrCtrl.addr === MEPC.U && csrCtrl.csrSel, dest, mepc)
+    mcause        := Mux(csrCtrl.addr === MCAUSE.U && csrCtrl.csrSel, dest, mcause)
+    mtvec         := Mux(csrCtrl.addr === MTVEC.U && csrCtrl.csrSel, dest, mtvec)
+    mie           := Mux(csrCtrl.addr === MIE.U && csrCtrl.csrSel, dest, mie)
     io.finalPC    := mepc
     // io.interrupt  := true.B
   }.elsewhen((mstatus(3) === 1.U) && (mip(7) === 1.U) && (mie(7) === 1.U)) {
     mstatus       := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
     mepc          := io.npc
     mcause        := "x_7".U
-    mtvec         := Mux(io_csr.addr === MTVEC.U && io_csr.csrSel, dest, mtvec)
-    mie           := Mux(io_csr.addr === MIE.U && io_csr.csrSel, dest, mie)
+    mtvec         := Mux(csrCtrl.addr === MTVEC.U && csrCtrl.csrSel, dest, mtvec)
+    mie           := Mux(csrCtrl.addr === MIE.U && csrCtrl.csrSel, dest, mie)
     io.finalPC    := mtvec
     // io.interrupt  := true.B
   }.otherwise {
-    mstatus       := Mux(io_csr.addr === MSTATUS.U && io_csr.csrSel, dest, mstatus)
-    mepc          := Mux(io_csr.addr === MEPC.U && io_csr.csrSel, dest, mepc)
-    mcause        := Mux(io_csr.addr === MCAUSE.U && io_csr.csrSel, dest, mcause)
-    mtvec         := Mux(io_csr.addr === MTVEC.U && io_csr.csrSel, dest, mtvec)
-    mie           := Mux(io_csr.addr === MIE.U && io_csr.csrSel, dest, mie)
+    mstatus       := Mux(csrCtrl.addr === MSTATUS.U && csrCtrl.csrSel, dest, mstatus)
+    mepc          := Mux(csrCtrl.addr === MEPC.U && csrCtrl.csrSel, dest, mepc)
+    mcause        := Mux(csrCtrl.addr === MCAUSE.U && csrCtrl.csrSel, dest, mcause)
+    mtvec         := Mux(csrCtrl.addr === MTVEC.U && csrCtrl.csrSel, dest, mtvec)
+    mie           := Mux(csrCtrl.addr === MIE.U && csrCtrl.csrSel, dest, mie)
     io.finalPC    := io.npc
     // io.interrupt  := false.B
   }
