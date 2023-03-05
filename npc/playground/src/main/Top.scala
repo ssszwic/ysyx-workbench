@@ -19,6 +19,6 @@ class Top extends Module {
   LSU_u.ioEXU     <> EXU_u.ioEXU
   WBU_u.ioLSU     <> LSU_u.ioLSU
 
-  MemVirtual_inst.io <> IFU_u.ioMem
-  MemVirtual_data.io <> LSU_u.ioMem
+  MemVirtual_inst.io.ioMem <> IFU_u.ioMem
+  MemVirtual_data.io.ioMem <> LSU_u.ioMem
 }
