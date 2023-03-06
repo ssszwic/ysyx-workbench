@@ -8,7 +8,7 @@ SIM_DIR := $(WORK_DIR)/sim
 # design scala
 SCALA_SRC := $(shell find $(WORK_DIR)/playground/src -name "*.scala" -not -name "Elaborate.scala")
 # black design
-SCALA_SRC += $(shell find $(WORK_DIR)/playground/test/resources -name "*.v")
+# SCALA_SRC += $(shell find $(WORK_DIR)/playground/test/resources -name "*.v")
 # rtl design
 DESIGN_SRC := $(addsuffix .v,$(sort $(basename $(notdir $(SCALA_SRC)))))
 DESIGN_SRC := $(addprefix $(BUILD_DIR)/,$(DESIGN_SRC))
