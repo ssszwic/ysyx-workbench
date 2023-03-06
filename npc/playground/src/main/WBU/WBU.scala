@@ -32,6 +32,8 @@ class WBU extends Module {
   ioReg.regCtrl.wen     := Mux(regEn, ioLSU.regCtrl.wen, false.B)
   ioReg.regCtrl.rdAddr  := ioLSU.regCtrl.rdAddr
 
+  NPCReg_u.io.clock := clock
+  NPCReg_u.io.reset := reset
   NPCReg_u.io.wen   := regEn
   NPCReg_u.io.wData := ioLSU.npc
 

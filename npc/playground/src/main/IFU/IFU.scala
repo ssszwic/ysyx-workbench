@@ -37,6 +37,8 @@ class IFU extends Module {
   val finish = Wire(Bool())
   val regEn  = Wire(Bool())
 
+  PCReg_u.io.clock := clock
+  PCReg_u.io.reset := reset
   PCReg_u.io.wen    := regEn
   PCReg_u.io.wData  := ioWBU.npc
 
