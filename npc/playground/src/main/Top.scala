@@ -4,6 +4,10 @@ import chisel3._
 import chisel3.util._
 
 class Top extends Module {
+  val io = IO(new Bundle {
+    val wbu_valid = Output(Bool())
+  })
+  
   val IFU_u = Module(new IFU.IFU)
   val IDU_u = Module(new IDU.IDU)
   val EXU_u = Module(new EXU.EXU)
@@ -19,6 +23,13 @@ class Top extends Module {
   LSU_u.ioEXU     <> EXU_u.ioEXU
   WBU_u.ioLSU     <> LSU_u.ioLSU
 
-  MemVirtual_inst.io <> IFU_u.ioMem
-  MemVirtual_data.io <> LSU_u.ioMem
+  MemVirtual_inst.io.ioMem <> IFU_u.ioMem
+  MemVirtual_inst.io.clock <> clock
+  MemVirtual_inst.io.reset <> reset
+  MemVirtual_data.io.ioMem <> LSU_u.ioMem
+  MemVirtual_data.io.clock <> clock
+  MemVirtual_data.io.reset <> reset
+
+  // debug
+  io.wbu_valid := WBU_u.ioWBU.valid
 }

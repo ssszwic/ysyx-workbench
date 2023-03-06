@@ -17,17 +17,11 @@ class MemInterface extends Bundle {
 }
 
 class MemVirtual extends BlackBox with HasBlackBoxResource {
-  // val io = IO(new Bundle {
-  //   // read
-  //   val ren       = Input(Bool())
-  //   val addr      = Input(UInt(64.W))
-  //   val rData     = Output(UInt(64.W))
-  //   // write
-  //   val wen       = Input(Bool())
-  //   val wData     = Input(UInt(64.W))
-  //   // control
-  //   val wMask     = Input(UInt(8.W))
-  // })
-  val io = IO(new MemInterface)
+  val io = IO(new Bundle {
+    // read
+    val clock   = Input(Clock())
+    val reset   = Input(Bool())
+    val ioMem   = new MemInterface
+  })
   addResource("/MemVirtual.v")
 }

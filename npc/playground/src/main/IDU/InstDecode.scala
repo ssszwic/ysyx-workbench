@@ -8,6 +8,7 @@ import main.IDU
 import main.LSU
 import main.IFU
 import main.Tools
+import main.DPIC
 
 import main.LSU.CSRCtrlInterface
 
@@ -152,13 +153,6 @@ class InstDecode extends Module {
   memCtrl.unsign := funct3(2)
 
   // tell sim break when inst is ebreak
-  val EbreakInst = Module(new Ebreak)
+  val EbreakInst = Module(new DPIC.Ebreak)
   EbreakInst.io.ebreak := ebreak
-}
-
-class Ebreak extends BlackBox with HasBlackBoxResource {
-  val io = IO(new Bundle {
-    val ebreak = Input(Bool())
-  })
-  addResource("/Ebreak.v")
 }

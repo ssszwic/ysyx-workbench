@@ -20,10 +20,10 @@ static void checkregs(NEMUCPUState *ref) {
   bool same = true;
   bool err_list[34] = {};
   // check next pc
-  if(ref->pc != npc_cpu.next_pc) {
+  if(ref->pc != *npc_cpu.next_pc) {
     log_write(true, ANSI_FMT("pc (next instruction) error: \n", ANSI_FG_RED));
     log_write(true, "ref pc: 0x%016lx\n", ref->pc);
-    log_write(true, "dut pc: 0x%016lx\n", npc_cpu.next_pc);
+    log_write(true, "dut pc: 0x%016lx\n", *npc_cpu.next_pc);
     same = false;
     err_list[33] = true;
   }
@@ -43,7 +43,7 @@ static void checkregs(NEMUCPUState *ref) {
     // print all dut regs when error
     isa_reg_display(err_list);
     npc_state.state = NPC_ABORT;
-    npc_state.halt_pc = npc_cpu.pc;
+    npc_state.halt_pc = *npc_cpu.pc;
   }
 }
 
@@ -81,11 +81,9 @@ void init_difftest(char *ref_so_file, long img_size) {
   // copy img instruction to ref
   ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);
   // copy reg to ref
-  // memcpy(&cpu_diff, &npc_cpu.gpr, 32*sizeof(cpu_diff.gpr[0]));
-  // cpu_diff.pc = npc_cpu.pc;
-
-
-  ref_difftest_regcpy(&npc_cpu, DIFFTEST_TO_REF);
+  memcpy(&cpu_diff, npc_cpu.gpr, 32*sizeof(cpu_diff.gpr[0]));
+  cpu_diff.pc = *npc_cpu.pc;
+  ref_difftest_regcpy(&cpu_diff, DIFFTEST_TO_REF);
 }
 
 void difftest_step() {
@@ -94,8 +92,8 @@ void difftest_step() {
   if (is_skip_ref) {
     // to skip the checking of an instruction, just copy the reg state to reference design
     // next pc
-    memcpy(&cpu_diff, &npc_cpu.gpr, 32*sizeof(cpu_diff.gpr[0]));
-    cpu_diff.pc = npc_cpu.next_pc;
+    memcpy(&cpu_diff, npc_cpu.gpr, 32*sizeof(cpu_diff.gpr[0]));
+    cpu_diff.pc = *npc_cpu.next_pc;
     ref_difftest_regcpy(&cpu_diff, DIFFTEST_TO_REF);
     is_skip_ref = false;
     return;
@@ -108,4 +106,3 @@ void difftest_step() {
 }
 
 #endif
-

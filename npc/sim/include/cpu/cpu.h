@@ -22,10 +22,10 @@ typedef struct {
 
 typedef struct {
   // uint_64 for riscv64
-  uint64_t gpr[32];
-  vaddr_t pc;
+  uint64_t *gpr;
+  vaddr_t *pc;
   uint32_t inst;
-  vaddr_t next_pc;
+  vaddr_t *next_pc;
   #ifdef CONFIG_ITRACE
   char logbuf[128];
   #endif

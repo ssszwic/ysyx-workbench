@@ -27,7 +27,7 @@ uint8_t* new_space(int size) {
 
 static void check_bound(IOMap *map, paddr_t addr) {
   if (map == NULL) {
-    log_write(true, ANSI_FMT("address (0x%08lx) is out of bound at pc = 0x%016lx\n", ANSI_FG_RED), addr, npc_cpu.pc);
+    log_write(true, ANSI_FMT("address (0x%08lx) is out of bound at pc = 0x%016lx\n", ANSI_FG_RED), addr, *npc_cpu.pc);
     except_exit((char*) "device address out of bound!");
   } 
   else {

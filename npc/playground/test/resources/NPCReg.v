@@ -1,4 +1,4 @@
-module PCReg (
+module NPCReg (
     input               clock,
     input               reset,
     input               wen,
@@ -6,8 +6,8 @@ module PCReg (
     output  reg [63:0]  value
 );
 
-import "DPI-C" function void set_pc_ptr(input logic [63:0] a []);
-initial set_pc_ptr(value);
+import "DPI-C" function void set_npc_ptr(input logic [63:0] a []);
+initial set_npc_ptr(value);
 
 always@(posedge clock) begin
     if(reset) begin

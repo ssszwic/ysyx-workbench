@@ -75,13 +75,15 @@ IMG ?=
 ######################################################################
 default: run
 
+build: $(BUILD_DIR)/V$(MODULE)
+
 run: $(BUILD_DIR)/V$(MODULE)
 	@echo
 	@echo "-- RUN ---------------------"
 	@rm -rf logs
 	@-rm $(LOG)
 	@mkdir -p logs
-	@sudo perf record -F 999 obj_dir/V$(MODULE) $(ARGS) $(IMG)
+	@obj_dir/V$(MODULE) $(ARGS) $(IMG)
 	@echo
 	@echo "-- DONE --------------------"
 	@echo "To see waveforms, make wave"

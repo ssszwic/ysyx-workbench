@@ -23,7 +23,7 @@ class CSR extends Module {
     val csrData       = Output(UInt(64.W))
     val finalPC       = Output(UInt(64.W))
     // verilator debug for difftest
-    // val interrupt     = Output(Bool())
+    val interrupt     = Output(Bool())
   })
   val csrCtrl = IO(new CSRCtrlInterface)
 
@@ -95,7 +95,7 @@ class CSR extends Module {
     mtvec         := Mux(csrCtrl.addr === MTVEC.U && csrCtrl.csrSel, dest, mtvec)
     mie           := Mux(csrCtrl.addr === MIE.U && csrCtrl.csrSel, dest, mie)
     io.finalPC    := mtvec
-    // io.interrupt  := true.B
+    io.interrupt  := true.B
   }.elsewhen(csrCtrl.mretSel) {
     mstatus       := Seq(mstatus(63, 4), mstatus(7), mstatus(2, 0)).reduceLeft(Cat(_, _))
     mepc          := Mux(csrCtrl.addr === MEPC.U && csrCtrl.csrSel, dest, mepc)
@@ -103,7 +103,7 @@ class CSR extends Module {
     mtvec         := Mux(csrCtrl.addr === MTVEC.U && csrCtrl.csrSel, dest, mtvec)
     mie           := Mux(csrCtrl.addr === MIE.U && csrCtrl.csrSel, dest, mie)
     io.finalPC    := mepc
-    // io.interrupt  := true.B
+    io.interrupt  := true.B
   }.elsewhen((mstatus(3) === 1.U) && (mip(7) === 1.U) && (mie(7) === 1.U)) {
     mstatus       := Seq(mstatus(63, 8), mstatus(3), mstatus(6, 4), 0.U(1.W), mstatus(2, 0)).reduceLeft(Cat(_, _))
     mepc          := io.npc
@@ -111,7 +111,7 @@ class CSR extends Module {
     mtvec         := Mux(csrCtrl.addr === MTVEC.U && csrCtrl.csrSel, dest, mtvec)
     mie           := Mux(csrCtrl.addr === MIE.U && csrCtrl.csrSel, dest, mie)
     io.finalPC    := mtvec
-    // io.interrupt  := true.B
+    io.interrupt  := true.B
   }.otherwise {
     mstatus       := Mux(csrCtrl.addr === MSTATUS.U && csrCtrl.csrSel, dest, mstatus)
     mepc          := Mux(csrCtrl.addr === MEPC.U && csrCtrl.csrSel, dest, mepc)
@@ -119,6 +119,6 @@ class CSR extends Module {
     mtvec         := Mux(csrCtrl.addr === MTVEC.U && csrCtrl.csrSel, dest, mtvec)
     mie           := Mux(csrCtrl.addr === MIE.U && csrCtrl.csrSel, dest, mie)
     io.finalPC    := io.npc
-    // io.interrupt  := false.B
+    io.interrupt  := false.B
   }
 }

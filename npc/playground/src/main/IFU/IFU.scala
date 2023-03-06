@@ -5,6 +5,7 @@ import chisel3.util._
 
 import main.MEM
 import main.WBU
+import main.DPIC
 
 class IFUInterface extends Bundle {
   val ready = Input(Bool())
@@ -19,7 +20,7 @@ class IFU extends Module {
   val ioIFU = IO(new IFUInterface)
   val ioMem = IO(Flipped(new MEM.MemInterface))
 
-  val PCReg_u = Module(new PCReg)
+  val PCReg_u = Module(new DPIC.PCReg)
 
   // start signal: only generate once after reset
   val cntReg = RegInit(0.U(4.W))
@@ -36,6 +37,8 @@ class IFU extends Module {
   val finish = Wire(Bool())
   val regEn  = Wire(Bool())
 
+  PCReg_u.io.clock := clock
+  PCReg_u.io.reset := reset
   PCReg_u.io.wen    := regEn
   PCReg_u.io.wData  := ioWBU.npc
 
@@ -43,10 +46,10 @@ class IFU extends Module {
   regEn       := (state === sIDLE) && (ioWBU.valid || start)
   ioIFU.pc    := PCReg_u.io.value
   ioIFU.pc4   := RegEnable((ioWBU.npc + 4.U), 0.U, regEn) 
-  ioIFU.inst  := Mux((ioIFU.pc(2, 0) === "b100".U), ioMem.rData(63, 32), ioMem.rData(31, 0))
+  ioIFU.inst  := Mux((ioIFU.pc(2, 0) === "b100".U(3.W)), ioMem.rData(63, 32), ioMem.rData(31, 0))
 
   ioMem.ren   := regEn
-  ioMem.addr  := Cat(ioIFU.pc(31, 3), "b000".U)
+  ioMem.addr  := Cat(ioWBU.npc(31, 3), "b000".U(3.W))
   // don't write
   ioMem.wen   := false.B
   ioMem.wMask := 0.U
@@ -97,17 +100,6 @@ class IFU extends Module {
       }
     }
   }
-}
-
-// dugbu pc value by DPI-C
-class PCReg extends BlackBox with HasBlackBoxResource {
-  val io = IO(new Bundle {
-    val wen   = Input(Bool())
-    val wData = Input(UInt(64.W))
-    val value = Output(UInt(64.W))
-  })
-
-  addResource("/PCReg.v")
 }
 
 // waveDrom
