@@ -12,13 +12,13 @@ const char *regs[] = {
 void isa_reg_display(bool *err_list) {
   // pc reg
   printf(ANSI_FMT("CPU register state: \n", ANSI_FG_BLUE));
-  printf("pc:  0x%016lx\t  ", npc_cpu.pc);
+  printf("pc:  0x%016lx\t  ", *npc_cpu.pc);
   #ifdef CONFIG_DIFFTEST
   if(err_list[33]) {
-    printf(ANSI_FMT("npc: 0x%016lx\n", ANSI_FG_RED), npc_cpu.next_pc);
+    printf(ANSI_FMT("npc: 0x%016lx\n", ANSI_FG_RED), *npc_cpu.next_pc);
   }
   else {
-    printf("npc: 0x%016lx\n", npc_cpu.next_pc);
+    printf("npc: 0x%016lx\n", *npc_cpu.next_pc);
   }
   #endif
   
@@ -42,7 +42,7 @@ uint64_t isa_reg_str2val(const char *s, bool *success) {
   // pc reg
   if (strcmp(s, "pc") == 0){
     *success = true;
-    return npc_cpu.pc;
+    return *npc_cpu.pc;
   }
   // noemal reg
   int i = 0;

@@ -152,13 +152,13 @@ void cpu_exec(uint64_t n) {
 
   if(npc_state.state == NPC_END) {
     if (npc_state.halt_ret == 0) {
-      log_write(true, ANSI_FMT("HIT GOOD TRAP at pc = 0x%016lx\n", ANSI_FG_GREEN), npc_cpu.pc);
+      log_write(true, ANSI_FMT("HIT GOOD TRAP at pc = 0x%016lx\n", ANSI_FG_GREEN), *npc_cpu.pc);
       // for return successful, don't print to screen
       log_trace(false);
       IFDEF(CONFIG_STATISTIC, statistic());
     }
     else {
-      log_write(true, ANSI_FMT("HIT BAD TRAP at pc = 0x%016lx\n", ANSI_FG_RED), npc_cpu.pc);
+      log_write(true, ANSI_FMT("HIT BAD TRAP at pc = 0x%016lx\n", ANSI_FG_RED), *npc_cpu.pc);
       log_trace(true);
     }
     // stop sim and save wave
@@ -190,14 +190,14 @@ void trace_and_difftest() {
 // itrace
 #ifdef CONFIG_ITRACE
   char *p = npc_cpu.logbuf;
-  p += snprintf(p, sizeof(npc_cpu.logbuf), "0x%016lx:  ", npc_cpu.pc);
+  p += snprintf(p, sizeof(npc_cpu.logbuf), "0x%016lx:  ", *npc_cpu.pc);
   // print from MSB
-  uint32_t inst = get_inst(npc_cpu.pc);
+  uint32_t inst = get_inst(*npc_cpu.pc);
   uint8_t *inst_byte = (uint8_t *) &inst;
   for(int i = 3; i >= 0; i--) {
     p += snprintf(p, sizeof(npc_cpu.logbuf), "%02x ", *(inst_byte + i));
   }
-  disassemble(p, npc_cpu.logbuf + sizeof(npc_cpu.logbuf) - p, npc_cpu.pc, inst_byte, 4);
+  disassemble(p, npc_cpu.logbuf + sizeof(npc_cpu.logbuf) - p, *npc_cpu.pc, inst_byte, 4);
   log_write(screen_display_inst, "%s\n", npc_cpu.logbuf);
   // instruction ring buff
   memset(inst_ring_buf[inst_ring_ref], ' ', 6); // copy 5 'space' to cover '---->'
@@ -222,28 +222,28 @@ void trace_and_difftest() {
   }
   else if(func_state == -1) {
     // call initial function
-    id = func_pc(npc_cpu.pc);
+    id = func_pc(*npc_cpu.pc);
     memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", npc_cpu.pc, func_list[id].name, func_list[id].start_addr);
+    sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", *npc_cpu.pc, func_list[id].name, func_list[id].start_addr);
     strcpy(func_ring_buf[func_ring_ref], tmp);
     func_state = id;
   }
   else if(jal) {
     // call function
-    id = func_pc(npc_cpu.next_pc);
+    id = func_pc(*npc_cpu.next_pc);
     memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", npc_cpu.pc, func_list[id].name, func_list[id].start_addr);
+    sprintf(tmp, "0x%08lx: ----> call [%s@0x%08lx] ", *npc_cpu.pc, func_list[id].name, func_list[id].start_addr);
     strcpy(func_ring_buf[func_ring_ref], tmp);
     func_state = id;
   }
   else if(jalr) {
     // ret function
-    id = func_pc(npc_cpu.next_pc);
+    id = func_pc(*npc_cpu.next_pc);
     memset(func_ring_buf[func_ring_ref] + 12, ' ', 6);
     if (++func_ring_ref == FUNC_RING_BUF_WIDTH) {func_ring_ref = 0;}
-    sprintf(tmp, "0x%08lx: ----> ret  [%s@0x%08lx] ", npc_cpu.pc, func_list[id].name, func_list[id].start_addr);
+    sprintf(tmp, "0x%08lx: ----> ret  [%s@0x%08lx] ", *npc_cpu.pc, func_list[id].name, func_list[id].start_addr);
     strcpy(func_ring_buf[func_ring_ref], tmp);
     func_state = id;
   }
@@ -275,8 +275,9 @@ void cpu_init() {
   top->reset = 0;
 
   // initial npc_cpu
-  npc_cpu.pc = *rtl_pc;
-  memcpy(npc_cpu.gpr, rtl_gpr, 32*sizeof(npc_cpu.gpr[0]));
+  npc_cpu.pc = rtl_pc;
+  npc_cpu.next_pc = rtl_npc;
+  npc_cpu.gpr = rtl_gpr;
 
   if(!top->clock) {
     return ;
@@ -313,9 +314,9 @@ static void isa_exec_once() {
   }
 
   // update reg and pc, gpr(regfiles) will not update until next cycle, so update by io_regWen
-  npc_cpu.pc = *rtl_pc;
-  npc_cpu.next_pc = *rtl_npc;
-  memcpy(npc_cpu.gpr, rtl_gpr, 32*sizeof(npc_cpu.gpr[0]));
+  // npc_cpu.pc = *rtl_pc;
+  // npc_cpu.next_pc = *rtl_npc;
+  // memcpy(npc_cpu.gpr, rtl_gpr, 32*sizeof(npc_cpu.gpr[0]));
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
