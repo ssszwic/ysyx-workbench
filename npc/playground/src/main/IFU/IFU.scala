@@ -49,7 +49,7 @@ class IFU extends Module {
   ioIFU.inst  := Mux((ioIFU.pc(2, 0) === "b100".U), ioMem.rData(63, 32), ioMem.rData(31, 0))
 
   ioMem.ren   := regEn
-  ioMem.addr  := Cat(ioIFU.pc(31, 3), "b000".U)
+  ioMem.addr  := Cat(ioWBU.npc(31, 3), "b000".U)
   // don't write
   ioMem.wen   := false.B
   ioMem.wMask := 0.U

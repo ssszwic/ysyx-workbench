@@ -31,6 +31,7 @@ gdb: $(DESIGN_SRC)
 	make -C $(SIM_DIR) gdb
 
 help:
+	echo $(SCALA_SRC)
 	mill -i __.test.runMain main.Elaborate --help
 
 compile:
