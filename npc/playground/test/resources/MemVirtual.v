@@ -54,20 +54,4 @@ always@(*) begin
   end
 end
 
-// always @(*) begin
-//   // read
-//   if(en) begin
-//     pmem_read(addr, rData);
-//   end
-//   else begin
-//     rData = 0;
-//   end
-
-//   // write
-//   if(en) begin
-//     pmem_write(addr, wData, wMask);
-//   end
-  
-// end
-
 endmodule

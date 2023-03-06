@@ -114,7 +114,6 @@ extern "C" void difftest_skip() {
   IFDEF(CONFIG_DIFFTEST, difftest_skip_ref());
 }
 
-
 // DPI_C
 extern "C" void cpu_inst_ebreak() {
   // half = $a0
@@ -293,15 +292,7 @@ void cpu_init() {
 static void isa_exec_once() {
   while(1) {
     top->clock = !top->clock;
-    // posedge clk
-    // if(!cpu_state_init) {
-    //   // update pc register
-    //   top->eval();
-    //   // enable cpu (avoid pc reg change)
-    //   top->io_cpuEn = 1;
-    //   cpu_state_init = true;
-    // }
-    // update inst
+
     eval_and_wave();
     contextp->timeInc(1);
 
@@ -312,11 +303,6 @@ static void isa_exec_once() {
     // when wbu_valid is true, one inst excute finished
     if(top->io_wbu_valid == 1) break;
   }
-
-  // update reg and pc, gpr(regfiles) will not update until next cycle, so update by io_regWen
-  // npc_cpu.pc = *rtl_pc;
-  // npc_cpu.next_pc = *rtl_npc;
-  // memcpy(npc_cpu.gpr, rtl_gpr, 32*sizeof(npc_cpu.gpr[0]));
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
