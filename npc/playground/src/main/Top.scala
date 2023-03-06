@@ -6,7 +6,9 @@ import chisel3.util._
 class Top extends Module {
   val io = IO(new Bundle {
     val wbu_valid = Output(Bool())
+    val npc       = Output(Uint(64.W))
   })
+  
   val IFU_u = Module(new IFU.IFU)
   val IDU_u = Module(new IDU.IDU)
   val EXU_u = Module(new EXU.EXU)

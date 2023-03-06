@@ -78,6 +78,7 @@ bool screen_display_inst = false;
 NPCState npc_state = { .state = NPC_STOP };
 CPUState npc_cpu = { };
 static uint64_t *rtl_pc;
+static uint64_t *rtl_npc;
 static uint64_t *rtl_gpr;
 // Ensure cpu initialization is complete
 static bool cpu_state_init = false;
@@ -103,6 +104,16 @@ extern "C" void set_gpr_ptr(const svOpenArrayHandle r) {
 extern "C" void set_pc_ptr(const svOpenArrayHandle r) {
   rtl_pc = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
 }
+
+extern "C" void set_npc_ptr(const svOpenArrayHandle r) {
+  rtl_npc = (uint64_t *)(((VerilatedDpiOpenVar*)r)->datap());
+}
+
+// difftest skip when read/write csr reg or interrupt or write/read clint
+extern "C" void difftest_skip(const svOpenArrayHandle r) {
+  IFDEF(CONFIG_DIFFTEST, difftest_skip_ref());
+}
+
 
 // DPI_C
 extern "C" void cpu_inst_ebreak() {
@@ -265,7 +276,7 @@ void cpu_init() {
 
   // initial npc_cpu
   npc_cpu.pc = *rtl_pc;
-  memcpy(npc_cpu.gpr, rtl_gpr, sizeof(npc_cpu.gpr));
+  npc_cpu.gpr = (uint64_t *)rtl_gpr;
 
   if(!top->clock) {
     return ;
@@ -279,38 +290,31 @@ void cpu_init() {
 }
 
 static void isa_exec_once() {
-  top->clock = !top->clock;
-  // posedge clk
-  // if(!cpu_state_init) {
-  //   // update pc register
-  //   top->eval();
-  //   // enable cpu (avoid pc reg change)
-  //   top->io_cpuEn = 1;
-  //   cpu_state_init = true;
-  // }
-  // update inst
-  eval_and_wave();
-  contextp->timeInc(1);
+  while(1) {
+    top->clock = !top->clock;
+    // posedge clk
+    // if(!cpu_state_init) {
+    //   // update pc register
+    //   top->eval();
+    //   // enable cpu (avoid pc reg change)
+    //   top->io_cpuEn = 1;
+    //   cpu_state_init = true;
+    // }
+    // update inst
+    eval_and_wave();
+    contextp->timeInc(1);
 
-  top->clock = !top->clock;
-  eval_and_wave();
-  contextp->timeInc(1);
+    top->clock = !top->clock;
+    eval_and_wave();
+    contextp->timeInc(1);
 
-  // when wbu_valid is true, one inst excute finished
+    // when wbu_valid is true, one inst excute finished
+    if(top->io_wbu_valid == 1) break;
+  }
 
-  top->
   // update reg and pc, gpr(regfiles) will not update until next cycle, so update by io_regWen
   npc_cpu.pc = *rtl_pc;
-  npc_cpu.next_pc = top->io_nextPC;
-  if((top->io_regWen == 1) && (top->io_regAddr != 0)) {
-    npc_cpu.gpr[top->io_regAddr] = top->io_regWData;
-  }
-#ifdef CONFIG_DIFFTEST
-  // difftest skip when read/write csr reg or interrupt or write/read clint
-  if(top->io_csrOrInter || top->io_clintWR) {
-    difftest_skip_ref();
-  }
-#endif
+  npc_cpu.next_pc = *rtl_npc;
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc

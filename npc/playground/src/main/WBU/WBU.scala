@@ -5,6 +5,7 @@ import chisel3.util._
 
 import main.LSU
 import main.IDU
+import main.DPIC
 
 class WBUInterface extends Bundle {
   val ready   = Input(Bool())
@@ -16,6 +17,8 @@ class WBU extends Module {
   val ioWBU = IO(new WBUInterface)
   val ioLSU = IO(Flipped(new LSU.LSUInterface))
   val ioReg = IO(Flipped(new IDU.RegInterface))
+
+  val NPCReg_u = Module(new DPIC.NPCReg)
   
   // FSM
   val sIDLE :: sFINISH :: Nil = Enum(2)
@@ -25,9 +28,13 @@ class WBU extends Module {
 
   val regEn = Wire(Bool())
   regEn := (state === sIDLE) && ioLSU.valid
-  ioWBU.npc := RegEnable(ioLSU.npc, "h80000000".U, regEn) // 0x80000000 is wrong that as int
-  ioReg.regCtrl.wen   := Mux(regEn, ioLSU.regCtrl.wen, false.B)
-  ioReg.regCtrl.rdAddr := ioLSU.regCtrl.rdAddr
+  ioWBU.npc             := NPCReg_u.io.value
+  ioReg.regCtrl.wen     := Mux(regEn, ioLSU.regCtrl.wen, false.B)
+  ioReg.regCtrl.rdAddr  := ioLSU.regCtrl.rdAddr
+
+  NPCReg_u.io.wen   := regEn
+  NPCReg_u.io.wData := ioLSU.npc
+
   when(ioLSU.csrSel) {
     ioReg.rdData := ioLSU.csrData
   }.elsewhen(ioLSU.memSel) {

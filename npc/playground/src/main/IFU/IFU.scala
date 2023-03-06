@@ -5,6 +5,7 @@ import chisel3.util._
 
 import main.MEM
 import main.WBU
+import main.DPIC
 
 class IFUInterface extends Bundle {
   val ready = Input(Bool())
@@ -19,7 +20,7 @@ class IFU extends Module {
   val ioIFU = IO(new IFUInterface)
   val ioMem = IO(Flipped(new MEM.MemInterface))
 
-  val PCReg_u = Module(new PCReg)
+  val PCReg_u = Module(new DPIC.PCReg)
 
   // start signal: only generate once after reset
   val cntReg = RegInit(0.U(4.W))
@@ -97,19 +98,6 @@ class IFU extends Module {
       }
     }
   }
-}
-
-// dugbu pc value by DPI-C
-class PCReg extends BlackBox with HasBlackBoxResource {
-  val io = IO(new Bundle {
-    val clock = Input(Clock())
-    val reset = Input(Bool())
-    val wen   = Input(Bool())
-    val wData = Input(UInt(64.W))
-    val value = Output(UInt(64.W))
-  })
-
-  addResource("/PCReg.v")
 }
 
 // waveDrom

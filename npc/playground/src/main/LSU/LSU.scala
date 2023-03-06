@@ -8,6 +8,7 @@ import main.IDU
 import main.LSU
 import main.MEM
 import main.Tools
+import main.DPIC
 
 import main.LSU.MemLS
 
@@ -113,6 +114,11 @@ class LSU extends Module {
       }
     }
   }
+
+  val DifftestSkip_u = Module(new DPIC.DifftestSkip)
+  // difftest skip when read/write csr reg or interrupt or write/read clint
+  DifftestSkip_u.io.skip := regEn && (ioEXU.csrCtrl.csrSel || CSR_u.io.interrupt || MemLS_u.clintCtrl.ren || MemLS_u.clintCtrl.wen)
+  
 }
 
 // waveDrom
