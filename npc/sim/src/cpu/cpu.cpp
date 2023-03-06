@@ -110,7 +110,7 @@ extern "C" void set_npc_ptr(const svOpenArrayHandle r) {
 }
 
 // difftest skip when read/write csr reg or interrupt or write/read clint
-extern "C" void difftest_skip(const svOpenArrayHandle r) {
+extern "C" void difftest_skip() {
   IFDEF(CONFIG_DIFFTEST, difftest_skip_ref());
 }
 
@@ -307,6 +307,8 @@ static void isa_exec_once() {
     top->clock = !top->clock;
     eval_and_wave();
     contextp->timeInc(1);
+
+    if(contextp->time() == 100) break;
 
     // when wbu_valid is true, one inst excute finished
     if(top->io_wbu_valid == 1) break;
