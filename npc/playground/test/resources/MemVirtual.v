@@ -18,7 +18,7 @@ module MemVirtual(
 import "DPI-C" function void pmem_read(input int raddr, output longint rdata);
 import "DPI-C" function void pmem_write(input int waddr, input longint wdata, input byte wmask);
 
-wire  [63:0]  data_from_dpic;
+reg   [63:0]  data_from_dpic;
 
 assign ioMem_hit = 1'b1;
 
