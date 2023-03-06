@@ -6,7 +6,7 @@ WORK_DIR := $(shell pwd)
 BUILD_DIR := $(WORK_DIR)/build
 SIM_DIR := $(WORK_DIR)/sim
 # design scala
-SCALA_SRC := $(shell find $(WORK_DIR)/playground/src -name "*.scala" -not -name "Elaborate.scala")
+SCALA_SRC := $(shell find $(WORK_DIR)/playground/src -name "*.scala" -not -name "Elaborate.scala" -not -name "Tools.scala")
 # black design
 # SCALA_SRC += $(shell find $(WORK_DIR)/playground/test/resources -name "*.v")
 # rtl design
@@ -31,7 +31,7 @@ gdb: $(DESIGN_SRC)
 	make -C $(SIM_DIR) gdb
 
 help:
-	echo $(SCALA_SRC)
+	@echo $(SCALA_SRC)
 	mill -i __.test.runMain main.Elaborate --help
 
 compile:
