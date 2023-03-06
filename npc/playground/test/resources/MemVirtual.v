@@ -18,7 +18,15 @@ module MemVirtual(
 import "DPI-C" function void pmem_read(input int raddr, output longint rdata);
 import "DPI-C" function void pmem_write(input int waddr, input longint wdata, input byte wmask);
 
+wire  [63:0]  data_from_dpic;
+
 assign ioMem_hit = 1'b1;
+
+always@(*) begin
+  if(ioMem_ren) begin
+    pmem_read(ioMem_addr, data_from_dpic);
+  end
+end
 
 // read
 always@(posedge clock) begin
@@ -27,7 +35,7 @@ always@(posedge clock) begin
     ioMem_rvalid  <= 1'b0;
   end
   else if(ioMem_ren) begin
-    pmem_read(ioMem_addr, ioMem_rData);
+    ioMem_rData   <= data_from_dpic;
     ioMem_rvalid  <= 1'b1;
   end
   else begin
@@ -37,7 +45,7 @@ always@(posedge clock) begin
 end
 
 // write
-always@(posedge clock) begin
+always@(*) begin
   if(ioMem_wen) begin
     pmem_write(ioMem_addr, ioMem_wData, ioMem_wMask);
   end
