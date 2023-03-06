@@ -27,7 +27,7 @@ always@(*) begin
     pmem_read(ioMem_addr, data_from_dpic);
   end
   else begin
-    data_from_dpic <= 64'b0;
+    data_from_dpic = 64'b0;
   end
 end
 
