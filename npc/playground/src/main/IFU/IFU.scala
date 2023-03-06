@@ -46,10 +46,10 @@ class IFU extends Module {
   regEn       := (state === sIDLE) && (ioWBU.valid || start)
   ioIFU.pc    := PCReg_u.io.value
   ioIFU.pc4   := RegEnable((ioWBU.npc + 4.U), 0.U, regEn) 
-  ioIFU.inst  := Mux((ioIFU.pc(2, 0) === "b100".U), ioMem.rData(63, 32), ioMem.rData(31, 0))
+  ioIFU.inst  := Mux((ioIFU.pc(2, 0) === "b100".U(3.W)), ioMem.rData(63, 32), ioMem.rData(31, 0))
 
   ioMem.ren   := regEn
-  ioMem.addr  := Cat(ioWBU.npc(31, 3), "b000".U)
+  ioMem.addr  := Cat(ioWBU.npc(31, 3), "b000".U(3.W))
   // don't write
   ioMem.wen   := false.B
   ioMem.wMask := 0.U
