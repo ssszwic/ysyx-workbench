@@ -276,7 +276,7 @@ void cpu_init() {
 
   // initial npc_cpu
   npc_cpu.pc = *rtl_pc;
-  npc_cpu.gpr = (uint64_t *)rtl_gpr;
+  memcpy(npc_cpu.gpr, rtl_gpr, 32*sizeof(npc_cpu.gpr[0]));
 
   if(!top->clock) {
     return ;
@@ -308,8 +308,6 @@ static void isa_exec_once() {
     eval_and_wave();
     contextp->timeInc(1);
 
-    if(contextp->time() == 100) break;
-
     // when wbu_valid is true, one inst excute finished
     if(top->io_wbu_valid == 1) break;
   }
@@ -317,6 +315,7 @@ static void isa_exec_once() {
   // update reg and pc, gpr(regfiles) will not update until next cycle, so update by io_regWen
   npc_cpu.pc = *rtl_pc;
   npc_cpu.next_pc = *rtl_npc;
+  memcpy(npc_cpu.gpr, rtl_gpr, 32*sizeof(npc_cpu.gpr[0]));
 
 #ifdef CONFIG_FUNCTION_TRACE
   // upadte next pc
