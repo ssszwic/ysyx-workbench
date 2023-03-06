@@ -47,6 +47,8 @@ class IDU extends Module{
   InstDecode_u.io.inst := ioIFU.inst
 
   // regfiles
+  RegFiles_u.io.clock    := clock
+  RegFiles_u.io.reset    := reset
   RegFiles_u.io.regCtrl  <> ioReg.regCtrl
   RegFiles_u.io.rdData   := ioReg.rdData
   RegFiles_u.io.rs1Addr  := InstDecode_u.io.rs1Addr

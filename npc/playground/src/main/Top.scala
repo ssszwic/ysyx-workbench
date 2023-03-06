@@ -24,7 +24,11 @@ class Top extends Module {
   WBU_u.ioLSU     <> LSU_u.ioLSU
 
   MemVirtual_inst.io.ioMem <> IFU_u.ioMem
+  MemVirtual_inst.io.clock <> clock
+  MemVirtual_inst.io.reset <> reset
   MemVirtual_data.io.ioMem <> LSU_u.ioMem
+  MemVirtual_data.io.clock <> clock
+  MemVirtual_data.io.reset <> reset
 
   // debug
   io.wbu_valid := WBU_u.ioWBU.valid
