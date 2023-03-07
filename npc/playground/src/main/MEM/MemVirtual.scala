@@ -3,6 +3,87 @@ package main.MEM
 import chisel3._
 import chisel3.util._
 
+class AXI_LITE_AW(addrWidth: Int) extends Bundle {
+  val valid   = Output(Bool())
+  val ready   = Input(Bool())
+  val addr    = Output(UInt(addrWidth.W))
+  val prot    = Output(UInt(3.W))
+}
+
+class AXI_LITE_W(dataWidth: Int, strbWidth: Int) extends Bundle {
+  val valid   = Output(Bool())
+  val ready   = Input(Bool())
+  val data    = Output(UInt(dataWidth.W))
+  val strb    = Output(UInt(strbWidth.W))
+}
+
+class AXI_LITE_B extends Bundle {
+  val valid   = Input(Bool())
+  val ready   = Output(Bool())
+  val resp    = Input(UInt(2.W))
+}
+
+class AXI_LITE_AR(addrWidth: Int) extends Bundle {
+  val valid   = Output(Bool())
+  val ready   = Input(Bool())
+  val addr    = Output(UInt(addrWidth.W))
+  val prot    = Output(UInt(3.W))
+}
+
+class AXI_LITE_R(dataWidth: Int) extends Bundle {
+  val valid   = Input(Bool())
+  val ready   = Output(Bool())
+  val data    = Input(UInt(dataWidth.W))
+  val resp    = Input(UInt(2.W))
+}
+
+class AXI_LITE_MASTER(addrWidth: Int, dataWidth: Int, strbWidth: Int) extends Bundle {
+  val aw = new AXI_LITE_AW(addrWidth)
+  val w  = new AXI_LITE_W(dataWidth, strbWidth)
+  val b  = new AXI_LITE_B
+  val ar = new AXI_LITE_AR(addrWidth)
+  val r  = new AXI_LITE_R(dataWidth)
+}
+
+class AXI_LITE_SLAVE(addrWidth: Int, dataWidth: Int, strbWidth: Int) extends Bundle {
+  val aw = Flipped(new AXI_LITE_AW(addrWidth))
+  val w  = Flipped(new AXI_LITE_W(dataWidth, strbWidth))
+  val b  = Flipped(new AXI_LITE_B)
+  val ar = Flipped(new AXI_LITE_AR(addrWidth))
+  val r  = Flipped(new AXI_LITE_R(dataWidth))
+}
+
+// class AXI_WDATA(dataWidth: Int, strbWidth: Int) extends Bundle {
+//   val data    = Output(UInt(dataWidth.W))
+//   val strb    = Output(UInt(strbWidth.W))
+//   val valid   = Output(Bool())
+//   val ready   = Input(Bool())
+// }
+
+// class AXI_WBACK extends Bundle {
+//   val resp   = Input(UInt(2.W))
+//   val valid  = Input(Bool())
+//   val ready  = Output(Bool())
+// }
+
+// class AXI_RADDR(addrWidth: Int) extends Bundle {
+//   val addr    = Output(UInt(addrWidth.W))
+//   val valid   = Output(Bool())
+//   val ready   = Input(Bool())
+// }
+
+// class AXI_RDATA(dataWidth: Int) extends Bundle {
+//   val data    = Input(UInt(dataWidth.W))
+//   val resp    = Input(UInt(strbWidth.W))
+//   val valid   = Input(Bool())
+//   val ready   = Output(Bool())
+// }
+
+// class AXI_LITE_M extends Bundle {
+//   val wa
+// }
+
+
 class MemInterface extends Bundle {
   // read
   val ren     = Input(Bool())
