@@ -49,6 +49,15 @@ class IFU extends Module {
   ioAXI.ar.addr := RegEnable(Cat(ioWBU.npc(31, 3), "b000".U(3.W)), 0.U, regEn)
   ioAXI.ar.prot := RegEnable("b001".U(3.W), "b001".U(3.W), regEn) // default unprivileged, secure and instruction acess
 
+  // don't write
+  ioAXI.aw.valid := false.B
+  ioAXI.aw.addr  := 0.U
+  ioAXI.aw.prot  := 0.U
+  ioAXI.w.valid  := false.B
+  ioAXI.w.data   := 0.U
+  ioAXI.w.strb   := 0.U
+  ioAXI.b.ready  := false.B
+
   // FSM
   ioWBU.ready     := (state === sIDLE)
   ioIFU.valid     := (state === sFINISH)
