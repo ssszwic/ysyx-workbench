@@ -34,7 +34,7 @@ reg     [31:0]      aw_addr_r;
 reg     [63:0]      w_data_r;
 reg     [7:0]      w_strb_r;
 
-always@(posedge clock) begin
+always @(posedge clock) begin
     if(reset) begin
         axi_aw_ready <= 1'b1;
     end
@@ -51,7 +51,7 @@ always@(posedge clock) begin
     end
 end
 
-always@(posedge clock) begin
+always @(posedge clock) begin
     if(reset) begin
         axi_w_ready <= 1'b1;
     end
@@ -64,12 +64,12 @@ always@(posedge clock) begin
         axi_w_ready <= 1'b1;
     end
     else begin
-        axi_w_rew_strb_rady <= axi_w_ready;
+        axi_w_ready <= axi_w_ready;
     end
 end
 
 // store address or data when receive
-always@(posedge clock) begin
+always @(posedge clock) begin
     if(reset) begin
         aw_addr_r <= 32'b0;
     end
@@ -80,7 +80,7 @@ always@(posedge clock) begin
         aw_addr_r <= aw_addr_r;
     end
 end
-always@(posedge clock) begin
+always @(posedge clock) begin
     if(reset) begin
         w_data_r <= 64'b0;
         w_strb_r <= 8'b0;
@@ -96,7 +96,7 @@ always@(posedge clock) begin
 end
 
 // write data
-always(*) begin
+always @(*) begin
     if(axi_aw_valid && axi_aw_ready && (!axi_w_ready)) begin
         // data has arrived before address
         pmem_write(axi_aw_addr, w_data_r, w_strb_r);
@@ -145,33 +145,36 @@ always @(posedge clock) begin
         axi_ar_ready    <= 1'b1;
         axi_r_valid     <= 1'b0;
         axi_r_data      <= 64'b0;
-        axi_r_resb      <= 2'b0;
+        axi_r_resp      <= 2'b0;
     end
     else if(axi_ar_ready && axi_ar_valid) begin
         axi_ar_ready    <= 1'b0;
         axi_r_valid     <= 1'b1;
         axi_r_data      <= rdata_from_dpic;
         // default read success
-        axi_r_resb      <= 2'b0;
+        axi_r_resp      <= 2'b0;
     end
     else if(axi_r_ready && axi_r_valid) begin
         axi_ar_ready    <= 1'b1;
         axi_r_valid     <= 1'b0;
         axi_r_data      <= axi_r_data;
-        axi_r_resb      <= axi_r_resb;
+        axi_r_resp      <= axi_r_resp;
     end
     else begin
         axi_ar_ready    <= axi_ar_ready;
         axi_r_valid     <= axi_r_valid;
         axi_r_data      <= axi_r_data;
-        axi_r_resb      <= axi_r_resb;
+        axi_r_resp      <= axi_r_resp;
     end
 end
 
 // read data
-always(*) begin
+always @(*) begin
     if(axi_ar_ready && axi_ar_valid) begin
         pmem_read(axi_ar_addr, rdata_from_dpic);
+    end
+    else begin
+        rdata_from_dpic = 64'b0;
     end
 end
 
