@@ -18,7 +18,7 @@ class IFUInterface extends Bundle {
 class IFU extends Module {
   val ioWBU = IO(Flipped(new WBU.WBUInterface))
   val ioIFU = IO(new IFUInterface)
-  val ioMem = IO(Flipped(new MEM.MemInterface))
+  val ioAXI = IO(new MEM.AXI_LITE_MASTER(32, 64, 8))
 
   val PCReg_u = Module(new DPIC.PCReg)
 
@@ -29,12 +29,9 @@ class IFU extends Module {
   start   := (cntReg === 10.U)
 
   // FSM
-  val sIDLE :: sWORK :: sFINISH :: Nil = Enum(3)
-  val state           = RegInit(sIDLE)
-  val ioWBU_ready_reg = RegInit(true.B)
-  val ioIFU_valid_reg = RegInit(false.B)
+  val sIDLE :: sSEND_AD :: sWAIT_D :: sFINISH :: Nil = Enum(4)
+  val state  = RegInit(sIDLE)
 
-  val finish = Wire(Bool())
   val regEn  = Wire(Bool())
 
   PCReg_u.io.clock := clock
@@ -42,83 +39,79 @@ class IFU extends Module {
   PCReg_u.io.wen    := regEn
   PCReg_u.io.wData  := ioWBU.npc
 
-  finish      := ioMem.rvalid
   regEn       := (state === sIDLE) && (ioWBU.valid || start)
   ioIFU.pc    := PCReg_u.io.value
-  ioIFU.pc4   := RegEnable((ioWBU.npc + 4.U), 0.U, regEn) 
-  ioIFU.inst  := Mux((ioIFU.pc(2, 0) === "b100".U(3.W)), ioMem.rData(63, 32), ioMem.rData(31, 0))
+  ioIFU.pc4   := RegEnable((ioWBU.npc + 4.U), 0.U, regEn)
+  val inst_w  = Wire(UInt(64.W))
+  inst_w      := Mux((ioIFU.pc(2, 0) === "b100".U(3.W)), ioAXI.r.data(63, 32), ioAXI.r.data(31, 0))
+  ioIFU.inst  := RegEnable(inst_w, 0.U, (state === sWAIT_D) && ioAXI.r.valid)
 
-  ioMem.ren   := regEn
-  ioMem.addr  := Cat(ioWBU.npc(31, 3), "b000".U(3.W))
-  // don't write
-  ioMem.wen   := false.B
-  ioMem.wMask := 0.U
-  ioMem.wData := 0.U
+  ioAXI.ar.addr := RegEnable(Cat(ioWBU.npc(31, 3), "b000".U(3.W)), 0.U, regEn)
+  ioAXI.ar.prot := RegEnable("b001".U(3.W), "b001".U(3.W), regEn) // default unprivileged, secure and instruction acess
 
   // FSM
-  ioWBU.ready := ioWBU_ready_reg
-  ioIFU.valid := ioIFU_valid_reg
+  ioWBU.ready     := (state === sIDLE)
+  ioIFU.valid     := (state === sFINISH)
+  ioAXI.ar.valid  := (state === sSEND_AD)
+  ioAXI.r.ready   := (state === sWAIT_D)
 
   switch(state) {
     is(sIDLE) {
       when(ioWBU.valid || start) {
-        when(ioMem.hit) {
-          state := sFINISH
-          ioWBU_ready_reg := false.B
-          ioIFU_valid_reg := true.B
-        }.otherwise {
-          state := sWORK
-          ioWBU_ready_reg := false.B
-          ioIFU_valid_reg := false.B
-        }
+        state := sSEND_AD
       }.otherwise {
         state := sIDLE
-        ioWBU_ready_reg := true.B
-        ioIFU_valid_reg := false.B
       }
     }
-    is(sWORK) {
-      when(finish) {
-        state := sFINISH
-        ioWBU_ready_reg := false.B
-        ioIFU_valid_reg := true.B
+    is(sSEND_AD) {
+      when(ioAXI.ar.ready) {
+        state := sWAIT_D
       }.otherwise {
-        state := sWORK
-        ioWBU_ready_reg := false.B
-        ioIFU_valid_reg := false.B
+        state := sSEND_AD
+      }
+    }
+    is(sWAIT_D) {
+      when(ioAXI.r.valid) {
+        state := sFINISH
+      }.otherwise {
+        state := sWAIT_D
       }
     }
     is(sFINISH) {
       when(ioIFU.ready) {
         state := sIDLE
-        ioWBU_ready_reg := true.B
-        ioIFU_valid_reg := false.B
       }.otherwise {
         state := sFINISH
-        ioWBU_ready_reg := false.B
-        ioIFU_valid_reg := true.B
       }
     }
   }
+
 }
 
 // waveDrom
 // {signal: [
-//   {name: 'clk', wave: 'p.......'},
-//   {name: 'state', wave: '3.4.56..', data: ['IDLE', 'WORK', 'FINISH', 'IDLE']},
-//   {name: 'ioWBU_valid', wave: '010.....'},
-//   {name: 'ioWBU_ready', wave: '1.0..1..'},
-//   {name: 'npc', wave: 'x3x.....'},
-//   {name: 'pc', wave: 'x.3.....'},
-//   {name: 'pc4', wave: 'x.3.....'},
-//   {name: 'ren', wave: '010.....'},
-//   {name: 'ioMem', wave: 'x3x.....'},
-//   {name: 'hit', wave: '0.......'},
-//   {name: 'finish', wave: '0..10...'},
+//   {name: 'clk', 		wave: 'p.........'},
+//   {name: 'state', 		wave: '6.7..89.6.', data: ['IDLE', 'SEND_AD', 'WAIT_D', 'FINISH', 'IDLE']},
+//   {name: 'ioWBU_valid', wave: '010.......'},
+//   {name: 'ioWBU_ready', wave: '1.0.....1.'},
+//   {name: 'npc', 		wave: 'x3x.......'},
+//   {name: 'pc', 			wave: 'x.3.......'},
+//   {name: 'pc4', 		wave: 'x.3.......'},
+//   ['AR',
+//     {name: 'ar_valid', 	wave: '0.1..0....'},
+//     {name: 'ar_ready', 	wave: '0...1.....'},
+//     {name: 'ar_addr', 	wave: 'x.5.......'},
+//     {name: 'ar_prot', 	wave: 'x.5.......'},
+//   ],
+//   ['R',
+//     {name: 'r_valid', 	wave: '0....10...'},
+//     {name: 'r_ready', 	wave: '0....10...'},
+//     {name: 'r_data', 	wave: 'x....3....'},
+//     {name: 'r_resb', 	wave: 'x....3....'},
+//   ],
   
-//   {name: 'inst', wave: 'x..3....'},
-//   {name: 'ioIFU_valid', wave: '0...10..'},
-//   {name: 'ioIFU_ready', wave: '1....0..'},
+//   {name: 'inst', 		wave: 'x.....3...'},
+//   {name: 'ioIFU_valid', wave: '0.....1.0.'},
+//   {name: 'ioIFU_ready', wave: '0......10.'},
 // ]}
-
 

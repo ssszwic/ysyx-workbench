@@ -13,7 +13,7 @@ class Top extends Module {
   val EXU_u = Module(new EXU.EXU)
   val LSU_u = Module(new LSU.LSU)
   val WBU_u = Module(new WBU.WBU)
-  val MemVirtual_inst = Module(new MEM.MemVirtual)
+  val SRAM_inst = Module(new MEM.SRAM)
   val MemVirtual_data = Module(new MEM.MemVirtual)
 
   IFU_u.ioWBU     <> WBU_u.ioWBU
@@ -23,9 +23,9 @@ class Top extends Module {
   LSU_u.ioEXU     <> EXU_u.ioEXU
   WBU_u.ioLSU     <> LSU_u.ioLSU
 
-  MemVirtual_inst.io.ioMem <> IFU_u.ioMem
-  MemVirtual_inst.io.clock <> clock
-  MemVirtual_inst.io.reset <> reset
+  SRAM_inst.io.axi <> IFU_u.ioAXI
+  SRAM_inst.io.clock <> clock
+  SRAM_inst.io.reset <> reset
   MemVirtual_data.io.ioMem <> LSU_u.ioMem
   MemVirtual_data.io.clock <> clock
   MemVirtual_data.io.reset <> reset
