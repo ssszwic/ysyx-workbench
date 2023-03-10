@@ -27,7 +27,7 @@ class MemLS extends Module {
   })
   val memCtrl       = IO(new MemLSCtrlInterface)
   val clintCtrl     = IO(Flipped(new ClintCtrlInterface))
-  val ioMem         = IO(Flipped(new MEM.MemInterface))
+  val ioAXI         = IO(Flipped(new MEM.AXI_LITE_MASTER(32, 64, 8)))
 
   val mask        = Wire(UInt(8.W))
   // virtual mem or clint true: mem
@@ -42,11 +42,68 @@ class MemLS extends Module {
   addrAlig := Cat(io.addr(31, 3), Fill(3, 0.U(1.W)))
 
   clintSel          := (addrAlig === "x_200_4000".U) || (addrAlig === "x_200_BFF8".U)
-  io.hit_and_clint  := clintSel || ioMem.hit
+  io.hit_and_clint  := clintSel
+
+  // FSM
+  val sIDLE :: sSEND_RAD :: sWAIT_RD :: sSEND_WAD_WD :: sSEND_WAD :: sSEND_WD :: sWAIT_B :: sFINISH :: Nil = Enum(6)
+  val state = RegInit(sIDLE)
+
+  // AXI
+  ioAXI.ar.addr   := RegEnable(addrAlig, 0.U, (state === sIDLE) && (memCtrl.ren && (!clintSel)))
+  ioAXI.ar.prot   := 0.U
+  ioAXI.ar.valid  := (state === sSEND_RAD)
+  ioAXI.r.ready   := (state === sWAIT_RD)
+  ioAXI.aw.addr   := RegEnable(addrAlig, 0.U, (state === sIDLE) && (memCtrl.wen && (!clintSel)))
+  ioAXI.aw.prot   := 0.U
+  ioAXI.aw.valid  := (state === sSEND_WAD || state === sSEND_WAD_WD)
+  ioAXI.w.data    := RegEnable(io.wData, 0.U, (state === sIDLE) && (memCtrl.wen && (!clintSel)))
+  ioAXI.w.strb    := RegEnable(mask, 0.U, (state === sIDLE) && (memCtrl.wen && (!clintSel)))
+  ioAXI.w.valid   := (state === sSEND_WD || state === sSEND_WAD_WD)
+  ioAXI.b.ready   := (state === sWAIT_B)
+
+  switch(state) {
+    is(sIDLE) {
+      when(memCtrl.ren && (!clintSel)) {
+        state := sSEND_RAD
+      }.elsewhen(memCtrl.wen && (!clintSel)) {
+        state := sSEND_WAD_WD
+      }.otherwise {
+        state := sIDLE
+      }
+    }
+    is(sSEND_RAD) {
+      state := Mux(ioAXI.ar.ready, sWAIT_RD, sSEND_RAD)
+    }
+    is(sWAIT_RD) {
+      state := Mux(ioAXI.r.valid, sFINISH, sWAIT_RD)
+    }
+    is(sFINISH) {
+      state := sIDLE
+    }
+    is(sSEND_WAD_WD) {
+      when(ioAXI.aw.ready && ioAXI.w.ready) {
+        state := sWAIT_B
+      }.elsewhen(ioAXI.aw.ready) {
+        state := sSEND_WD
+      }.elsewhen(ioAXI.w.ready) {
+        state := sSEND_WAD
+      }.otherwise {
+        state := sSEND_WAD_WD
+      }
+    }
+    is(sSEND_WD) {
+      state := Mux(ioAXI.w.ready, sWAIT_B, sSEND_WD)
+    }
+    is(sSEND_WAD) {
+      state := Mux(ioAXI.aw.ready, sWAIT_B, sSEND_WAD)
+    }
+    is(sWAIT_B) {
+      state := Mux(ioAXI.b.valid, sFINISH, sWAIT_B)
+    }
+  }
 
   // In eight-byte units
   // Consider that there is no cross-unit reading and writing
-  
   when (memCtrl.length === 0.U) {
     mask := 1.U << io.addr(2, 0)
   }.elsewhen(memCtrl.length === 1.U) {
@@ -60,13 +117,6 @@ class MemLS extends Module {
   val wData = Wire(UInt(64.W))
   wData := io.wData << Cat(io.addr(2, 0), "b000".U(3.W))
 
-  ioMem.ren     := Mux(!clintSel, memCtrl.ren, false.B)
-  ioMem.addr    := addrAlig
-  ioMem.wen     := Mux(!clintSel, memCtrl.wen, false.B)
-  ioMem.wData   := wData
-  ioMem.wMask   := mask
-
-
   clintCtrl.ren          := Mux(clintSel, memCtrl.ren, false.B)
   clintCtrl.addr         := addrAlig
   clintCtrl.wen          := Mux(clintSel, memCtrl.wen, false.B)
@@ -74,6 +124,15 @@ class MemLS extends Module {
   clintCtrl.wMask        := mask
 
   // read data
+  val rData = RegInit(0.U(64.W))
+  when((state === sIDLE) && memCtrl.ren && (!clintSel)) {
+    rData := clintCtrl.rData
+  }.elsewhen((state === sWAIT_RD) && ioAXI.r.valid) {
+    rData := ioAXI.r.data
+  }.otherwise {
+    rData := rData
+  }
+
   val dataRead = Wire(UInt(64.W))
   val dataByte = Wire(UInt(8.W))
   val dataHalf = Wire(UInt(16.W))

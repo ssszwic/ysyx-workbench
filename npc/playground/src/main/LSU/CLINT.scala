@@ -58,7 +58,7 @@ class CLINT extends Module {
     tmp := 0.U
   }
   
-  clintCtrl.rData := RegEnable(tmp, 0.U, clintCtrl.ren)
+  clintCtrl.rData := tmp
   // new data after write with mask
   tmpNew := CLINTTools.WriteMask(tmp, clintCtrl.wMask, clintCtrl.wData)
 

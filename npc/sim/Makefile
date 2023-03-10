@@ -114,7 +114,7 @@ $(BUILD_DIR)/V$(MODULE): $(VERILATOR_INPUT) $(INCLUDES) $(WORK_DIR)/Makefile
 	$(MAKE) -j -C obj_dir -f V$(MODULE).mk
 
 wave:
-	gtkwave wave.vcd
+	gtkwave wave.vcd&
 
 ######################################################################
 # Other targets
