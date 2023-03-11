@@ -14,7 +14,7 @@ class Top extends Module {
   val LSU_u = Module(new LSU.LSU)
   val WBU_u = Module(new WBU.WBU)
   val SRAM_inst = Module(new MEM.SRAM)
-  val MemVirtual_data = Module(new MEM.MemVirtual)
+  val SRAM_data = Module(new MEM.SRAM)
 
   IFU_u.ioWBU     <> WBU_u.ioWBU
   IDU_u.ioIFU     <> IFU_u.ioIFU
@@ -26,9 +26,9 @@ class Top extends Module {
   SRAM_inst.io.axi <> IFU_u.ioAXI
   SRAM_inst.io.clock <> clock
   SRAM_inst.io.reset <> reset
-  MemVirtual_data.io.ioMem <> LSU_u.ioMem
-  MemVirtual_data.io.clock <> clock
-  MemVirtual_data.io.reset <> reset
+  SRAM_data.io.axi <> LSU_u.ioAXI
+  SRAM_data.io.clock <> clock
+  SRAM_data.io.reset <> reset
 
   // debug
   io.wbu_valid := WBU_u.ioWBU.valid
