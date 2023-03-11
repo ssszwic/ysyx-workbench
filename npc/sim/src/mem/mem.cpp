@@ -46,6 +46,13 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
   if (likely(in_pmem(paddr))) {
     // *rdata = host_read(guest_to_host(paddr), 8);
     *rdata = *(uint64_t *) guest_to_host(paddr);
+    #ifdef CONFIG_MEMORY_TRACE
+    char tmp[MAX_SINGLE_WIDTH] = {};
+    memset(mem_ring_buf[mem_ring_ref], ' ', 6);
+    if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
+    sprintf(tmp, "----> read \t0x%016llx\t0x%016llx", raddr, *rdata);
+    strcpy(mem_ring_buf[mem_ring_ref], tmp);
+    #endif
     return;
   }
   
@@ -54,13 +61,7 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
   return;
 #endif
 
-#ifdef CONFIG_MEMORY_TRACE
-  char tmp[MAX_SINGLE_WIDTH] = {};
-  memset(mem_ring_buf[mem_ring_ref], ' ', 6);
-  if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
-  sprintf(tmp, "----> read \t0x%016llx\t0x%016llx", raddr, *rdata);
-  strcpy(mem_ring_buf[mem_ring_ref], tmp);
-#endif
+
 
   out_of_bound(paddr);
 }
