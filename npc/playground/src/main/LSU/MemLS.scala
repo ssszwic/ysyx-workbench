@@ -40,6 +40,9 @@ class MemLS extends Module {
   // addr
   val addrAlig = Wire(UInt(32.W))
   addrAlig := Cat(io.addr(31, 3), Fill(3, 0.U(1.W)))
+  // data
+  val wData = Wire(UInt(64.W))
+  wData := io.wData << Cat(io.addr(2, 0), "b000".U(3.W))
 
   clintSel          := (addrAlig === "x_200_4000".U) || (addrAlig === "x_200_BFF8".U)
   io.hit_and_clint  := clintSel
@@ -56,7 +59,7 @@ class MemLS extends Module {
   ioAXI.aw.addr   := RegEnable(addrAlig, 0.U, (state === sIDLE) && (memCtrl.wen && (!clintSel)))
   ioAXI.aw.prot   := 0.U
   ioAXI.aw.valid  := (state === sSEND_WAD || state === sSEND_WAD_WD)
-  ioAXI.w.data    := RegEnable(io.wData, 0.U, (state === sIDLE) && (memCtrl.wen && (!clintSel)))
+  ioAXI.w.data    := RegEnable(wData, 0.U, (state === sIDLE) && (memCtrl.wen && (!clintSel)))
   ioAXI.w.strb    := RegEnable(mask, 0.U, (state === sIDLE) && (memCtrl.wen && (!clintSel)))
   ioAXI.w.valid   := (state === sSEND_WD || state === sSEND_WAD_WD)
   ioAXI.b.ready   := (state === sWAIT_B)
@@ -113,9 +116,6 @@ class MemLS extends Module {
   }.otherwise{
     mask := "b1111_1111".U
   }
-
-  val wData = Wire(UInt(64.W))
-  wData := io.wData << Cat(io.addr(2, 0), "b000".U(3.W))
 
   clintCtrl.ren          := Mux(clintSel, memCtrl.ren, false.B)
   clintCtrl.addr         := addrAlig
