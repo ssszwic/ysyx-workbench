@@ -42,6 +42,7 @@ class IFU extends Module {
   regEn       := (state === sIDLE) && (ioWBU.valid || start)
   ioIFU.pc    := PCReg_u.io.value
   ioIFU.pc4   := RegEnable((ioWBU.npc + 4.U), 0.U, regEn)
+  // get readed data and ignore resp
   val inst_w  = Wire(UInt(64.W))
   inst_w      := Mux((ioIFU.pc(2, 0) === "b100".U(3.W)), ioAXI.r.data(63, 32), ioAXI.r.data(31, 0))
   ioIFU.inst  := RegEnable(inst_w, 0.U, (state === sWAIT_D) && ioAXI.r.valid)
