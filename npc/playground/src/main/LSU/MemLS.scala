@@ -27,7 +27,7 @@ class MemLS extends Module {
   })
   val memCtrl       = IO(new MemLSCtrlInterface)
   val clintCtrl     = IO(Flipped(new ClintCtrlInterface))
-  val ioAXI         = IO(Flipped(new MEM.AXI_LITE_MASTER(32, 64, 8)))
+  val ioAXI         = IO(new MEM.AXI_LITE_MASTER(32, 64, 8))
 
   val mask        = Wire(UInt(8.W))
   // virtual mem or clint true: mem
