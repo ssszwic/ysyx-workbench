@@ -3,8 +3,6 @@ package main.MEM
 import chisel3._
 import chisel3.util._
 
-<<<<<<< HEAD
-=======
 class AXI_LITE_AW(addrWidth: Int) extends Bundle {
   val valid   = Output(Bool())
   val ready   = Input(Bool())
@@ -55,7 +53,6 @@ class AXI_LITE_SLAVE(addrWidth: Int, dataWidth: Int, strbWidth: Int) extends Bun
   val r  = Flipped(new AXI_LITE_R(dataWidth))
 }
 
->>>>>>> temp
 class SRAM extends BlackBox with HasBlackBoxResource {
   val io = IO(new Bundle {
     // read

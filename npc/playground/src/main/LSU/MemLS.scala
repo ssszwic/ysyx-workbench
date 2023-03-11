@@ -27,11 +27,7 @@ class MemLS extends Module {
   })
   val memCtrl       = IO(new MemLSCtrlInterface)
   val clintCtrl     = IO(Flipped(new ClintCtrlInterface))
-<<<<<<< HEAD
-  val ioAXI         = IO(Flipped(new MEM.AXI_LITE_MASTER(32, 64, 8)))
-=======
   val ioAXI         = IO(new MEM.AXI_LITE_MASTER(32, 64, 8))
->>>>>>> temp
 
   val mask        = Wire(UInt(8.W))
   // virtual mem or clint true: mem
@@ -44,22 +40,15 @@ class MemLS extends Module {
   // addr
   val addrAlig = Wire(UInt(32.W))
   addrAlig := Cat(io.addr(31, 3), Fill(3, 0.U(1.W)))
-<<<<<<< HEAD
-=======
   // data
   val wData = Wire(UInt(64.W))
   wData := io.wData << Cat(io.addr(2, 0), "b000".U(3.W))
->>>>>>> temp
 
   clintSel          := (addrAlig === "x_200_4000".U) || (addrAlig === "x_200_BFF8".U)
   io.hit_and_clint  := clintSel
 
   // FSM
-<<<<<<< HEAD
-  val sIDLE :: sSEND_RAD :: sWAIT_RD :: sSEND_WAD_WD :: sSEND_WAD :: sSEND_WD :: sWAIT_B :: sFINISH :: Nil = Enum(6)
-=======
   val sIDLE :: sSEND_RAD :: sWAIT_RD :: sSEND_WAD_WD :: sSEND_WAD :: sSEND_WD :: sWAIT_B :: sFINISH :: Nil = Enum(8)
->>>>>>> temp
   val state = RegInit(sIDLE)
 
   // AXI
@@ -70,11 +59,7 @@ class MemLS extends Module {
   ioAXI.aw.addr   := RegEnable(addrAlig, 0.U, (state === sIDLE) && (memCtrl.wen && (!clintSel)))
   ioAXI.aw.prot   := 0.U
   ioAXI.aw.valid  := (state === sSEND_WAD || state === sSEND_WAD_WD)
-<<<<<<< HEAD
-  ioAXI.w.data    := RegEnable(io.wData, 0.U, (state === sIDLE) && (memCtrl.wen && (!clintSel)))
-=======
   ioAXI.w.data    := RegEnable(wData, 0.U, (state === sIDLE) && (memCtrl.wen && (!clintSel)))
->>>>>>> temp
   ioAXI.w.strb    := RegEnable(mask, 0.U, (state === sIDLE) && (memCtrl.wen && (!clintSel)))
   ioAXI.w.valid   := (state === sSEND_WD || state === sSEND_WAD_WD)
   ioAXI.b.ready   := (state === sWAIT_B)
@@ -132,12 +117,6 @@ class MemLS extends Module {
     mask := "b1111_1111".U
   }
 
-<<<<<<< HEAD
-  val wData = Wire(UInt(64.W))
-  wData := io.wData << Cat(io.addr(2, 0), "b000".U(3.W))
-
-=======
->>>>>>> temp
   clintCtrl.ren          := Mux(clintSel, memCtrl.ren, false.B)
   clintCtrl.addr         := addrAlig
   clintCtrl.wen          := Mux(clintSel, memCtrl.wen, false.B)
@@ -160,11 +139,7 @@ class MemLS extends Module {
   val dataWord = Wire(UInt(32.W))
   val dataDoub = Wire(UInt(64.W))
 
-<<<<<<< HEAD
-  dataRead := Mux(clintSelReg, clintCtrl.rData, ioMem.rData)
-=======
   dataRead := rData
->>>>>>> temp
   dataByte := 0.U
   dataHalf := 0.U
   dataWord := 0.U
@@ -193,33 +168,6 @@ class MemLS extends Module {
   }
 
   // expend
-<<<<<<< HEAD
-  val rData = Wire(UInt(64.W))
-  when (lengthReg === 0.U) {
-    when(unsignReg) {
-      rData := Cat(Fill(56, 0.U(1.W)), dataByte)
-    }.otherwise{
-      rData := Cat(Fill(56, dataByte(7)), dataByte)
-    }
-  }.elsewhen(lengthReg === 1.U) {
-    when(unsignReg) {
-      rData := Cat(Fill(48, 0.U(1.W)), dataHalf)
-    }.otherwise{
-      rData := Cat(Fill(48, dataHalf(15)), dataHalf)
-    }
-  }.elsewhen(lengthReg === 2.U) {
-    when(unsignReg) {
-      rData := Cat(Fill(32, 0.U(1.W)), dataWord)
-    }.otherwise{
-      rData := Cat(Fill(32, dataWord(31)), dataWord)
-    }
-  }.otherwise{
-    rData := dataDoub
-  }
-  
-  io.rData := rData
-  io.valid := ioMem.rvalid
-=======
   val rData_expen = Wire(UInt(64.W))
   when (lengthReg === 0.U) {
     when(unsignReg) {
@@ -245,5 +193,4 @@ class MemLS extends Module {
   
   io.rData := rData_expen
   io.valid := (state === sFINISH)
->>>>>>> temp
 }

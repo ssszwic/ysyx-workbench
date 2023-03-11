@@ -46,22 +46,10 @@ extern "C" void inst_pmem_read(long long raddr, long long *rdata) {
 extern "C" void pmem_read(long long raddr, long long *rdata) {
   // 总是读取地址为`raddr & ~0x7ull`的8字节返回给`rdata`
   // memory trace
-<<<<<<< HEAD
-#ifdef CONFIG_MEMORY_TRACE
-  char tmp[MAX_SINGLE_WIDTH] = {};
-  memset(mem_ring_buf[mem_ring_ref], ' ', 6);
-  if (++mem_ring_ref == MEM_RING_BUF_WIDTH) {mem_ring_ref = 0;}
-  sprintf(tmp, "----> read \t0x%016llx\t0x%016llx", raddr, *rdata);
-  strcpy(mem_ring_buf[mem_ring_ref], tmp);
-#endif
-=======
->>>>>>> temp
   uint64_t paddr = raddr & ~0x7;
   if (likely(in_pmem(paddr))) {
     // *rdata = host_read(guest_to_host(paddr), 8);
     *rdata = *(uint64_t *) guest_to_host(paddr);
-<<<<<<< HEAD
-=======
     #ifdef CONFIG_MEMORY_TRACE
     char tmp[MAX_SINGLE_WIDTH] = {};
     memset(mem_ring_buf[mem_ring_ref], ' ', 6);
@@ -69,7 +57,6 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
     sprintf(tmp, "----> read \t0x%016llx\t0x%016llx", raddr, *rdata);
     strcpy(mem_ring_buf[mem_ring_ref], tmp);
     #endif
->>>>>>> temp
     return;
   }
   
@@ -78,11 +65,6 @@ extern "C" void pmem_read(long long raddr, long long *rdata) {
   return;
 #endif
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> temp
   out_of_bound(paddr);
 }
 
