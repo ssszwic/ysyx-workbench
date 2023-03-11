@@ -346,7 +346,7 @@ void sdb_mainloop() {
         printf("Unknown command '%s'\n", cmd); 
       }
       else {
-        printf("%lu\n", expr_result);
+        printf("0x%lx\n", expr_result);
       }
     }
   }
