@@ -16,6 +16,7 @@ uint64_t expr(char *e, bool *success);
 void new_wp(char *expr, word_t result);
 uint64_t isa_reg_str2val(const char *s, bool *success);
 void isa_reg_display(bool *err_list);
+void log_trace(bool print_screen);
 extern bool screen_display_inst;
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -61,6 +62,8 @@ static int cmd_delate(char *args);
 
 static int cmd_f(char *args);
 
+static int cmd_trace(char *args);
+
 static int info_reg();
 
 static int info_watch();
@@ -82,6 +85,7 @@ static struct {
   { "w", "Add watch point.", cmd_watch},
   { "d", "Delate specified watchpoint", cmd_delate},
   { "f", "printf function calls", cmd_f},
+  { "trace", "printf trace", cmd_trace},
 };
 
 static int cmd_help(char *args) {
@@ -280,6 +284,10 @@ static int cmd_f(char *args) {
   // return 0;
   // #endif
   return 0;
+}
+
+static int cmd_trace(char *args) {
+  log_trace(bool true);
 }
 
 void sdb_set_batch_mode() {
