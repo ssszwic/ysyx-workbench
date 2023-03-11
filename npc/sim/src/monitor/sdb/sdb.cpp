@@ -287,7 +287,7 @@ static int cmd_f(char *args) {
 }
 
 static int cmd_trace(char *args) {
-  log_trace(bool true);
+  log_trace(true);
 }
 
 void sdb_set_batch_mode() {
