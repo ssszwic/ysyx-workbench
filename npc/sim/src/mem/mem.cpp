@@ -13,7 +13,7 @@ void cpu_exit();
 uint64_t get_time();
 
 #ifdef CONFIG_MEMORY_TRACE
-#define MEM_RING_BUF_WIDTH 300
+#define MEM_RING_BUF_WIDTH 1000
 #define MAX_SINGLE_WIDTH 80
 static char mem_ring_buf[MEM_RING_BUF_WIDTH][MAX_SINGLE_WIDTH] = {};
 static int mem_ring_ref = MEM_RING_BUF_WIDTH - 1;
