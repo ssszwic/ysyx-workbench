@@ -27,7 +27,11 @@ class LSUInterface extends Bundle {
 class LSU extends Module {
   val ioLSU   = IO(new LSUInterface)
   val ioEXU   = IO(Flipped(new EXU.EXUInterface))
+<<<<<<< HEAD
   val ioMem   = IO(Flipped(new MEM.MemInterface))
+=======
+  val ioAXI   = IO(new MEM.AXI_LITE_MASTER(32, 64, 8))
+>>>>>>> temp
 
   val CSR_u   = Module(new CSR)
   val MemLS_u = Module(new MemLS)
@@ -36,15 +40,23 @@ class LSU extends Module {
   // FSM
   val sIDLE :: sWORK :: sFINISH :: Nil = Enum(3)
   val state = RegInit(sIDLE)
+<<<<<<< HEAD
   val ioLSU_valid_reg = RegInit(false.B)
   val ioEXU_ready_reg = RegInit(true.B)
+=======
+>>>>>>> temp
 
   val finish  = Wire(Bool())
   val regEn   = Wire(Bool())
 
   regEn           := ((state === sIDLE) && ioEXU.valid)
+<<<<<<< HEAD
   ioLSU.valid     := ioLSU_valid_reg
   ioEXU.ready     := ioEXU_ready_reg
+=======
+  ioLSU.valid     := (state === sFINISH)
+  ioEXU.ready     := (state === sIDLE)
+>>>>>>> temp
   ioLSU.result    := RegEnable(ioEXU.result, 0.U, regEn)
   ioLSU.memSel    := RegEnable(ioEXU.memCtrl.ren, false.B, regEn)
   ioLSU.csrSel    := RegEnable(ioEXU.csrCtrl.csrSel, false.B, regEn)
@@ -68,7 +80,11 @@ class LSU extends Module {
   CSR_u.csrCtrl     <> ioEXU.csrCtrl
 
   CLINT_u.clintCtrl <> MemLS_u.clintCtrl
+<<<<<<< HEAD
   ioMem <> MemLS_u.ioMem
+=======
+  ioAXI <> MemLS_u.ioAXI
+>>>>>>> temp
 
   // FSM
   finish := MemLS_u.io.valid
@@ -76,6 +92,7 @@ class LSU extends Module {
   switch(state) {
     is(sIDLE) {
       when(ioEXU.valid) {
+<<<<<<< HEAD
         when(ioEXU.memCtrl.ren && (!MemLS_u.io.hit_and_clint)) {
           state := sWORK
           ioEXU_ready_reg := false.B
@@ -112,6 +129,22 @@ class LSU extends Module {
         ioEXU_ready_reg := false.B
         ioLSU_valid_reg := true.B
       }
+=======
+        when((ioEXU.memCtrl.ren || ioEXU.memCtrl.wen) && (!MemLS_u.io.hit_and_clint)) {
+          state := sWORK
+        }.otherwise {
+          state := sFINISH
+        }
+      }.otherwise {
+        state := sIDLE
+      }
+    }
+    is(sWORK) {
+      state := Mux(finish, sFINISH, sWORK)
+    }
+    is(sFINISH) {
+      state := Mux(ioLSU.ready, sIDLE, sFINISH)
+>>>>>>> temp
     }
   }
 

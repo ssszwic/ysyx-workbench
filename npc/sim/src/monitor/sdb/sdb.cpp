@@ -16,6 +16,10 @@ uint64_t expr(char *e, bool *success);
 void new_wp(char *expr, word_t result);
 uint64_t isa_reg_str2val(const char *s, bool *success);
 void isa_reg_display(bool *err_list);
+<<<<<<< HEAD
+=======
+void log_trace(bool print_screen);
+>>>>>>> temp
 extern bool screen_display_inst;
 
 /* We use the `readline' library to provide more flexibility to read from stdin. */
@@ -61,6 +65,11 @@ static int cmd_delate(char *args);
 
 static int cmd_f(char *args);
 
+<<<<<<< HEAD
+=======
+static int cmd_trace(char *args);
+
+>>>>>>> temp
 static int info_reg();
 
 static int info_watch();
@@ -82,6 +91,10 @@ static struct {
   { "w", "Add watch point.", cmd_watch},
   { "d", "Delate specified watchpoint", cmd_delate},
   { "f", "printf function calls", cmd_f},
+<<<<<<< HEAD
+=======
+  { "trace", "printf trace", cmd_trace},
+>>>>>>> temp
 };
 
 static int cmd_help(char *args) {
@@ -282,6 +295,14 @@ static int cmd_f(char *args) {
   return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int cmd_trace(char *args) {
+  log_trace(true);
+  return 0;
+}
+
+>>>>>>> temp
 void sdb_set_batch_mode() {
   is_batch_mode = true;
 }
@@ -337,7 +358,11 @@ void sdb_mainloop() {
         printf("Unknown command '%s'\n", cmd); 
       }
       else {
+<<<<<<< HEAD
         printf("%lu\n", expr_result);
+=======
+        printf("0x%lx\n", expr_result);
+>>>>>>> temp
       }
     }
   }

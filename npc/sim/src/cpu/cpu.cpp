@@ -88,7 +88,11 @@ static void eval_and_wave();
 static void isa_exec_once();
 static void exec_once();
 static void trace_and_difftest();
+<<<<<<< HEAD
 static void log_trace(bool print_screen);
+=======
+void log_trace(bool print_screen);
+>>>>>>> temp
 void isa_reg_display(bool *err_list);
 
 bool update_wp(char *log);
@@ -175,7 +179,11 @@ void cpu_exec(uint64_t n) {
   }
 }
 
+<<<<<<< HEAD
 static void log_trace(bool print_screen) {
+=======
+void log_trace(bool print_screen) {
+>>>>>>> temp
   IFDEF(CONFIG_ITRACE, log_inst_ring(print_screen));
   IFDEF(CONFIG_MEMORY_TRACE, log_mem_ring(print_screen));
   IFDEF(CONFIG_FUNCTION_TRACE, log_func_ring(print_screen));
