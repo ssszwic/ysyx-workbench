@@ -45,7 +45,7 @@ class MemLS extends Module {
   io.hit_and_clint  := clintSel
 
   // FSM
-  val sIDLE :: sSEND_RAD :: sWAIT_RD :: sSEND_WAD_WD :: sSEND_WAD :: sSEND_WD :: sWAIT_B :: sFINISH :: Nil = Enum(6)
+  val sIDLE :: sSEND_RAD :: sWAIT_RD :: sSEND_WAD_WD :: sSEND_WAD :: sSEND_WD :: sWAIT_B :: sFINISH :: Nil = Enum(8)
   val state = RegInit(sIDLE)
 
   // AXI
