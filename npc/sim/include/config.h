@@ -12,7 +12,6 @@
 // #define CONFIG_STATISTIC        1
 // #define PRINT_CPU_TIME          1
 
-
 #define CONFIG_DEVICE           1
 #define CONFIG_HAS_SERIAL       1
 #define CONFIG_HAS_TIMER        1

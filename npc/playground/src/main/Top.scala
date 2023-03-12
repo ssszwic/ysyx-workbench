@@ -13,8 +13,8 @@ class Top extends Module {
   val EXU_u = Module(new EXU.EXU)
   val LSU_u = Module(new LSU.LSU)
   val WBU_u = Module(new WBU.WBU)
-  val SRAM_inst = Module(new MEM.SRAM)
-  val SRAM_data = Module(new MEM.SRAM)
+  val SRAM_u    = Module(new MEM.SRAM)
+  val Arbiter_u = Module(new MEM.Arbiter)
 
   IFU_u.ioWBU     <> WBU_u.ioWBU
   IDU_u.ioIFU     <> IFU_u.ioIFU
@@ -23,12 +23,12 @@ class Top extends Module {
   LSU_u.ioEXU     <> EXU_u.ioEXU
   WBU_u.ioLSU     <> LSU_u.ioLSU
 
-  SRAM_inst.io.axi <> IFU_u.ioAXI
-  SRAM_inst.io.clock <> clock
-  SRAM_inst.io.reset <> reset
-  SRAM_data.io.axi <> LSU_u.ioAXI
-  SRAM_data.io.clock <> clock
-  SRAM_data.io.reset <> reset
+  Arbiter_u.ioAXI_high <> IFU_u.ioAXI
+  Arbiter_u.ioAXI_low  <> LSU_u.ioAXI
+
+  SRAM_u.io.clock <> clock
+  SRAM_u.io.reset <> reset
+  SRAM_u.io.axi   <> Arbiter_u.ioAXI_SRAM
 
   // debug
   io.wbu_valid := WBU_u.ioWBU.valid
