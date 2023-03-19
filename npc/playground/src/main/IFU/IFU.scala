@@ -8,7 +8,6 @@ import main.WBU
 import main.DPIC
 
 class IFUInterface extends Bundle {
-  val ready = Input(Bool())
   val valid = Output(Bool())
   val inst  = Output(UInt(32.W))
   val pc    = Output(UInt(64.W))
@@ -34,8 +33,8 @@ class IFU extends Module {
 
   val regEn  = Wire(Bool())
 
-  PCReg_u.io.clock := clock
-  PCReg_u.io.reset := reset
+  PCReg_u.io.clock  := clock
+  PCReg_u.io.reset  := reset
   PCReg_u.io.wen    := regEn
   PCReg_u.io.wData  := ioWBU.npc
 
@@ -60,7 +59,6 @@ class IFU extends Module {
   ioAXI.b.ready  := false.B
 
   // FSM
-  ioWBU.ready     := (state === sIDLE)
   ioIFU.valid     := (state === sFINISH)
   ioAXI.ar.valid  := (state === sSEND_AD)
   ioAXI.r.ready   := (state === sWAIT_D)
@@ -88,11 +86,7 @@ class IFU extends Module {
       }
     }
     is(sFINISH) {
-      when(ioIFU.ready) {
-        state := sIDLE
-      }.otherwise {
-        state := sFINISH
-      }
+      state := sIDLE
     }
   }
 
@@ -101,9 +95,14 @@ class IFU extends Module {
 // waveDrom
 // {signal: [
 //   {name: 'clk', 		wave: 'p.........'},
-//   {name: 'state', 		wave: '6.7..89.6.', data: ['IDLE', 'SEND_AD', 'WAIT_D', 'FINISH', 'IDLE']},
+//   {name: 'state', 		wave: '6.7..896..', data: ['IDLE', 'SEND_AD', 'WAIT_D', 'FINISH', 'IDLE']},
 //   {name: 'ioWBU_valid', wave: '010.......'},
-//   {name: 'ioWBU_ready', wave: '1.0.....1.'},
+//   {name: 'npc', 		wave: 'x3x.......'},
+//   {name: 'pc', 			wave: 'x.3.......'},
+//   {name: 'pc4', 		wave: 'x.3.......'},{signal: [
+//   {name: 'clk', 		wave: 'p.........'},
+//   {name: 'state', 		wave: '6.7..896..', data: ['IDLE', 'SEND_AD', 'WAIT_D', 'FINISH', 'IDLE']},
+//   {name: 'ioWBU_valid', wave: '010.......'},
 //   {name: 'npc', 		wave: 'x3x.......'},
 //   {name: 'pc', 			wave: 'x.3.......'},
 //   {name: 'pc4', 		wave: 'x.3.......'},
@@ -121,7 +120,21 @@ class IFU extends Module {
 //   ],
   
 //   {name: 'inst', 		wave: 'x.....3...'},
-//   {name: 'ioIFU_valid', wave: '0.....1.0.'},
-//   {name: 'ioIFU_ready', wave: '0......10.'},
+//   {name: 'ioIFU_valid', wave: '0.....10..'},
 // ]}
-
+//   ['AR',
+//     {name: 'ar_valid', 	wave: '0.1..0....'},
+//     {name: 'ar_ready', 	wave: '0...1.....'},
+//     {name: 'ar_addr', 	wave: 'x.5.......'},
+//     {name: 'ar_prot', 	wave: 'x.5.......'},
+//   ],
+//   ['R',
+//     {name: 'r_valid', 	wave: '0....10...'},
+//     {name: 'r_ready', 	wave: '0....10...'},
+//     {name: 'r_data', 	wave: 'x....3....'},
+//     {name: 'r_resb', 	wave: 'x....3....'},
+//   ],
+  
+//   {name: 'inst', 		wave: 'x.....3...'},
+//   {name: 'ioIFU_valid', wave: '0.....10..'},
+// ]}

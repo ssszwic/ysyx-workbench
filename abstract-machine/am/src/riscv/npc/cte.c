@@ -4,7 +4,7 @@
 
 static Context* (*user_handler)(Event, Context*) = NULL;
 
-// static uint64_t timecmp = 0x100;
+static uint64_t timecmp = 0x1000;
 
 Context* __am_irq_handle(Context *c) {
   if (user_handler) {
@@ -12,7 +12,7 @@ Context* __am_irq_handle(Context *c) {
 
     switch (c->mcause) {
       case 0xb: ev.event = EVENT_SYSCALL; break;
-      // case 0x7: ev.event = EVENT_IRQ_TIMER; timecmp = timecmp + 0x1000; outd(0x2004000, timecmp);break;
+      case 0x7: ev.event = EVENT_IRQ_TIMER; timecmp = timecmp + 0x1000; outd(0x2004000, timecmp);break;
       default: ev.event = EVENT_ERROR; break;
     }
 
@@ -36,7 +36,7 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
   // outd(0x2004000, timecmp);
   // uint64_t mie = 0x80;
   // asm volatile("csrw mie, %0" : : "r"(mie));
-
+  
   // register event handler
   user_handler = handler;
 

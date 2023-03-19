@@ -11,8 +11,7 @@ import main.Tools
 
 
 class IDUInterface extends Bundle {
-  val ready = Input(Bool())
-  val valid = Output(Bool())
+  val valid   = Output(Bool())
   val rs1Data = Output(UInt(64.W))
   val rs2Data = Output(UInt(64.W))
   val imme    = Output(UInt(64.W))
@@ -37,12 +36,6 @@ class IDU extends Module{
   val InstDecode_u  = Module(new InstDecode)
   val RegFiles_u    = Module(new RegFiles)
 
-  // FSM
-  val sIDLE :: sFINISH :: Nil = Enum(2)
-  val state = RegInit(sIDLE)
-  val ioIDU_valid_reg = RegInit(false.B)
-  val ioIFU_ready_reg = RegInit(true.B)
-
   // instruction decode
   InstDecode_u.io.inst := ioIFU.inst
 
@@ -55,8 +48,8 @@ class IDU extends Module{
   RegFiles_u.io.rs2Addr  := InstDecode_u.io.rs2Addr
 
   // io
-  val regEn = Wire(Bool())
-  regEn           := ((state === sIDLE) && ioIFU.valid)
+  val regEn = ioIFU.valid
+  ioIDU.valid     := RegNext(ioIFU.valid, false.B)
   ioIDU.rs1Data   := RegEnable(RegFiles_u.io.rs1Data, 0.U, regEn)
   ioIDU.rs2Data   := RegEnable(RegFiles_u.io.rs2Data, 0.U, regEn)
   ioIDU.pc        := RegEnable(ioIFU.pc, 0.U, regEn)
@@ -66,35 +59,5 @@ class IDU extends Module{
   Tools.myRegEnable(ioIDU.regCtrl, InstDecode_u.regCtrl, regEn)
   Tools.myRegEnable(ioIDU.memCtrl, InstDecode_u.memCtrl, regEn)
   Tools.myRegEnable(ioIDU.csrCtrl, InstDecode_u.csrCtrl, regEn)
-
-  // FSM
-  ioIDU.valid := ioIDU_valid_reg
-  ioIFU.ready := ioIFU_ready_reg
-
-  switch(state) {
-    is(sIDLE) {
-      when(ioIFU.valid) {
-        state := sFINISH
-        ioIFU_ready_reg := false.B
-        ioIDU_valid_reg := true.B
-      }.otherwise {
-        state := sIDLE
-        ioIFU_ready_reg := true.B
-        ioIDU_valid_reg := false.B
-      }
-    }
-    is(sFINISH) {
-      when(ioIDU.ready){
-        state := sIDLE
-        ioIFU_ready_reg := true.B
-        ioIDU_valid_reg := false.B
-      }.otherwise {
-        state := sFINISH
-        ioIFU_ready_reg := false.B
-        ioIDU_valid_reg := true.B
-      }
-    }
-  }
-
 }
 
